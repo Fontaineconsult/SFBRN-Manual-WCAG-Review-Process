@@ -2,7 +2,9 @@
 
 The interactive improve-loop between the **reviewer** (testing the product)
 and the **assistant/system** (structuring results, tracking coverage, asking
-the questions). Capture mode: **hybrid** — the reviewer narrates freely; the
+the questions). Before the loop starts, the enclosure is usually mapped by
+**assisted exploration** (`assisted-exploration.md`) — there the roles flip
+and the assistant drives the browser. Capture mode: **hybrid** — the reviewer narrates freely; the
 assistant maps narration to the checklist in the background and asks only
 about gaps.
 
@@ -57,6 +59,59 @@ map changes what is left to test. At the end of the review the corrected
 enclosure is saved back to the library (`save-enclosure`) so the next review
 of this product — or a similar product — starts from truth instead of
 hypotheses.
+
+## Reviewer session walkthroughs
+
+When a batch of reviewer-driven work accumulates (JAWS runs, zoom checks,
+confirmations of assistant-driven fails), the assistant generates a
+**walkthrough**: `reviews/<id>/session-<sample>-reviewer-walkthrough.md` — an
+ordered script of numbered steps (`W1, W2…`), each with **Do** (exact
+actions/keystrokes), **Tell me** (what to narrate), why-it-matters context
+for key steps, and a **Feedback** line. The reviewer works top to bottom
+narrating freely; the assistant records feedback in place AND converts it
+into the normal structures (run observations/outcomes, findings, rollup,
+enclosure) in the same breath — the walkthrough is a capture surface, not a
+new system of record. Steps that need a new run say so, and the assistant
+logs it via `log-test` the moment the step starts. Close each walkthrough
+with a check that every Feedback line is filled or the step explicitly
+skipped.
+
+### How to build one (the derivation is mechanical — no invention)
+
+1. **Collect the open work for the sample** from the live sources, never
+   from memory:
+   - `review.py validate` — runs without Results, missing WAVE sweeps
+   - `review.py matrix` — unrun view×modality cells for this sample
+   - `review.py next` — the priority rationale (vendor-claim discrepancies)
+   - each run's `run.md` — check rows left empty or marked "reviewer",
+     instrument caveats in Notes
+   - `04-task-testing.md` — findings marked *pending reviewer confirmation*
+   - `03-scope-and-sample.md` §2.6 — recon items ("verify X under check Y")
+   - `03` §1.5 — tool versions still unrecorded
+2. **Keep only reviewer-driven work.** Anything the assistant may drive
+   itself (per `testing-tools.md` §Assistant-driven runs) is done by the
+   assistant, not scripted for the human.
+3. **Group into parts, one per instrument/run** (setup; JAWS run; zoom
+   completion; keyboard confirmation; short one-off confirmations; new runs
+   like WAVE/cognition last).
+4. **Order by value**, the same priority `next` encodes: version-recording
+   setup first (it unblocks the record), then vendor-claim discrepancies and
+   recon-resolving steps early within their part, quick confirmations and
+   fresh sweeps at the end.
+5. **Write each step** from the modality checklist + tool conventions:
+   `W#` + title naming the run/checks it feeds; **Do** with the exact
+   keystrokes (JAWS: `H`/`R`/lists/Speech History; zoom: window width +
+   `Ctrl+plus` to 400%; keyboard: reload-first-Tab, counts); **Tell me**
+   asking for precisely what the check outcome needs; a why-it-matters line
+   whenever the step confirms/refutes a pending finding or vendor claim
+   (mark those **KEY STEP**); `**Feedback:** _(pending)_`.
+6. **End with a close-out block**: the assistant's write-back duties, every
+   Feedback line filled-or-skipped, `validate` re-run, and the
+   next-target decision.
+
+Regenerating an existing walkthrough (new open work accumulated): append new
+`W#` steps or a dated section — never renumber or overwrite steps that
+already carry feedback.
 
 ## Roles in one line each
 

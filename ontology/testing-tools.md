@@ -22,6 +22,12 @@ sequence** the way an actual screen reader user would. (See
 **Record once per review** (03 §1.5): JAWS version and build, browser and
 version, OS. Update if the version changes mid-review.
 
+**Environment hygiene (learned 2026-08-04):** JAWS reads whatever shares the
+focused window. Before a JAWS run, close or unfocus the Claude for Chrome
+side panel (and DevTools, extra panes) so speech is product-only; when the
+assistant panel must stay open, keep focus in the product tab and disregard
+non-product speech when setting outcomes — note the contamination in the run.
+
 **Testing pattern per run:**
 
 1. Start a run (`log-test --tool jaws --view <sample> --url <page>`).
@@ -40,11 +46,49 @@ version, OS. Update if the version changes mid-review.
 and findings for name/role/value, focus order, keyboard operability, labels,
 status messages, and announcement of dynamic changes.
 
-## WAVE — automated per-view sweep
+## axe-core — automated per-view sweep (primary)
 
-**Role:** automated checker run on **every sampled view and significant
-state** (including opened dialogs, error states, and mid-process views —
-re-run WAVE after the state changes).
+**Role:** the standard automated checker, run on **every sampled view and
+significant state**. Assistant-runnable, and it traverses open shadow DOM —
+which WAVE cannot on this product class. Engine vendored at
+`tools/axe/axe.min.js` (record the version in 03 §1.5; currently 4.10.3).
+
+**Setup — dedicated testing profile (learned 2026-08-04):** Chrome 136+
+ignores `--remote-debugging-port` on the *default* profile, and
+session-restore relaunches drop the flag — so scans use a dedicated profile
+the reviewer signs into once (also better hygiene: a stable, declared test
+environment):
+
+    chrome.exe --remote-debugging-port=9222 --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome
+
+The profile persists across sessions (stays signed in). It lives outside
+the repo — never commit or copy profile contents. Verify the port with
+http://localhost:9222/json/version before scanning.
+
+**Run per view/state:**
+
+    python scripts/axe_scan.py <review> --view S1 --url <URL>
+
+- Logs the run itself (`--tool axe`, no modality) unless `--run R###`
+  attaches to an existing one; `--tab TEXT` picks the tab when the URL is
+  ambiguous (SPA views); `--tags wcag2a,wcag2aa,wcag22aa` restricts the
+  ruleset; `--out PATH` does an ad-hoc scan with no run (recon only).
+- Saves the **raw axe JSON** as `evidence/runs/R###/R###-axe.json` and
+  prints a summary (violations by impact, incomplete items).
+
+**Interpreting output** (the automated-sweep checks in
+`modality-checks.md`): every `violations` entry is human-confirmed →
+finding (citing the axe rule ID and the run) or dismissed with a reason;
+`incomplete` entries are candidates for the matching modality's manual
+checks; `passes`/`inapplicable` counts stay in the raw JSON for the record.
+Sanity-check against the JAWS walk per W3 — axe handles open shadow roots,
+but closed roots and cross-origin iframes are still invisible to it.
+
+## WAVE — automated per-view sweep (secondary)
+
+**Role:** reviewer-run automated checker for views WAVE can actually parse
+(light-DOM pages: marketing/landing, documentation). Re-run after
+significant state changes.
 
 **Record once per review** (03 §1.5): WAVE extension version and browser.
 
@@ -65,6 +109,118 @@ re-run WAVE after the state changes).
 **What WAVE testing feeds:** view-sweep findings (04 §B) — alt text, labels,
 contrast, structure, ARIA misuse — and pointers for where JAWS testing should
 dig deeper.
+
+**Mandatory cadence (applies to the sweep, whichever instrument):** every
+sampled view gets one automated sweep run (axe primary; WAVE where it can
+parse), and significant states get re-runs. `review.py validate` fails while
+any sampled view lacks one; `next` lists missing sweeps. Schedule the sweep
+in the same session the view is first tested.
+
+**Shadow-DOM blindness (learned 2026-08-04, Adobe Express R007):** the WAVE
+extension may analyze only the light DOM of web-component apps. Signature:
+**0 errors + "No heading structure" + "No page regions" alerts on a page
+where JAWS reports structure** — that is non-penetration, not cleanliness,
+and the AIM score is meaningless there. Handle it: sanity-check WAVE's
+structure view against the JAWS walk (W3); if blind, set the sweep run's
+Result to **N/A (instrument-blind)** with the contradiction noted, dismiss
+the structure alerts, and do NOT read 0 errors as a pass. For automated
+coverage of such views, a shadow-DOM-capable checker (axe DevTools, IBM
+Equal Access — `tools/wai-evaluation-tools.md`) may be added to 03 §1.5 as a
+secondary instrument; WAVE stays the declared standard for views it can
+parse.
+
+## The other instruments (one per remaining modality)
+
+Tool names below are the exact `--tool` values `log-test` expects
+(`MODALITY_DEFAULTS` in `review.py`). Each serves the matching checklist in
+`modality-checks.md`.
+
+### `zoom` — low-vision (baseline B3)
+
+- **Canonical setup:** browser zoom 400% in a 1280px-wide window. The
+  CSS-equivalent instrument — a **320 CSS px wide viewport** (WCAG 1.4.10's
+  own equivalence) via window resize or DevTools device emulation — is
+  accepted; record which was used in the run notes.
+- **Text spacing (LV3):** apply the standard override to the page and re-read:
+  `line-height 1.5× font size; paragraph spacing 2×; letter spacing 0.12×;
+  word spacing 0.16×` (bookmarklet or injected CSS — record which).
+- **Contrast (LV4/LV5):** WAVE contrast data and/or eyedropper measurement
+  (e.g., Colour Contrast Analyser). Computed-style sampling from the DOM is
+  **indicative only** — gradients, overlays, and images require eyedropper
+  confirmation before a finding.
+- **Evidence:** screenshots at reflow width (full view, scrolled states),
+  with-text-spacing screenshot, any clipped/overlapping state.
+
+### `grayscale` — no-color
+
+- **Canonical setup:** OS color filter (Windows: Settings → Accessibility →
+  Color filters → Grayscale, toggle `Win+Ctrl+C`).
+- **Accepted proxy:** injected CSS `html { filter: grayscale(1) }` — visually
+  equivalent for on-page content; record its use in the run notes.
+- **Evidence:** grayscale screenshots of every state inspected; note each
+  place color was the only differentiator.
+
+### `keyboard` — motor (baseline B2)
+
+- **Setup:** pointer set aside entirely; Tab / Shift+Tab / Enter / Space /
+  arrows / Esc only.
+- **Record the focus path** in the run notes: the sequence of elements focus
+  visits, noting any unreachable control (MO1), inoperable control (MO2),
+  trap (MO3), invisible indicator (MO4), or illogical order (MO5). Target
+  size (MO9) may be measured via DevTools/element geometry.
+- **Evidence:** screenshots of focus states — especially wherever the
+  indicator is faint or missing.
+
+### `inspection` — no-hearing, no-speech, cognition
+
+- A structured pass against that modality's checklist; no special apparatus.
+  `no-hearing`/`no-speech` are commonly **N/A** (no audio / no voice
+  features on the view) — an N/A Result with a one-line justification is a
+  complete, valid run and counts as coverage.
+
+## Assistant-driven runs (Chrome automation)
+
+The assistant (per `assisted-exploration.md` roles) may **drive** these
+instruments itself: `axe` (scripts/axe_scan.py — the standard automated
+sweep), `zoom` (window-resize reflow, injected text-spacing CSS),
+`grayscale` (CSS proxy), `keyboard` (synthesized Tab-walk with
+screenshots), and `inspection`. Two are **always reviewer-driven**: JAWS
+(real AT behavior cannot be synthesized) and the WAVE extension (extension
+UI is outside automation reach).
+
+Conventions for an assistant-driven run:
+
+- **Tester** field in `run.md`: `assistant (Claude, Chrome automation)`.
+- Any instrument approximation (window-resize instead of browser zoom, CSS
+  grayscale instead of OS filter, computed-style contrast sampling) is named
+  in the run notes.
+- Check outcomes from assistant-driven runs are working results: the
+  reviewer spot-checks them (especially any **fail**) before the finding
+  feeds `06-report.md`. Findings still cite the run and evidence files as
+  usual.
+
+Known instrument limits (learned 2026-08-04, Adobe Express trials):
+
+- **CSS `zoom` is NOT a reflow instrument.** It magnifies without
+  re-evaluating responsive breakpoints — layout does not reflow, producing
+  false LV1/LV2 failures. Never judge reflow from it. If window resize is
+  ignored (maximized/managed windows report success but the viewport doesn't
+  change) and browser-zoom keystrokes are unavailable, LV1/LV2/LV7/LV8 go to
+  the reviewer at real browser zoom; the assistant still covers
+  LV3 (injected text-spacing CSS is the canonical method), LV4 (solid
+  backgrounds only), and LV6.
+- **Computed-style contrast sampling** is reliable only against solid
+  ancestor backgrounds; gradient/image/indeterminate backgrounds need the
+  reviewer's eyedropper.
+- **Synthetic keyboard focus attribution can lie.** On shadow-DOM-heavy
+  apps, `activeElement` queries between synthesized Tab presses may report
+  BODY while focus visibly moves. Trust *presence* observations (a visible
+  outline in a screenshot, a reached element); never conclude
+  unreachable/no-indicator from automation alone — that conclusion needs a
+  physical keyboard.
+- **Synthetic hover teleports.** 1.4.13 "hoverable" fails observed via
+  teleporting pointer need reviewer confirmation with continuous pointer
+  travel.
 
 ## Evidence conventions
 

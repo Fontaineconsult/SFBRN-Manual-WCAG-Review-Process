@@ -90,13 +90,24 @@ Each review contains:
 
 ## Repository layout
 
+- `CLAUDE.md` — agent operating manual, auto-loaded into every Claude Code
+  session: session-start protocol, task routing to the ontology docs, hard
+  rules, and the process-gap ratchet (agents fix the process doc they had to
+  figure out, in the same session)
 - `templates/review/` — the stage templates scaffolded into each review
 - `enclosures/` — enclosure library: generic archetypes and saved product enclosures
 - `reviews/` — one directory per review (the system of record)
 - `ontology/` — reference documents converted from W3C sources
   ([WCAG-EM 2.0](ontology/wcag-em.md), [selecting evaluation tools](ontology/selecting-evaluation-tools.md))
+  plus this process's own methods: the [testing loop](ontology/testing-loop.md),
+  [modality checks](ontology/modality-checks.md), [testing tools](ontology/testing-tools.md),
+  and [assisted exploration](ontology/assisted-exploration.md) (the assistant
+  drives the browser during WCAG-EM step 2 and writes the map back into the
+  enclosure)
 - `tools/` — [searchable catalog](tools/wai-evaluation-tools.md) of the W3C
   WAI evaluation tools list (refresh with `python tools/update_tools_list.py`)
 - `scripts/` — process automation (`review.py` — the review CLI;
   `import_acr.py` — parse a vendor's HTML ACR and fill the review's
-  vendor-claim lines)
+  vendor-claim lines; `axe_scan.py` — per-view automated sweep: runs the
+  vendored axe-core inside the authenticated Chrome session via the
+  DevTools port and saves raw JSON into the run's evidence folder)

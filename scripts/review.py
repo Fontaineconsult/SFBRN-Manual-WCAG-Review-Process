@@ -230,6 +230,12 @@ def run_meta(run_dir):
 REQUIRED_MODALITIES = ["no-vision", "low-vision", "no-color", "no-hearing",
                        "no-speech", "motor", "cognition"]
 
+# Tools that satisfy the per-view automated-sweep requirement (run with no
+# --modality). axe = scripts/axe_scan.py (shadow-DOM capable, assistant-
+# runnable); wave = WAVE extension (reviewer-run; blind on shadow-DOM apps —
+# see ontology/testing-tools.md).
+SWEEP_TOOLS = {"axe", "wave"}
+
 # Default instrument + baseline per modality (see ontology/modality-checks.md)
 MODALITY_DEFAULTS = {
     "no-vision": ("jaws", "B1"),
@@ -455,7 +461,7 @@ def cmd_next(args):
         return
     runs = [run_meta(d) for d in run_dirs(review)]
     covered = {(r["view"].lower(), r["modality"].lower()) for r in runs}
-    swept = {r["view"].lower() for r in runs if r["tool"].lower() == "wave"}
+    swept = {r["view"].lower() for r in runs if r["tool"].lower() in SWEEP_TOOLS}
 
     # score modalities by vendor-claim discrepancy value: verifying claimed
     # failures (and shaky Partially Supports) first produces decision-relevant
@@ -487,7 +493,7 @@ def cmd_next(args):
     def text(d):
         if not d["next"]:
             print("All view×modality cells have runs."
-                  + (f" WAVE sweeps still missing: {', '.join(d['unswept_views'])}"
+                  + (f" Automated sweeps (axe/wave) still missing: {', '.join(d['unswept_views'])}"
                      if d["unswept_views"] else " Coverage complete."))
             return
         top = d["next"][0]
@@ -506,7 +512,7 @@ def cmd_next(args):
                 print(f"  {c['view']} ({c['name']}) × {c['modality']}"
                       + (f"  [score {c['score']}]" if c["score"] else ""))
         if d["unswept_views"]:
-            print(f"WAVE sweeps still missing: {', '.join(d['unswept_views'])}")
+            print(f"Automated sweeps (axe/wave) still missing: {', '.join(d['unswept_views'])}")
 
     emit(data, args.json, text)
 
@@ -725,9 +731,9 @@ def cmd_validate(args):
                           "not yet run (see review.py matrix)")
         unswept = [vid for vid, _ in views
                    if not any(r["view"].lower() == vid.lower()
-                              and r["tool"].lower() == "wave" for r in runs)]
+                              and r["tool"].lower() in SWEEP_TOOLS for r in runs)]
         if unswept:
-            issues.append(f"WAVE sweep missing for view(s): {', '.join(unswept)}")
+            issues.append(f"automated sweep (axe/wave) missing for view(s): {', '.join(unswept)}")
 
     unchecked = len(re.findall(r"^- \[ \]", read(review / STAGES[3]), re.M))
     if unchecked:

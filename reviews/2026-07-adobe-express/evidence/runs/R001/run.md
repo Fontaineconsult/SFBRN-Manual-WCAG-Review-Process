@@ -20,8 +20,8 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NV1 — Page/view title identifies its purpose | | |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
+| NV1 — Page/view title identifies its purpose | pass | O1 |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | pass | O3 (sparse but proper; region identity pending) |
 | NV3 — Every control announces an accurate name, role, and value/state | | |
 | NV4 — Images announce appropriate alternatives; decorative images are silent | | |
 | NV5 — Reading order matches the meaning of the visual order | | |
@@ -39,7 +39,60 @@ Format:
 - O1 [new] (state: which view state): what happened
   - Classified: <check ID> / WCAG <SC> / <severity> → finding <ID> | dismissed: <reason>
 
-(none yet)
+- O1 [classified] (state: fresh page load, session 2026-08-04, walkthrough
+  W2): JAWS announces title "Adobe Express" — identifies the product home;
+  title-only announcement is expected behavior.
+  - Classified: NV1 / WCAG 2.4.2 / pass — no finding
+- O2 [classified] (state: same load): JAWS also spoke a lot of extra
+  information from the Claude for Chrome extension UI (side panel sharing
+  the browser window) — not from the product.
+  - Dismissed: environment artifact. Mitigation for the rest of this run:
+    keep focus in the product tab and close/unfocus the assistant side
+    panel during JAWS steps; disregard non-product speech when setting
+    outcomes.
+- O3 [clarified] (state: default, walkthrough W3): Structure is real to
+  JAWS → the near-empty extraction tree (03 §2.6) was a tooling artifact,
+  resolved. Initial load announcement said "3 headings, 2 regions, 1 link";
+  the full `H`-key walk found the complete outline, all reachable and
+  properly announced:
+  - Adobe Express
+    - [2] Daniel Fontaine
+      - [3] Recent
+  - [1] How would you like to start?
+    - [2] Upload · [2] Start new design · [2] Edit photos · [2] Set up
+      brand kit · [2] Generate presentation · [2] Quick edits · [2] File
+      formats · [2] Ways to create · [2] Templates
+  Hierarchy quirks (not failures): greeting exposed as heading "Daniel
+  Fontaine"; "Recent" nested under it at level 3. Pending: identity of the
+  2 regions (a `main` region would give SR users a partial app-bar bypass —
+  affects V-F3 scope; keyboard-only users unaffected either way).
+  - Classified: NV2 / WCAG 1.3.1, 2.4.6 / pass — no finding
+- O5 [new] (state: default, walkthrough W3→W4): "Recent" is 3rd in reading
+  order (right after the greeting) but visually the bottom sticky strip —
+  candidate NV5 (1.3.2) divergence. Resolve in W4: when arrowing, does the
+  Recent content interrupting greeting→start-cards disorient, or read as a
+  sensible summary-first order?
+- O6 [new] (state: default, walkthrough W3): Two page sections not in the
+  visual exploration map surfaced via headings: "Ways to create" and
+  "Templates" (below the fold). Enclosure C3 row updated.
+- O7 [classified] (state: default, walkthrough W3): Landmark walk (`R`),
+  supersedes the load announcement's "2 regions": **Apps [navigation],
+  banner, Primary [navigation], main, search** — all reachable, sensibly
+  labeled. Consequences: NV2 pass reinforced; the Adobe app bar is a
+  labeled nav region and a `main` landmark exists → JAWS users can bypass
+  repeated blocks via landmarks (WCAG sufficient technique ARIA11), so
+  finding V-F3's affected users narrow to keyboard-only (non-AT) users.
+  Whether 2.4.1 then still fails is a conformance-interpretation call —
+  reviewer decision pending (05 remarks).
+  - Classified: NV2 / WCAG 1.3.1, 2.4.6 / pass — no finding
+- Note on initial-load counts: JAWS's page-load summary ("3 headings,
+  2 regions, 1 link") undercounted reality in both W3 walks — don't set
+  outcomes from load-announcement counts; walk the structure.
+- O4 [new] (state: default, walkthrough W3): JAWS reports only 1 link, but
+  the DOM holds 7 anchors (two "View all", "browse", the Recent-file card,
+  app links). Either most render as buttons to AT (acceptable) or link
+  content is missing from the virtual buffer (NV3 problem). Resolve in W5:
+  `Insert+F7` links list + walk the Recent-file card and "View all".
 
 ## Notes
 

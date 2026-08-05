@@ -113,6 +113,16 @@ and sensitive functionality (authentication, personal data, payments).
 |----|------|-----------------|
 | A1 | | |
 
+### 2.6 Exploration notes (recon for testing — not yet findings)
+
+Dated observations from exploration sessions (see
+`ontology/assisted-exploration.md`): machine-extraction results, suspected
+issues phrased as "verify X under check Y in a run", artifacts created during
+exploration, and replication quirks (e.g., SPA views whose URL does not
+change). Nothing here is a finding until a logged run verifies it.
+
+- (none yet)
+
 ## Step 3 — Select the representative sample set
 
 If feasible (few views, or a document), evaluate the entire product and skip

@@ -115,6 +115,7 @@ pointer interactions.
 | MO8 | Pointer actions can be cancelled (up-event activation) | 2.5.2 |
 | MO9 | Targets are ≥ 24×24 CSS px or adequately spaced | 2.5.8 |
 | MO10 | Nothing requires device motion (shake/tilt) without an alternative | 2.5.4 |
+| MO11 | A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | 2.4.1 |
 
 ## cognition — With Limited Language, Cognitive, and Learning Abilities (302.9)
 
@@ -131,17 +132,22 @@ Structured inspection of the view's demands on memory, language, and attention.
 | CO7 | Time limits are adjustable/extendable; moving content can be paused | 2.2.1, 2.2.2 |
 | CO8 | Focus/input does not trigger unexpected context changes | 3.2.1, 3.2.2 |
 
-## Supporting instrument — WAVE automated sweep
+## Supporting instrument — automated sweep (axe-core / WAVE)
 
-Not a modality: WAVE is an instrument whose output feeds several modalities
-(NV2–NV4, LV4–LV5, NC1, CO3). Run it once per sampled view and state
-(`log-test --tool wave` — leave `--modality` unset), and:
+Not a modality: the automated sweep is an instrument whose output feeds
+several modalities (NV2–NV4, LV4–LV5, NC1, CO3). Every sampled view (and
+significant state) gets one sweep run, logged with `--modality` unset.
+**Primary instrument: axe-core** via `scripts/axe_scan.py` —
+assistant-runnable, traverses open shadow DOM, saves raw JSON into the run
+folder (`log-test --tool axe`, or let the script log the run itself).
+**Secondary: WAVE extension** — reviewer-run; blind on shadow-DOM apps (see
+testing-tools.md), use where it can parse (e.g., marketing pages).
 
 | ID | Check |
 |----|-------|
-| W1 | Every WAVE **Error** and **Contrast Error** is human-confirmed → finding, or dismissed with a written reason in the run notes |
-| W2 | Every **Alert** is reviewed; relevant ones investigated in the matching modality |
-| W3 | Structure panel reviewed: heading outline and landmarks are sane (feeds NV2) |
+| W1 | Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |
+| W2 | Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality |
+| W3 | Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |
 
 ## Result semantics
 

@@ -91,24 +91,57 @@ initiating processes (those are covered in §A). Repeated components (header,
 navigation, footer) need re-checking only where they appear or behave
 differently.
 
-### View S1 — (name)
+### View S1 — Home dashboard
 
 | | |
 |---|---|
-| **Baselines run** | |
-| **Date tested** | |
-| **Findings** | (none / IDs below) |
+| **Baselines run** | B3 (R002, partial), — (R003, R005, R006, R007 wave-blind, R009 axe), B2 (R004, partial); B1/JAWS in progress (R001, walkthrough W2–W3 done) |
+| **Date tested** | 2026-08-04 (assistant-driven trials + axe sweep; reviewer walkthrough in progress) |
+| **Findings** | V-F1, V-F2, V-F3, V-F4 |
 
 #### Finding V-F1
 
 | | |
 |---|---|
-| **Where** | (view and component) |
-| **Observed** | |
-| **Affected users** | |
-| **WCAG criteria failed** | |
-| **Severity** | Blocker / Major / Minor |
-| **Evidence** | |
+| **Where** | S1 Home dashboard — left-rail hover flyout ("Get inspired" panel on rail items) |
+| **Observed** | Hover content violates all three 1.4.13 conditions observed: moving the pointer onto the flyout dismissed it (not hoverable); Esc did not dismiss it (not dismissible); once stuck, it persisted indefinitely over page content through unrelated interactions. Assistant-driven (synthetic hover teleports) — confirm with continuous pointer movement. |
+| **Affected users** | Low-vision magnification users (flyout obscures content they cannot reposition around); motor-impaired users relying on Esc |
+| **WCAG criteria failed** | 1.4.13 |
+| **Severity** | Major |
+| **Evidence** | evidence/runs/R002/R002-flyout-hover.jpg, evidence/runs/R003/R003-grayscale-home.jpg (flyout still open minutes later) (runs R002, R003) |
+
+#### Finding V-F2
+
+| | |
+|---|---|
+| **Where** | S1 Home dashboard — Upload card, "browse" link ("Drag and drop files or browse") |
+| **Observed** | 11px link text at 3.96:1 computed contrast against the card background (4.5:1 required). CONFIRMED by two independent instruments: computed-style measurement (R002) and axe-core `color-contrast` violation on the same `.browse-text` node (R009). Consistent with vendor ACR "Does Not Support" for 1.4.3. |
+| **Affected users** | Low-vision users |
+| **WCAG criteria failed** | 1.4.3 |
+| **Severity** | Minor |
+| **Evidence** | evidence/runs/R002/R002-upload-card-browse.png (run R002); evidence/runs/R009/R009-axe.json (run R009) |
+
+#### Finding V-F3
+
+| | |
+|---|---|
+| **Where** | S1 Home dashboard — page-level keyboard entry (Adobe cross-product app-switcher bar precedes all content) |
+| **Observed** | No skip link on first Tab; ~15 observed Tab stops remained in the app-switcher bar region before any Express content. Assistant-driven with a focus-attribution caveat (run R004 O3) — reviewer keyboard confirmation still pending (W14). AMENDED 2026-08-04 (R001 O7): landmark walk found Apps[nav]/banner/Primary[nav]/main/search — SR users can bypass via landmarks (sufficient technique ARIA11), so the barrier is keyboard-only (non-AT) users. Reviewer decision pending: does 2.4.1 stand as a failure (no keyboard-reachable mechanism) or reclassify as advisory barrier with 2.4.1 = Supports? |
+| **Affected users** | Keyboard-only users without AT (every page visit); screen reader users NOT affected (landmarks, R001 O7) |
+| **WCAG criteria failed** | 2.4.1 |
+| **Severity** | Major |
+| **Evidence** | evidence/runs/R004/R004-tab5-focus.jpg, R004-tab15-plusbutton-focus.jpg (run R004) |
+
+#### Finding V-F4
+
+| | |
+|---|---|
+| **Where** | S1 Home dashboard — header, community/people icon button (`x-community-discovery-trigger` → icon-only `sp-action-button`) |
+| **Observed** | axe-core `aria-command-name` violation (serious): the button exposes `role="button"` with no accessible name — its only content is an `aria-hidden` icon with an empty label. A screen reader user hears "button" with no purpose. Assistant-driven (axe, R009); JAWS confirmation pending (walkthrough W5: what announces on this control?). Vendor claims Does Not Support for 4.1.2 — consistent. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.2 |
+| **Severity** | Major |
+| **Evidence** | evidence/runs/R009/R009-axe.json (run R009, violations[0]) |
 
 ---
 

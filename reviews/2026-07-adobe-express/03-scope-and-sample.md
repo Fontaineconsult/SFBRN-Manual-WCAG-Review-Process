@@ -41,6 +41,19 @@ used during evaluation.
 | B1 | Windows 11 | Chrome | JAWS |
 | B2 | Windows 11 | Chrome | Keyboard only (no pointer) |
 | B3 | Windows 11 | Chrome | 400% zoom / reflow |
+| B4 | Windows 11 (build TBC) | Chrome 150.0.7871.187 | **NVDA 2026.1.1** — added 2026-08-06, the screen reader actually in use |
+
+**Screen-reader baseline note (2026-08-06):** testing is being performed with
+**NVDA**, not JAWS. B1 is retained rather than edited because runs already
+recorded against it must keep their attribution, and because the two are not
+interchangeable evidence — they differ in how they compute accessible names,
+expose ARIA states, and handle shadow DOM, so "works in NVDA" does not
+establish "works in JAWS" or vice versa. Open question for the reviewer:
+**is JAWS in scope for this procurement at all?** If CSU/SFSU supports both,
+B1 stays and its cells remain untested; if NVDA is the institutional
+standard, B1 should be struck and this review's conformance statements
+scoped to B4. Until answered, no-vision conclusions here are **NVDA-only**
+and the report must say so.
 
 ### 1.4 Additional evaluation requirements (optional)
 
@@ -56,13 +69,30 @@ page/view, date, tool, and baseline, and creates the run's evidence folder.
 
 | Tool | Type | Version used | Purpose | Output captured per run |
 |------|------|--------------|---------|-------------------------|
-| JAWS (Freedom Scientific) | Screen reader — manual testing (reviewer-driven) | (record before first run) | Walk task sequences and inspect views as a screen reader user (no-vision) | Action/announced/expected notes, speech history excerpts, screenshots |
+| **NVDA (NV Access)** | Screen reader — manual testing (reviewer-driven), **baseline B4** | **2026.1.1** (recorded 2026-08-06) | Walk task sequences and inspect views as a screen reader user (no-vision) | Action/announced/expected notes, **Speech Viewer** excerpts, screenshots |
+| JAWS (Freedom Scientific) | Screen reader — manual testing (reviewer-driven), baseline B1 | not in use as of 2026-08-06 — see §1.3 baseline note | Walk task sequences and inspect views as a screen reader user (no-vision) | Action/announced/expected notes, speech history excerpts, screenshots |
 | axe-core via `scripts/axe_scan.py` | Automated checker — **primary sweep** (assistant-driven; shadow-DOM capable) | 4.10.3 (vendored `tools/axe/axe.min.js`) | Sweep every sampled view and state inside the authenticated session (CDP attach) | Raw `R###-axe.json` in the run folder + summary in run.md |
 | WAVE (WebAIM) browser extension | Automated checker — secondary (reviewer-driven; light-DOM views only — blind on this app's shadow DOM, R007) | (record before first run) | Sweep views WAVE can parse (marketing/landing, docs) | Summary counts, error list, annotated screenshots |
 | `zoom` — 400% reflow / 320 CSS px viewport + text-spacing override | Manual — low-vision (B3) | Chrome (record version) | LV checks: reflow, loss of content, text spacing, contrast, hover/focus persistence | Reflow + text-spacing screenshots, contrast measurements |
 | `grayscale` — OS Color Filters (or CSS proxy on assistant-driven runs) | Manual — no-color | Windows 11 / Chrome | NC checks: nothing conveyed by color alone | Grayscale screenshots |
 | `keyboard` — keyboard-only operation | Manual — motor (B2) | Chrome | MO checks: reach, operate, no traps, focus visibility/order | Focus-path notes, focus-state screenshots |
 | `inspection` — structured checklist pass | Manual — no-hearing / no-speech / cognition | — | NH/NS/CO checks; N/A with justification where no relevant content | Notes |
+
+**Browser version — recorded 2026-08-06, with a live warning.** All runs to
+date (R001–R011) were executed on **Chrome 150.0.7871.187** — confirmed from
+the binary's own version info and the running instance over CDP, not from
+recollection. But **Chrome 151.0.7922.76 is already staged in the
+Application directory** and takes effect the next time Chrome fully
+restarts. Consequences to manage rather than discover later:
+
+- The debug-profile window must not be casually restarted mid-session, or
+  automated sweeps silently change instrument version between views —
+  R009/R011 (150) would not be comparable with later runs (151).
+- When the upgrade does land, **record it as a new version line here** and
+  note the first run ID executed on it. A conformance record that says
+  "Chrome 150" while half the runs were 151 is false.
+- If a finding disappears after the upgrade, that is a browser-behaviour
+  change, not a product fix — re-verify rather than withdrawing it.
 
 ## Step 2 — Explore the target product
 
@@ -120,7 +150,7 @@ what exploration reveals.
 | HTML / CSS / JavaScript | SPA; `lang="en-US"` set on html element |
 | Web components / shadow DOM | **Observed 2026-08-04:** browser-extension accessibility-tree extraction returned a near-empty tree (single generic node); DOM walk shows one top-level shadow host wrapping the app. Must verify what JAWS/DevTools actually expose — high-priority recon for R001 |
 | WAI-ARIA | Heavy use expected in custom widgets |
-| Canvas / WebGL rendering | Major risk area: canvas content is invisible to AT unless mirrored in the accessibility tree — editor canvas confirmed present |
+| Canvas / WebGL rendering | **Confirmed 2026-08-06, and the risk is realised.** The editor renders the document into a **single full-viewport `<canvas>`** (2328×1145) carrying **no `role`, no `aria-label`, no `aria-hidden`, and zero fallback child elements**. A text element reading "Text Test" that is plainly visible on the canvas **does not appear anywhere in the DOM** — not as text, not as an `aria-label` — across all 960 open shadow roots. The document's content therefore exists only as painted pixels. Recon, to be verified under NV3/NV4/NV5 in a run (see §2.6). |
 | Drag and drop | Confirmed: "Drag and drop files" upload card on home; canvas manipulation. Check keyboard alternatives (2.5.7) |
 | File upload / download | Confirmed: Upload card (home), Upload rail item (editor), Download button (editor) |
 | Generative AI features | Firefly-based: Generate presentation / Generate template buttons, credits meter in account menu |
@@ -157,8 +187,94 @@ Session 2026-08-04, signed in as fontaine@sfsu.edu (Chrome, exploration only):
 - Creating a design is frictionless but silently creates a persistent
   "Untitled - <date>" doc (one now exists in Your stuff from this session —
   reusable as the P2 test document).
-- Left-rail Templates (Explore) does not change the URL — replication steps
-  for runs must describe UI actions, not URLs, for this view.
+- Left-rail Templates (Explore) does not change the URL — **CORRECTED
+  2026-08-06:** it does. The view is addressable as
+  `/explore/templates?assetCollection=urn:aaid:sc:VA6C2:…` and was scanned
+  directly at that URL (R011). The earlier note was written from a session
+  that reached Explore by clicking the rail; S2 is replicable by URL.
+
+**Exploration session 2026-08-06 — S3 Editor and S4 Your stuff (assistant
+driving, per `assisted-exploration.md`). Mapping only; nothing here is a
+finding until a run verifies it.**
+
+- **Canvas exposure — the headline recon item.** The editor paints the whole
+  document into one `<canvas>` (2328×1145) with **no `role`, no
+  `aria-label`, no fallback children, and no `aria-hidden`**. The visible
+  text element "Text Test" is **absent from the DOM entirely** across 960
+  open shadow roots. → *Verify under **NV3, NV4 and NV5** in the S3
+  no-vision run: with a screen reader, can the user perceive that the
+  document contains a text object, read its content, select it, or know
+  where it sits on the page?* If confirmed, this is the most serious defect
+  available in the product, because it makes the **document itself** —
+  not a control around it — imperceptible. Note it would also bear directly
+  on task **P2** (edit and export), every step of which operates on canvas
+  content.
+- **No `main` landmark in the editor.** Landmarks found: `form`, `header`,
+  `sp-action-group[toolbar]`, `sp-button-group[region]`. S1 exposed
+  `main` plus four others, and that `main` is the entire basis for V-F3's
+  amendment narrowing 2.4.1 to keyboard-only users (ARIA11 bypass).
+  → *Verify under **NV2/MO11** in the S3 runs: if the editor has no `main`,
+  the landmark-bypass argument does not transfer here, and 2.4.1 may be
+  worse on S3 than the S1 evidence suggests.* Do not assume S1's finding
+  scope applies to this view.
+- **Editor headings** (11+): `h2` "Untitled…", `h2` "Daniel Fontaine",
+  `h2` "Canvas", `h2` "Search", then `h3` per search-panel section
+  (Templates, Photos, Design assets, Icons, Shapes, Stickers, Backgrounds,
+  Videos, Music, Sound effects, Charts). **No `h1`.** A heading named
+  "Canvas" exists, so the region is at least announceable even if its
+  contents are not. → *Verify under NV2.*
+- **S3's no-hearing cell will NOT be N/A** — unlike S1 and S2. The editor's
+  asset panel offers **Videos, Music and Sound effects**, so captions,
+  transcripts and audio alternatives (NH1–NH4 / 1.2.x) become live
+  criteria for the first time in this review. Plan a real no-hearing run
+  for S3 rather than reusing S1's N/A.
+- **Editor scale:** 3,971 elements across **960 open shadow roots** (S1:
+  1,751 / 303). Expect axe sweeps and any DOM-walking instrument to be
+  slower and heavier here.
+- **The editor *does* set a document title** ("Untitled - August 06, 2026 at
+  13.02.17"), confirming the V-F8 nuance: the app is capable of meaningful
+  titles and simply does not set them on its non-document views.
+- **S4 Your stuff (visited in passing):** tabs Files / Projects (NEW) /
+  Libraries / Favorites; "Files" heading with an add button; card grid;
+  Create file; filter, sort and list-view toggles; scoped search showing an
+  "In:Files" chip. Matches C8 as recorded. Three files present — see
+  artifacts below.
+
+**Artifacts created by assistant-driven sessions (per CLAUDE.md browser
+rules — record, don't hide):**
+
+- 2026-08-04: one "Untitled - <date>" document, created during exploration
+  and recorded as retained for P2. **CORRECTION 2026-08-06: it is gone.**
+  Your stuff lists only three files and this is not among them. Either it
+  was never persisted or it was removed between sessions. The S3 sample row
+  pointed at it and has been re-pointed at a document that exists. Lesson
+  for the enclosure: a sample locator that names "the doc from this session"
+  is not replicable — record the durable ID.
+- **2026-08-06, unattributed: a file named "sdcsdc"** (timestamped ~2 hrs
+  before this exploration), and the "Untitled - August 06" document now
+  contains a text element reading **"Text Test"** that was not placed by the
+  assistant. Both are consistent with the reviewer's NVDA session having
+  exercised the editor and a naming/search field, but that is **inference,
+  not observation** — recorded as unattributed so the record stays honest.
+  Reviewer to confirm provenance; keep or delete deliberately.
+- **2026-08-06: a second document, "Untitled - August 06, 2026 at
+  13.02.17"** (`/id/urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86`,
+  `taskID=instagram-portrait-post`). Created unintentionally in the
+  **debug-profile** browser: a CDP `Page.navigate` to `https://new.express.
+  adobe.com/` from the Explore view did not land on Home — the app resumed a
+  pending template task and opened a new document instead. Two consequences
+  worth carrying forward:
+  1. **Instrument lesson:** navigating this SPA by URL does not guarantee
+     the view you asked for. Any run must verify the landed view (title +
+     URL) *before* measuring — an AX-tree capture taken on this document was
+     briefly mistaken for Home and discarded.
+  2. **Product observation (recon, not a finding):** a plain navigation to
+     the site root silently created a persistent user artifact. Worth
+     testing deliberately under CO8 (3.2.1/3.2.2 unexpected context change)
+     and as a data-hygiene note — a screen reader user could land in an
+     editor without having asked for one.
+- Both documents remain in Your stuff (S4). Do not delete them — deletion is
+  outside assistant permissions, and they are now part of S4's tested state.
 
 ## Step 3 — Select the representative sample set
 
@@ -175,7 +291,7 @@ sample types (2.3), technologies relied upon (2.4), and other relevant samples
 |----|---------------|-----------------|-----------------------------------|
 | S1 | Home dashboard (incl. "Get started" modal state) | https://new.express.adobe.com/ | C3; entry points for F1 (create from template/blank); start of P1; modal-dialog type |
 | S2 | Explore / template gallery | left-rail Templates (SPA, URL stays `/`) | C4; F1 (choose template); gallery-grid type; P1 step 2 — proposed 2026-08-04 |
-| S3 | Editor (blank square doc from this session) | `/new?width=1080&height=1080…` → Untitled doc | C5; F2/F3/F5 (edit, upload, export); canvas + panels + export dialog; P1 step 3, all of P2 — proposed 2026-08-04 |
+| S3 | Editor ("Text Test" document) | **`https://new.express.adobe.com/id/urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86`** — the durable locator; use exactly this in run records. Reachable via Your stuff → "Untitled - August 06, 2026 at 13.02.17". Do **not** record the `?category=…&pageId=…` suffix seen in a live address bar: those are transient UI state (which side panel is open, which page is showing), not part of the document address. **CORRECTED 2026-08-06** — the previously-cited "blank square doc from this session" (2026-08-04) no longer exists, so the old locator was unreplicable. This document is better for testing anyway: it holds a text element reading "Text Test", so NV3/NV4/NV5 can be exercised against real document content, which a blank canvas cannot do. | C5; F2/F3/F5 (edit, upload, export); canvas + panels + export dialog; P1 step 3, all of P2 |
 | S4 | Your stuff | `/your-stuff/files/recent?filter=express` | C8; F4 (save/find work); gallery-grid + folders; end of P2 verification — proposed 2026-08-04 |
 
 Candidates not yet sampled (decide after remaining exploration): Brands (C9),

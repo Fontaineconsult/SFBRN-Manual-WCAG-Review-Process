@@ -10,8 +10,8 @@
 | **Modality** | no-vision |
 | **Tool** | jaws |
 | **Baseline** | B1 |
-| **Tester** | — |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Tester** | reviewer (D. Fontaine), **JAWS** — confirmed 2026-08-06 |
+| **Result** | Not set — **run suspended 2026-08-06**: JAWS is no longer the screen reader in use. NV1/NV2 stand as JAWS evidence; NV3–NV9 continue under **R012 (NVDA, B4)**. Resume only if JAWS is confirmed in scope (03 §1.3 baseline note) |
 
 ## Checks (no-vision)
 
@@ -93,6 +93,28 @@ Format:
   app links). Either most render as buttons to AT (acceptable) or link
   content is missing from the virtual buffer (NV3 problem). Resolve in W5:
   `Insert+F7` links list + walk the Recent-file card and "View all".
+- O8 [new] (state: default, search bar — DOM evidence from session
+  2026-08-06, R010 O2; **needs JAWS confirmation in W5**): the home search
+  input's accessible name is `aria-label="Search for templates and more"`,
+  while the text a sighted user reads in the field is the rotating
+  placeholder — "Search for *popular templates*" / "*seasonal templates*" /
+  "*images*". The visible string is therefore **not contained in** the
+  accessible name.
+  - Two separate consequences, do not conflate them:
+    (a) **Good for 4.1.2/NV3:** the name is stable and meaningful, and the
+        rotator is `aria-hidden="true"` in no live region — a screen reader
+        hears one consistent label, never the rotation. This also defuses
+        the W8 "chatty rotating placeholder" concern (NV7).
+    (b) **Candidate 2.5.3 Label in Name:** speech-input users say what they
+        see. "Click "Search for popular templates"" would not match the
+        accessible name, and the target string changes over time, so no
+        fixed utterance works. Vendor claims Partially Supports for 2.5.3.
+  - Held as a **candidate, not a finding** — whether a placeholder counts as
+    a "label" under 2.5.3 is a judgment call (placeholders are not labels
+    for 3.3.2 purposes, and 2.5.3 speaks of components "with labels"), and
+    it turns on how long the rotation is actually visible (R010 O1). W5
+    should capture what JAWS announces on the field; the 2.5.3 call is the
+    reviewer's.
 
 ## Notes
 

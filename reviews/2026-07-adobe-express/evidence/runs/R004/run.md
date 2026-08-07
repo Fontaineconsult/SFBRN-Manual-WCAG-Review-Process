@@ -28,7 +28,7 @@ run's Result is set. Fails cite observation IDs.
 | MO6 — Single-character shortcuts can be switched off or remapped | | reviewer |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | reviewer (Upload card drag-drop has "browse" alternative — pre-verified visually) |
 | MO8 — Pointer actions can be cancelled (up-event activation) | | reviewer |
-| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | | reviewer / geometry measurement |
+| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O4 (full-page geometry measurement, 2026-08-06) |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | desktop web view; no motion features |
 
 ## Observations
@@ -45,6 +45,33 @@ run's Result is set. Fails cite observation IDs.
   (R004-tab15-plusbutton-focus.jpg); the Photoshop tile a box-shadow focus
   style. Positive MO4 signal for the app bar only — not yet a pass for the
   whole view.
+- O4 [classified] (state: default, whole page — session 2026-08-06,
+  assistant, geometry measurement rather than eyeballing): enumerated every
+  interactive target across all 303 open shadow roots
+  (`button, a[href], input, select, textarea, [role=button|link|checkbox|
+  tab|menuitem], [tabindex="0"], sp-action-button, sp-button, sp-link`),
+  excluded zero-size/hidden/`opacity:0` nodes, and collapsed
+  wrapper+inner pairs sharing a box (e.g. `sp-link` around its inner `a`) so
+  one control counts once. **51 distinct targets** on S1 at 2328×1145.
+  Five measure under 24 CSS px in one dimension:
+  | Target | Size | Nearest other target (centre-to-centre) |
+  |---|---|---|
+  | "View all" — Quick edits | 40×15 | 115 px |
+  | "View all" — File formats | 40×15 | 104 px |
+  | "View all" — Templates (below fold) | 40×15 | 320 px |
+  | Account/avatar button | 24×24 | 36 px |
+  | Search input | 657×24 | 261 px |
+  2.5.8 Target Size (Minimum) is met when a 24 px-diameter circle centred on
+  the target intersects no other target's circle — i.e. centres ≥ 24 px
+  apart. The closest neighbour anywhere in this set is **104 px**, over four
+  times the threshold: the three undersized "View all" links sit alone
+  beside their section headings, not in a cluster. **All five clear 2.5.8
+  via the spacing exception**; the account button and search input are at
+  the 24 px boundary and clear it outright as well.
+  - Classified: MO9 / WCAG 2.5.8 / pass — no finding. Note this criterion
+    has **no vendor claim at all** (the 2023 ACR predates WCAG 2.2 — see
+    05 §"Vendor evidence gap"), so this is independent primary evidence,
+    not a verification.
 - O3 [new] (instrument): During the first five synthesized Tab presses,
   `document.activeElement` reported BODY while the page visibly rendered a
   focus state — focus attribution through the app's shadow DOM was

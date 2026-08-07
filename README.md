@@ -41,6 +41,8 @@ python scripts/review.py log-test <review> --view S1 --modality no-vision \
 python scripts/review.py runs <review>         # list logged test runs
 python scripts/review.py matrix <review>       # views × modalities coverage grid
 python scripts/review.py next <review>         # highest-value cell to test next
+python scripts/review.py gaps <review> [--view S1]
+                                               # unanswered check rows — the session's question list
 ```
 
 Testing runs as an interactive loop (`ontology/testing-loop.md`): `next`
@@ -49,6 +51,17 @@ run with its modality checklist, the reviewer narrates while the assistant
 structures observations, asks gap-driven questions, and writes results back
 into the run, findings, criterion rollup — and the enclosure itself when
 testing reveals unmapped views.
+
+`gaps` is the loop's question list made explicit: `validate` reports which
+*runs* lack a Result, `gaps` reports which *checks* are still unanswered —
+the rows a reviewer session actually works through, grouped by run. Use it
+to open a session (`gaps <review> --view S1`) and to see what a walkthrough
+still needs.
+
+**Findings come from the reviewer's testing.** Automated sweeps are
+supporting instruments: every violation is human-confirmed into a finding or
+dismissed in writing, and every `incomplete` is routed to a modality check.
+A scan result is never itself a finding.
 
 Modalities are sensory/functional, per the Section 508 Functional Performance
 Criteria: `no-vision`, `low-vision`, `no-color`, `no-hearing`, `no-speech`,

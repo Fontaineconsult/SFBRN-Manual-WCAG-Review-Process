@@ -27,7 +27,9 @@ next → log-test → narrate/observe → gap questions → write-back → refle
    observation (`O1, O2…`) in the run file; check outcomes fill in
    (pass / fail / partial / n/a) as narration covers them.
 5. **Assistant asks gap questions.** Questions are generated from
-   deterministic gaps, not improvisation:
+   deterministic gaps, not improvisation — `review.py gaps <review> [--view
+   S#]` prints exactly that list (every check row still without an outcome,
+   grouped by run). Open a session with it; re-run it to see what is left:
    - a check row still empty → ask that check, quoting its text
    - a fail/partial without reproduction detail → ask for exact behavior
      (JAWS: paste the Speech History; WAVE: the summary counts)
@@ -36,6 +38,20 @@ next → log-test → narrate/observe → gap questions → write-back → refle
      affected users / WCAG SC / severity / evidence) → ask for that field
    - a screenshot-worthy moment without a file → ask for one
      (`R###-<what>.png`)
+
+   **Do not re-interpret the reviewer's words into something stronger.**
+   When a narrated phrase matches a checklist item's own wording, it is the
+   answer to *that check* — not a finding in disguise. "Focus is not
+   trapped" was an MO3 pass (you can always get out); the assistant read it
+   as focus escaping an open modal and raised a Major 2.4.3 finding, which
+   the reviewer's next sentence retracted. Ask what happened before writing
+   what it means.
+
+   **Ask before recording any assistant hypothesis.** On 2026-08-06 three
+   assistant conclusions were wrong and all three were caught this way,
+   costing one question each instead of a retraction in the report. A
+   withdrawn finding in a delivered ACR is far more expensive than a
+   question.
 6. **Write-back.** The assistant updates, immediately, in this order:
    - the run's checks table and observations (with lifecycle status:
      `new → clarified → classified → finding:<ID> | dismissed`)
@@ -80,6 +96,9 @@ skipped.
 
 1. **Collect the open work for the sample** from the live sources, never
    from memory:
+   - `review.py gaps <review> --view S#` — every unanswered check row for
+     this sample, grouped by run. Start here: it is the walkthrough's
+     backbone, and each row becomes a **Tell me** line.
    - `review.py validate` — runs without Results, missing WAVE sweeps
    - `review.py matrix` — unrun view×modality cells for this sample
    - `review.py next` — the priority rationale (vendor-claim discrepancies)

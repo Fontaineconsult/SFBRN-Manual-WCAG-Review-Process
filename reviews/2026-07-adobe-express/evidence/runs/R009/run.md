@@ -21,7 +21,7 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | W1 — Every reported failure (axe **violations**) is human-confirmed → finding, or dismissed with a written reason in the run notes | fail | O1 (V-F2 corroborated), O2 (new V-F4), O3 (best-practice, held as observation) |
-| W2 — Every warning (axe **incomplete**) is reviewed; relevant ones investigated in the matching modality | pass | O4, O5, O6 — all routed to walkthrough steps |
+| W2 — Every warning (axe **incomplete**) is reviewed; relevant ones investigated in the matching modality | pass | O4, O5, O6 routed; O8 resolves 8 of the 15 contrast nodes (pass), O9 holds the other 7 open with a named method |
 | W3 — Structure output sane and cross-checked against the JAWS walk | pass | O3, O7 — axe penetrated the shadow DOM (unlike WAVE, R007); its landmark picture matches JAWS |
 
 ## Observations
@@ -52,6 +52,49 @@ inapplicable 42.** Raw output: `R009-axe.json` (1.65 MB).
   axe cannot compute gradient backgrounds either. **Exactly the W13
   eyedropper queue** (matches R002 O3).
   - Routed: W13 (low-vision eyedropper measurements)
+  - **AMENDED 2026-08-06 (O8):** the 15 nodes are not one group. They split
+    into 8 app-bar labels (resolved, O8), 2 rotating-placeholder words, and
+    5 headings over card art (both still open, O9). W13's queue is 8 nodes
+    smaller than recorded.
+- O8 [classified] (resolves 8 of O4's 15 nodes; session 2026-08-06,
+  assistant, Chrome extension): the app-bar background is **not a CSS
+  gradient** — it is a self-contained SVG
+  (`express_background.svg`, `viewBox 0 0 1440 56`,
+  `preserveAspectRatio="none"`, painted at `background-size: 100% 100%`),
+  which is why axe returned *"background color could not be determined due
+  to a background image"* rather than a ratio. Because the SVG references no
+  external resources, it can be re-rendered same-origin as a data URI on a
+  canvas and sampled exactly — no eyedropper needed. Method: draw at the
+  container's rendered size (2328×56), sample a 13×7 grid across each
+  label's box, compute WCAG contrast against the label colour
+  `rgb(248,248,248)` (12px/500 → **normal text, 4.5:1 required**).
+  Worst ratio per label: Adobe Home 11.23, Firefly 11.18, Express 11.23,
+  Photoshop 11.43, Lightroom 11.64, Acrobat 11.71, Fonts 11.64, Stock 11.59.
+  Darkest sampled background `rgb(46,38,138)`; the SVG's base fill is
+  `#110036` and the two radial gradients (`#3236a8`, `#800081`) only lighten
+  it slightly. **All 8 pass 1.4.3 with ~2.5× headroom.** Confounder checked
+  and excluded: every `sp-underlay` in the tree is `visibility:hidden` /
+  `opacity:0` (not painted) and the one painted `x-coachmark-underlay` is
+  `rgba(0,0,0,0)` — nothing translucent sits over the bar.
+  - Classified: W2 / WCAG 1.4.3 / pass — no finding. **Removes 8 nodes from
+    the W13 reviewer queue.**
+- O9 [new] (the other 7 of O4's 15 nodes — NOT resolved): these cannot be
+  settled by DOM inspection and must not be guessed.
+  (a) **5 headings over card art** — the four start-card `h2`s ("Start new
+  design", "Edit photos", "Set up brand kit", "Generate presentation") and
+  one `x-home-row` `h2`. Ancestor-walking returns *no painted background at
+  all* (every ancestor `rgba(0,0,0,0)`, no background-image), and
+  `elementsFromPoint` through the shadow roots is transparent the whole way
+  down — the card colour is painted by a pseudo-element or a
+  non-hit-testable image. An ancestor walk here yields a false "white
+  background, 21:1"; that number is wrong and was discarded rather than
+  recorded.
+  (b) **2 rotating-placeholder words** — axe: "partially obscured by another
+  element", because the rotator keeps the outgoing and incoming word in the
+  DOM simultaneously (see R010 O1).
+  - Routed: rendered-pixel sampling via CDP `Page.captureScreenshot` on the
+    debug-profile Chrome (exact coordinates recorded above), or the W13
+    eyedropper. Method noted in testing-tools.md.
 - O5 [classified] (incomplete `aria-valid-attr-value`, critical, 2 nodes):
   (a) "More apps" button has `aria-controls="spillover-dialog"` — verify the
   target ID exists when closed; (b) profile-thumbnail (account button)

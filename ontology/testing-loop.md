@@ -20,7 +20,12 @@ next → log-test → narrate/observe → gap questions → write-back → refle
    Supports), then sample order. It prints the ready `log-test` command.
 2. **Open the run.** `log-test` scaffolds `run.md` with that modality's
    checklist as an empty outcomes table — the empty rows are the session's
-   question list.
+   question list. `--url` takes the **replicable locator**: a durable URL
+   (transient params stripped; documents by `/id/urn:…` ID from the `03`
+   §2.6 registry, never display name) or `UI: <action path>` for
+   unaddressable states. If the target doesn't exist yet (a document the
+   run will create), resolve the placeholder **in the same session** the
+   artifact appears — `validate` flags unresolved locators.
 3. **Reviewer narrates.** Test the page in any order and report what you see,
    free-form. No need to follow the checklist sequence.
 4. **Assistant structures.** Each narrated item becomes a numbered

@@ -270,6 +270,75 @@ Format:
     from failure.
   - Classified: NV3 / WCAG 4.1.2 (name/role/value for the focused object),
     1.3.1 / **Major** → feeds the consolidated S3 finding
+- O10 [classified] (state: editor, asset panel — reviewer, 2026-08-10):
+  *"tables are regularly used for navigation elements, but the tables don't
+  have a summary so I don't know what the table area is about — also I
+  thought tables were not supposed to be used for navigation?"*
+  - **Measured and confirmed: 12 grids on S3, 11 of them unnamed.** All
+    eleven are `x-simple-row-scroller` (`role="grid"`, 281px wide) — the
+    asset panel's content rows: Templates, Photos, Design assets, Icons,
+    Shapes, Stickers, Backgrounds, Videos, Music, Sound effects, Charts.
+    106 `gridcell` nodes sit inside them. The **only** named grid is the
+    layers list (`hz-sortable-list`). Verified in both the DOM and the
+    accessibility tree.
+  - **Two distinct defects, and they should be written up separately:**
+    1. **The grids have no accessible name** (no `aria-label`, no
+       `aria-labelledby`). A user lands in "a grid/table" with no
+       indication of what it holds — the reviewer's "I don't know what the
+       table area is about". → **1.3.1**.
+    2. **`role="grid"` is applied to non-tabular content.** These are
+       horizontal card carousels with no meaningful row/column
+       relationship, so the markup asserts a structure the content does not
+       have, and burdens the user with grid navigation semantics for what
+       is a list of choices. → **1.3.1** (relationships conveyed
+       programmatically do not match the content).
+  - **Correcting the reviewer's framing before it reaches the report** —
+    this matters because the weaker version is easy for a vendor to rebut:
+    these are **not** HTML `<table>` elements used for layout (the
+    discouraged practice, which would need `role="presentation"`). They are
+    ARIA `role="grid"`, a legitimate pattern that is being **misapplied**.
+    The defensible claim is "grid semantics on non-tabular content, 11 of
+    12 unnamed", not "tables used for navigation". Likewise "summary" is
+    the obsolete HTML4 table attribute; the modern equivalent is
+    `aria-label`/`aria-labelledby`.
+  - **Remediation is cheap and that strengthens the finding:** each section
+    already carries an adjacent `h3` ("Templates", "Photos", "Design
+    assets"…) which *is* exposed to AT. One `aria-labelledby` per grid,
+    pointing at the heading already present, would name all eleven. The
+    information exists and simply is not wired up.
+  - **Scope — likely product-wide, not S3-only.** `x-simple-row-scroller`
+    also appears on S1 (the Recent bar, R009 node paths), and S2's template
+    grid is the related `x-masonry` with an *orphaned* `role="row"`
+    (R011 O1). The same component family underlies the asset rows here, the
+    home rows, and the Explore grid. **Verify on S1/S2 before sizing**, then
+    raise once as a product-wide finding rather than per view.
+  - **SCOPE CHECK DONE 2026-08-10 — product-wide, and worse than S3 alone
+    suggested.** Counted on each sampled view, verifying the landed view
+    before measuring:
+
+    | View | Grids | Named | Unnamed | Orphaned `role="row"` |
+    |---|---|---|---|---|
+    | S1 Home | 2 | 0 | 2 | 2 |
+    | S2 Explore | 2 | 0 | 2 | 3 |
+    | S3 Editor | 12 | 1 | 11 | — |
+    | S4 Your stuff | 2 | 0 | 2 | 1 |
+    | **Total** | **18** | **1** | **17** | on every view |
+
+    Components involved: `x-home-row-scroller`, `x-simple-row-scroller`,
+    `sp-grid`, `x-masonry`. **The single named grid in the entire product
+    sample is the editor's layers list.**
+  - **The orphaned-row defect is also product-wide.** `role="row"` with no
+    `grid`/`table`/`rowgroup` ancestor appears on S1, S2 and S4 — the same
+    defect that axe flagged as a critical `aria-required-parent` violation
+    on S2's `x-masonry` and that was identified as the root cause of
+    **T1-F2** (R011 O1). It is not confined to the template grid.
+  - **Count caveat, stated so nobody over-reads it:** these are **floors,
+    not totals**. S1/S2/S4 were measured shortly after navigation and these
+    views lazy-load content on scroll, so more grids may exist than were
+    counted. S3's 12 reflects a fully-rendered asset panel. The *ratio* —
+    essentially none named — is the robust result.
+  - Classified: NV2/NV3 / WCAG 1.3.1 / Major → **finding V-F11**
+    (product-wide, 04 §B).
 
 ## Notes
 

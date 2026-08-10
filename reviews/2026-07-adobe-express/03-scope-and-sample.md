@@ -273,8 +273,29 @@ rules — record, don't hide):**
      testing deliberately under CO8 (3.2.1/3.2.2 unexpected context change)
      and as a data-hygiene note — a screen reader user could land in an
      editor without having asked for one.
-- Both documents remain in Your stuff (S4). Do not delete them — deletion is
+- **2026-08-10, reviewer-created, deliberate: the T2 test document** — a
+  blank document authored by the reviewer entirely via keyboard/NVDA to
+  walk task **T2** (run R016). Created and renamed without a pointer, which
+  is itself a recorded positive (R016 O4). **Locator discrepancy, open:**
+  the reviewer renamed it to "Test-With-Keyboard" and heard the rename
+  succeed, but the Your stuff listing (read 2026-08-10) shows it as
+  **"Untitled - August 10, 2026 at 13.09.20"** — see R016 O11 before
+  drawing any conclusion. This is the T2 test document; keep it.
+
+**Document registry (durable IDs, resolved 2026-08-10 from the Your stuff
+listing — use these in run locators, never display names, which can drift):**
+
+| Document (name as listed) | Durable locator (`https://new.express.adobe.com/id/<urn>`) | Role |
+|---|---|---|
+| Untitled - August 06, 2026 at 13.02.17 | `urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86` | **S3 sample** ("Text Test" doc) |
+| Untitled - August 10, 2026 at 13.09.20 | `urn:aaid:sc:US:b1ab530f-f097-4a5f-8a6f-b8923fa65115` | **T2 test document** (R016; rename discrepancy above) |
+| sdcsdc | `urn:aaid:sc:US:d0ad5936-2a17-4db7-a9e8-bb0fb8eb91a1` | unattributed (likely reviewer NVDA session 2026-08-06) |
+| Kaiser Permanente Mobile App - Letter Details | `urn:aaid:sc:US:0e88a2b4-710d-4577-a664-0ef3d2dde1dc` | reviewer's real document — **do not open in tests** |
+
+- All documents remain in Your stuff (S4). Do not delete them — deletion is
   outside assistant permissions, and they are now part of S4's tested state.
+  As of 2026-08-10 the listing shows four, which makes S4 a usefully
+  populated view for its own run rather than a near-empty one.
 
 ## Step 3 — Select the representative sample set
 
@@ -290,7 +311,7 @@ sample types (2.3), technologies relied upon (2.4), and other relevant samples
 | ID | View / screen | Location / path | Represents (C/F/type/tech/A refs) |
 |----|---------------|-----------------|-----------------------------------|
 | S1 | Home dashboard (incl. "Get started" modal state) | https://new.express.adobe.com/ | C3; entry points for F1 (create from template/blank); start of P1; modal-dialog type |
-| S2 | Explore / template gallery | left-rail Templates (SPA, URL stays `/`) | C4; F1 (choose template); gallery-grid type; P1 step 2 — proposed 2026-08-04 |
+| S2 | Explore / template gallery | `https://new.express.adobe.com/explore/templates` (CORRECTED 2026-08-10 — the 2026-08-04 note "SPA, URL stays `/`" was wrong; the view is URL-addressable and was scanned at this URL in R011/R013. Also reachable via left-rail Templates.) | C4; F1 (choose template); gallery-grid type; P1 step 2 — proposed 2026-08-04 |
 | S3 | Editor ("Text Test" document) | **`https://new.express.adobe.com/id/urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86`** — the durable locator; use exactly this in run records. Reachable via Your stuff → "Untitled - August 06, 2026 at 13.02.17". Do **not** record the `?category=…&pageId=…` suffix seen in a live address bar: those are transient UI state (which side panel is open, which page is showing), not part of the document address. **CORRECTED 2026-08-06** — the previously-cited "blank square doc from this session" (2026-08-04) no longer exists, so the old locator was unreplicable. This document is better for testing anyway: it holds a text element reading "Text Test", so NV3/NV4/NV5 can be exercised against real document content, which a blank canvas cannot do. | C5; F2/F3/F5 (edit, upload, export); canvas + panels + export dialog; P1 step 3, all of P2 |
 | S4 | Your stuff | `/your-stuff/files/recent?filter=express` | C8; F4 (save/find work); gallery-grid + folders; end of P2 verification — proposed 2026-08-04 |
 

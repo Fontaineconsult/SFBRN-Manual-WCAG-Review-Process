@@ -115,6 +115,7 @@ if nobody said the word "test".
 | Reviewer-driven session (JAWS, zoom, confirmations) | `ontology/testing-loop.md` §Reviewer session walkthroughs | `reviews/<id>/session-<sample>-reviewer-walkthrough.md` + the runs it feeds |
 | Results rollup / report | `05`/`06` template text | `05-results.md`, `06-report.md` |
 | Finish a review | `review.py validate` until clean | `06-report.md`, then `save-enclosure` |
+| Export the report for distribution | `scripts/export_report.py --help`, ontology/reporting.md §Distribution | `reviews/<id>/<id>-report.docx` — generated output; edit the .md and re-export, never the .docx |
 | Change the process itself | the doc being changed | `ontology/` + `templates/` + `scripts/` + README together — never just deviate in-session |
 
 ## Hard rules
@@ -131,6 +132,15 @@ if nobody said the word "test".
   ones; never renumber or reuse.
 - **Findings cite runs.** Exploration observations are recon → `03` §2.6,
   phrased "verify X under check Y in a run". No run, no finding.
+- **Every run carries a replicable locator** — validate enforces it. A real
+  URL (durable form: strip transient params like `?category=`/`?pageId=`;
+  for documents use the `/id/urn:aaid:…` ID, never the display name — names
+  drift, IDs don't; the review keeps a document registry in `03` §2.6), or
+  an explicit `UI: <action path>` for states with no address (e.g.
+  `UI: Home → "Start new design" → Get started modal`). Resolve
+  placeholders like "(ID recorded when created)" the moment the artifact
+  exists, not later — R016's stayed unresolved for four days and the
+  document's display name had changed by the time it was chased.
 - **"Unmeasured" is a valid result; a confident wrong number is not.** When
   an instrument cannot reach something, record that plus the instrument that
   could, and move on. The trap that catches agents: contrast by

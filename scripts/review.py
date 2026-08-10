@@ -768,6 +768,16 @@ def cmd_validate(args):
     if unset:
         issues.append(f"{len(unset)} run(s) without a Result "
                       f"(Works / Works with issues / Broken): {', '.join(unset)}")
+    # Every run needs a replicable locator: a real URL, or an explicit
+    # UI-action path ("UI: ...") for states with no address. Placeholders
+    # ("recorded when created", TBD/TBC) and empty fields fail review
+    # replication and vendor rebuttal alike.
+    no_locator = [r["run"] for r in runs
+                  if not (("http" in r["url"]) or r["url"].startswith("UI:"))
+                  or any(p in r["url"] for p in ("recorded when", "TBD", "TBC"))]
+    if no_locator:
+        issues.append(f"{len(no_locator)} run(s) without a replicable URL/locator "
+                      f"(real URL or 'UI: <action path>'): {', '.join(no_locator)}")
     views = sample_views(review)
     if views:
         gaps = [f"{vid}×{m}" for vid, _ in views for m in REQUIRED_MODALITIES

@@ -183,10 +183,49 @@ given alt text at all — the single most consequential question for 1.1.1 in
 an authoring tool, since it determines whether the product lets its users
 produce accessible output. No run has touched it.
 
-**Sequence notes:** (per-step observations; identify the step where each
-barrier occurs)
+**Sequence notes** (walk in progress, run R016, B4/NVDA):
 
-_(walk in progress — 2026-08-06)_
+- **Step 0, create a blank document.** Completable by keyboard. Two
+  barriers: option names are absent in **six of the seven** category tabs
+  (T2-F1), and no confirmation is given of what was chosen. Arrival is
+  announced — "Loading Document, Untitled, Untitled" — though focus
+  placement is not. Renaming by keyboard works cleanly.
+- **Step 1, add a text element. Passes on every count** (R016 O5): the
+  control is in NVDA's lists *and* Tab-reachable, activation announces
+  "edit selected add text", edit mode is entered automatically, and the
+  content can be confirmed by ear.
+- **Step 2, insert an image.** "Add a photo" and "Generate with AI" are both
+  findable, but **neither reports success** (T2-F2) — and the same panel
+  announced text insertion one step earlier. Selected objects announce only
+  "Canvas Graphic": a generic role, no identity, so **the element being
+  edited cannot be determined** (R016 O8). The layers region — the only
+  route back to existing objects — is absent from NVDA navigation and
+  reachable only by a long tab traversal (R016 O9).
+- **Steps 3–5, export.** Not yet walked.
+
+#### Finding T2-F1
+
+| | |
+|---|---|
+| **Where** | Step 0 — the "Get started" create chooser, category tabs |
+| **Observed** | Options in **six of the seven** category tabs announce as **"Clickable Figure Template Button"** with no distinguishing name — Social media and ads, Video, Photo, Document, Webpage, Print. Only **Standard & Suggested**, which is the tab open by default, names its options (R016 O1, reviewer, NVDA 2026.1.1). Activating a choice gives no confirmation of what was selected before the view changes (R016 O2). So a user gets a working first impression and finds every subsequent category unusable by name. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.2 (controls without accessible names); 1.1.1 (the thumbnail is the only differentiator and carries no text alternative) |
+| **Severity** | Major — the user can create *a* document but can meaningfully choose only from the default tab |
+| **Note** | Distinct from V-F5, which concerns ten identically-named "Browse templates" buttons in the same modal. V-F5 is many controls sharing one unhelpful name; this is controls with no name at all. Assistant corroboration was attempted and failed (chooser would not reopen programmatically); reviewer testimony stands. |
+| **Evidence** | R016 O1, O2 |
+
+#### Finding T2-F2
+
+| | |
+|---|---|
+| **Where** | Step 2 — inserting an image via "Add a photo", and generating one via "Generate with AI" |
+| **Observed** | Both controls are findable by keyboard, but **neither reports whether the image was successfully placed or generated** (R016 O7). Nothing announces insertion, completion, or failure. The inconsistency is what makes this clear-cut: **one step earlier, in the same panel, adding *text* announced "edit selected add text"** — the product knows how to report insertion and does so for one content type and not the other. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.3 Status Messages |
+| **Severity** | Major — and worse for **"Generate with AI"**, which is an asynchronous operation taking many seconds with no progress, completion or error announcement, so "still working", "finished" and "failed" are indistinguishable. That is also the product's most heavily promoted capability (03 §2.2, F8). |
+| **Pattern** | Third instance of this exact defect in the review: S2's lazily-loaded template grid, S2's search results, and now image insertion/generation. All 4.1.3, all "the app did something and did not say so". |
+| **Evidence** | R016 O7 |
 
 ---
 
@@ -364,6 +403,20 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 
 Findings that are properties of the view *set* rather than of one view.
 Recorded once here rather than repeated per view.
+
+#### Finding V-F11
+
+| | |
+|---|---|
+| **Where** | Every sampled view — S1 Home, S2 Explore, S3 Editor, S4 Your stuff. Components: `x-home-row-scroller`, `x-simple-row-scroller`, `sp-grid`, `x-masonry`. |
+| **Observed** | Two related defects in how the product marks up its content rows and card collections. **(1) Grids are unnamed: 17 of the 18 grids found across the four sampled views carry no accessible name** — no `aria-label`, no `aria-labelledby`. The sole exception is the editor's layers list. A screen-reader user enters what is announced as a grid or table with no indication of what it contains; the reviewer's words: *"the tables don't have a summary so I don't know what the table area is about"* (R015 O10, NVDA 2026.1.1, corroborated in the DOM and the accessibility tree). **(2) `role="grid"` is applied to non-tabular content** — these are horizontal card carousels (template rows, asset rows, file lists) with no meaningful row/column relationship, so the markup asserts a structure the content does not have and imposes grid-navigation semantics on what is simply a list of choices. Separately, `role="row"` elements with **no `grid`/`table`/`rowgroup` ancestor** occur on S1 (2), S2 (3) and S4 (1) — the same orphaned-row defect axe flagged as a critical `aria-required-parent` violation on S2 and which is the root cause of T1-F2. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 1.3.1 — relationships conveyed through presentation are not correctly determined programmatically, in both directions: real grouping is unnamed, and a tabular structure is asserted where none exists |
+| **Severity** | Major |
+| **Precision note for the report** | These are **not** HTML `<table>` elements used for layout — that older discouraged practice would require `role="presentation"`. They are ARIA `role="grid"`, a legitimate pattern being **misapplied**. State it as "grid semantics on non-tabular content, 17 of 18 unnamed"; "tables used for navigation" is easy for a vendor to rebut and is not what the markup does. Likewise `summary` is the obsolete HTML4 table attribute; the modern equivalent is `aria-label`/`aria-labelledby`. |
+| **Remediation is cheap, which strengthens the case** | Every one of these sections already has an adjacent heading that **is** exposed to AT — "Templates", "Photos", "Design assets", "Quick edits", "File formats". A single `aria-labelledby` per grid, pointing at the heading already present, would name all of them. The information exists and is simply not wired up. |
+| **Counts are floors, not totals** | S1/S2/S4 were measured shortly after navigation and lazy-load on scroll, so more grids may exist. S3's 12 reflects a fully-rendered panel. The robust result is the ratio — essentially none are named. |
+| **Evidence** | R015 O10 (reviewer observation + assistant enumeration across four views, 2026-08-10); R011 O1 (axe `aria-required-parent`, S2) |
 
 #### Finding V-F8
 

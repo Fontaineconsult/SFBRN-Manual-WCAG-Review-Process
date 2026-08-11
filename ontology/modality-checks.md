@@ -132,6 +132,30 @@ Structured inspection of the view's demands on memory, language, and attention.
 | CO7 | Time limits are adjustable/extendable; moving content can be paused | 2.2.1, 2.2.2 |
 | CO8 | Focus/input does not trigger unexpected context changes | 3.2.1, 3.2.2 |
 
+## Modality → WCAG map (the report's spine)
+
+The consolidated view of the per-check tables above: which WCAG criteria
+each sensory/functional modality exercises. `06-report.md` **must** report
+findings sliced by this map (§Findings by sensory/functional modality) —
+procurement reads in 508 FPC terms ("can a blind user…", "a deaf user…"),
+not criterion numbers, and this table is what ties the two vocabularies
+together. A criterion can serve several modalities; a finding is listed
+under every modality whose users it affects.
+
+| Modality | 508 FPC | WCAG criteria exercised (via checks above) |
+|----------|---------|--------------------------------------------|
+| no-vision | 302.1 | 1.1.1, 1.3.1, 1.3.2, 1.3.3, 2.4.2, 2.4.6, 2.5.3, 3.1.1, 3.1.2, 3.3.1, 3.3.2, 4.1.2, 4.1.3 |
+| low-vision | 302.2 | 1.3.4, 1.4.3, 1.4.4, 1.4.10, 1.4.11, 1.4.12, 1.4.13, 2.4.7, 2.4.11 |
+| no-color | 302.3 | 1.4.1 |
+| no-hearing | 302.4, 302.5 | 1.1.1, 1.2.1, 1.2.2, 1.2.4, 1.4.2 |
+| no-speech | 302.6 | — (FPC-only; any voice feature needs a non-speech alternative) |
+| motor | 302.7, 302.8 | 2.1.1, 2.1.2, 2.1.4, 2.4.1, 2.4.3, 2.4.7, 2.4.11, 2.5.1, 2.5.2, 2.5.4, 2.5.7, 2.5.8 |
+| cognition | 302.9 | 2.2.1, 2.2.2, 3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.6, 3.3.2, 3.3.3, 3.3.7, 3.3.8 |
+
+Criteria in the WCAG 2.2 AA target not exercised by any modality checklist
+row (verify they are covered by task walks or sweeps rather than assumed:
+1.3.5, 1.4.5, 2.2.1 timing beyond CO7, 3.2.5 n/a-AA, 4.1.1 removed).
+
 ## Supporting instrument — automated sweep (axe-core / WAVE)
 
 Not a modality: the automated sweep is an instrument whose output feeds

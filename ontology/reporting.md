@@ -57,6 +57,16 @@ Every section is filled from the live files, never from memory:
 - **Coverage & limitations** ← `validate` + `matrix` output, instruments
   and baselines from `03` §1.3/§1.5, plus any standing caveats (e.g. a
   single-AT evidence base).
+- **Findings by modality (508 FPC)** ← the modality→WCAG map in
+  `modality-checks.md` × the coverage matrix × findings. Every modality gets
+  a row even when N/A or untested — an absent row reads as "fine". Untested
+  rows say what remains untested and why it matters ("S3's media assets
+  make hearing non-N/A"), never just "pending".
+- **Recommendation** ← last section before appendices. Drafted from
+  evidence, explicitly labelled as for the reviewer to adopt/amend/reject;
+  names the bucket the evidence points to, what would move it, and what the
+  evidence does *not* support. The Decision field itself is never filled by
+  the drafter.
 - **Automated sweep record** ← each sweep run's triage (W1–W3 checks in its
   `run.md`): per-view counts + disposition of every violation (confirmed →
   finding ID / dismissed with reason / **false positive, with the

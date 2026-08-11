@@ -113,9 +113,9 @@ what exploration reveals.
 | C7 | Help / support — hypothesis; "?" icon in home top bar not yet opened | |
 | C8 | Your stuff — **confirmed 2026-08-04**: tabs Files / Projects (NEW) / Libraries / Favorites, Folders, file cards grid, Create button, filter/sort/list-view toggles | `/your-stuff/files/recent?filter=express` |
 | C9 | Brands — **confirmed 2026-08-04**: brand-kit setup; empty state with "Manual set up" and "Extract brand from upload (BETA)", Create brand / Browse shared brands, filter | `/brands` |
-| C10 | Schedule (social-post scheduler) — seen in More menu, not yet opened | via left-rail More |
-| C11 | Learn (tutorials) — seen in More menu, not yet opened | via left-rail More |
-| C12 | Add-ons (marketplace) — seen in More menu, not yet opened; also a rail item inside the editor | via left-rail More |
+| C10 | Schedule (social-post scheduler) — **confirmed 2026-08-10** (crawl fingerprint): a **calendar surface** (`hz-calendar-slot` ×42), the heaviest non-editor view (796 shadow roots); `main` present; 2 headings; 1 unnamed grid; title still "Adobe Express" | `https://new.express.adobe.com/schedule` |
+| C11 | Learn (tutorials) — **confirmed 2026-08-10**: redirects to a **video tutorial playlist** (`?playlist=playlist/express/get-started`, `x-tutorial-image` ×25). **Video content → no-hearing criteria (1.2.x) are live here**, as in the editor's asset panel; captions state unknown | `https://new.express.adobe.com/learn` |
+| C12 | Add-ons (marketplace) — **confirmed 2026-08-10**: card marketplace (`hz-discover-add-on-card` ×30), **38 headings** (best-headed view in the product); 1 unnamed grid | `https://new.express.adobe.com/add-ons` |
 
 ### 2.2 Essential functionality — user stories
 
@@ -142,6 +142,8 @@ what exploration reveals.
 | Marketing pages | Content-style pages with media | Landing (C1) — not yet visited |
 | Transient UI | Toasts, tooltips, progress indicators, autosave notices, AI credits meter | Everywhere |
 | Menus / overlays | Account menu, More flyout, scoped search bar (In:Templates / In:Files / In:Brands) | Home, all rail views — confirmed |
+| Calendar / scheduler surface | Time-grid with slot cells, month/week navigation (`hz-calendar-*`) | Schedule (C10) — added 2026-08-10 from crawl; no sample yet covers this type |
+| Video playlist / player | Tutorial playlists with embedded players | Learn (C11) — added 2026-08-10; no-hearing criteria live |
 
 ### 2.4 Technologies relied upon
 
@@ -239,6 +241,18 @@ finding until a run verifies it.**
   Create file; filter, sort and list-view toggles; scoped search showing an
   "In:Files" chip. Matches C8 as recorded. Three files present — see
   artifacts below.
+
+**Systematic crawl 2026-08-10** (`scripts/crawl_map.py`, fingerprints in
+`crawl-map-2026-08-10.md`): all seven candidate views visited read-only —
+Home, Explore, Your stuff, Brands, **Schedule, Learn, Add-ons** (the last
+three previously never opened; C10–C12 confirmed above). Cross-cutting
+results: **title is "Adobe Express" on all 7 views** (V-F8 scope widened
+from 4); **every grid on every view is unnamed** (V-F11 corroborated on 3
+further views); every view exposes `main`. Harvest note: the left rail and
+More menu are **JS-routed buttons, not links** — link harvesting cannot
+discover them, so rail-reached views must be probed by URL or walked
+manually. Sampling gap now visible: no sample covers the calendar type
+(C10) or video playlist type (C11).
 
 **Artifacts created by assistant-driven sessions (per CLAUDE.md browser
 rules — record, don't hide):**

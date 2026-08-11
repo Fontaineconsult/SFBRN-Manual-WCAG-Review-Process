@@ -422,7 +422,7 @@ Recorded once here rather than repeated per view.
 
 | | |
 |---|---|
-| **Where** | Every SPA view in scope. Confirmed on Home (S1), Explore (S2), Your stuff (S4) and Brands. |
+| **Where** | Every SPA view in scope. Confirmed on **seven views** (crawl 2026-08-10): Home (S1), Explore (S2), Your stuff (S4), Brands, Schedule, Learn, Add-ons. |
 | **Observed** | The document title is the string **"Adobe Express"** on every view; it never changes as the user moves between them. Reviewer-reported with NVDA 2026.1.1 — *"Adobe Express is all that's announced as Title for every page"* — and independently corroborated by the assistant navigating four views and reading `document.title` at each: **4 views, 1 distinct title.** The single exception is an opened document, which does retitle (e.g. "Untitled - August 06, 2026 at 13.02.17"), showing the app *can* set titles and simply does not for its main views. |
 | **Affected users** | Screen reader users above all — the title is the primary announcement of "where am I now", so moving Home → Explore → Your stuff produces no signal that the view changed at all. Also anyone using multiple tabs, browser history, or bookmarks, where every entry reads identically. |
 | **WCAG criteria failed** | 2.4.2 Page Titled — titles must describe topic or purpose. "Adobe Express" names the product, not the view. |

@@ -43,6 +43,10 @@ python scripts/review.py matrix <review>       # views × modalities coverage gr
 python scripts/review.py next <review>         # highest-value cell to test next
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
+python scripts/crawl_map.py harvest|map URL... [--out FILE]
+                                               # enclosure mapping over CDP: harvest candidate links,
+                                               # fingerprint allowlisted views (never auto-follows —
+                                               # see ontology/assisted-exploration.md)
 python scripts/export_report.py <review> [--out PATH]
                                                # render 06-report.md as a styled .docx (real heading
                                                # styles + tables; needs `pip install python-docx`)

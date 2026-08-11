@@ -220,6 +220,28 @@ mostly additive; and almost none of this is visible to automated testing
   returned "indeterminate" (and axe's two *failing* contrast numbers on the
   editor were proven false positives by pixel measurement).
 
+## Findings by sensory/functional modality (Section 508 FPC)
+
+*Procurement reads in functional terms — "can a blind user, a deaf user, a
+keyboard-only user actually work?" This slices the same findings by the
+Section 508 Functional Performance Criteria (302.1–302.9), per the
+modality→WCAG map in `ontology/modality-checks.md`.*
+
+| Modality (508 FPC) | Coverage so far | Criteria failed | Findings | What it means for this user group |
+|---|---|---|---|---|
+| **Without vision** (302.1) | S1 ✓, S2 ✓, S3 in progress (NVDA only) | 1.1.1, 1.3.1, 1.3.3, 2.4.2, 2.4.3, 2.4.6, 4.1.2, 4.1.3 | T1-F1, T1-F2, T2-F1, T2-F2, V-F4, V-F5, V-F7–V-F11 | Can author a design end to end; cannot choose templates by name, revise existing work, or tell when operations finish. The most-affected group. |
+| **With limited vision** (302.2) | Partial — reviewer zoom/reflow session pending | 1.4.3, 1.4.13 | V-F1, V-F2 | One contrast failure (a 3.96:1 link) and a hover flyout that cannot be dismissed and obscures content. 400% reflow — the core low-vision question — is **untested**. |
+| **Without color perception** (302.3) | S1 ✓ | none found | — | No color-alone conveyance found on S1; other views pending. |
+| **Without hearing / limited hearing** (302.4/.5) | S1, S2 legitimately N/A; **S3 and Learn are NOT N/A and are untested** | not yet evaluated | — | The editor offers insertable video/music/sound assets and Learn is a video tutorial playlist — caption/transcript state unknown. A real gap, not a clean bill. |
+| **Without speech** (302.6) | All views so far | n/a | — | No voice-input features observed. |
+| **With limited manipulation/reach/strength** (302.7/.8) | Partial — physical-keyboard sweep pending | 2.4.1 (reviewer classification pending) | V-F3 | Everything reached so far is keyboard-operable (incl. full authoring), but every page visit costs ~15 tab stops of unrelated chrome with no skip mechanism — and the editor has no `main` landmark to bypass with. **2.5.8 target size verified Supports** — independent positive on a criterion the vendor never claimed. |
+| **With limited language/cognitive/learning abilities** (302.9) | Partial — conversational pass pending | none yet | — | Consistency criteria (3.2.3/3.2.4) became answerable once multiple views were tested; not yet walked. No time limits or cognitive-function tests observed. |
+
+Two honest caveats this table makes visible: the *worst-tested* modality
+(low-vision at 400% zoom) is one of the *likeliest to fail* on a canvas
+product, and the two N/A-looking rows (hearing) stop being N/A exactly
+where the product meets media — neither should be read as "clear".
+
 ## Vendor ACR audit
 
 ### Coverage: the ACR does not address the target standard
@@ -370,6 +392,36 @@ are not reassurance), and axe **contrast numbers are only trustworthy where
 a DOM-resolvable background exists** (otherwise it can emit confident false
 violations; verified by pixel measurement, R014 O2). Raw output:
 `evidence/runs/R009|R011|R014/R###-axe.json`.
+
+## Recommendation
+
+*Drafted by the review process from the evidence above, for the reviewer to
+adopt, amend, or reject — the Decision field remains the reviewer's alone.*
+
+On the interim evidence, the pattern most consistent with the findings is
+**Needs TAAP, conditioned on vendor commitments**, for three reasons.
+First, no essential task is failed outright: a screen-reader user completed
+template-based creation (with substantial burden) and authored a design
+from scratch, so accommodation is workable rather than fictional. Second,
+the barriers are overwhelmingly **feedback and naming defects with cheap,
+additive fixes** — the fourteen-item remediation exhibit is dominated by
+one-line ARIA attributes and status messages, with a working reference
+implementation for the hardest item already present in Adobe's own
+codebase — which makes a dated remediation roadmap a reasonable contractual
+ask rather than wishful thinking. Third, the vendor's ACR is stale and
+unreliable in both directions, so any agreement should require a
+current-standard (WCAG 2.2) ACR and treat future vendor claims as
+unverified until tested. **Approval is not supportable** while three
+criteria stand at Does Not Support and the product's core choosing and
+revising workflows exclude screen-reader users; **denial is not supported
+either** on present evidence, since every tested task remains completable
+and the remediation ask is modest. Two open items could move this
+recommendation before the report goes FINAL: the untested low-vision 400%
+reflow behaviour (a canvas product's likeliest structural failure), and the
+Section 508 §504 alt-text question — if Express publishes PDF/webpages with
+no alt-text capability and the vendor will not commit to adding it, the
+output-side harm compounds across every campus artifact and weighs toward
+denial for publishing-oriented procurements.
 
 ## Appendices
 

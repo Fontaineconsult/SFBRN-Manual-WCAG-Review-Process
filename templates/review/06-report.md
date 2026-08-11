@@ -92,6 +92,25 @@ listed too.
 - **Root cause (if identified):**
 - **Evidence:**
 
+## Findings by sensory/functional modality (Section 508 FPC)
+
+*The same findings sliced by the Section 508 Functional Performance
+Criteria (302.1–302.9) — procurement's vocabulary. Derive from the
+modality→WCAG map in `ontology/modality-checks.md` and the coverage matrix;
+one row per modality, every modality present even when the row is
+N/A or untested (an absent row reads as "fine", which is never what an
+untested modality means).*
+
+| Modality (508 FPC) | Coverage so far | Criteria failed | Findings | What it means for this user group |
+|---|---|---|---|---|
+| Without vision (302.1) | | | | |
+| With limited vision (302.2) | | | | |
+| Without color perception (302.3) | | | | |
+| Without hearing / limited (302.4/.5) | | | | |
+| Without speech (302.6) | | | | |
+| Limited manipulation/reach/strength (302.7/.8) | | | | |
+| Limited language/cognitive/learning (302.9) | | | | |
+
 ## Vendor ACR audit
 
 *The section only an independent reviewer can write: is this vendor's
@@ -184,6 +203,15 @@ on this product (canvas, shadow DOM, unresolvable backgrounds).
 | View | Run | Violations | Incomplete | Passes | Disposition |
 |---|---|---|---|---|---|
 | | | | | | |
+
+## Recommendation
+
+*Drafted from the evidence for the reviewer to adopt, amend, or reject —
+the Decision field remains the reviewer's alone. One paragraph: which
+bucket the evidence points to and why (task completability, remediation
+outlook, vendor reliability); what would move the recommendation; explicit
+about what approval/denial would require that the evidence does or does not
+show.*
 
 ## Appendices
 

@@ -30,7 +30,7 @@ run's Result is set. Fails cite observation IDs.
 | MO8 — Pointer actions can be cancelled (up-event activation) | n/a | not testable under B2 (no pointer) |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | partial | not measured on S3 (S1 measured pass; editor rails/panels unmeasured) |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | desktop web |
-| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | fail | no skip mechanism, and no `main` landmark on this view (R014 O3) — the S1 landmark mitigation does not exist here; V-F3 scope |
+| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | fail | no skip mechanism for keyboard-only users; V-F3 scope. (SR users have region landmarks here — "Edit page"/"Canvas"/page-management, R015 O11 — correcting an earlier claim that no landmark route existed) |
 
 ## Observations
 

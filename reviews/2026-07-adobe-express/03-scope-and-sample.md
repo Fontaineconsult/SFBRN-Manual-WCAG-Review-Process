@@ -26,8 +26,16 @@ is clear whether it is in scope.
 
 ### 1.2 Conformance target
 
-WCAG 2.2 Level AA. Optionally note higher-level (AAA) criteria observed as
-advisory findings.
+**Primary: WCAG 2.1 Level AA** (50 criteria) — the compliance baseline that
+binds CSU as a public entity under the revised ADA Title II rule.
+**Additionally evaluated: WCAG 2.2 Level AA** (the six added criteria plus
+the 4.1.1 removal) — reported alongside, since 2.2 is the current W3C
+recommendation and the six additions protect motor and cognitive users.
+Retargeted 2026-08-13 (was: 2.2 AA alone); all testing to date covers both
+sets, so no evidence is invalidated. 4.1.1 Parsing (in 2.1, removed in 2.2)
+is treated per the WCAG 2.2 erratum and ACT practice: met by modern
+browsers' parsers; not separately tested. AAA criteria observed in passing
+may be noted as advisory.
 
 ### 1.3 Accessibility support baseline
 

@@ -1,40 +1,31 @@
 # Reviewer Session Walkthrough — S3 Editor ("Text Test" document)
 
-> ## ⏸ PAUSED 2026-08-06 — resume here
+> ## ⏸ PAUSED 2026-08-13 — resume here (testing resumes tomorrow)
 >
-> **Next action: W12** — reviewer creates a blank document by keyboard/NVDA
-> to begin task **T2** (run **R016**, already logged). Parts A/B produced
-> R015; Part C is where we stopped.
+> **Next action: W16 — the export walk** (T2 steps 3–5, run **R016**). It
+> is the review's last task-level gap and answers three things at once:
+> T2's verdict, the §504 output formats (PDF? webpage?), and whether
+> captions survive export/publish. While in the export dialog also watch:
+> is completion announced (the product's silent-completion pattern has
+> five instances)?
 >
-> **State at pause**
+> **State at pause:** the **view×modality matrix is COMPLETE — 28/28
+> cells**. Tasks: T1 Pass with barriers · T2 in progress (export
+> remaining). 23/55 criteria verified. 19 findings (18 active).
 >
-> | | |
-> |---|---|
-> | Runs open | **R015** (S3 no-vision, checks unfilled — observations O1–O9 recorded) · **R016** (T2 authoring, not started) |
-> | Tasks | T1 Pass with barriers · **T2 Not run** |
-> | Instrument | NVDA 2026.1.1 / Chrome 150.0.7871.187, baseline **B4** |
-> | Browsers | debug-profile Chrome on port 9222 was left open on the S3 document; the reviewer's own NVDA window is separate |
+> **Also open, all small:** W13's LV5 remainder + W11 focus-at-zoom (S1);
+> the editor panel-at-320px reachability check (R019 O1); auto-caption
+> editability spot-check (R030 O2); the 5 card-heading contrast
+> measurements (R009 O9a); MO8 pointer-cancel micro-check.
 >
-> **The three questions this walk exists to answer**, in priority order:
-> 1. **W15 — can an inserted image be given alt text?** Untouched by any
->    run. Decides whether the product lets its users produce accessible
->    output at all — an outward-facing harm, not a single-user barrier.
-> 2. **W14** — does anything announce that an inserted image landed?
-> 3. **W16** — is export *completion* announced? (4.1.3 has already failed
->    twice on this product for exactly this pattern.)
+> **Standing reviewer decisions:** 2.4.1 classification (evidence now
+> firm: 19/33 stops, no skip link) · 1.4.13 pointer confirmation (V-F1) ·
+> JAWS in scope? (03 §1.3) · §504 scope call.
 >
-> **Carry-forward from R015 — do not re-derive:** selecting any object
-> announces only **"Canvas"**, identically for every object (O9); the route
-> into an object is **Tab to layer → Enter → Enter**, announced nowhere
-> (O7); the text-editing toolbar that appears is **unlabelled** (O6); the
-> editing textarea has **no accessible name** (O8); Italic exposes no
-> pressed state while Bold/Underline do (O6).
->
-> **Withdrawn — do not resurrect:** 2.1.1 Keyboard is **not** failed (a
-> keyboard route exists); text content **is** readable in edit mode; the
-> canvas is **not** a permanent black box. Three assistant hypotheses were
-> corrected by the reviewer here — see R015 O5/O7 and CLAUDE.md
-> §"Why the assistant's probes mislead".
+> **Withdrawn — do not resurrect:** V-F6 (modal focus is correct);
+> 2.1.1-as-Blocker (keyboard route exists; the surviving 2.1.1 failures
+> are rotation, non-text resize, and the S4 checkbox); "invisible editing";
+> the rename-integrity concern (unreproducible, R029 O3).
 
 
 Ordered script for the reviewer-driven testing of S3, the editor. Built

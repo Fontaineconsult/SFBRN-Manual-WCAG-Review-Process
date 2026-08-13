@@ -21,7 +21,7 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | | |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | partial | O10/O11 — landmarks better than the DOM probe suggested: NVDA lists **Edit page [region], Canvas [region], Allows for adding and deleting pages [region]** (reviewer, 2026-08-13). No `main` and no `h1` (R014 O3) and the "Canvas" heading is markup-only (O1) — but region navigation is available. Full heading walk still open |
 | NV3 — Every control announces an accurate name, role, and value/state | | |
 | NV4 — Images announce appropriate alternatives; decorative images are silent | | |
 | NV5 — Reading order matches the meaning of the visual order | | |
@@ -339,6 +339,21 @@ Format:
     essentially none named — is the robust result.
   - Classified: NV2/NV3 / WCAG 1.3.1 / Major → **finding V-F11**
     (product-wide, 04 §B).
+
+- O11 [classified] (landmarks, reviewer NVDA list — 2026-08-13,
+  **corrects an assistant inference**): the editor exposes **three region
+  landmarks: "Edit page", "Canvas", "Allows for adding and deleting
+  pages"**. Earlier statements that "the S1 landmark mitigation does not
+  exist in the editor" rested on the missing `main` element (R014 O3,
+  which stands as instrument fact) — but regions are navigable landmarks
+  too, so **screen-reader users do have landmark navigation in the
+  editor**, including a region named "Canvas" that jumps to the work
+  surface. The V-F3 scoping (2.4.1 barrier = keyboard-without-AT users)
+  therefore holds in the editor as elsewhere; the "even that mitigation is
+  absent there" claim is withdrawn from 05/06/R031. Note the two probes
+  disagree because the region wrappers appear per panel-state and the axe
+  fingerprint ran at rest with the Search panel open.
+  - Classified: NV2 / 1.3.1 / partial-positive — no finding change.
 
 ## Notes
 

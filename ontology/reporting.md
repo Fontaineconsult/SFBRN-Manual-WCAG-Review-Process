@@ -62,6 +62,17 @@ Every section is filled from the live files, never from memory:
   a row even when N/A or untested — an absent row reads as "fine". Untested
   rows say what remains untested and why it matters ("S3's media assets
   make hearing non-N/A"), never just "pending".
+- **Barriers at the TAAP threshold** ← the findings that individually
+  prevent "Approved" (each substantially burdens an essential task for an
+  affected group — the decision-bucket language applied finding by
+  finding). One row per barrier with group, task, criteria, finding IDs;
+  close with what does *not* reach the threshold so the list is a
+  judgment, not an inventory. Feeds TAAP "Affected functionality" directly.
+- **Dual conformance target**: the primary target is WCAG 2.1 AA (ADA
+  Title II baseline); WCAG 2.2 AA is additionally evaluated. Results
+  tables report the full 2.2 set with a stated 2.1-subset rollup, and the
+  vendor-ACR coverage critique distinguishes "matches the 2.1 primary
+  target" from "holds no position on the 2.2 additions."
 - **Recommendation** ← last section before appendices. Drafted from
   evidence, explicitly labelled as for the reviewer to adopt/amend/reject;
   names the bucket the evidence points to, what would move it, and what the
@@ -88,6 +99,21 @@ facts into the Word file.** The export uses real Heading 1–3 styles and real
 tables with repeating header rows (the accessible way to build a Word doc),
 but run Word's own Accessibility Checker before official distribution, and
 fill Word-side metadata (document title, author) there.
+
+## Prose style (reviewer-set, 2026-08-13)
+
+- **Banned word:** "precisely" (use "exactly", "narrowly", or drop it).
+- **Banned phrase:** "and that is what matters most" and its "matters
+  most" variants — state the consequence, not its rank.
+- **Never attribute intention to the developer.** Report what the product
+  does, not why. "The same techniques are present in some components and
+  absent from others" — not "this proves it is a choice, not a
+  limitation." We observe behavior; we do not know minds or roadmaps.
+- **No rhetorical framing devices.** Headers and asides like "framing that
+  survives vendor rebuttal" argue with an imagined opponent. State what
+  the evidence supports and what it does not; the reader draws the
+  conclusion. Precision in the claims is the whole defense — it does not
+  need to be announced.
 
 ## Rules
 

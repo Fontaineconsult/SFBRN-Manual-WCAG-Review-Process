@@ -14,7 +14,7 @@ Derivation rules: `ontology/reporting.md`.
 | **Reviewer(s)** | |
 | **Product & version** | {{PRODUCT_NAME}} |
 | **Vendor ACR reviewed** | (title, date, standard it was written against) |
-| **Conformance target** | WCAG 2.2 Level AA |
+| **Conformance target** | WCAG 2.1 Level AA (primary — ADA Title II baseline); WCAG 2.2 Level AA additionally evaluated |
 | **Methodology** | WCAG-EM 2.0 (scope & sample: `03-scope-and-sample.md`) |
 | **Instruments & baselines** | (from `03` §1.3/§1.5 — AT + versions actually used) |
 
@@ -77,6 +77,18 @@ do, whether they can, and what stands in the way:
 | Task | User story | Verdict | WCAG criteria failed | Findings |
 |------|-----------|---------|----------------------|----------|
 | T1 | | Not run / Pass / Pass with barriers / Fail | | |
+
+## Barriers at the TAAP threshold
+
+*The subset of findings that individually prevent "Approved": each
+substantially burdens an essential task for an affected user group. One
+row per barrier; feeds the TAAP "Affected functionality" field. Close with
+the findings that do NOT reach the threshold, so the list reads as a
+judgment, not an inventory.*
+
+| # | Barrier | Affected group | Essential task burdened | Criteria | Findings |
+|---|---------|----------------|------------------------|----------|----------|
+| | | | | | |
 
 ## Key findings, by user impact
 

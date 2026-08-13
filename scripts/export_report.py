@@ -140,7 +140,57 @@ def add_table(doc, rows):
                         r.font.size = Pt(9.5)
 
 
+def add_field(paragraph, instr):
+    """Insert a Word field (PAGE, NUMPAGES, TOC...) into a paragraph."""
+    r = paragraph.add_run()
+    for el, attrs, text in (("w:fldChar", {"w:fldCharType": "begin"}, None),
+                            ("w:instrText", {"xml:space": "preserve"}, instr),
+                            ("w:fldChar", {"w:fldCharType": "separate"}, None),
+                            ("w:fldChar", {"w:fldCharType": "end"}, None)):
+        e = OxmlElement(el)
+        for k, v in attrs.items():
+            e.set(qn(k), v)
+        if text:
+            e.text = text
+        r._r.append(e)
+
+
+def add_footer(doc, stamp):
+    from docx.enum.text import WD_TAB_ALIGNMENT
+    sec = doc.sections[0]
+    p = sec.footer.paragraphs[0]
+    p.text = ""
+    p.paragraph_format.tab_stops.add_tab_stop(Inches(6.7), WD_TAB_ALIGNMENT.RIGHT)
+    r = p.add_run(stamp + "\t")
+    r.font.size = Pt(8.5)
+    r.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
+    pg = p.add_run("Page ")
+    pg.font.size = Pt(8.5)
+    add_field(p, "PAGE")
+    of = p.add_run(" of ")
+    of.font.size = Pt(8.5)
+    add_field(p, "NUMPAGES")
+    for run in p.runs:
+        run.font.size = Pt(8.5)
+        run.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
+
+
+def add_toc(doc):
+    p = doc.add_paragraph(style="Heading 1")
+    p.add_run("Contents")
+    tp = doc.add_paragraph()
+    add_field(tp, r'TOC \o "1-2" \h \z \u')
+    note = doc.add_paragraph()
+    r = note.add_run("(In Word: right-click the table of contents → "
+                     "Update Field, or select all and press F9, to populate "
+                     "page numbers.)")
+    r.italic = True
+    r.font.size = Pt(9)
+    doc.add_page_break()
+
+
 def convert(md_path: Path, out_path: Path):
+    import datetime
     doc = docx.Document()
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
@@ -149,11 +199,14 @@ def convert(md_path: Path, out_path: Path):
         s = doc.styles[name]
         s.font.size = Pt(size)
         s.font.color.rgb = RGBColor(0x1F, 0x1F, 0x1F)
+        s.paragraph_format.keep_with_next = True   # heading never orphaned
     for sec in doc.sections:
         sec.left_margin = sec.right_margin = Inches(0.9)
+    add_footer(doc, f"Generated {datetime.date.today().isoformat()} from "
+                    f"{md_path.name} — edit the markdown and re-export")
 
     lines = md_path.read_text(encoding="utf-8").splitlines()
-    i, first_h1 = 0, True
+    i, first_h1, pending_toc = 0, True, False
     while i < len(lines):
         line = lines[i]
 
@@ -168,6 +221,7 @@ def convert(md_path: Path, out_path: Path):
                 p = doc.add_paragraph(style="Title")
                 add_runs(p, text)
                 first_h1 = False
+                pending_toc = True   # emit TOC after the metadata table
             else:
                 p = doc.add_paragraph(style=f"Heading {min(level, 3)}")
                 add_runs(p, text)
@@ -183,6 +237,9 @@ def convert(md_path: Path, out_path: Path):
             if rows:
                 add_table(doc, rows)
                 doc.add_paragraph().paragraph_format.space_after = Pt(2)
+            if pending_toc:      # first table = the metadata block; TOC after it
+                add_toc(doc)
+                pending_toc = False
             i = j
             continue
 
@@ -249,7 +306,17 @@ def main():
     if not src.exists():
         sys.exit(f"{src} does not exist")
     out = Path(args.out) if args.out else review / f"{review.name}-report.docx"
-    convert(src, out)
+    try:
+        convert(src, out)
+    except PermissionError:
+        # The target is almost certainly open in Word, which locks it.
+        import datetime
+        alt = out.with_name(f"{out.stem}-"
+                            f"{datetime.datetime.now():%H%M%S}{out.suffix}")
+        convert(src, alt)
+        print(f"NOTE: {out.name} is locked (open in Word?) — wrote {alt.name}"
+              f" instead. Close the old copy in Word; it is now stale.")
+        out = alt
     print(f"wrote {out}  ({out.stat().st_size:,} bytes)")
     print("Reminder: the .docx is generated output — edit the markdown and "
           "re-export. Run Word's Accessibility Checker before distribution.")

@@ -128,6 +128,12 @@ if nobody said the word "test".
   passing to native exes, so `python -c "..."` and here-strings mangle any
   script containing quotes or regex. Write the script to the scratchpad
   directory and run it by path — two calls instead of four failed ones.
+- **Never round-trip file content through PowerShell string ops.**
+  `Get-Content` (PS 5.1) reads UTF-8 files as ANSI by default, so a
+  `Get-Content | -replace | Set-Content` pipeline mojibakes every em-dash,
+  §, and × in the file and adds a BOM — it corrupted `05` and `06` on
+  2026-08-13 (repaired by reversing the double-encoding in Python). All
+  content edits go through Edit/Write or a Python script.
 - **IDs are stable once assigned** (C/F/S/P/T/R and finding IDs). Append new
   ones; never renumber or reuse.
 - **Findings cite runs.** Exploration observations are recon → `03` §2.6,

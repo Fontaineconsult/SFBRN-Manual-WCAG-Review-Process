@@ -33,7 +33,7 @@ on procurement independently of anything found on any view.
 The conformance target for this review is **WCAG 2.2 Level AA** (03 §1.2) —
 55 A/AA criteria. The vendor's report
 (`vendor-acr/adobe-express-webapp-2023-acr.html`, dated 2023) contains
-**exactly 50 criteria**, and the arithmetic identifies it precisely:
+**exactly 50 criteria**, and the arithmetic identifies it exactly:
 
 | | Count |
 |---|---|
@@ -44,7 +44,7 @@ The conformance target for this review is **WCAG 2.2 Level AA** (03 §1.2) —
 | **In-scope criteria with no vendor claim of any kind** | **6** |
 
 50 − 1 obsolete + 6 new = 55. The gap is not arbitrary: the six unclaimed
-criteria are *precisely* the six added in WCAG 2.2 —
+criteria are exactly the six added in WCAG 2.2 —
 
 - **3.2.6 Consistent Help** (A)
 - **3.3.7 Redundant Entry** (A)
@@ -132,7 +132,7 @@ standard, rather than presenting 50 claims as full coverage.
 - **Outcome:** Partially Supports
 - **Vendor claim:** Does Not Support (Web)
 - **Task findings:** V-F14
-- **Remarks:** Extensively exercised under B2 (physical keyboard, NVDA off, 2026-08-13): S1's full 33-stop traversal is reachable and operable (R004 O5); document creation, renaming, text authoring and canvas **translation and z-order** all work by keyboard (R016, R029, R031). The confirmed failures: **rotation (any object) and resize of non-text objects are pointer-drag only** (V-F14, broadened 2026-08-13) — for shapes and images "only translate is available"; text resizes via the Edit panel (whose +/− steppers announce no value — the feedback pattern again). And on S4, **the file-card checkbox does not respond to the Space bar** (V-F12 extended, R033 O1), making bulk file selection keyboard-unavailable. Also relevant: an earlier assistant Blocker claim against this criterion ("editing is pointer-only") was **withdrawn** when the reviewer found the keyboard route (R015 O7) — the surviving 2.1.1 failure is rotation, precisely scoped. Narrower than the vendor's blanket Does Not Support.
+- **Remarks:** Extensively exercised under B2 (physical keyboard, NVDA off, 2026-08-13): S1's full 33-stop traversal is reachable and operable (R004 O5); document creation, renaming, text authoring and canvas **translation and z-order** all work by keyboard (R016, R029, R031). The confirmed failures: **rotation (any object) and resize of non-text objects are pointer-drag only** (V-F14, broadened 2026-08-13) — for shapes and images "only translate is available"; text resizes via the Edit panel (whose +/− steppers announce no value — the feedback pattern again). And on S4, **the file-card checkbox does not respond to the Space bar** (V-F12 extended, R033 O1), making bulk file selection keyboard-unavailable. Also relevant: an earlier assistant Blocker claim against this criterion ("editing is pointer-only") was **withdrawn** when the reviewer found the keyboard route (R015 O7) — the surviving 2.1.1 failure is rotation, narrowly scoped. Narrower than the vendor's blanket Does Not Support.
 
 ### 2.1.2 No Keyboard Trap (Level A)
 - **Outcome:** Not Evaluated
@@ -168,7 +168,7 @@ standard, rather than presenting 50 claims as full coverage.
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (Web)
 - **Task findings:** V-F3
-- **Remarks:** S1: **reviewer-confirmed with a physical keyboard 2026-08-13 (R004 O5): no skip link; 19 Tab stops to the left rail, 33 to the Recent strip** — the earlier assistant caveat is resolved and the vendor's *Supports* is contradicted by direct test. Screen-reader users bypass via landmarks on S1 (ARIA11, confirmed in both JAWS and NVDA) — but **not in the editor, which has no `main`** (R014 O3), so even that mitigation is per-view. REVIEWER DECISION still open in name — though the evidence now firmly supports keeping the failure for keyboard-without-AT users: keep as Does Not Support, or reclassify Supports + advisory. Outcome stands as Does Not Support.
+- **Remarks:** S1: **reviewer-confirmed with a physical keyboard 2026-08-13 (R004 O5): no skip link; 19 Tab stops to the left rail, 33 to the Recent strip** — the earlier assistant caveat is resolved and the vendor's *Supports* is contradicted by direct test. Screen-reader users bypass via landmarks on S1 (ARIA11, confirmed in both JAWS and NVDA) and in the editor via its region landmarks ("Edit page", "Canvas", "Allows for adding and deleting pages" — R015 O11; no `main` element, but regions are navigable). REVIEWER DECISION still open in name — though the evidence now firmly supports keeping the failure for keyboard-without-AT users: keep as Does Not Support, or reclassify Supports + advisory. Outcome stands as Does Not Support.
 
 ### 2.4.2 Page Titled (Level A)
 - **Outcome:** Does Not Support

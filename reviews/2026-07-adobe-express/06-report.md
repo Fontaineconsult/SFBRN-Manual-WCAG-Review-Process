@@ -14,7 +14,7 @@ Derivation rules: `ontology/reporting.md`.
 | **Reviewer(s)** | |
 | **Product & version** | Adobe Express (web app, new.express.adobe.com) |
 | **Vendor ACR reviewed** | "Adobe Express Web App" ACR, 2023 — written against WCAG 2.1 (see §Vendor ACR audit) |
-| **Conformance target** | WCAG 2.2 Level AA |
+| **Conformance target** | **WCAG 2.1 Level AA (primary — ADA Title II baseline)**; WCAG 2.2 Level AA additionally evaluated (retargeted 2026-08-13; see 03 §1.2) |
 | **Methodology** | WCAG-EM 2.0 (scope & sample: `03-scope-and-sample.md`) |
 | **Instruments & baselines** | NVDA 2026.1.1 + Chrome 150.0.7871.187 (B4); axe-core 4.10.3 (assistant-run sweeps); keyboard-only (B2) and 400% zoom (B3) pending; JAWS (B1) suspended pending a scope decision |
 
@@ -49,7 +49,7 @@ apply the first bucket whose conditions all hold:
 | **Headline** | A screen-reader user can **author** a design end to end, but cannot readily **choose** a template by name, **revise** existing work, or **tell when operations complete**. |
 | **Essential tasks** | 2 defined: T1 (create from template) **Pass with barriers**; T2 (author from scratch) in progress — authoring steps pass, feedback steps fail |
 | **Criteria verified** | **23 of 55**: 9 Supports · 10 Partially Supports · 4 Does Not Support |
-| **Findings** | **14 active** (0 Blocker · 12 Major · 2 Minor) + 1 raised-and-withdrawn, retained for the record; at least 3 product-wide |
+| **Findings** | **18 active** (0 Blocker · 15 Major · 3 Minor) + 1 raised-and-withdrawn, retained for the record; at least 4 product-wide |
 | **Vendor ACR coverage** | 2023, written against **WCAG 2.1**: 6 of the 55 target criteria unaddressed (all six WCAG 2.2 additions), 1 claim obsolete (4.1.1) |
 | **Vendor ACR reliability** | Of 23 verified: **5 worse than claimed · 7 better · 8 agree** (+3 with no claim to check) |
 | **Remediation outlook** | Mostly **additive and cheap** (names, announcements — see exhibit); one structural item (canvas object identity) |
@@ -57,28 +57,34 @@ apply the first bucket whose conditions all hold:
 
 ## Executive summary
 
-Adobe Express (web) was evaluated against WCAG 2.2 Level AA using WCAG-EM,
-with task-based testing by a screen-reader-using reviewer across the home
-dashboard, template gallery, and editor. The product's fundamentals are
-sound — a user was able to author, name, and populate a design entirely by
-keyboard and screen reader — but a consistent product-wide pattern of
-missing names and missing status feedback means the same user cannot choose
-between visually-distinguished options, revise existing work, or tell when
-asynchronous operations finish. The vendor's ACR predates the target
-standard and misstates roughly a third of the criteria verified so far, in
-both directions. Testing is incomplete; this interim report exists to
-support early procurement conversation, not a final decision.
+Adobe Express (web) was evaluated against WCAG 2.2 Level AA using WCAG-EM:
+task-based testing by a reviewer using NVDA and a physical keyboard, plus
+instrumented measurement, across all four sampled views — **every
+view×modality cell in the evaluation matrix is now covered**. The
+product's fundamentals are sound — consistent, calm, fully keyboard-
+reachable, reflowing cleanly, with a user able to author a design end to
+end — but a product-wide pattern of missing names and missing status
+feedback means a screen-reader user cannot choose between
+visually-distinguished options, revise existing work, or tell when
+operations finish, and a keyboard-only user cannot rotate or resize
+non-text objects or bulk-select files. The vendor's 2023 ACR predates the
+target standard and misstates roughly half of the criteria verified.
+Remaining work is flow-scoped (export, sign-in, error paths, Learn's
+videos) and the reviewer decisions; this interim report supports
+procurement conversation ahead of that closure.
 
 ## Character of the barriers
 
 **The product is broadly operable and fails on feedback, not on
-mechanics.** Across three views tested to date, the baseline semantics are
-sound: real headings, real buttons, landmark structure on most views,
-keyboard reachability of essentially everything, and — where tested —
-correct focus containment in dialogs. Very little is outright broken.
+mechanics.** Across all four sampled views and every modality, the baseline
+semantics are sound: real headings, real buttons, landmark structure on
+most views, keyboard reachability of essentially everything, visible focus
+throughout, correct focus containment in dialogs, and full cross-view
+consistency. Very little is outright broken — the exceptions are enumerated
+(rotation, non-text resize, one Space-dead checkbox).
 
-**What is thin is the supplementary layer that conveys *meaning* — and in
-this product that is the layer that matters most.** This is an application
+**What is thin is the supplementary layer that conveys *meaning*.** This is
+an application
 for producing **visual artifacts**, so a user who cannot see the artifact
 depends entirely on what the interface tells them. More feedback should be
 expected here than in an ordinary web application, not less. The evidence
@@ -98,17 +104,17 @@ is consistent on this point:
   create-flow categories, and the text-editing field itself carry no
   accessible names (T1-F2, T2-F1, R015 O8).
 
-**The exceptions prove it is a choice, not a limitation.** Where the product
-does supply ARIA, it works well: the layers list carries a genuinely
-instructive label including its keyboard shortcuts; adding new text
-announces "edit selected add text"; document creation announces "Loading
-Document"; renaming is fully operable by keyboard. The same codebase does
-this correctly in some places and omits it in most.
+**The pattern is uneven within the same product.** Where ARIA is supplied
+it works well: the layers list carries an instructive label including its
+keyboard shortcuts; adding new text announces "edit selected add text";
+document creation announces "Loading Document"; renaming is fully operable
+by keyboard. The same techniques are present in some components and absent
+from others.
 
-**Framing that survives vendor rebuttal.** Two easy claims are *not*
-supported: "the editor is inaccessible" (a user authored a design end to
+**Scope of the claims.** Two broad statements are *not* supported by the
+evidence: "the editor is inaccessible" (a user authored a design end to
 end) and "tables are misused for navigation" (these are ARIA `grid` roles
-misapplied to carousels, not layout tables). The defensible statements:
+applied to carousels, not layout tables). What the evidence does support:
 **a screen-reader user can author a design but cannot readily revise one**
 — including their own work in a later session (R016 O6); remediation is
 mostly additive; and almost none of this is visible to automated testing
@@ -120,6 +126,30 @@ mostly additive; and almost none of this is visible to automated testing
 |------|-----------|---------|----------------------|----------|
 | T1 | Create a design from a template (F1 — core purpose) | **Pass with barriers** (B4/NVDA; Fail was considered and rejected by reviewer decision — see 04 §A) | 4.1.2, 1.1.1, 1.3.1, 2.4.3, 4.1.3, 1.3.3, 2.4.2 | T1-F1, T1-F2 (+V-F8, V-F9) |
 | T2 | Author a design from scratch: add text, add an image, save (F2+F5) | **In progress** — create/rename/add-text pass cleanly; image feedback fails; export not yet walked | 4.1.2, 1.1.1, 4.1.3 (so far) | T2-F1, T2-F2 |
+
+## Barriers at the TAAP threshold
+
+*The subset of findings that individually prevent an "Approved" decision:
+each substantially burdens an essential task for an affected user group,
+so each is something a TAAP would have to accommodate — or the vendor
+remediate — for the product to serve that group. This list feeds the TAAP
+"Affected functionality" field directly.*
+
+| # | Barrier | Affected group | Essential task burdened | Criteria | Findings |
+|---|---------|----------------|------------------------|----------|----------|
+| 1 | Templates and create-flow options cannot be distinguished by name; thumbnails absent from the accessibility tree | Screen reader users | T1 create-from-template (the product's core purpose); T2 step 0 | 4.1.2, 1.1.1, 1.3.1, 1.3.3 | T1-F2, T2-F1, V-F5 |
+| 2 | Existing designs cannot practically be revised: canvas objects expose no identity, the layers route is undiscoverable, operations are unannounced | Screen reader users | F2 editing — returning to any prior work | 4.1.2, 1.3.1, 2.4.3 | R015/R016 cluster (O6/O8/O9) |
+| 3 | Operations complete silently — search, lazy loading, image insertion, AI generation, filtering | Screen reader users | Every multi-step task; sharpest on AI generation | 4.1.3 | T1-F2, T2-F2, V-F13 |
+| 4 | Rotation (any object) and resize (non-text objects) have no keyboard route | Keyboard-only and motor-impaired users | F2 authoring — designs needing rotated or resized elements | 2.1.1, 2.5.7 | V-F14 |
+| 5 | Bulk file selection unavailable: the checkbox is unnamed and ignores the Space bar | Screen reader and keyboard-only users | F4 file management | 4.1.2, 2.1.1 | V-F12 |
+| 6 | No bypass mechanism: 19 tab stops of unrelated chrome before content on every page | Keyboard-without-AT users | Every task, every page visit | 2.4.1 | V-F3 |
+| 7 | No orientation across views: one title product-wide, navigation unannounced | Screen reader users | Every multi-view task | 2.4.2, 2.4.3 | V-F8, T1-F1 |
+
+Findings that do **not** reach this threshold (Minor, or verbosity without
+information loss): V-F2 (one low-contrast link), V-F7 (decorative-image
+noise), V-F15 (one non-remappable shortcut), V-F9/V-F11 (structure gaps
+with heading workarounds available). They remain in the remediation
+exhibit but do not individually drive the decision.
 
 ## Key findings, by user impact
 
@@ -151,15 +181,18 @@ mostly additive; and almost none of this is visible to automated testing
   achievable in this codebase.
 - **Evidence:** R013 O3–O8; R016 O1/O2; R011 O1.
 
-### 3. Operations complete silently — three instances of the same 4.1.3 defect (T1-F2, T2-F2)
+### 3. Operations complete silently — five-plus instances of the same 4.1.3 defect (T1-F2, T2-F2, V-F13)
 
-- **Impact:** Search results arrive, lazy content loads, images insert, and
-  AI generation runs for many seconds — none of it announced. "Still
+- **Impact:** Search results arrive, lazy content loads, images insert, AI
+  generation runs for many seconds, **S4's filter changes the file list**,
+  the text-size steppers change values — none of it announced. "Still
   working", "finished" and "failed" are indistinguishable. Sharpest on
-  **Generate with AI**, the product's most promoted capability.
+  **Generate with AI**, the product's most promoted capability. Five-plus
+  verified instances across three views: a product pattern, not
+  per-component slips.
 - **The clincher:** the same panel announces *text* insertion ("edit
   selected add text") — the capability exists and is unevenly applied.
-- **Evidence:** R013 O3/O8/O13; R016 O7.
+- **Evidence:** R013 O3/O8/O13; R016 O7; R029 O4; R031 O7.
 
 ### 4. No orientation across views — titles and navigation (V-F8, T1-F1)
 
@@ -180,15 +213,33 @@ mostly additive; and almost none of this is visible to automated testing
   exposed heading; `aria-labelledby` closes it.
 - **Evidence:** R015 O10 (counts across S1/S2/S3/S4).
 
-### 6. Keyboard-only users have no bypass (V-F3 — reviewer decision pending)
+### 6. Keyboard-only users have no bypass (V-F3 — confirmed by hand)
 
-- **Impact:** No skip link; ~15 tab stops of Adobe cross-product chrome
-  precede content on every page. Screen-reader users bypass via landmarks
-  (confirmed in both JAWS and NVDA), so this is scoped to keyboard-without-AT
-  users. Held at Does Not Support pending the reviewer's 2.4.1 call — note
-  the editor (S3) has **no `main` landmark**, so the landmark bypass does
-  not exist there.
-- **Evidence:** R004 O1; R001 O7; R012 O7; R014 O3.
+- **Impact:** No skip link; **19 Tab stops to reach the left rail, 33 to
+  reach the Recent strip** — reviewer-counted with a physical keyboard
+  (2026-08-13), on every page visit, against the vendor's claimed
+  *Supports*. Screen-reader users bypass via landmarks on every view —
+  confirmed in JAWS and NVDA on S1, and in the editor via its region
+  landmarks ("Edit page", "Canvas", "Allows for adding and deleting pages"
+  — R015 O11; the editor lacks a `main` element but regions are navigable)
+  — so this barrier is scoped to keyboard-without-AT users.
+- **Evidence:** R004 O5 (hand counts); R001 O7; R012 O7; R014 O3; R015 O11.
+
+### 6b. Canvas manipulation is part-keyboard, part-pointer-only (V-F14, V-F12 extended, V-F15)
+
+- **Impact:** Under a physical keyboard (B2): translation, z-order and
+  text-resize work; **rotation of any object and resize of non-text
+  objects (shapes, images) have no keyboard route at all** — Level A
+  (2.1.1) plus 2.5.7, on the product's core surface. On S4, the file
+  **checkbox ignores the Space bar**, making bulk selection
+  keyboard-unavailable (the same control screen-reader users can't
+  identify). And the editor's "T" single-key shortcut has **no disable or
+  remap** (2.1.4, against a claimed Supports) — Settings was checked.
+- **Root cause visibility:** the working operations prove the pattern is
+  achievable; the gaps are specific omissions, each with a standard fix
+  (properties-panel fields; Space handling; a shortcuts toggle).
+- **Evidence:** R031 O4/O5/O7; R033 O1; 03 §2.5 A2 (shortcut docs out of
+  sync both directions).
 
 ### 7. Hover flyout violates all three 1.4.13 conditions (V-F1 — pointer confirmation pending)
 
@@ -197,23 +248,34 @@ mostly additive; and almost none of this is visible to automated testing
   claim if confirmed with continuous pointer movement.
 - **Evidence:** R002 O4/O5; R003.
 
-### 8. Unnamed icon controls and a stateless toggle (V-F4, V-F10, R015 O6)
+### 8. Unnamed controls — specific, recurrent, cheap to fix (V-F4, V-F10, V-F12, R015 O6/O8)
 
-- **Impact:** The header community button (every view) and the editor's
-  page-nav "more" button announce as bare "button"; the floating
-  text-toolbar's Bold/Italic/Underline carry no labels; Italic exposes no
-  pressed state. Scope verified narrow — these are specific misses, not a
-  systemic component failure (48 of 49 controls on S1 are correctly named).
-- **Evidence:** R012 O1; R014 O1; R015 O6.
+- **Impact:** The header community button (every view), the editor's
+  page-nav "more" button, the floating text-toolbar's Bold/Italic/Underline,
+  the edit-mode textarea, and S4's per-card checkbox and action button all
+  lack accessible names; Italic exposes no pressed state. Scope verified
+  narrow each time — specific misses of one cheap class, not systemic
+  component failure (48 of 49 controls on S1 are correctly named; S4's card
+  *links* are named).
+- **Evidence:** R012 O1; R014 O1; R015 O6/O8; R029 O2; R017 O4.
 
 ### Positives that shape the decision
 
-- **Authoring works end to end**: blank document created, named
-  ("Test-With-Keyboard"), text added with correct announcements, edit mode
-  entered automatically, content confirmable by ear (R016 O4/O5).
-- **The "Get started" modal is exemplary on focus**: focus moves in, is
-  contained, Esc closes (R012 O8/O13 — a Major finding was raised against
-  it in error and formally withdrawn, V-F6).
+- **Cognition is the product's strongest modality — all four views Works**
+  (R010, R034–R036): consistent navigation and identification, help in a
+  consistent place, no unexpected context changes, nothing moving or
+  blinking, everything labeled/iconed/tooltipped. Six criteria verified
+  Supports on this evidence.
+- **Reflow is a strength**: zero horizontal overflow on all four views at
+  the 320-px equivalence — **better than the vendor's own claim** (1.4.10
+  Supports vs claimed Partially).
+- **Authoring works end to end**: blank document created, named, text added
+  with correct announcements, edit mode entered automatically, content
+  confirmable by ear (R016 O4/O5). Renaming is fully keyboard-operable.
+- **Focus discipline is good**: visible focus indicators on every view the
+  reviewer swept; no keyboard traps anywhere; the "Get started" modal is
+  exemplary (focus in, contained, Esc out — a Major finding raised against
+  it in error was formally withdrawn, V-F6).
 - **2.5.8 Target Size: Supports** — measured across all 51 interactive
   targets; independent evidence for a criterion the vendor never addressed.
 - **App-bar contrast passes at 11–12:1** where two automated instruments
@@ -234,7 +296,7 @@ modality→WCAG map in `ontology/modality-checks.md`.*
 | **Without color perception** (302.3) | S1–S4 all captured in grayscale | none found | — | Selected states survive grayscale on every view (filled pills, boxed selections, numeric badges, real checkmarks). Open: canvas selection highlight (not capturable by instrument), link hover cues. |
 | **Without hearing / limited hearing** (302.4/.5) | S1–S4 all determined (R030 closed S3); **Learn (C11) untested** | none in the product's own UI | — | The editor's UI carries no audio content (N/A with evidence); no sound-alone feedback anywhere; no voice input (reviewer-confirmed). The live issue moved to §Concerns: **auto-caption capability exists for inserted video but professional caption files cannot be uploaded**. Learn's tutorial videos — Adobe's *own* content, where 1.2.2 applies directly — remain untested. |
 | **Without speech** (302.6) | All views so far | n/a | — | No voice-input features observed. |
-| **With limited manipulation/reach/strength** (302.7/.8) | Partial — physical-keyboard sweep pending | 2.4.1 (reviewer classification pending) | V-F3 | Everything reached so far is keyboard-operable (incl. full authoring), but every page visit costs ~15 tab stops of unrelated chrome with no skip mechanism — and the editor has no `main` landmark to bypass with. **2.5.8 target size verified Supports** — independent positive on a criterion the vendor never claimed. |
+| **With limited manipulation/reach/strength** (302.7/.8) | **Complete — all four views** (R004, R031–R033) | 2.4.1, 2.1.1, 2.5.7, 2.1.4 | V-F3, V-F14, V-F15, V-F12 | Reach and focus visibility are clean everywhere; operability fails at named points: **rotation and non-text resize are pointer-only** (V-F14), **the S4 checkbox ignores the Space bar** (bulk selection unavailable), the "T" shortcut cannot be disabled (V-F15), and every page visit costs **19 confirmed tab stops** of unrelated chrome with no skip mechanism (V-F3). **2.5.8 verified Supports** — independent positive on a criterion the vendor never claimed. |
 | **With limited language/cognitive/learning abilities** (302.9) | **Complete — all four views, Works** (R010, R034–R036) | none | — | **The product's strongest modality.** Navigation and identification consistent across every view; help in a consistent location; no unexpected context changes anywhere; nothing moving or blinking; everything labeled, iconed or tooltipped. Six criteria verified Supports on this evidence (3.2.1/3.2.2/3.2.3/3.2.4/3.2.6/2.2.2), two of them better than or absent from the vendor's ACR. Auth (3.3.8) and error-path criteria remain flow-scoped. |
 
 Two honest caveats this table makes visible: the *worst-tested* modality
@@ -246,13 +308,13 @@ where the product meets media — neither should be read as "clear".
 
 ### Coverage: the ACR does not address the target standard
 
-The vendor's 2023 ACR is a **WCAG 2.1-era document** offered against a WCAG
-2.2 AA procurement. The arithmetic identifies it exactly: 50 criteria
-claimed; 1 obsolete (4.1.1 Parsing, removed in 2.2); the **6 criteria with
-no claim at all are precisely the six WCAG 2.2 additions** — 3.2.6, 3.3.7,
-2.4.11, 2.5.7, 2.5.8, 3.3.8 — the criteria protecting motor and cognitive
-users. ~11% of the standard has no vendor position to verify or hold them
-to. (Full arithmetic: `05` §Vendor evidence gap.)
+The vendor's 2023 ACR is a **WCAG 2.1 document**, which matches the
+primary target's scope — its 50 claims cover the 2.1 AA criteria. Two
+coverage limits remain: it is **three years stale** against a fast-moving
+product, and it holds **no position on the six WCAG 2.2 additions**
+(3.2.6, 3.3.7, 2.4.11, 2.5.7, 2.5.8, 3.3.8 — the criteria protecting motor
+and cognitive users) that this review additionally evaluates. (Full
+arithmetic: `05` §Vendor evidence gap.)
 
 ### Reliability — claims vs verified (12 criteria verified to date)
 
@@ -289,6 +351,14 @@ as evidence of *what is true*. Any agreement should require an ACR against
 WCAG 2.2 and treat vendor ratings as unverified until tested.
 
 ## Results summary
+
+The table covers the full evaluated set (WCAG 2.2 A+AA, 55 criteria).
+**Against the primary WCAG 2.1 AA target (50 criteria): 20 verified — 7
+Supports, 9 Partially Supports, 4 Does Not Support.** All four confirmed
+Does-Not-Support outcomes are 2.1 criteria, so every conformance failure
+found so far counts against the legal baseline. 4.1.1 Parsing is treated
+as met per the WCAG 2.2 erratum; the three 2.2-only verifications (2.5.7,
+2.5.8, 3.2.6) are supplemental.
 
 | Outcome | Level A (of 31) | Level AA (of 24) | Total (of 55) |
 |---------|-----------------|------------------|---------------|
@@ -431,30 +501,32 @@ violations; verified by pixel measurement, R014 O2). Raw output:
 *Drafted by the review process from the evidence above, for the reviewer to
 adopt, amend, or reject — the Decision field remains the reviewer's alone.*
 
-On the interim evidence, the pattern most consistent with the findings is
+On the evidence to date, the pattern most consistent with the findings is
 **Needs TAAP, conditioned on vendor commitments**, for three reasons.
 First, no essential task is failed outright: a screen-reader user completed
 template-based creation (with substantial burden) and authored a design
-from scratch, so accommodation is workable rather than fictional. Second,
-the barriers are overwhelmingly **feedback and naming defects with cheap,
-additive fixes** — the fourteen-item remediation exhibit is dominated by
-one-line ARIA attributes and status messages, with a working reference
-implementation for the hardest item already present in Adobe's own
-codebase — which makes a dated remediation roadmap a reasonable contractual
-ask rather than wishful thinking. Third, the vendor's ACR is stale and
-unreliable in both directions, so any agreement should require a
-current-standard (WCAG 2.2) ACR and treat future vendor claims as
-unverified until tested. **Approval is not supportable** while three
-criteria stand at Does Not Support and the product's core choosing and
-revising workflows exclude screen-reader users; **denial is not supported
-either** on present evidence, since every tested task remains completable
-and the remediation ask is modest. Two open items could move this
-recommendation before the report goes FINAL: the untested low-vision 400%
-reflow behaviour (a canvas product's likeliest structural failure), and the
-Section 508 §504 alt-text question — if Express publishes PDF/webpages with
-no alt-text capability and the vendor will not commit to adding it, the
-output-side harm compounds across every campus artifact and weighs toward
-denial for publishing-oriented procurements.
+from scratch, so accommodation is workable rather than fictional — and the
+full-matrix picture adds genuine strengths (cognition Works on every view;
+clean reflow; universal focus visibility). Second, the barriers are
+overwhelmingly **naming and feedback defects with cheap, additive fixes** —
+the eighteen-item remediation exhibit is dominated by one-line ARIA
+attributes and status messages, with a working reference implementation for
+the hardest item already in Adobe's own codebase; the true structural asks
+are few and named (canvas object exposure with on-demand read-back;
+keyboard rotation/resize; a Space-operable checkbox). Third, the vendor's
+ACR is stale and unreliable in both directions — of 23 criteria verified,
+five are worse than claimed and seven better — so any agreement should
+require a current-standard (WCAG 2.2) ACR and treat vendor claims as
+unverified until tested. **Approval is not supportable** while four
+criteria stand at Does Not Support, two of them Level A, and the product's
+choosing and revising workflows exclude screen-reader users; **denial is
+not supported either**, since every tested task remains completable and
+the remediation ask is modest. One open item could still move this
+recommendation before the report goes FINAL: the Section 508 §504 output
+question — if Express publishes PDF/webpages with no alt-text capability
+and no professional-caption path, and the vendor will not commit to both,
+the output-side harm compounds across every campus artifact and weighs
+toward denial for publishing-oriented procurements.
 
 ## Appendices
 

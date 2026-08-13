@@ -298,7 +298,7 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 | | |
 |---|---|
 | **Where** | S1 Home dashboard — page-level keyboard entry (Adobe cross-product app-switcher bar precedes all content) |
-| **Observed** | No skip link on first Tab; ~15 observed Tab stops remained in the app-switcher bar region before any Express content. Assistant-driven with a focus-attribution caveat (run R004 O3) — reviewer keyboard confirmation still pending (W14). AMENDED 2026-08-04 (R001 O7): landmark walk found Apps[nav]/banner/Primary[nav]/main/search — SR users can bypass via landmarks (sufficient technique ARIA11), so the barrier is keyboard-only (non-AT) users. Reviewer decision pending: does 2.4.1 stand as a failure (no keyboard-reachable mechanism) or reclassify as advisory barrier with 2.4.1 = Supports? |
+| **Observed** | **Reviewer-confirmed with a physical keyboard, 2026-08-13 (R004 O5): no skip link; 19 Tab stops to reach the left rail, 33 to reach the Recent strip.** The original assistant trial (~15 stops, focus-attribution caveat) is superseded by these hand counts. AMENDED 2026-08-04 (R001 O7): landmark walk found Apps[nav]/banner/Primary[nav]/main/search — SR users can bypass via landmarks (sufficient technique ARIA11), so the barrier is keyboard-only (non-AT) users. Reviewer decision pending: does 2.4.1 stand as a failure (no keyboard-reachable mechanism) or reclassify as advisory barrier with 2.4.1 = Supports? |
 | **Affected users** | Keyboard-only users without AT (every page visit); screen reader users NOT affected (landmarks, R001 O7) |
 | **WCAG criteria failed** | 2.4.1 |
 | **Severity** | Major |
@@ -384,6 +384,29 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 | **Date tested** | 2026-08-06 |
 | **Findings** | V-F10 |
 
+#### Finding V-F14
+
+| | |
+|---|---|
+| **Where** | S3 Editor — canvas object manipulation |
+| **Observed** | **Rotation and non-text resize cannot be done with the keyboard.** Reviewer-tested under B2 (R031 O4/O7): translation works, z-order works (via the "…" menu), and *text* can be resized through the Edit panel's size controls (with a defect of their own — the +/− steppers announce no resulting size). But **rotation (any object) and canvas resize (the corner-drag) have no keyboard route at all** — for shapes and images, "only translate is available." Core canvas operations are pointer-drag only with no alternatives exposed. |
+| **Affected users** | Keyboard-only users, screen reader users, anyone who cannot perform precise drags (tremor, switch access) |
+| **WCAG criteria failed** | **2.1.1 Keyboard (Level A)**; 2.5.7 Dragging Movements (AA — one of the six criteria the vendor ACR never addressed) |
+| **Severity** | Major — designs requiring rotated or resized non-text elements cannot be authored without a pointer |
+| **Remediation** | Reviewer's own formulation, adopted: **"exposing all orientation manipulation controls in the Edit pane"** — rotation, size and position fields in the properties panel (and/or modifier+arrow equivalents), with announced values |
+| **Evidence** | R031 O4, O7 (reviewer, B2) |
+
+#### Finding V-F15
+
+| | |
+|---|---|
+| **Where** | S3 Editor — the "T" single-character shortcut (creates a text box) |
+| **Observed** | A single-character key shortcut is active in the editor, and **no mechanism exists to turn it off or remap it**: Settings (C6) was opened and checked — it is keyboard-reachable (a positive) but contains no keyboard-customization options (R031 O5/O7). 2.1.4 requires single-character shortcuts be disable-able, remappable, or active only when the relevant component has focus. The focus-scoping defense is untested but implausible here, since the canvas cannot receive focus at all (R015 O2). |
+| **Affected users** | Speech-input users (a spoken word containing "T"-adjacent recognition can fire it) and users with tremor or unintended keypresses — a text box appears unexpectedly mid-workflow |
+| **WCAG criteria failed** | 2.1.4 Character Key Shortcuts (Level A) |
+| **Severity** | Minor — one shortcut, reversible action; but it contradicts the vendor's claimed *Supports* |
+| **Evidence** | R031 O5, O7 (reviewer, B2; Settings checked) |
+
 #### Finding V-F10
 
 | | |
@@ -396,6 +419,39 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 | **Relationship to V-F4** | **A distinct defect, not a recurrence.** V-F4 is the community icon in the shared *home* header; this is an editor-specific control on the page navigation. Same rule and criterion, different component and view — so this is the **second** unnamed control found in the product, and it establishes that unnamed icon-buttons are a pattern across teams rather than a single oversight. |
 | **Status** | Assistant-driven (axe). **Reviewer confirmation by ear still wanted** in the S3 no-vision run — S1 showed axe and NVDA agreeing on names, but also showed an NVDA elements-list rendering that nearly produced a false finding (R012 O9), so names are confirmed on focus, not from a list. |
 | **Evidence** | `evidence/runs/R014/R014-axe.json` (run R014, O1) |
+
+---
+
+### View S4 — Your stuff
+
+| | |
+|---|---|
+| **Baselines run** | B4 NVDA (R029); axe (R017); low-vision reflow (R020); grayscale (R023); NH/NS N/A (R027/R028) |
+| **Date tested** | 2026-08-13 |
+| **Findings** | V-F12, V-F13 |
+
+#### Finding V-F12
+
+| | |
+|---|---|
+| **Where** | S4 Your stuff — the two per-card controls on every file card: the bulk-select **checkbox** and the card **action button** |
+| **Observed** | Two defects on the same controls, found by different modalities. **(1) Naming:** neither control carries a unique accessible name — reviewer-confirmed by ear (R029 O2, NVDA): a user cannot tell **which file** the control belongs to. Predicted by axe (critical `label` violation, hidden `<label>` — R017 O4), confirmed on focus. **(2) Operability (added 2026-08-13, B2 — R033 O1): the checkbox does not respond to the Space bar** — the standard keyboard activation — so **bulk file selection is unavailable to keyboard-only users entirely**. The "…" menu operates but offers per-file actions, with no established bulk equivalent. Scope stays precise: the card **links are named and operable** — the defects are the two per-card controls. |
+| **Affected users** | Screen reader users (naming); keyboard-only users (operability) |
+| **WCAG criteria failed** | 4.1.2; **2.1.1 (Level A — added 2026-08-13)** |
+| **Severity** | Major |
+| **Remediation** | Include the file name in each control's accessible name ("Select *sdcsdc*", "Actions for *sdcsdc*") — the name is already on the card. |
+| **Evidence** | R029 O2 (reviewer); R017 O4 + `R017-axe.json` (instrument) |
+
+#### Finding V-F13
+
+| | |
+|---|---|
+| **Where** | S4 Your stuff — filter (and scoped search) over the file list |
+| **Observed** | Changing the filter updates the list with **no announcement of any kind** (R029 O4, reviewer, NVDA): no result count, no "list updated", nothing. A screen-reader user cannot tell their filter did anything. This is the **fourth verified instance** of the same product-wide defect: S2's lazily-loaded grid, S2's search results, S3's image insertion / AI generation (T1-F2, T2-F2), now S4's filter. Four instances across three views establishes the absence of status messages as a **product pattern**, not per-component slips. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.3 Status Messages |
+| **Severity** | Major |
+| **Evidence** | R029 O4 (reviewer) |
 
 ---
 

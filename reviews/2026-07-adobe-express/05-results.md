@@ -129,10 +129,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 2.1.1 Keyboard (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Partially Supports
 - **Vendor claim:** Does Not Support (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** V-F14
+- **Remarks:** Extensively exercised under B2 (physical keyboard, NVDA off, 2026-08-13): S1's full 33-stop traversal is reachable and operable (R004 O5); document creation, renaming, text authoring and canvas **translation and z-order** all work by keyboard (R016, R029, R031). The confirmed failures: **rotation (any object) and resize of non-text objects are pointer-drag only** (V-F14, broadened 2026-08-13) — for shapes and images "only translate is available"; text resizes via the Edit panel (whose +/− steppers announce no value — the feedback pattern again). And on S4, **the file-card checkbox does not respond to the Space bar** (V-F12 extended, R033 O1), making bulk file selection keyboard-unavailable. Also relevant: an earlier assistant Blocker claim against this criterion ("editing is pointer-only") was **withdrawn** when the reviewer found the keyboard route (R015 O7) — the surviving 2.1.1 failure is rotation, precisely scoped. Narrower than the vendor's blanket Does Not Support.
 
 ### 2.1.2 No Keyboard Trap (Level A)
 - **Outcome:** Not Evaluated
@@ -141,10 +141,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 2.1.4 Character Key Shortcuts (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Does Not Support
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** V-F15
+- **Remarks:** **Settings checked 2026-08-13 (R031 O7): no keyboard-customization options exist.** The editor's "T" shortcut (creates a text box) can be neither disabled nor remapped; the focus-scoping defense is implausible since the canvas cannot receive focus (R015 O2). The criterion's entire subject matter — character-key shortcuts — fails, hence Does Not Support. **Fifth criterion verified worse than the vendor's claim** (Supports claimed). Also recorded: shortcut documentation and implementation out of sync in both directions (documented rename shortcut broken; working shortcuts undocumented — R031 O2/O6).
 
 ### 2.2.1 Timing Adjustable (Level A)
 - **Outcome:** Not Evaluated
@@ -153,10 +153,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 2.2.2 Pause, Stop, Hide (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:** S1: search-bar placeholder auto-rotates suggestions with no visible pause control (exploration observation) — verify duration/mechanism in cognition run.
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): nothing moving, blinking or auto-updating on any view (also instrumented: 0 animations page-wide at 68s, R010 O1). The once-suspected rotating placeholder is static in steady state and hidden from AT. Load-window rotation, if any, is under 5s after dozens of observed loads. Agrees with vendor.
 
 ### 2.3.1 Three Flashes or Below Threshold (Level A)
 - **Outcome:** Not Evaluated
@@ -168,7 +168,7 @@ standard, rather than presenting 50 claims as full coverage.
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (Web)
 - **Task findings:** V-F3
-- **Remarks:** S1: no skip link; ~15 Tab stops in the app bar before content (R004, keyboard confirmation pending W14). AMENDED per R001 O7: proper landmark set (Apps[nav]/banner/Primary[nav]/main/search) means SR users bypass fine — ARIA11 is a formally sufficient technique, which would make the vendor's "Supports" defensible. REVIEWER DECISION PENDING: keep as failure (no mechanism usable by keyboard-without-AT users) or reclassify Supports + advisory barrier. Outcome stands as Does Not Support only until that call is made.
+- **Remarks:** S1: **reviewer-confirmed with a physical keyboard 2026-08-13 (R004 O5): no skip link; 19 Tab stops to the left rail, 33 to the Recent strip** — the earlier assistant caveat is resolved and the vendor's *Supports* is contradicted by direct test. Screen-reader users bypass via landmarks on S1 (ARIA11, confirmed in both JAWS and NVDA) — but **not in the editor, which has no `main`** (R014 O3), so even that mitigation is per-view. REVIEWER DECISION still open in name — though the evidence now firmly supports keeping the failure for keyboard-without-AT users: keep as Does Not Support, or reclassify Supports + advisory. Outcome stands as Does Not Support.
 
 ### 2.4.2 Page Titled (Level A)
 - **Outcome:** Does Not Support
@@ -219,22 +219,22 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 3.2.1 On Focus (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): no unexpected context changes on focus anywhere across four views and all sessions. Agrees with vendor.
 
 ### 3.2.2 On Input (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Partially Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): no unexpected context changes on input; filter/search inputs change results only (their *silence* is the separate 4.1.3 pattern, not a context change). **Better than the vendor's Partially Supports.**
 
 ### 3.2.6 Consistent Help (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Not covered by vendor ACR
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): help ('?') appears in a consistent location on every view. **Independent primary evidence — one of the six WCAG 2.2 criteria absent from the vendor ACR.** Help *content* (C7) still unopened — location consistency is what 3.2.6 requires.
 
 ### 3.3.1 Error Identification (Level A)
 - **Outcome:** Not Evaluated
@@ -258,7 +258,7 @@ standard, rather than presenting 50 claims as full coverage.
 - **Outcome:** Partially Supports
 - **Vendor claim:** Does Not Support (Web)
 - **Task findings:** V-F4
-- **Remarks:** S1: header community button has no accessible name — **reviewer-confirmed 2026-08-06 with NVDA 2026.1.1 (R012 O1)**, corroborated by Chrome's accessibility tree and axe-core (R009). Extent on S1 is now established and is **narrow**: exactly one control of 48 exposed interactive nodes. The worse hypothesis — systemic mis-mapping of Spectrum web components to the platform API — was tested and refuted, so the vendor's blanket "Does Not Support" looks materially harsher than S1 warrants. Still pending: aria-controls target existence on "More apps" and account-button state toggling (R009 O5, W5); JAWS behaviour on this control is untested (R001 suspended when testing moved to NVDA — see 03 §1.3). Outcome stays Partially Supports pending S2/S3/S4.
+- **Remarks:** S1: header community button has no accessible name — **reviewer-confirmed 2026-08-06 with NVDA 2026.1.1 (R012 O1)**, corroborated by Chrome's accessibility tree and axe-core (R009). Extent on S1 is now established and is **narrow**: exactly one control of 48 exposed interactive nodes. The worse hypothesis — systemic mis-mapping of Spectrum web components to the platform API — was tested and refuted, so the vendor's blanket "Does Not Support" looks materially harsher than S1 warrants. Still pending: aria-controls target existence on "More apps" and account-button state toggling (R009 O5, W5); JAWS behaviour on this control is untested (R001 suspended when testing moved to NVDA — see 03 §1.3). **Extent across views now established (2026-08-13):** S3 adds the page-nav "more" button (V-F10), the unlabelled floating text toolbar and the unnamed edit textarea (R015), the create chooser's six unnamed category tabs' options (T2-F1); S4 adds the per-card checkbox and action button (V-F12, reviewer-confirmed). The defects are specific, recurrent, and all of the same cheap-to-fix class — missing accessible names on custom controls — rather than systemic component mis-mapping (R012 O1 refuted that). Outcome stays Partially Supports.
 
 ---
 
@@ -307,10 +307,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 1.4.10 Reflow (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Partially Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Measured on **all four sampled views** at a 320 CSS px viewport (CDP device emulation — the equivalence 1.4.10 itself defines; runs R002/R018/R019/R020, 2026-08-13): **zero horizontal overflow everywhere**; layouts re-stack to a single column. The editor's drawing canvas is exempt content under this criterion. **Better than the vendor's claim** — a genuine product strength worth stating. One scoped caveat, not a defect: at 320px the editor goes panel-over-canvas (asset panel covers the document); whether the canvas is *reachable* at that width is an open interactive check (R019 O1) that belongs to 1.4.4/usability rather than reflow itself. Revisit if that check fails.
 
 ### 1.4.11 Non-text Contrast (Level AA)
 - **Outcome:** Not Evaluated
@@ -319,10 +319,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 1.4.12 Text Spacing (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:** S1 pass under override (R002 O1; "Premium member" badge flicker to re-verify). Other views pending.
+- **Task findings:** none
+- **Remarks:** S1 passes with full visual confirmation (R002 O1 screenshot + 2026-08-13 re-capture at 320px). S2/S3/S4 pass **by overflow metric** under the standard override (no layout growth, R018–R020); the visual confirmation screenshots stalled on those views — a documented instrument limit (renderer never stabilizes under global spacing injection on heavy shadow-DOM views), not a product signal. Agrees with the vendor. Downgrade only if a reviewer spot-check ever shows clipping the metric missed.
 
 ### 1.4.13 Content on Hover or Focus (Level AA)
 - **Outcome:** Does Not Support
@@ -355,10 +355,10 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 2.5.7 Dragging Movements (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Partially Supports
 - **Vendor claim:** Not covered by vendor ACR
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** V-F14
+- **Remarks:** **Independent primary evidence — no vendor claim exists** (one of the six WCAG 2.2 criteria absent from the 2023 ACR; see §Vendor evidence gap). Tested on the two drag-heavy surfaces: the upload card's drag-drop has a working non-drag alternative ("browse", B2-verified, R004 O5); canvas object **translation** has a keyboard route and **z-order** a menu route, but **rotation is drag-only with no alternative found, and the corner-drag resize has no keyboard equivalent for non-text objects** (V-F14, R031 O4/O7). The S2 masonry and S4 lists involve no dragging.
 
 ### 2.5.8 Target Size (Minimum) (Level AA)
 - **Outcome:** Supports
@@ -385,16 +385,16 @@ standard, rather than presenting 50 claims as full coverage.
 - **Remarks:**
 
 ### 3.2.3 Consistent Navigation (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): navigation consistent across S1–S4 (rail, header, ordering). Agrees with vendor.
 
 ### 3.2.4 Consistent Identification (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (Web)
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** none
+- **Remarks:** Reviewer cross-view closure 2026-08-13 (runs R010, R034–R036): components identified consistently across views. Agrees with vendor.
 
 ### 3.3.3 Error Suggestion (Level AA)
 - **Outcome:** Not Evaluated
@@ -417,5 +417,5 @@ standard, rather than presenting 50 claims as full coverage.
 ### 4.1.3 Status Messages (Level AA)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Partially Supports (Web)
-- **Task findings:** T1-F2, T2-F2
-- **Remarks:** **Three independent instances across two views — a consistent product pattern, not isolated slips.** S3: inserting an image reports nothing, and **"Generate with AI"** — an asynchronous, heavily-promoted operation taking many seconds — announces no progress, completion or failure, so a screen-reader user cannot distinguish working from finished from failed (T2-F2, R016 O7). The inconsistency makes it clear-cut: the same panel announced *text* insertion ("edit selected add text") one step earlier, so the capability exists and is simply not applied to images. S2: the template grid loads results lazily on scroll and **their arrival is not announced** — combined with silent arrow navigation and unnamed items, the reviewer could find no reliable way to search the grid by ear (T1-F2, R013 O3/O8, NVDA 2026.1.1). Entering the grid region is likewise unannounced. **Confirmed a second time via the search path** (R013 O13): running a template search updates the results with no announcement of any kind — no count, no "results updated" — so a user cannot tell whether their search returned anything. S1 partial evidence is more favourable: opening the "Get started" modal announces (over-announces, R010/R012 O15) rather than staying silent. Agrees with the vendor's claim. Pending S3/S4 — the editor's autosave and export progress indicators are the next place this matters.
+- **Task findings:** T1-F2, T2-F2, V-F13
+- **Remarks:** **Four independent instances across three views — a consistent product pattern, not isolated slips.** S4: changing the file filter updates the list with no announcement of any kind (V-F13, reviewer-confirmed, R029 O4). S3: inserting an image reports nothing, and **"Generate with AI"** — an asynchronous, heavily-promoted operation taking many seconds — announces no progress, completion or failure, so a screen-reader user cannot distinguish working from finished from failed (T2-F2, R016 O7). The inconsistency makes it clear-cut: the same panel announced *text* insertion ("edit selected add text") one step earlier, so the capability exists and is simply not applied to images. S2: the template grid loads results lazily on scroll and **their arrival is not announced** — combined with silent arrow navigation and unnamed items, the reviewer could find no reliable way to search the grid by ear (T1-F2, R013 O3/O8, NVDA 2026.1.1). Entering the grid region is likewise unannounced. **Confirmed a second time via the search path** (R013 O13): running a template search updates the results with no announcement of any kind — no count, no "results updated" — so a user cannot tell whether their search returned anything. S1 partial evidence is more favourable: opening the "Get started" modal announces (over-announces, R010/R012 O15) rather than staying silent. Agrees with the vendor's claim. Pending S3/S4 — the editor's autosave and export progress indicators are the next place this matters.

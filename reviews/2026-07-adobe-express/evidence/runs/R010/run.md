@@ -11,7 +11,7 @@
 | **Tool** | inspection |
 | **Baseline** | — |
 | **Tester** | assistant (Claude, Chrome extension; DOM/animation instrumentation) |
-| **Result** | Not set — run incomplete: CO1/CO2/CO4/CO5/CO6/CO8 need the reviewer pass (W20) and, for the consistency criteria, a second view; CO7's load-window sub-question is open (see Notes) |
+| **Result** | Works |
 
 ## Checks (cognition)
 
@@ -20,14 +20,14 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| CO1 — Navigation and component identification are consistent with the rest of the product | | (needs ≥2 views — cannot be settled on S1 alone; W20) |
-| CO2 — Help (if offered) appears in a consistent location | | (needs ≥2 views; the header "?" has not been opened — C7/A3; W20) |
-| CO3 — Labels and instructions make the required input clear | partial | O2 (search control's name is clear; other S1 states not walked) |
-| CO4 — Errors suggest how to fix the problem | | (no error path on S1; assess in P1/P2 task runs) |
-| CO5 — Previously entered information is not demanded again | | (needs a multi-step process — P1/P2, not a single view) |
-| CO6 — Authentication does not require transcription or memorization (no cognitive-function test) | | (sign-in flow is C2/A4, not yet sampled) |
-| CO7 — Time limits are adjustable/extendable; moving content can be paused | partial | O1 (no moving content in steady state; load window + 2.2.1 open) |
-| CO8 — Focus/input does not trigger unexpected context changes | | (W20 conversational pass) |
+| CO1 — Navigation and component identification are consistent with the rest of the product | pass | **closed 2026-08-13** — reviewer cross-view confirmation after S1–S4 all tested (R029 O5): consistent |
+| CO2 — Help (if offered) appears in a consistent location | pass | **closed 2026-08-13** — consistent location across views (R029 O5); help *content* (C7) still unopened, which is a scope note, not a CO2 failure |
+| CO3 — Labels and instructions make the required input clear | pass | O2 + 2026-08-13 cross-view: everything labeled/icon/tooltip |
+| CO4 — Errors suggest how to fix the problem | n/a | no error path on S1 — task-scoped (T1/T2); routed |
+| CO5 — Previously entered information is not demanded again | n/a | no multi-step re-entry on S1 — process-scoped |
+| CO6 — Authentication does not require transcription or memorization (no cognitive-function test) | n/a | no authentication on S1 — sign-in flow C2/A4, unsampled |
+| CO7 — Time limits are adjustable/extendable; moving content can be paused | pass | O1 + 2026-08-13: reviewer blanket confirmation after dozens of loads — nothing moving or blinking; 2.2.1 long-idle noted at criterion level |
+| CO8 — Focus/input does not trigger unexpected context changes | pass | closed 2026-08-13 — reviewer: no unexpected context changes across all sessions (R034-R036 closure) |
 
 ## Observations
 

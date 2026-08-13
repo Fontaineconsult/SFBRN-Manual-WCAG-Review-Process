@@ -48,10 +48,10 @@ apply the first bucket whose conditions all hold:
 |---|---|
 | **Headline** | A screen-reader user can **author** a design end to end, but cannot readily **choose** a template by name, **revise** existing work, or **tell when operations complete**. |
 | **Essential tasks** | 2 defined: T1 (create from template) **Pass with barriers**; T2 (author from scratch) in progress — authoring steps pass, feedback steps fail |
-| **Criteria verified** | **12 of 55**: 1 Supports · 8 Partially Supports · 3 Does Not Support |
+| **Criteria verified** | **23 of 55**: 9 Supports · 10 Partially Supports · 4 Does Not Support |
 | **Findings** | **14 active** (0 Blocker · 12 Major · 2 Minor) + 1 raised-and-withdrawn, retained for the record; at least 3 product-wide |
 | **Vendor ACR coverage** | 2023, written against **WCAG 2.1**: 6 of the 55 target criteria unaddressed (all six WCAG 2.2 additions), 1 claim obsolete (4.1.1) |
-| **Vendor ACR reliability** | Of 12 verified: **4 worse than claimed · 4 better · 3 agree** (+1 with no claim to check) |
+| **Vendor ACR reliability** | Of 23 verified: **5 worse than claimed · 7 better · 8 agree** (+3 with no claim to check) |
 | **Remediation outlook** | Mostly **additive and cheap** (names, announcements — see exhibit); one structural item (canvas object identity) |
 | **Coverage of this review** | 9 of 28 view×modality cells run; **all screen-reader evidence is NVDA-only** |
 
@@ -230,12 +230,12 @@ modality→WCAG map in `ontology/modality-checks.md`.*
 | Modality (508 FPC) | Coverage so far | Criteria failed | Findings | What it means for this user group |
 |---|---|---|---|---|
 | **Without vision** (302.1) | S1 ✓, S2 ✓, S3 in progress (NVDA only) | 1.1.1, 1.3.1, 1.3.3, 2.4.2, 2.4.3, 2.4.6, 4.1.2, 4.1.3 | T1-F1, T1-F2, T2-F1, T2-F2, V-F4, V-F5, V-F7–V-F11 | Can author a design end to end; cannot choose templates by name, revise existing work, or tell when operations finish. The most-affected group. |
-| **With limited vision** (302.2) | Partial — reviewer zoom/reflow session pending | 1.4.3, 1.4.13 | V-F1, V-F2 | One contrast failure (a 3.96:1 link) and a hover flyout that cannot be dismissed and obscures content. 400% reflow — the core low-vision question — is **untested**. |
-| **Without color perception** (302.3) | S1 ✓ | none found | — | No color-alone conveyance found on S1; other views pending. |
-| **Without hearing / limited hearing** (302.4/.5) | S1, S2 legitimately N/A; **S3 and Learn are NOT N/A and are untested** | not yet evaluated | — | The editor offers insertable video/music/sound assets and Learn is a video tutorial playlist — caption/transcript state unknown. A real gap, not a clean bill. |
+| **With limited vision** (302.2) | Reflow measured on **all four views** (320-px equivalence, 2026-08-13); contrast/focus/hover items remain | 1.4.3, 1.4.13 | V-F1, V-F2 | **Reflow passes everywhere** — zero horizontal overflow on S1–S4, a genuine strength. Open: the editor goes panel-over-canvas at 320px (canvas reachability unverified); one contrast failure (3.96:1 link); the undismissable hover flyout; icon contrast and focus-at-zoom checks. |
+| **Without color perception** (302.3) | S1–S4 all captured in grayscale | none found | — | Selected states survive grayscale on every view (filled pills, boxed selections, numeric badges, real checkmarks). Open: canvas selection highlight (not capturable by instrument), link hover cues. |
+| **Without hearing / limited hearing** (302.4/.5) | S1–S4 all determined (R030 closed S3); **Learn (C11) untested** | none in the product's own UI | — | The editor's UI carries no audio content (N/A with evidence); no sound-alone feedback anywhere; no voice input (reviewer-confirmed). The live issue moved to §Concerns: **auto-caption capability exists for inserted video but professional caption files cannot be uploaded**. Learn's tutorial videos — Adobe's *own* content, where 1.2.2 applies directly — remain untested. |
 | **Without speech** (302.6) | All views so far | n/a | — | No voice-input features observed. |
 | **With limited manipulation/reach/strength** (302.7/.8) | Partial — physical-keyboard sweep pending | 2.4.1 (reviewer classification pending) | V-F3 | Everything reached so far is keyboard-operable (incl. full authoring), but every page visit costs ~15 tab stops of unrelated chrome with no skip mechanism — and the editor has no `main` landmark to bypass with. **2.5.8 target size verified Supports** — independent positive on a criterion the vendor never claimed. |
-| **With limited language/cognitive/learning abilities** (302.9) | Partial — conversational pass pending | none yet | — | Consistency criteria (3.2.3/3.2.4) became answerable once multiple views were tested; not yet walked. No time limits or cognitive-function tests observed. |
+| **With limited language/cognitive/learning abilities** (302.9) | **Complete — all four views, Works** (R010, R034–R036) | none | — | **The product's strongest modality.** Navigation and identification consistent across every view; help in a consistent location; no unexpected context changes anywhere; nothing moving or blinking; everything labeled, iconed or tooltipped. Six criteria verified Supports on this evidence (3.2.1/3.2.2/3.2.3/3.2.4/3.2.6/2.2.2), two of them better than or absent from the vendor's ACR. Auth (3.3.8) and error-path criteria remain flow-scoped. |
 
 Two honest caveats this table makes visible: the *worst-tested* modality
 (low-vision at 400% zoom) is one of the *likeliest to fail* on a canvas
@@ -268,8 +268,16 @@ to. (Full arithmetic: `05` §Vendor evidence gap.)
 | 4.1.2 | Does Not Support | Partially Supports | better | specific unnamed controls, not systemic mis-mapping |
 | 1.1.1 | Partially Supports | Partially Supports | agree | vendor's own exception wording reproduced on S1 |
 | 1.3.1 | Partially Supports | Partially Supports | agree | |
-| 4.1.3 | Partially Supports | Partially Supports | agree | three verified instances |
+| 4.1.3 | Partially Supports | Partially Supports | agree | five-plus verified instances across three views |
+| 1.4.12 | Supports | Supports | agree | S1 visually confirmed; S2–S4 by overflow metric |
+| 3.2.1 / 3.2.3 / 3.2.4 / 2.2.2 | Supports | Supports | agree | cross-view reviewer closure, R034–R036 |
+| 3.2.2 | Partially Supports | Supports | better | no context change on input anywhere |
+| 3.2.6 | **no claim** | Supports | — | independent: help location consistent on every view |
+| 2.1.4 | Supports | Does Not Support | **worse** | "T" shortcut; Settings has no disable/remap (V-F15) |
+| 2.1.1 | Does Not Support | Partially Supports | better | authoring, navigation, move, z-order all keyboard-operable; rotation/non-text-resize fail (V-F14) |
+| 1.4.10 | Partially Supports | Supports | better | zero horizontal overflow on all four views, measured |
 | 2.5.8 | **no claim** | Supports | — | independent primary evidence; criterion absent from ACR |
+| 2.5.7 | **no claim** | Partially Supports | — | independent: upload/move/z-order have alternatives; rotation and non-text resize do not (V-F14) |
 
 ### What this means for relying on this vendor's ACRs
 
@@ -284,11 +292,11 @@ WCAG 2.2 and treat vendor ratings as unverified until tested.
 
 | Outcome | Level A (of 31) | Level AA (of 24) | Total (of 55) |
 |---------|-----------------|------------------|---------------|
-| Supports | 0 | 1 | 1 |
-| Partially Supports | 5 | 3 | 8 |
-| Does Not Support | 2 | 1 | 3 |
+| Supports | 4 | 5 | 9 |
+| Partially Supports | 6 | 4 | 10 |
+| Does Not Support | 3 | 1 | 4 |
 | Not Applicable | 0 | 0 | 0 |
-| Not Evaluated | 24 | 19 | 43 |
+| Not Evaluated | 18 | 14 | 32 |
 
 Full per-criterion record with evidence citations: `05-results.md`.
 
@@ -306,21 +314,42 @@ webpage publishing**, where every artifact the campuses publish would carry
 unlabelled images — an outward-facing, compounding harm affecting readers
 who never touch Express.
 
+**Video captions — the sibling concern, half-answered well (R030,
+2026-08-13).** For user-inserted video the picture is better than for
+images: the video edit window offers a **CC button with auto-generated
+captions** — a real §504.2 capability, credited as such. The gap: **no
+apparent way to upload professionally-authored caption files** (SRT/VTT)
+or substitute corrected captions. Auto-generated captions are, as a class,
+insufficient for published-content conformance (accuracy, speaker
+identification, sound description), and CSU's standard captioning
+workflows produce professional caption files Express cannot ingest.
+Whether auto-captions are at least *editable in place* was not established.
+Summary across the two concerns: **images — no capability at all; video —
+partial capability with no professional-quality path.**
+
 **Reviewer decisions required:** (1) extend this review's scope to 508
-§504, or carry this as an advisory note beside the conformance statement;
-(2) confirm via the export walk (W16) which output formats are offered.
+§504, or carry these as advisory notes beside the conformance statement;
+(2) confirm via the export walk (W16) which output formats are offered and
+**whether captions survive export/publish**; (3) spot-check whether
+auto-generated captions are editable in place.
 
 ## Coverage & limitations of this review
 
-**This is an interim report.** 12 of 55 criteria verified; 9 of 28
-view×modality cells run.
+**This is an interim report.** 23 of 55 criteria verified; **all 28
+view×modality cells run** (matrix complete 2026-08-13). What remains is
+task- and flow-scoped: T2's export walk; the criteria reachable only
+through flows not yet walked (1.2.x via Learn's videos, 3.3.x error
+handling, 3.3.8 via sign-in); measurement leftovers (per-view contrast,
+focus-at-zoom, the editor's panel-at-320px check); and the standing
+reviewer decisions (JAWS scope, 1.4.13 pointer confirmation, 2.4.1
+classification, §504 scope).
 
 | View | Done | Open |
 |---|---|---|
-| S1 Home | no-vision (NVDA), no-color, axe; no-hearing/no-speech N/A | low-vision (5 checks), motor (8), cognition (6); JAWS run suspended |
-| S2 Explore | no-vision (NVDA + task walk T1), axe | all other modalities |
-| S3 Editor | axe; no-vision in progress (view sweep + task walk T2) | T2 export steps; all other modalities — **no-hearing is NOT N/A here** (insertable video/audio assets) |
-| S4 Your stuff | — | everything, including the required axe sweep |
+| S1 Home | no-vision (NVDA), no-color, reflow/spacing measured, axe; NH/NS N/A | LV icon-contrast + focus-at-zoom; motor (8 checks); cognition (6); JAWS suspended |
+| S2 Explore | no-vision + task T1, axe, reflow measured, grayscale, NH/NS N/A (evidence-backed) | motor; cognition |
+| S3 Editor | axe, reflow measured (panel-over-canvas question open), grayscale chrome, NS N/A | no-vision close-out + T2 export; **no-hearing (insertable media — reviewer)**; motor; cognition |
+| S4 Your stuff | axe, reflow measured, grayscale, NH/NS N/A (evidence-backed) | **no-vision (walkthrough W22–W26 ready — checkbox candidate + rename discrepancy)**; motor; cognition |
 
 Standing caveats: **all screen-reader evidence is NVDA 2026.1.1 only** — 
 whether JAWS is in scope is an open question (03 §1.3), and JAWS/NVDA
@@ -347,6 +376,10 @@ sweeps cannot see the canvas at all.
 | 12 | Hover flyout not hoverable/dismissible/persistent-safe (V-F1) | 1.4.13 | Standard hover-content behavior incl. Esc | Pointer + Esc re-test per 1.4.13 |
 | 13 | Decorative inner graphics announced (V-F7) | 1.1.1 | `alt=""`/`aria-hidden` on decorative card images | `G`-walk hears named figures only |
 | 14 | No alt-text authoring for placed images (R016 O10) | *508 §504.2/.3 (outside WCAG target)* | Alt-text field on images, carried into PDF/webpage output | Author alt text by keyboard; verify in exported artifact |
+| 15 | Object rotation is pointer-drag only (V-F14) | 2.1.1, 2.5.7 | Rotation field in properties panel and/or modifier+arrow rotation | Rotate an object end-to-end by keyboard (B2) |
+| 16 | Canvas objects and operations silent to AT; no way to survey a document by ear (R015 O9, R031 O3) | 4.1.2, 1.3.1 | Expose selected-object name/type/state; announce operation results; **provide an on-demand spoken canvas description** (reviewer recommendation: read back the objects, their content and arrangement, on command) | NVDA distinguishes objects and hears move/format results; a "describe canvas" action exists and is announced |
+| 17 | Shortcut docs and implementation out of sync both ways: documented rename shortcut broken; working shortcuts undocumented (R031 O2/O6) | — (vendor doc accuracy) | Reconcile the shortcuts page with the implementation; surface an in-app shortcut reference | Every documented shortcut works; every working shortcut documented |
+| 18 | "T" single-char shortcut with no known disable/remap (R031 O5 — pending Settings check) | 2.1.4 | Disable/remap setting, or focus-scope the shortcut | Toggle exists and works, or shortcut fires only with canvas focused |
 
 ## TAAP — Technology Accessibility Accommodation Plan
 

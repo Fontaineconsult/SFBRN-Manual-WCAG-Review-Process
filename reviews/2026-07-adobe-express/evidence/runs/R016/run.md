@@ -259,7 +259,12 @@ add text, add an image, export. Reviewer-driven, NVDA 2026.1.1 / Chrome
     then the durable URN (recorded in the header and 03 §2.6 registry) is
     the only trustworthy locator — which is precisely why display names
     must never serve as locators.
-  - Classified: NV7 candidate — **pending reviewer disambiguation**.
+  - Classified: NV7 candidate — **CLOSED 2026-08-13 as unreproducible**
+    (R029 O3): the reviewer renamed the document again, in both the listing
+    and the canvas-edit surface; names now persist and display correctly in
+    both. No feedback-integrity finding raised. Residual value: display
+    names demonstrably drift, which is why the URN registry (03 §2.6) is
+    the locator authority.
 
 ## Notes
 

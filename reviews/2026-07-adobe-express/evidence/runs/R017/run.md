@@ -57,10 +57,9 @@ axe-core 4.10.3, full ruleset, authenticated S4. **violations 4, incomplete
   checkboxes** — the mechanism for selecting files for bulk actions.
   - If confirmed by ear, a screen-reader user hears "checkbox" with no
     indication of *which file* it selects.
-  - Classified: W1 / 4.1.2 / Major → **candidate**, routed to the S4
-    no-vision run: focus a file checkbox, report exact speech. Not raised
-    until heard (the label-hidden pattern *can* still compute a name;
-    axe itself is unsure — that is why this is a candidate).
+  - Classified: W1 / 4.1.2 / Major → **CONFIRMED by ear 2026-08-13**
+    (R029 O2): checkbox and card action button announce with no unique
+    name → **finding V-F12**.
 - O5 [classified] (incompletes): `aria-valid-attr-value` ×2 = the shared
   header's `aria-controls` items, unchanged from S1/S2/S3 (resolve once,
   product-wide). `aria-prohibited-attr` ×4 routed with them.

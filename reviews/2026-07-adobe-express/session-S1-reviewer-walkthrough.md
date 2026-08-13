@@ -164,18 +164,20 @@ no-vision user.
 Baseline B3. Set window ~1280px wide (snap to half of the 4K screen is
 fine — tell me the actual width), then `Ctrl+plus` to 400%. `Ctrl+0` resets.
 
-### W10 — Reflow at 400% (LV1, LV2)
+### W10 — Reflow at 400% (LV1, LV2) — **CLOSED 2026-08-13, do not redo**
 
-**Do:** At 400%, scroll the page.
-**Tell me:** One-column reflow or two-dimensional scrolling? Anything
-clipped, overlapped, or missing (compare: search, start cards, Quick edits,
-File formats, Recent, left rail)?
-**Feedback:** _(pending)_
+Resolved by CDP 320 CSS px device emulation (the documented 1.4.10
+equivalence): S1 reflows to a single column with zero horizontal overflow;
+no content loss; landscape fine (R002 O7, screenshots in the run folder).
+Skip unless you want to spot-check the screenshots.
+**Feedback:** closed by measurement (R002 O7)
 
-### W11 — Focus visibility at zoom (LV7)
+### W11 — Focus visibility at zoom (LV7) — one of R002's two remaining rows
 
-**Do:** Still at 400%, Tab through a dozen stops.
+**Do:** At 400% (or a ~320px-wide window), Tab through a dozen stops.
 **Tell me:** Is the focus indicator always visible and unobscured?
+**Note:** this and W13's LV5 remainder (icon/control contrast) are all that
+still hold R002 open — everything else in Part B closed by measurement.
 **Feedback:** _(pending)_
 
 ### W12 — Confirm V-F1: the hover flyout (LV6 / 1.4.13) — KEY STEP
@@ -219,7 +221,7 @@ Baseline B2. Mouse out of reach.
 focus reaches Express content (left rail or search).
 **Tell me:** Did a skip link appear? How many stops through the Adobe app
 bar? (Trial: none, ~15 stops — confirm or refute; vendor claims Supports.)
-**Feedback:** _(pending)_
+**Feedback:** 2026-08-13 (physical keyboard, B2) — CONFIRMED: no skip link; 19 tabs to the left rail, 33 to Recent. V-F3 upgraded to reviewer-grade evidence; vendor 'Supports' contradicted (R004 O5).
 
 ### W15 — Full sweep: reach, operate, order, indicator (MO1/2/4/5)
 
@@ -228,14 +230,14 @@ kind: a start card (Enter), a Quick edits card, a "View all" link, the
 Recent-file card.
 **Tell me:** Anything unreachable, inoperable, indicator-less, or in a weird
 order.
-**Feedback:** _(pending)_
+**Feedback:** 2026-08-13 — full traversal completed; 'navigation is fully keyboard accessible'; no order anomalies; no missing-indicator stop reported (MO4 partial — implied by successful sighted traversal, not per-stop confirmed).
 
 ### W16 — Modal keyboard behavior (MO3) + shortcuts (MO6)
 
 **Do:** Open "Get started" with Enter; Tab around inside; Esc to close.
 Then check: any single-character shortcuts active on this page?
 **Tell me:** Trap/exit behavior; where focus returns; shortcut findings.
-**Feedback:** _(pending)_
+**Feedback:** 2026-08-13 — modal opened via Tab+Enter, Esc exited (B2 confirmation of R012 O13). Single-char shortcut assessment moved to S3 (R031), where shortcuts live.
 
 ### W17 — Targets and gestures (MO7/8) — MO9 DONE 2026-08-06
 
@@ -252,7 +254,7 @@ clears 2.5.8's spacing exception by 4× or more. MO9 = pass at desktop width.
    into a fail. This is the one way MO9 could still fail on S1.
 **Tell me:** Any drag-only interaction, and whether the "View all" links
 crowd at 400%.
-**Feedback:** _(pending)_
+**Feedback:** 2026-08-13 — non-drag upload works (browse alternative, B2). MO9 was already measured (pass). MO8 click-slide-off is not testable under B2 (no pointer) — 30-second pointer micro-check queued.
 
 ---
 

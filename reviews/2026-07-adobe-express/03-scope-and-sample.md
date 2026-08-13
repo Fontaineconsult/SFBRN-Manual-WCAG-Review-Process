@@ -109,7 +109,7 @@ what exploration reveals.
 | C3 | Home dashboard — **confirmed 2026-08-04**: search bar, "How would you like to start?" cards (Upload / Start new design / Edit photos / Set up brand kit / Generate presentation), Quick edits row, File formats row, Recent files strip, plus below-the-fold sections "Ways to create" and "Templates" (found via JAWS heading walk, R001 O6). Key state: "Get started" modal (create chooser: Create + Quick actions tabs, category list, size presets, Upload media) opened from "Start new design" | https://new.express.adobe.com/ |
 | C4 | Template gallery / browse — **confirmed 2026-08-04** as "Explore" (left-rail Templates): content-type tabs (Templates, Photos, Videos, Design assets, Backgrounds, Text layouts, Webpage templates, Stickers), filter sidebar (Price/Output/Size/Type/Style/Mood/Region), category chips, infinite-scroll masonry grid | SPA view at `/` (no distinct URL observed) |
 | C5 | Editor — **confirmed 2026-08-04**: own left rail (Search, Add content, Text, Upload, Your stuff, Brands, Templates, Styles, Add-ons), top bar (File menu, doc name, zoom, undo/redo, comments, Download, Share), template search panel ("Generate template" AI button, 20,000+ results), canvas with Edit page / Resize / Add page. New docs auto-named "Untitled - <date>" | `/new?width=…&height=…` (new); `/id/urn:aaid:sc:…` (existing docs) |
-| C6 | Account / settings — **partially confirmed 2026-08-04**: in-app account menu (avatar) = Notifications, Generative AI credits meter (2000/2000, reset date), premium-features notice (admin-managed), Settings, Install Adobe Express app, Legal notices, Sign out. Full account mgmt is external (account.adobe.com) | menu overlay; Settings view not yet opened |
+| C6 | Account / settings — **confirmed 2026-08-13**: Settings opened by the reviewer, **keyboard-reachable**; contains **no keyboard-customization options** (fed V-F15 / 2.1.4). Earlier (2026-08-04): account menu = Notifications, AI credits meter, premium notice, Settings, Install app, Legal notices, Sign out. Full account mgmt external (account.adobe.com) | account menu → Settings |
 | C7 | Help / support — hypothesis; "?" icon in home top bar not yet opened | |
 | C8 | Your stuff — **confirmed 2026-08-04**: tabs Files / Projects (NEW) / Libraries / Favorites, Folders, file cards grid, Create button, filter/sort/list-view toggles | `/your-stuff/files/recent?filter=express` |
 | C9 | Brands — **confirmed 2026-08-04**: brand-kit setup; empty state with "Manual set up" and "Extract brand from upload (BETA)", Create brand / Browse shared brands, filter | `/brands` |
@@ -163,7 +163,7 @@ what exploration reveals.
 | ID | View | Location / path |
 |----|------|-----------------|
 | A1 | Accessibility statement | |
-| A2 | Keyboard shortcuts reference / panel | |
+| A2 | Keyboard shortcuts reference — **confirmed 2026-08-13** (reviewer): external help page, `https://helpx.adobe.com/express/web/get-started/keyboard-shortcuts.html`. No in-app panel found so far. Note (R031): some documented shortcuts do not work (e.g. rename) | external helpx.adobe.com |
 | A3 | Help center / documentation | "?" icon in home top bar — not yet opened |
 | A4 | Authentication (sign in, password reset, MFA) | Adobe IMS SSO; SFSU enterprise account — walk via sign-out/sign-in |
 | A5 | Personal data / privacy settings | Settings in account menu — not yet opened |
@@ -332,6 +332,30 @@ sample types (2.3), technologies relied upon (2.4), and other relevant samples
 Candidates not yet sampled (decide after remaining exploration): Brands (C9),
 Schedule (C10), Learn (C11), Add-ons (C12), Settings/account menu (C6), Help
 (C7/A3), sign-in flow (C2/A4), signed-out landing (C1).
+
+### 3.1b Coverage baseline — what we actually tested, per enclosure area
+
+**The audience-facing accounting** (adopted 2026-08-13 as the baseline for
+the remainder of this review): every area of the enclosure, its locator,
+and exactly what testing it has received. **Update this table in the same
+write-back as every new run** — it is the "what did you actually do" answer
+and feeds `06` §Coverage directly. Regenerate coverage facts from
+`review.py matrix` / `runs`; never let this table contradict them.
+
+| Area | Locator | Map status | Testing received | State |
+|---|---|---|---|---|
+| C3 = **S1 Home** (+ Get started modal) | `/` | confirmed | NVDA complete (R012); no-color (R003); axe (R009); WAVE blind (R007); low-vision reflow closed by measurement (R002 — LV5/LV7 reviewer); cognition/motor partial (R010/R004); JAWS suspended (R001) | **most-tested** |
+| C4 = **S2 Explore** | `/explore/templates` | confirmed | NVDA + task T1 (R013); axe (R011); low-vision reflow (R018); no-color (R021); NH/NS N/A (R024/R025) | motor + cognition remain |
+| C5 = **S3 Editor** | `/id/urn:aaid:sc:US:1fd8af9a…` | confirmed | axe (R014); NVDA sweep + task T2 in progress (R015/R016); low-vision reflow (R019 — panel-over-canvas question open); no-color chrome (R022); NS N/A (R026); **no-hearing determined (R030** — UI N/A; caption-capability findings to 06 §504) | T2 export + motor + cognition remain |
+| C8 = **S4 Your stuff** | `/your-stuff/files/recent?filter=express` | confirmed | **NVDA complete (R029** — V-F12 confirmed, V-F13 new, rename discrepancy closed); axe (R017); low-vision reflow (R020); no-color (R023); NH/NS N/A (R027/R028) | motor + cognition remain |
+| C9 Brands | `/brands` | confirmed | crawl fingerprint only | untested |
+| C10 Schedule | `/schedule` | confirmed 08-10 | crawl fingerprint only | untested; calendar type unsampled |
+| C11 Learn | `/learn` | confirmed 08-10 | crawl fingerprint only | untested; **no-hearing live here** |
+| C12 Add-ons | `/add-ons` | confirmed 08-10 | crawl fingerprint only | untested |
+| C6 Settings | account-menu overlay | partial | menu seen in exploration | Settings view unopened |
+| C2 Sign-in (IMS) | `auth.services.adobe.com` | exists (seen 08-06) | none | **never walked — gates 3.3.8** |
+| C1 Signed-out landing | — | hypothesis | none | unvisited |
+| C7 Help | header "?" | hypothesis | none | unopened |
 
 ### 3.2 Randomly selected sample set
 

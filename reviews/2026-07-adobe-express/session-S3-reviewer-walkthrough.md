@@ -319,7 +319,15 @@ resizing and rotating objects. Check for single-pointer, non-drag
 alternatives. Also MO6 — an editor is the most likely place in the product
 for **single-character shortcuts** (2.1.4).
 
-**Feedback:** _(pending)_
+**Feedback:** 2026-08-13 (run R031, Works with issues) — translation YES,
+z-order YES (via "…" menu), **rotation NO → finding V-F14 (2.1.1/2.5.7)**;
+"generally keyboard accessible, if not slow to use". Object moves announce
+nothing to AT (folds into the canvas-identity finding; reviewer
+recommendation recorded: on-demand spoken canvas description). "T" is the
+one single-char shortcut (creates text box) — 2.1.4 candidate pending a
+Settings check. Shortcut docs out of sync both directions (documented
+rename broken; undocumented working shortcuts exist). **Remaining: resize
+by keyboard; the Settings disable/remap check.**
 
 ---
 

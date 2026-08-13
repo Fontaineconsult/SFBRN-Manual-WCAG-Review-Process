@@ -199,6 +199,16 @@ Tool names below are the exact `--tool` values `log-test` expects
   CSS-equivalent instrument — a **320 CSS px wide viewport** (WCAG 1.4.10's
   own equivalence) via window resize or DevTools device emulation — is
   accepted; record which was used in the run notes.
+- **Assistant-driven reflow (works — used 2026-08-13):** CDP
+  `Emulation.setDeviceMetricsOverride` to 320×900 on the debug-profile
+  Chrome. The 2026-08-04 blocker only applied to the extension channel.
+  Verify the landed view by *path* before measuring (host-substring
+  matching once measured the wrong view). Reflow metric: scrollingElement
+  scrollWidth vs 320. **Known limit:** after injecting the text-spacing
+  override across shadow roots, `Page.captureScreenshot` can hang
+  indefinitely on heavy views (renderer never reaches a stable frame) —
+  keep the *metric* (scrollWidth delta) as the LV3 outcome and mark the
+  visual confirmation partial rather than fighting the screenshot.
 - **Text spacing (LV3):** apply the standard override to the page and re-read:
   `line-height 1.5× font size; paragraph spacing 2×; letter spacing 0.12×;
   word spacing 0.16×` (bookmarklet or injected CSS — record which).

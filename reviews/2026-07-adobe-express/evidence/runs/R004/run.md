@@ -11,7 +11,7 @@
 | **Tool** | keyboard |
 | **Baseline** | B2 |
 | **Tester** | assistant (Claude, Chrome automation) |
-| **Result** | Not set — run incomplete: instrument caveat, reviewer real-keyboard pass required (see Notes) |
+| **Result** | Works with issues |
 
 ## Checks (motor)
 
@@ -20,14 +20,14 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | O1 partial signal; reviewer full Tab sweep needed |
-| MO2 — Every reached element can be operated (activate, select, dismiss) | | reviewer |
-| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | | reviewer (include "Get started" modal) |
-| MO4 — A visible focus indicator exists at all times | | O2 positive signals only; full sweep needed |
-| MO5 — Focus order follows the meaning and operation order of the view | | O1; reviewer |
-| MO6 — Single-character shortcuts can be switched off or remapped | | reviewer |
-| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | reviewer (Upload card drag-drop has "browse" alternative — pre-verified visually) |
-| MO8 — Pointer actions can be cancelled (up-event activation) | | reviewer |
+| MO1 — Every interactive element can be reached with the keyboard | pass | O5 — reviewer B2 2026-08-13: "navigation is fully keyboard accessible"; 33-stop full traversal completed |
+| MO2 — Every reached element can be operated (activate, select, dismiss) | pass | O5 — modal opened by keyboard, upload alternative operated |
+| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | O5 — "Get started" modal: opened by Tab+Enter, Esc exited (B2 confirmation of R012 O13) |
+| MO4 — A visible focus indicator exists at all times | partial | O2 presence positives + a successful sighted 33-stop traversal (followable focus implied); no explicit per-stop confirmation narrated |
+| MO5 — Focus order follows the meaning and operation order of the view | pass | O5 — no order anomalies in the full traversal |
+| MO6 — Single-character shortcuts can be switched off or remapped | partial | O5 — a documented shortcuts reference exists (03 §2.5 A2); single-char activity and remappability assessed on S3 (R031), where shortcuts live |
+| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | pass | O5 — **"non drag upload works"**: the browse alternative operated under B2. Canvas drag alternatives are S3's question (R031) |
+| MO8 — Pointer actions can be cancelled (up-event activation) | n/a | not testable under B2 (no pointer in baseline); 30-second pointer micro-check queued separately |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O4 (full-page geometry measurement, 2026-08-06) |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | desktop web view; no motion features |
 
@@ -72,6 +72,18 @@ run's Result is set. Fails cite observation IDs.
     has **no vendor claim at all** (the 2023 ACR predates WCAG 2.2 — see
     05 §"Vendor evidence gap"), so this is independent primary evidence,
     not a verification.
+- O5 [classified] (state: default, **reviewer, physical keyboard, B2 —
+  2026-08-13; resolves this run's instrument caveat**): W14 confirmed by
+  hand: **no skip link encountered; 19 Tab stops to reach the left rail
+  (Your stuff item); 33 stops to reach the Recent strip.** Worse than the
+  assistant trial's ~15 estimate. Everything traversed was reachable and
+  operable ("navigation is fully keyboard accessible"); the "Get started"
+  modal opened by keyboard and exited on Esc; the upload card's non-drag
+  "browse" alternative works. Finding V-F3's evidence is now
+  reviewer-grade: the 2.4.1 barrier for keyboard-without-AT users stands on
+  a physical-keyboard count, against the vendor's claimed *Supports*.
+  - Classified: MO11 / WCAG 2.4.1 / Major → **V-F3 confirmed** (counts
+    updated); MO1/MO2/MO3/MO5/MO7 pass per rows above.
 - O3 [new] (instrument): During the first five synthesized Tab presses,
   `document.activeElement` reported BODY while the page visibly rendered a
   focus state — focus attribution through the app's shadow DOM was

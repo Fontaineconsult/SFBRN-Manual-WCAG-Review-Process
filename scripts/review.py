@@ -452,6 +452,53 @@ def cmd_runs(args):
     emit(rows, args.json, text)
 
 
+def cmd_gaps(args):
+    """The assistant's question list: every check row still without an outcome.
+
+    testing-loop.md step 5 says gap questions come from deterministic gaps,
+    not improvisation — this is where that list comes from. `validate` says
+    which runs lack a Result; this says which *checks* are unanswered, which
+    is what a reviewer session actually works through.
+    """
+    review = resolve(args.review)
+    rows = []
+    for d in run_dirs(review):
+        meta = run_meta(d)
+        if args.view and meta["view"].lower() != args.view.lower():
+            continue
+        txt = read(d / "run.md")
+        checks = re.findall(
+            r"^\|\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*—\s*(.+?)\s*\|(.*?)\|",
+            txt, re.M)
+        for cid, label, outcome in checks:
+            if not outcome.strip():
+                rows.append({"run": meta["run"], "view": meta["view"],
+                             "modality": meta["modality"], "tool": meta["tool"],
+                             "check": cid, "label": label.strip(),
+                             "result": meta["result"]})
+
+    def text(rows):
+        if not rows:
+            print("No unanswered check rows"
+                  + (f" on {args.view}" if args.view else "")
+                  + ". Every logged run's checklist is complete.")
+            return
+        by_run = {}
+        for r in rows:
+            by_run.setdefault(r["run"], []).append(r)
+        for run, items in by_run.items():
+            head = items[0]
+            print(f"{run}  view={head['view']}  modality={head['modality']}  "
+                  f"tool={head['tool']}  ({len(items)} unanswered)")
+            for r in items:
+                print(f"    [ ] {r['check']} — {r['label'][:88]}")
+            print()
+        print(f"TOTAL unanswered check rows"
+              + (f" on {args.view}" if args.view else "") + f": {len(rows)}")
+
+    emit(rows, args.json, text)
+
+
 def cmd_next(args):
     review = resolve(args.review)
     views = sample_views(review)
@@ -721,6 +768,16 @@ def cmd_validate(args):
     if unset:
         issues.append(f"{len(unset)} run(s) without a Result "
                       f"(Works / Works with issues / Broken): {', '.join(unset)}")
+    # Every run needs a replicable locator: a real URL, or an explicit
+    # UI-action path ("UI: ...") for states with no address. Placeholders
+    # ("recorded when created", TBD/TBC) and empty fields fail review
+    # replication and vendor rebuttal alike.
+    no_locator = [r["run"] for r in runs
+                  if not (("http" in r["url"]) or r["url"].startswith("UI:"))
+                  or any(p in r["url"] for p in ("recorded when", "TBD", "TBC"))]
+    if no_locator:
+        issues.append(f"{len(no_locator)} run(s) without a replicable URL/locator "
+                      f"(real URL or 'UI: <action path>'): {', '.join(no_locator)}")
     views = sample_views(review)
     if views:
         gaps = [f"{vid}×{m}" for vid, _ in views for m in REQUIRED_MODALITIES
@@ -792,6 +849,13 @@ def main():
             sp.add_argument("review", help="review directory name or unique substring")
         sp.add_argument("--json", action="store_true", help="machine-readable output")
         sp.set_defaults(fn=fn)
+
+    p_gaps = sub.add_parser("gaps",
+                            help="unanswered check rows — the reviewer session's question list")
+    p_gaps.add_argument("review", help="review directory name or unique substring")
+    p_gaps.add_argument("--view", help="limit to one sample ID (e.g. S1)")
+    p_gaps.add_argument("--json", action="store_true", help="machine-readable output")
+    p_gaps.set_defaults(fn=cmd_gaps)
 
     p_seed = sub.add_parser("seed", help="apply an enclosure to an existing review")
     p_seed.add_argument("review", help="review directory name or unique substring")

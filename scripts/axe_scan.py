@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""axe_scan.py — per-view automated accessibility scan with axe-core.
+r"""axe_scan.py — per-view automated accessibility scan with axe-core.
 
 Runs Deque's axe-core (vendored at tools/axe/axe.min.js) inside an
 already-open, already-authenticated Chrome tab via the DevTools protocol,
 and saves the RAW axe JSON into the run's evidence folder.
 
-Setup (one-time per session): Chrome must expose a debugging port. Close
-Chrome fully, then relaunch it with:
+Setup: Chrome must expose a debugging port on a DEDICATED profile. Chrome
+136+ ignores --remote-debugging-port on the default profile, so launch:
 
-    chrome.exe --remote-debugging-port=9222
+    chrome.exe --remote-debugging-port=9222 \
+        --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome
 
-(The normal profile loads — you stay signed in.)
+The reviewer signs into the product in that window once; the profile
+persists on disk. Verify the profile directory still exists and the port
+answers (http://localhost:9222/json/version) before scanning — a missing
+profile means a fresh sign-in is needed. Full notes:
+ontology/testing-tools.md §axe-core.
 
 Usage:
     python scripts/axe_scan.py <review> --view S1 --url https://...
@@ -82,8 +87,11 @@ def pick_tab(port: int, needle: str) -> dict:
     except Exception as e:
         sys.exit(
             f"Cannot reach Chrome DevTools on port {port} ({e}).\n"
-            "Close Chrome fully, then relaunch with:\n"
-            "  chrome.exe --remote-debugging-port=9222")
+            "Launch the dedicated testing profile (Chrome 136+ ignores the\n"
+            "flag on the default profile — see ontology/testing-tools.md):\n"
+            "  chrome.exe --remote-debugging-port=9222 "
+            "--user-data-dir=%LOCALAPPDATA%\\sfbrn-a11y-chrome\n"
+            "then sign in once in that window.")
     pages = [t for t in tabs if t.get("type") == "page"]
     hits = [t for t in pages if needle.lower() in t.get("url", "").lower()]
     if not hits:

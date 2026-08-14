@@ -68,6 +68,35 @@ until a real run verifies it.
    reviewer: views confirmed, views still unexplored, boundary questions
    awaiting their decision.
 
+## Systematic mapping with `scripts/crawl_map.py` (added 2026-08-10)
+
+The manual pass above stays the method; the crawler makes steps 2–3
+systematic and repeatable:
+
+1. **`harvest URL…`** — collect same-origin link targets from rendered
+   pages (shadow-piercing). This is the *candidate* map. **Limits:** JS-
+   routed navigation (rail buttons, menus) is invisible to harvesting —
+   Adobe Express's entire left rail is — so harvest output is a floor, and
+   menu-reached views must be probed by URL guess or walked manually.
+2. **A human/agent promotes candidates to an allowlist.** Never auto-follow
+   discovered links: on authenticated products a "link" can be an action
+   (this product silently *creates a document* on some navigations). The
+   script refuses action-shaped paths (`/new`, delete, checkout…) and
+   document URLs by default, and reports any navigation that bounced
+   instead of fingerprinting the wrong view.
+3. **`map URL… [--out FILE]`** — fingerprint each allowlisted view: title,
+   lang, landmarks (+`main` present?), heading outline, named/unnamed grid
+   counts, unnamed controls, canvases, iframes, shadow-root count, custom-
+   element histogram. The fingerprint is **enclosure content**: it fills
+   §2.1 rows (confirmed, dated), reveals sample *types* (§2.3 — a calendar
+   component histogram is how Schedule's type was caught), flags per-view
+   risk before any run (no `main`, canvas present, grid counts), and shows
+   product-wide patterns across views in one table.
+4. **Write-back stays curated.** Crawl output is recon; work it into `03`
+   by hand per the conventions below, keep the raw map file
+   (`crawl-map-<date>.md`) beside the review, and never log runs or
+   findings from it.
+
 ## Conventions
 
 - Every statement written into Step 2 is either **confirmed (dated)** or an

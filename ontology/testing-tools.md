@@ -61,9 +61,27 @@ environment):
 
     chrome.exe --remote-debugging-port=9222 --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome
 
-The profile persists across sessions (stays signed in). It lives outside
-the repo — never commit or copy profile contents. Verify the port with
-http://localhost:9222/json/version before scanning.
+The profile lives outside the repo — never commit or copy profile
+contents. It normally persists signed-in across sessions, but **do not
+assume it survives** (2026-08-06: the directory was simply gone between
+sessions, and the relaunch landed on the IMS sign-in page). Pre-flight,
+in this order:
+
+1. Profile directory exists? (`%LOCALAPPDATA%\sfbrn-a11y-chrome`)
+2. Port answers? (http://localhost:9222/json/version)
+3. The target tab is **authenticated**, not the IMS sign-in page — check
+   `http://localhost:9222/json` for a tab titled "Sign in" or a
+   `auth.services.adobe.com` / `adobelogin.com` URL.
+
+A missing directory or a sign-in page means the reviewer must sign in
+once in that window before scanning — **the assistant never
+authenticates** (CLAUDE.md browser rules). Scanning a signed-out tab
+measures the login page, not the product.
+
+The debug-profile window is a second Chrome, independent of the
+reviewer's everyday one: launching it does not disturb the default
+profile's session, and the two can be used side by side (extension work
+on the signed-in default profile, axe sweeps on the debug profile).
 
 **Run per view/state:**
 
@@ -75,6 +93,46 @@ http://localhost:9222/json/version before scanning.
   ruleset; `--out PATH` does an ad-hoc scan with no run (recon only).
 - Saves the **raw axe JSON** as `evidence/runs/R###/R###-axe.json` and
   prints a summary (violations by impact, incomplete items).
+
+**A `violation` is not automatically true — verify contrast ones (learned
+2026-08-06, R014 O2).** axe normally reports *incomplete* when it cannot
+resolve a background, but for `color-contrast` it will sometimes substitute
+an assumed background and emit a confident numeric **violation** instead. On
+S3 it reported the editor header at **1.08:1** and **1.14:1**; sampling the
+rendered pixels gave **15.06:1** and **12.18:1** — the real background was
+`rgb(29,29,29)`, not the `#e9e9e9` axe assumed. Two fabricated serious 1.4.3
+failures would have entered the ACR unchallenged.
+
+- **The distinguishing signal:** walk the ancestors for an opaque
+  background. If one exists, axe's number is reliable (S1's `.browse-text`
+  3.96:1 was independently corroborated twice). If **no opaque background is
+  found**, treat any axe contrast number — violation *or* incomplete — as
+  unmeasured, and settle it by rendered-pixel sampling or eyedropper.
+- Applies to contrast specifically. Name/role/structure rules
+  (`aria-command-name`, `aria-required-parent`, …) inspect the DOM directly
+  and have been accurate on this product.
+
+**Reproducing a reviewer's keyboard path (learned 2026-08-06).** Use real
+dispatched key events — CDP `Input.dispatchKeyEvent` with
+`rawKeyDown`/`char`/`keyUp` — not `.click()` or `.focus()`. Programmatic
+activation bypasses the application's own key handling and will land you
+somewhere else: an attempt to follow a reviewer into a layer's edit UI
+opened the page-level panel instead, and the resulting reading had to be
+discarded. A tab walk driven this way also yields the **stop count** to a
+control, which is evidence for 2.4.1/2.4.3 that nothing else provides.
+
+**Probe every state, not one.** In a stateful application the accessibility
+tree only describes the current state. An editable field created on entering
+edit mode is genuinely absent from a snapshot taken beforehand — and
+concluding "no mechanism exists" from that absence produced a false 2.1.1
+Blocker on S3. If a mechanism might be modal, enter the mode and re-probe,
+or ask the reviewer.
+
+**Automated sweeps are blind to `<canvas>`.** On a canvas-rendering view the
+sweep can return a clean-looking result while the entire user document is
+unexposed — R014 reported 43 passes and *nothing at all* about a 2328×1145
+canvas holding the document. Never read a sweep's pass count as reassurance
+on such a view; the manual modality run carries the whole weight.
 
 **Interpreting output** (the automated-sweep checks in
 `modality-checks.md`): every `violations` entry is human-confirmed →
@@ -141,13 +199,53 @@ Tool names below are the exact `--tool` values `log-test` expects
   CSS-equivalent instrument — a **320 CSS px wide viewport** (WCAG 1.4.10's
   own equivalence) via window resize or DevTools device emulation — is
   accepted; record which was used in the run notes.
+- **Assistant-driven reflow (works — used 2026-08-13):** CDP
+  `Emulation.setDeviceMetricsOverride` to 320×900 on the debug-profile
+  Chrome. The 2026-08-04 blocker only applied to the extension channel.
+  Verify the landed view by *path* before measuring (host-substring
+  matching once measured the wrong view). Reflow metric: scrollingElement
+  scrollWidth vs 320. **Known limit:** after injecting the text-spacing
+  override across shadow roots, `Page.captureScreenshot` can hang
+  indefinitely on heavy views (renderer never reaches a stable frame) —
+  keep the *metric* (scrollWidth delta) as the LV3 outcome and mark the
+  visual confirmation partial rather than fighting the screenshot.
 - **Text spacing (LV3):** apply the standard override to the page and re-read:
   `line-height 1.5× font size; paragraph spacing 2×; letter spacing 0.12×;
   word spacing 0.16×` (bookmarklet or injected CSS — record which).
 - **Contrast (LV4/LV5):** WAVE contrast data and/or eyedropper measurement
-  (e.g., Colour Contrast Analyser). Computed-style sampling from the DOM is
-  **indicative only** — gradients, overlays, and images require eyedropper
-  confirmation before a finding.
+  (e.g., Colour Contrast Analyser). Pick the method by what paints the
+  background — the three cases are not interchangeable (learned 2026-08-06,
+  R009 O8/O9):
+
+  1. **Solid background colour** → computed-style sampling is reliable.
+     Walk ancestors (crossing shadow boundaries) to the first fully opaque
+     `background-color` and apply the WCAG relative-luminance formula.
+  2. **Self-contained SVG or CSS gradient background** → **measure it
+     exactly, don't reach for the eyedropper.** If the asset references no
+     external resources, re-render it same-origin as a `data:` URI onto a
+     canvas at the element's *rendered* size and `getImageData` under the
+     text box. This is an exact measurement, and it is what an automated
+     checker cannot do: axe reports these as *incomplete* ("background
+     colour could not be determined due to a background image"), not as a
+     pass or a fail. Sample a grid across the text box and report the worst
+     ratio, not the centre. Fetching the asset cross-origin will be
+     CORS-blocked and would taint the canvas — download it out-of-band and
+     inline it instead.
+  3. **Background painted by a pseudo-element, a non-hit-testable image, or
+     any compositing you cannot resolve** → eyedropper, or rendered-pixel
+     sampling via CDP `Page.captureScreenshot`. **Nothing else is valid
+     here.** The trap: an ancestor walk in this case finds no painted
+     background at all, silently falls back to white, and yields a
+     confident-looking ratio (typically 21:1 for dark text) that is
+     completely wrong. `elementsFromPoint` through the shadow roots returns
+     transparent all the way down and will not save you either. If the walk
+     reports "no background found", the honest output is *unmeasured* —
+     discard the number rather than recording it.
+
+  Before trusting any of the three, exclude translucent overlays: check
+  every underlay/scrim element for `visibility`, `opacity`, and actual
+  background alpha. A hidden-but-present `rgba(0,0,0,0.4)` scrim is common
+  in SPA component libraries and would change every ratio on the view.
 - **Evidence:** screenshots at reflow width (full view, scrolled states),
   with-text-spacing screenshot, any clipped/overlapping state.
 

@@ -41,6 +41,15 @@ python scripts/review.py log-test <review> --view S1 --modality no-vision \
 python scripts/review.py runs <review>         # list logged test runs
 python scripts/review.py matrix <review>       # views × modalities coverage grid
 python scripts/review.py next <review>         # highest-value cell to test next
+python scripts/review.py gaps <review> [--view S1]
+                                               # unanswered check rows — the session's question list
+python scripts/crawl_map.py harvest|map URL... [--out FILE]
+                                               # enclosure mapping over CDP: harvest candidate links,
+                                               # fingerprint allowlisted views (never auto-follows —
+                                               # see ontology/assisted-exploration.md)
+python scripts/export_report.py <review> [--out PATH]
+                                               # render 06-report.md as a styled .docx (real heading
+                                               # styles + tables; needs `pip install python-docx`)
 ```
 
 Testing runs as an interactive loop (`ontology/testing-loop.md`): `next`
@@ -49,6 +58,17 @@ run with its modality checklist, the reviewer narrates while the assistant
 structures observations, asks gap-driven questions, and writes results back
 into the run, findings, criterion rollup — and the enclosure itself when
 testing reveals unmapped views.
+
+`gaps` is the loop's question list made explicit: `validate` reports which
+*runs* lack a Result, `gaps` reports which *checks* are still unanswered —
+the rows a reviewer session actually works through, grouped by run. Use it
+to open a session (`gaps <review> --view S1`) and to see what a walkthrough
+still needs.
+
+**Findings come from the reviewer's testing.** Automated sweeps are
+supporting instruments: every violation is human-confirmed into a finding or
+dismissed in writing, and every `incomplete` is routed to a modality check.
+A scan result is never itself a finding.
 
 Modalities are sensory/functional, per the Section 508 Functional Performance
 Criteria: `no-vision`, `low-vision`, `no-color`, `no-hearing`, `no-speech`,
@@ -84,7 +104,7 @@ Each review contains:
 | `03-scope-and-sample.md` | WCAG-EM steps 1–3: product enclosure, conformance target, accessibility support baseline, exploration (common views, essential functionality as user stories, sample types, technologies), structured + random sample, complete processes |
 | `04-task-testing.md` | WCAG-EM step 4: testing clustered around tasks (user stories) — task verdicts (Pass / Pass with barriers / Fail) with findings that cite the WCAG criteria failed, plus a view sweep and random-sample comparison |
 | `05-results.md` | Per-criterion rollup of task findings for all 55 WCAG 2.2 A/AA criteria, in VPAT/ACR table structure with vendor-claim comparison |
-| `06-report.md` | Report: procurement decision (Approved / Needs TAAP / Denied) driven by task verdicts, task outcomes table, vendor-claim discrepancies, key findings, TAAP plan when required |
+| `06-report.md` | **Independent verification report** (not a VPAT/ACR — see `ontology/reporting.md`): procurement decision (Approved / Needs TAAP / Denied) driven by task verdicts; RFP-comparable "At a glance" box; key findings by user impact with root causes; **vendor ACR audit** (coverage + reliability, both directions); contract-ready remediation exhibit; coverage/limitations honesty box; TAAP inputs when required. `05-results.md` remains the ACR-shaped technical appendix. |
 | `evidence/` | Test-run record: `test-log.md` index plus `runs/R###/` per session (run metadata, JAWS notes / WAVE counts, screenshots) — see `ontology/testing-tools.md` |
 | `vendor-acr/` | The vendor's ACR/VPAT as received |
 

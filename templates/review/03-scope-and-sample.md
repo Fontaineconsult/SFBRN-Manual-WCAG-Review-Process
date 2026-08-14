@@ -22,7 +22,10 @@ is clear whether it is in scope.
 
 ### 1.2 Conformance target
 
-WCAG 2.2 Level AA. Optionally note higher-level (AAA) criteria observed as
+**Primary: WCAG 2.1 Level AA** — the ADA Title II baseline binding CSU as a
+public entity. **Additionally evaluated: WCAG 2.2 Level AA** (the six added
+criteria; 4.1.1 treated as met per the WCAG 2.2 erratum). Optionally note
+higher-level (AAA) criteria observed as
 advisory findings.
 
 ### 1.3 Accessibility support baseline

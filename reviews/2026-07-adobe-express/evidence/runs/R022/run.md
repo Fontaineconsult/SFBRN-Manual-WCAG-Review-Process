@@ -11,7 +11,13 @@
 | **Tool** | grayscale |
 | **Baseline** | — |
 | **Tester** | assistant (CSS grayscale proxy) |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works |
+
+**Result reasoning** (set 2026-08-14). Every applicable check passes: NC1
+and NC3 pass once the reviewer answered the canvas question the instrument
+could not reach (O2 — selection is a bounding box with edge resize
+circles, both geometric cues), and NC2 is n/a (no body-text links in the
+editor chrome). No colour-alone cue was found anywhere on this view.
 
 ## Checks (no-color)
 
@@ -20,9 +26,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | partial | O1 — chrome passes (boxed rail selection); **canvas selected-object highlight not capturable in this state** — reviewer question |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | pass | O1 — chrome passes (boxed rail selection); **O2 closes the canvas question 2026-08-14 (reviewer): selection is a bounding box + edge resize circles — geometry, not colour** |
 | NC2 — Links are distinguishable from surrounding text without color | n/a | O1 — no body-text links in the captured editor chrome |
-| NC3 — Everything remains operable and understandable in grayscale | partial | O1 — chrome yes; canvas interaction untested in grayscale |
+| NC3 — Everything remains operable and understandable in grayscale | pass | O1 — chrome yes; O2 — the canvas's one state cue (selection) is perceivable without colour, so the work surface remains operable in grayscale |
 
 ## Observations
 
@@ -41,6 +47,24 @@ Format:
   Videos/Music/Sound effects), and no N/A run is logged for it. Evidence:
   R022-nc-grayscale-top.png, R022-nc-grayscale-mid.png.
   - Classified: NC1/NC3 partial — no finding; canvas questions routed.
+- **O2 [classified]** (2026-08-14, **reviewer** — the canvas question O1
+  could not capture): **a selected object is clearly marked by a bounding
+  box with edge circles for resize.** Both cues are **geometric, not
+  chromatic** — a shape and a set of handles, which survive grayscale
+  intact and remain perceivable to a user who cannot distinguish colours
+  at all.
+  - This closes the one substantive 1.4.1 risk in the review. It mattered
+    because it sits on the product's **core surface**: had selection been
+    marked by a coloured glow or a colour-only border, 1.4.1 would have
+    failed on the view where users spend their time, not on a peripheral
+    control.
+  - **Note how it was answered.** The instrument could not reach it —
+    selection state is painted into the canvas and the grayscale proxy
+    captured no selected object. This is the pattern CLAUDE.md describes:
+    the probe answers "what exists in this snapshot", the reviewer answers
+    "what a user perceives". The honest interim record was *unmeasured*,
+    not a guess in either direction.
+  - Classified: NC1, NC3 / WCAG 1.4.1 / **pass** — no finding.
 
 ## Notes
 

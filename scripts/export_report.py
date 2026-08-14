@@ -39,7 +39,50 @@ ROOT = Path(__file__).resolve().parent.parent
 REVIEWS = ROOT / "reviews"
 
 MONO = "Consolas"
-HEADER_SHADE = "D9D9D9"          # light grey for table header rows
+
+# Palette. Restrained on purpose: this is a procurement document, and an
+# accessibility report that is itself hard to read undermines its own case.
+# Every colour below is decoration only — outcome and severity are always
+# carried by the words as well, so nothing here depends on colour
+# perception (the report would otherwise fail the 1.4.1 it tests for).
+ACCENT = RGBColor(0x1F, 0x38, 0x64)      # deep navy — headings
+ACCENT_HEX = "1F3864"
+HEADER_SHADE = "DCE6F1"                  # light blue — table header rows
+ZEBRA_SHADE = "F4F7FB"                   # barely-there tint — alternate rows
+RULE_HEX = "8EAADB"                      # heading underline
+
+# Outcome/severity tints. Text is never removed or replaced by these.
+SEV_COLORS = {
+    "does not support": RGBColor(0xA6, 0x1B, 0x1B),
+    "fail": RGBColor(0xA6, 0x1B, 0x1B),
+    "blocker": RGBColor(0xA6, 0x1B, 0x1B),
+    "partially supports": RGBColor(0x9C, 0x50, 0x00),
+    "pass with barriers": RGBColor(0x9C, 0x50, 0x00),
+    "major": RGBColor(0x9C, 0x50, 0x00),
+    "needs taap": RGBColor(0x9C, 0x50, 0x00),
+    "works with issues": RGBColor(0x9C, 0x50, 0x00),
+    "supports": RGBColor(0x1E, 0x60, 0x2E),
+    "pass": RGBColor(0x1E, 0x60, 0x2E),
+    "works": RGBColor(0x1E, 0x60, 0x2E),
+}
+# Longest first, so "does not support" wins over "supports".
+SEV_KEYS = sorted(SEV_COLORS, key=len, reverse=True)
+
+
+def tint_outcome(cell):
+    """Colour a table cell whose whole text is an outcome/severity term.
+
+    Applied only when the cell is *just* the term — never mid-sentence — so
+    the cue reinforces the word instead of decorating prose.
+    """
+    text = cell.text.strip().lower().strip("*")
+    for key in SEV_KEYS:
+        if text == key or text.startswith(key + " "):
+            for p in cell.paragraphs:
+                for r in p.runs:
+                    r.font.color.rgb = SEV_COLORS[key]
+                    r.bold = True
+            return
 
 
 def resolve_review(token: str) -> Path:
@@ -127,17 +170,34 @@ def add_table(doc, rows):
         th.set(qn("w:val"), "true")
         trPr.append(th)
 
-    for row in body:
+    for n, row in enumerate(body):
         cells = table.add_row().cells
         for i in range(ncols):
             add_runs(cells[i].paragraphs[0], row[i] if i < len(row) else "")
+            if n % 2 == 1:
+                shade_cell(cells[i], ZEBRA_SHADE)
+            tint_outcome(cells[i])
     for row in table.rows:
         for cell in row.cells:
             for p in cell.paragraphs:
                 p.paragraph_format.space_after = Pt(2)
+                p.paragraph_format.space_before = Pt(2)
                 for r in p.runs:
                     if r.font.size is None:
                         r.font.size = Pt(9.5)
+
+
+def add_rule(paragraph, hex_color=RULE_HEX, size=6):
+    """Draw a bottom border under a paragraph (used to underline H1s)."""
+    pPr = paragraph._p.get_or_add_pPr()
+    borders = OxmlElement("w:pBdr")
+    bottom = OxmlElement("w:bottom")
+    bottom.set(qn("w:val"), "single")
+    bottom.set(qn("w:sz"), str(size))
+    bottom.set(qn("w:space"), "4")
+    bottom.set(qn("w:color"), hex_color)
+    borders.append(bottom)
+    pPr.append(borders)
 
 
 def add_field(paragraph, instr):
@@ -195,11 +255,23 @@ def convert(md_path: Path, out_path: Path):
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
     style.font.size = Pt(11)
-    for name, size in (("Heading 1", 17), ("Heading 2", 14), ("Heading 3", 12)):
+    style.paragraph_format.space_after = Pt(8)
+    style.paragraph_format.line_spacing = 1.12   # easier on the eye at length
+
+    for name, size in (("Heading 1", 17), ("Heading 2", 13.5),
+                       ("Heading 3", 11.5)):
         s = doc.styles[name]
         s.font.size = Pt(size)
-        s.font.color.rgb = RGBColor(0x1F, 0x1F, 0x1F)
+        s.font.color.rgb = ACCENT
+        s.font.bold = True
         s.paragraph_format.keep_with_next = True   # heading never orphaned
+        s.paragraph_format.space_before = Pt(16 if size > 13 else 12)
+        s.paragraph_format.space_after = Pt(4)
+
+    title = doc.styles["Title"]
+    title.font.color.rgb = ACCENT
+    title.font.size = Pt(26)
+
     for sec in doc.sections:
         sec.left_margin = sec.right_margin = Inches(0.9)
     add_footer(doc, f"Generated {datetime.date.today().isoformat()} from "
@@ -220,11 +292,14 @@ def convert(md_path: Path, out_path: Path):
             if level == 1 and first_h1:
                 p = doc.add_paragraph(style="Title")
                 add_runs(p, text)
+                add_rule(p, ACCENT_HEX, size=12)
                 first_h1 = False
                 pending_toc = True   # emit TOC after the metadata table
             else:
                 p = doc.add_paragraph(style=f"Heading {min(level, 3)}")
                 add_runs(p, text)
+                if level <= 2:
+                    add_rule(p)
             i += 1
             continue
 

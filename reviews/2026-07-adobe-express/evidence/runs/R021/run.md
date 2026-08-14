@@ -11,7 +11,9 @@
 | **Tool** | grayscale |
 | **Baseline** | — |
 | **Tester** | assistant (CSS grayscale proxy per 03 s1.5) |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works |
+
+**Result reasoning** (set 2026-08-14). NC1 and NC3 pass; **NC2 closes 2026-08-14** - the link hover/focus cue question it was waiting on is answered by the reviewer's hover confirmation (R002 O-LV17). No colour-alone cue was found on this view.
 
 ## Checks (no-color)
 
@@ -21,7 +23,7 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | pass | O1 — selected chip = filled pill; selected rail item = boxed; checked filters = real checkmarks; filter count numeric |
-| NC2 — Links are distinguishable from surrounding text without color | partial | O1 — "Clear (2)" separable by position/affordance in grayscale; hover/focus cue check stays with the reviewer (as S1 W18) |
+| NC2 — Links are distinguishable from surrounding text without color | pass | O1 + reviewer hover confirmation 2026-08-14 (R002 O-LV17) — the hover/focus cue check this row was deferred for is answered |
 | NC3 — Everything remains operable and understandable in grayscale | pass | O1 — top+mid captures |
 
 ## Observations

@@ -92,6 +92,7 @@ inapplicable 42.** Raw output: `R009-axe.json` (1.65 MB).
   (b) **2 rotating-placeholder words** — axe: "partially obscured by another
   element", because the rotator keeps the outgoing and incoming word in the
   DOM simultaneously (see R010 O1).
+  - **RESOLVED 2026-08-14 (O10) — all 7 nodes measured and passing.**
   - Routed: rendered-pixel sampling via CDP `Page.captureScreenshot` on the
     debug-profile Chrome (exact coordinates recorded above), or the W13
     eyedropper. Method noted in testing-tools.md.
@@ -111,6 +112,51 @@ inapplicable 42.** Raw output: `R009-axe.json` (1.65 MB).
   (03 §2.6) read only the light text and missed the sr-only span. Recon note
   corrected. axe reports no name violation on it.
   - Classified: W1 / — / recon corrected, no finding
+
+- **O10 [classified]** (2026-08-14, assistant — resolves **all 7** remaining
+  nodes from O4/O9, closing the axe-incomplete contrast queue entirely):
+  measured from **rendered pixels** in the saved 1280×900 capture
+  `R002/R002-lv5-uicontrast-reference-1280.png`.
+
+  | Node | Text | Card / field | Contrast | 1.4.3 |
+  |---|---|---|---|---|
+  | Upload | `rgb(0,0,0)` | `rgb(233,233,233)` | **17.30:1** | pass |
+  | Start new design | `rgb(0,0,0)` | `rgb(254,219,158)` | **15.84:1** | pass |
+  | Edit photos | `rgb(0,0,0)` | `rgb(171,207,252)` | **13.06:1** | pass |
+  | Set up brand kit | `rgb(0,0,0)` | `rgb(222,192,246)` | **12.98:1** | pass |
+  | Generate presentation (2 lines) | `rgb(0,0,0)` | `rgb(255,182,168)` | **12.51:1** | pass |
+  | Search placeholder, static part | `rgb(80,80,80)` | `rgb(255,255,255)` | **8.06:1** | pass |
+  | Search placeholder, rotating word | `rgb(80,80,80)` | `rgb(255,255,255)` | **8.06:1** | pass |
+
+  - **Every node clears 4.5:1 — the stricter threshold — with margin**, so
+    the large-text allowance (3:1, which these ~19px bold headings would
+    qualify for) does not need to be relied on.
+  - **Method, and why it is not the method that failed in R042 O6.** That
+    attempt mapped `getBoundingClientRect` coordinates onto screenshot
+    pixels and was defeated by a ~56px offset between the two spaces. **No
+    coordinate translation happens here**: the sampling regions were read
+    off the rendered image itself and sampled from that same image — one
+    coordinate space, self-consistent. Within each region the dominant
+    colour is the card background and the luminance extreme is the glyph.
+  - **Cross-check that the regions were right:** the sampled backgrounds
+    reproduce the cards' visible colours — grey, yellow, blue, purple,
+    coral, in that order across the row. Had the regions been misaligned,
+    they would not have matched what is visibly on screen.
+  - **This is the number an ancestor walk gets wrong.** DOM inspection
+    returned *no painted background at all* on these nodes (every ancestor
+    `rgba(0,0,0,0)`), which yields a false "white, 21:1". The rendered
+    values above are the real ones — and note they still **pass**, so the
+    discarded false number would have produced the right verdict for the
+    wrong reason. Recording measured values rather than a lucky guess is
+    the point.
+  - **The rotating placeholder resolves too:** axe returned "partially
+    obscured" because the rotator holds the outgoing and incoming word in
+    the DOM simultaneously, but only one is painted in steady state
+    (consistent with R010 O1 — 0 animations at 68s), so the rendered pixels
+    settle it.
+  - Classified: LV4 / WCAG 1.4.3 / **pass** — no finding. **The
+    axe-incomplete contrast queue for S1 is now fully dispositioned: 15 of
+    15 nodes resolved** (8 by the app-bar SVG measurement in O8, 7 here).
 
 ## Notes
 

@@ -11,7 +11,15 @@
 | **Tool** | nvda |
 | **Baseline** | B4 |
 | **Tester** | reviewer (D. Fontaine), NVDA 2026.1.1 + Chrome 150.0.7871.187 |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+**Result reasoning** (set 2026-08-14 from the completed check grid). Not
+*Broken*: the decisive question of this run was settled favourably — a
+keyboard route into text content exists and the content is readable in
+edit mode (O7, O8), so the editor is operable by a screen-reader user and
+the earlier Blocker framing is withdrawn. Not *Works*: three checks fail
+outright (NV3, NV7, NV8) and the route is undiscoverable, unnamed at every
+step, and gives no feedback that anything happened.
 
 ## Checks (no-vision)
 
@@ -20,15 +28,22 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NV1 — Page/view title identifies its purpose | | |
+Grid completed 2026-08-14 by classifying this run's own recorded
+observations. **No outcome below is inferred from another view** — where an
+outcome rests on cross-run or instrument evidence rather than this
+session's reviewer narration, the row says so.
+
+| Check | Outcome | Observations |
+|-------|---------|--------------|
+| NV1 — Page/view title identifies its purpose | pass | The editor is the **one place in the product that retitles** — the document name becomes the title ("Untitled - August 06, 2026 at 13.02.17"), which is exactly the exception recorded in V-F8. Caveat recorded rather than glossed: this rests on the V-F8 cross-view work and on instrument reads, **not** on a reviewer ear-check in this session; and the name it announces is an auto-generated date stamp, so it identifies *which document* without describing it |
 | NV2 — Headings and landmarks exist, are hierarchical, and support navigation | partial | O10/O11 — landmarks better than the DOM probe suggested: NVDA lists **Edit page [region], Canvas [region], Allows for adding and deleting pages [region]** (reviewer, 2026-08-13). No `main` and no `h1` (R014 O3) and the "Canvas" heading is markup-only (O1) — but region navigation is available. Full heading walk still open |
-| NV3 — Every control announces an accurate name, role, and value/state | | |
-| NV4 — Images announce appropriate alternatives; decorative images are silent | | |
-| NV5 — Reading order matches the meaning of the visual order | | |
-| NV6 — Form fields announce labels and instructions; errors are announced and identified | | |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | | |
-| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | | |
+| NV3 — Every control announces an accurate name, role, and value/state | **fail** | Five distinct defects, all reviewer-observed or reviewer-confirmed: O6 — the **floating text toolbar is entirely unlabelled** (9 unnamed button nodes) while the equivalent left-panel controls are labelled, and **Italic exposes no `aria-pressed`**; O8 — the edit-mode **`<textarea>` has no accessible name**; O9 — a selected object announces only **"Canvas"**, identically for every object; O3 — tab stop 30 is a **bare unnamed `div`**, and Enter on a layer moves focus to an **unnamed `div` at [0,0]**; O10 — **11 of 12 grids unnamed**. Partial credit, recorded so the row is not read as blanket failure: the styling panel's comboboxes and textboxes are all correctly named (O4) |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | partial | O8 **settles the serious question favourably**: text content *is* exposed in edit mode as the textarea's value, so 1.1.1 is **not** failed for text objects and the earlier Blocker framing is withdrawn. What this run cannot answer: image objects on the canvas — the S3 test document holds a single text object (03 §3.1 flags this limit). Answered instead in **R016 O8** on an inserted image: it announces "Canvas Graphic", a generic role with no identity |
+| NV5 — Reading order matches the meaning of the visual order | partial | O3 — the layers item is **absent from every NVDA navigation view** ("no way to get that via NVDA view, had to tab into it") and sits at **tab stop 32**, after the entire top bar and left rail, so the order in which the work surface becomes reachable does not match its visual primacy. **Not checked:** a full browse-mode read-through of the editor top to bottom — the one part of this row resting on no evidence, named here rather than assumed |
+| NV6 — Form fields announce labels and instructions; errors are announced and identified | partial | O4 — the text styling panel is the **positive case in this run**: combobox "Font family", combobox "Font style", textbox "Font size", textbox "Text styles" are all correctly named and exposed. Against that, O8 — the edit-mode textarea, the one field carrying the user's actual content, has **no accessible name**. No error path was triggered in this session, so the error half of the row is untested |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | **fail** | O9 — **selection change announces nothing meaningful**: moving between objects gives no feedback that anything happened, so the user cannot tell progress from failure. O3 — activation moves focus to an unnamed container silently. This is the same product-wide 4.1.3 pattern recorded as V-F13 / T2-F2 |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | **fail** | O9 — the announcement is **identical for every object**: text, image or shape all read as "Canvas", with no type, content, position or size conveyed. The *only* way to tell canvas objects apart is to look at them, which is precisely what this check exists to catch |
+| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | partial | Page language is correctly declared — `<html lang="en-US">`, measured over CDP 2026-08-14. **Instrument evidence, not an ear-check**: no mispronunciation pass was run and no passage-level `lang` audit was done, so the row is partial rather than pass |
 
 ## Observations
 
@@ -395,4 +410,15 @@ toggles browse/focus mode in NVDA — avoid it.
 
 ## Findings raised from this run
 
-- (finding IDs recorded in 04-task-testing.md, or "none")
+- **V-F11** — grid semantics on non-tabular content; 17 of 18 grids unnamed
+  product-wide (O10, scope-checked across all four views)
+- **V-F14 / V-F15** draw on this run's canvas evidence (O2, O9) for the
+  focus-scoping argument; raised from R031
+- Feeds the **T2** cluster's "what is already known to sit on this path"
+  (O6, O7, O8, O9) and the report's key finding 1, the
+  authoring/revising asymmetry
+- **Withdrawn from this run, retained for the record:** the 2.1.1
+  "editing is pointer-only" Blocker (O7), "invisible editing" (O5), and
+  the claim that the editor lacks landmark bypass (O11). All three were
+  assistant hypotheses corrected by the reviewer before entering the
+  record — see CLAUDE.md §"Why the assistant's probes mislead"

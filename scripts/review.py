@@ -167,6 +167,13 @@ RUN_TEMPLATE = """# Test Run {rid} — {view}
 | **Tester** | {tester} |
 | **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
 
+**When you set the Result, replace this cell with the bare term and
+nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
+matches the cell against those exact strings and prints anything else
+verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
+in a `**Result reasoning.**` paragraph directly below this table — that is
+where it belongs anyway, and there is no length limit there.
+
 ## Checks ({modality_label})
 
 Outcome: pass / fail / partial / n/a — every row must get one before the

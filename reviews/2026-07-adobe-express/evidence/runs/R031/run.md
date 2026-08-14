@@ -131,6 +131,41 @@ remain.
   - Classified: MO7 / 2.1.1, 2.5.7 / Major → V-F14 (broadened); MO6 /
     2.1.4 / Minor → **V-F15**; stepper silence → the product feedback
     pattern (05 4.1.3 remarks).
+- **O8 [classified]** (2026-08-14, **reviewer ruling on the 2.5.1
+  classification question** — recorded because a criterion outcome turned
+  on it): **rotation has no alternative of any kind**, and the reviewer
+  named the absence precisely: *"I've yet to see a dedicated 'Translate'
+  tool window that would allow, using a slider, X, Y, Z or Rotate, or
+  resize — adding this would be low hanging fruit for the dev."*
+  - **How rotation is actually performed** (reviewer, on a touchscreen):
+    *"pressing and holding on the rotate button on a selected object then
+    moving the finger in an arc."* The **arc is the input** — the path the
+    pointer travels determines the resulting angle. That is the defining
+    property of a **path-based gesture**, so 2.5.1 is engaged, not
+    avoided, and the gesture works smoothly by touch precisely *because*
+    it is path-based.
+  - **The 2.5.1 test is therefore failed on the evidence:** functionality
+    using a path-based gesture must be operable with a single pointer
+    *without* a path gesture, and no such route exists — no angle field,
+    no rotate-by-90° command, no stepper. The **"essential" exception does
+    not apply**: a numeric rotation field would perform the same function,
+    so the gesture is not intrinsic to the task. 2.5.1 stands at
+    **Partially Supports**, no longer provisional.
+  - **One criterion, two failures, distinct reasons** — worth keeping
+    separate in the report because they have different remedies: **2.5.1**
+    fails for lack of a *single-pointer non-path* alternative; **2.5.7**
+    fails for lack of a *non-dragging* alternative; **2.1.1** fails for
+    lack of a *keyboard* route. A properties-panel transform control with
+    typed values closes all three at once, which is why it is the single
+    highest-leverage fix in the exhibit.
+  - **Baseline note:** the touch observation was made on a touchscreen,
+    which is **outside the four declared baselines** (03 §1.3 — all
+    Windows 11 + Chrome with keyboard, zoom or NVDA). It is recorded as
+    device-context evidence establishing *how the gesture works*, not as a
+    baseline run result. The 2.5.1 outcome rests on the **absence of an
+    alternative**, which was established under B2 (O4, O7).
+  - Classified: MO7 / WCAG **2.5.1** (added), 2.5.7, 2.1.1 / Major →
+    V-F14 (criteria widened); reviewer remediation wording adopted.
 
 ## Notes
 

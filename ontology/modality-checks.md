@@ -184,3 +184,25 @@ testing-tools.md), use where it can parse (e.g., marketing pages).
 - **N/A** — the view has no content relevant to this modality (common for
   `no-hearing`, `no-speech`). Counts as covered in the matrix.
 - **Not run** — initial state; the coverage matrix treats it as a gap.
+
+**The case these five terms do not cover: no check failed, but a check is
+unfinished.** It is the most common state in this review — an assistant
+measured what an instrument can reach and one check needs the reviewer.
+There is no term for it and one must not be invented: a run with an
+incomplete check is **not** "Works" (that requires *every* check to pass)
+and **not** "Works with issues" (that requires a failure and a finding).
+
+Leave the Result **unset**, and replace the placeholder text with the
+outstanding check and the instrument that closes it:
+
+    | **Result** | Not set — NC2 (link hover/focus cues in grayscale) needs a reviewer pass; NC1/NC3 pass |
+
+`validate` lists the run as resultless, which is correct — it *is*
+unfinished — and `matrix` shows the cell as `run?`. An **n/a** check is
+different: it is answered, not outstanding, so a run whose remaining checks
+are pass + n/a closes as **Works**.
+
+Write the outstanding check into the cell rather than leaving the generic
+"Not set (→ Works / …)" placeholder. A bare placeholder tells the next
+session nothing; naming the check turns the resultless-run list in
+`validate` into an actionable reviewer to-do list.

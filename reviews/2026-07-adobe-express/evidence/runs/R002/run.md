@@ -11,7 +11,16 @@
 | **Tool** | zoom |
 | **Baseline** | B3 |
 | **Tester** | assistant (Claude, Chrome automation) |
-| **Result** | Not set — 2 checks remain for the reviewer: LV5 (icon/control contrast eyedropper) and LV7 (focus visibility at zoom). LV1/LV2/LV8 closed 2026-08-13 by CDP device emulation (see O7) |
+| **Result** | Works with issues |
+
+**Result reasoning** (set 2026-08-14, all eight checks now answered).
+LV1/LV2/LV3/LV7/LV8 pass — reflow, no loss at zoom, text-spacing
+tolerance, focus visible and unobscured at 400%, and both orientations.
+**LV6 passes on reviewer confirmation, retiring V-F1.** Two fail: **LV4**
+(the "browse" link at 3.96:1 — V-F2, re-verified on Chrome 151) and
+**LV5** (buttons/icons below 3:1 against their backgrounds — V-F18). Both
+are real but bounded, so the view is usable with issues rather than
+broken.
 
 ## Checks (low-vision)
 
@@ -24,10 +33,10 @@ run's Result is set. Fails cite observation IDs.
 | LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | pass | O7 — single column, nothing clipped/overlapped in top/mid screenshots; app-switcher bar removed at narrow width (noted, not a loss of Express functionality) |
 | LV3 — The view tolerates text-spacing overrides without loss | pass | O1 |
 | LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | fail | O2 (fail → V-F2); O3 superseded by O6 — app bar measured and passes; 5 headings over card art still open |
-| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | pending — needs eyedropper measurement of icons/controls (O3) |
-| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | fail | O4, O5 — pending reviewer confirmation with continuous pointer movement |
-| LV7 — Focus indicator remains visible and unobscured at zoom | | reviewer, with LV1 |
-| LV8 — The view works in both portrait and landscape | pass | O7 — 900×320 landscape renders and scrolls; note: sticky Recent bar consumes ~⅓ of a short-landscape viewport |
+| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | **fail** | O-LV16 — reviewer with Color Contrast Checker, 2026-08-14: **text passes, but the buttons/icons holding it do not** when measured against the background. Confirmed on S1 Home *and* the editor → **V-F18** |
+| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | **pass** | **O-LV17 — reviewer, 2026-08-14: *"no issues with hover, pass it."* Supersedes O4/O5, which were assistant-driven synthetic hover teleports → finding V-F1 WITHDRAWN** |
+| LV7 — Focus indicator remains visible and unobscured at zoom | pass | O-LV15 — reviewer at **400% zoom, 2026-08-14**: *"everything is navigable still"*. Nothing is lost or trapped behind sticky content at that magnification → closes **2.4.11 Focus Not Obscured** |
+| LV8 — The view works in both portrait and landscape | pass | O-LV14 — landscape 900x400 by CDP emulation, 2026-08-14: **zero horizontal overflow**. Closes the check that previously stalled on an unstable screenshot — the metric answers it without one |
 
 ## Observations
 
@@ -99,6 +108,91 @@ run's Result is set. Fails cite observation IDs.
   - Classified: LV1, LV2, LV8 / WCAG 1.4.10, 1.4.4, 1.3.4 / pass — no
     finding. An earlier mis-navigation captured Your stuff instead of Home;
     those two PNGs were **deleted**, not retained (wrong-view evidence).
+
+- **O-LV14 [classified]** (2026-08-14, assistant — CDP measurement on the
+  clean debug profile, Chrome 151, extensions inert): low-vision
+  measurement pass on S1.
+
+  | Condition | Horizontal overflow |
+  |---|---|
+  | Baseline 1280 | 0px |
+  | **Landscape 900x400** | **0px** |
+  | **Text scaled 2x (text-only)** | **0px** |
+
+  - **LV8 / 1.3.4 closes: pass.** Landscape holds with no overflow. The
+    earlier attempt stalled on a screenshot that never stabilised; the
+    metric settles it without one.
+  - **1.4.4 Resize Text: the layout holds, but text clips.** Under
+    text-only doubling, horizontal overflow stays at zero — yet
+    **26 text block(s)** overflow fixed-height containers whose
+    `overflow` is hidden: start-card `h2`s need 146px in 97px containers; quick-edit labels 1198-2072px in 616px.
+  - **Outcome is Supports regardless**, because 1.4.4 is satisfied by
+    browser zoom (Understanding 1.4.4) and this product reflows cleanly at
+    the 320px/400% equivalence. The clipping affects users who scale
+    **text only** rather than zooming the page — a distinct group, and one
+    that skews low-vision. **Wants a reviewer visual check** to see what a
+    user actually gets: truncation, ellipsis, or a scrollbar.
+  - **Instrument honesty:** an earlier version of this measurement
+    reported 57 clipped blocks on S1. Those were
+    screen-reader-only elements (`height:1px`, clipped) whose scrollHeight
+    explodes when fonts are scaled — **not** visible clipped text. The
+    filter now excludes zero-area and visually-hidden nodes. The first
+    number was discarded rather than recorded.
+  - Classified: LV8 / 1.3.4 / pass; LV1 / 1.4.4 / pass with a recorded
+    caveat — no finding
+
+- **O-LV16 [classified]** (LV5 / 1.4.11 — **reviewer**, 2026-08-14, tool:
+  *Color Contrast Checker*): **the text passes; the controls holding it do
+  not.** Reviewer's words: *"home page all the text passes color contrast,
+  but some of the button/icons holding the text don't when measured against
+  the background. Same in the content edit view — text itself has enough
+  contrast, but button doesn't."*
+  - **This is precisely the split 1.4.11 exists to catch, and it is a
+    genuinely easy one to miss.** 1.4.3 governs *text* against its
+    background; 1.4.11 governs the **boundary of the control** against
+    what surrounds it. A button can carry perfectly legible 7:1 label text
+    and still fail, because a low-vision user must first perceive **that
+    there is a button there** — and the control's own edge against the page
+    is what conveys that.
+  - **Confirmed on two views, which makes it a pattern rather than a slip:
+    S1 Home and S3 the editor.** Two views, different components, same
+    defect class.
+  - **This is the LV5 check that four low-vision runs have been waiting on
+    since 2026-08-13**, and it is the criterion the assistant tried and
+    failed three times to measure automatically (R042 O6). The reviewer's
+    eyedropper answered it in one pass — the outcome that instrument work
+    was routed toward, exactly as testing-tools.md §zoom now prescribes.
+  - **What is deliberately NOT claimed here:** no ratio, and no count. The
+    reviewer reported *"some"* controls failing, without enumerating which
+    or by how much. Recording a number would be inventing one. The finding
+    is sized on the pattern, and the enumeration is named as remediation
+    work for the vendor rather than guessed at here.
+  - Classified: LV5 / WCAG **1.4.11** / Major → finding **V-F18**
+
+- **O-LV17 [classified]** (LV6 / 1.4.13 — **reviewer**, 2026-08-14):
+  **"no issues with hover, pass it."** Confirmed with a real pointer.
+  → **finding V-F1 WITHDRAWN; 1.4.13 moves from Does Not Support to
+  Supports.**
+  - **This supersedes the assistant evidence, and the reason matters.**
+    O4/O5 were produced by **synthetic hover teleports** — the pointer was
+    jumped from coordinate to coordinate rather than moved continuously.
+    That is not how a hover interaction works: a flyout that dismisses
+    when the pointer *teleports* away may behave perfectly when the
+    pointer *travels* onto it along a path. The original finding recorded
+    this caveat and explicitly asked for pointer confirmation; the
+    confirmation came back negative.
+  - **The instrument hierarchy applied as written** (CLAUDE.md): the
+    reviewer's direct interaction outranks an assistant probe, and the
+    probe's own recorded limitation is what flagged it for confirmation
+    in the first place. The process worked — a doubtful finding was
+    marked doubtful, routed, and retired rather than shipped.
+  - **Fourth assistant hypothesis retired by reviewer testing** on this
+    review, after the 2.1.1 "pointer-only editing" Blocker, "invisible
+    editing", and the claim that the editor lacks landmark bypass. All
+    four were caught before reaching the report. Worth stating plainly in
+    the report's methodology note: **assistant-driven interaction findings
+    on this product have a poor track record and must be reviewer-gated.**
+  - Classified: LV6 / WCAG **1.4.13** / **pass** — **V-F1 withdrawn**
 
 ## Notes
 

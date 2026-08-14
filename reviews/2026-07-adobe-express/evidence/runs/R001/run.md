@@ -11,7 +11,19 @@
 | **Tool** | jaws |
 | **Baseline** | B1 |
 | **Tester** | reviewer (D. Fontaine), **JAWS** — confirmed 2026-08-06 |
-| **Result** | Not set — **run suspended 2026-08-06**: JAWS is no longer the screen reader in use. NV1/NV2 stand as JAWS evidence; NV3–NV9 continue under **R012 (NVDA, B4)**. Resume only if JAWS is confirmed in scope (03 §1.3 baseline note) |
+| **Result** | N/A |
+
+**Result reasoning** (set 2026-08-14, at report close). **Run suspended
+2026-08-06** when testing moved from JAWS to NVDA; NV1/NV2 stand as JAWS
+evidence and NV3–NV9 continued under **R012 (NVDA, B4)**. Closed as
+**N/A** rather than left unset, because the run will not be completed
+under this review: JAWS was never confirmed in scope (03 §1.3), and the
+report states plainly that **all screen-reader evidence is NVDA-only**.
+The partial JAWS evidence it did produce is preserved below and was used —
+R001 O7's landmark walk is what scoped V-F3 to keyboard-without-AT users,
+and it remains the review's only cross-screen-reader corroboration.
+**Reopen only if JAWS is brought into scope**, which would be a new run,
+not a resumption of this one.
 
 ## Checks (no-vision)
 

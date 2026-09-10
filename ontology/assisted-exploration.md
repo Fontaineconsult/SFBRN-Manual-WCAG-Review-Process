@@ -97,6 +97,47 @@ systematic and repeatable:
    (`crawl-map-<date>.md`) beside the review, and never log runs or
    findings from it.
 
+## Probing without the browser extension — `scripts/cdp_probe.py` (added 2026-09-10)
+
+The pass above was written for Claude-in-Chrome. When only the debug-profile
+Chrome is available (the axe setup in testing-tools.md), the same steps run
+over CDP with two scripts: `crawl_map.py` for harvest/fingerprint, and
+`cdp_probe.py` for everything the pass needs per view — frames, visible text,
+visible controls, an accessibility-tree summary (role histogram + unnamed
+controls, from `Accessibility.getFullAXTree`), an optional role/name dump,
+a screenshot, an arbitrary `--js` expression, and a real key chord
+(`--key 5 --ctrl --shift`) dispatched through `Input.dispatchKeyEvent`.
+The AX summary is the instrument that matters: it is what the AT is given
+(CLAUDE.md instrument hierarchy), so "6 unnamed radios" there is recon worth
+a JAWS run, while a DOM-only check is not.
+
+Lessons from `2026-09-the-expert-ta` (2026-09-10):
+
+- **Harvest is a floor on WebForms apps too.** Root harvest found 9 links;
+  the real navigation was DevExpress combo boxes and a row click-menu. Dump
+  hidden menu items and `<select>` options (`--js` over `option`/`li`/
+  listbox cells, visible or not) before walking — an app's own "accessibility
+  mode" variant exposed every action URL as `<option value>`s.
+- **Look for a mode toggle.** A button such as "Accessibility Page" can
+  switch a view to a parallel version *and persist that per account*. Map
+  both versions, restore the account to the state you found it in, and make
+  every later run record which mode was active.
+- **Never submit to inventory.** Question types, keypads, drag-and-drop and
+  drawing widgets were inventoried by switching problems and reading
+  `.sr-only` instruction text, live-region content and control counts — no
+  answer submitted, no attempt consumed on the shared account.
+- **Read the vendor's own scripts.** `fetch()` of the page's accessibility
+  JS (same origin) listed every shortcut and announcement string in one
+  call; a real key dispatch then confirmed the live-region output.
+- Screenshots and the probe scripts' JSON go to the scratchpad; only the
+  curated `crawl-map-<date>.md` stays beside the review.
+- **One product tab, always.** The CDP client attaches to the tab already on
+  the product (`--tab`, or the URL's host); it refuses to navigate a blank
+  tab to the product. Expert TA invalidates the session the moment a second
+  tab on its host appears (`/WSInvalidAccess.aspx`, "Multiple Session
+  Instances") — that cost two session drops on 2026-09-10 before the cause
+  was pinned. Recovery: close the duplicate, reload the original tab.
+
 ## Conventions
 
 - Every statement written into Step 2 is either **confirmed (dated)** or an

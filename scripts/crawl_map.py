@@ -48,13 +48,26 @@ REFUSE_DEFAULT = ("/new", "logout", "signout", "delete", "remove", "create",
 
 
 class CDP:
-    def __init__(self, port):
+    def __init__(self, port, tab=None):
+        """Attach to a page tab. `tab` is a URL substring; without it, prefer a tab
+        already on an http(s) URL over chrome:// / new-tab pages — attaching to a
+        blank tab and navigating it opens the product in a SECOND tab, and some
+        products (Expert TA, 2026-09-10) invalidate the whole session when they
+        see two tabs. Never navigate a tab other than the one the product is
+        already open in."""
         tabs = json.load(urllib.request.urlopen(
             f"http://localhost:{port}/json", timeout=5))
         pages = [t for t in tabs if t.get("type") == "page"
                  and "service-worker" not in t.get("url", "")]
+        if tab:
+            pages = [t for t in pages if tab.lower() in t.get("url", "").lower()
+                     or tab.lower() in t.get("title", "").lower()]
+        else:
+            web = [t for t in pages if t.get("url", "").startswith("http")]
+            pages = web or pages
         if not pages:
-            sys.exit(f"no page tab on port {port}")
+            sys.exit(f"no page tab on port {port}" + (f" matching '{tab}'" if tab else ""))
+        self.tab = pages[0]
         self.ws = websocket.create_connection(
             pages[0]["webSocketDebuggerUrl"], timeout=120,
             max_size=128 * 1024 * 1024, suppress_origin=True)

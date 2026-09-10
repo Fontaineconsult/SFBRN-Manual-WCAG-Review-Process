@@ -338,8 +338,16 @@ def apply_enclosure(review, enc_path):
     step2 = re.search(r"(?ms)^## Step 2 .*?(?=^## |\Z)", body)
     if not step2:
         sys.exit(f"Enclosure {enc_path.name} has no '## Step 2' section.")
+    new_step2 = step2.group(0).rstrip()
+    # §2.6 (exploration notes / recon) is review-specific, so enclosures do not
+    # carry it. Preserve the template's block when the enclosure lacks one —
+    # otherwise the review loses the only sanctioned home for recon.
+    if not re.search(r"(?m)^### 2\.6 ", new_step2):
+        recon = re.search(r"(?ms)^### 2\.6 .*?(?=^## Step 3 )", scope)
+        if recon:
+            new_step2 += "\n\n" + recon.group(0).rstrip()
     new_scope, n = re.subn(r"(?ms)^## Step 2 .*?(?=^## Step 3 )",
-                           step2.group(0).rstrip() + "\n\n", scope)
+                           new_step2 + "\n\n", scope)
     if not n:
         sys.exit(f"{scope_path} has no Step 2 section to replace (already customized?).")
 
@@ -645,6 +653,8 @@ def cmd_save_enclosure(args):
     step2 = re.search(r"(?ms)^## Step 2 .*?(?=^## Step 3 )", scope)
     if not step2:
         sys.exit(f"No Step 2 section found in {review.name}/{STAGES[2]}.")
+    # Drop §2.6 — dated recon belongs to the review, not to the reusable map.
+    step2_text = re.sub(r"(?ms)^### 2\.6 .*\Z", "", step2.group(0)).rstrip()
     processes = re.search(r"(?ms)^#### Process .*\Z", scope)
 
     product = product_name(review)
@@ -660,7 +670,7 @@ def cmd_save_enclosure(args):
         f"description: Enclosure for {product}, documented during review {review.name}",
         "---",
         "",
-        step2.group(0).rstrip(),
+        step2_text,
         "",
     ]
     if processes:

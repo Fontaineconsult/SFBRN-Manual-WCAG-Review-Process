@@ -1,0 +1,438 @@
+Misspoke here is the account info for ExpertTA.
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+________________________________________
+From: Jack Cameron <jack@theexpertta.com>
+Sent: Tuesday, 01 September 2026 14:24:19
+To: Zach Oshri <zach.oshri@csueastbay.edu>; Jeremy Morton <jeremy@theexpertta.com>
+Cc: J Hale <j.hale@csueastbay.edu>; Jason Singley <jason.singley@csueastbay.edu>
+Subject: Re: Fw: New online homework system Canvas integration
+
+All,
+
+You can log into the account created for you to test the platform using the information below. This demo environment has all features and controls available. I used a fake username so several of you can have access to the same area. You have instructor access to the course and there is a sample assignment you can look through and work as a student by clicking the assignment name and selecting Take Assignment. If you need additional assistance in the account please let me know.
+
+Account Information
+Username: csuit@csueastbay.com
+Password: [redacted 2026-09-11 — credential held by the reviewer, not in the repo]
+
+
+Best regards,
+
+Jack Cameron
+918-346-8382
+
+
+On Tue, Sep 1, 2026 at 3:46 PM Jack Cameron <jack@theexpertta.com> wrote:
+Zach,
+
+Jeremy Morton is looped back in now; he originally gave you all some detailed information and also led the team that completed the 5-5 VPAT.
+
+I will get you an account so you can explore the system. I think meeting would be most beneficial to help expedite this. What does your schedule look like?
+
+
+Best regards,
+
+Jack Cameron
+918-346-8382
+
+
+On Tue, Sep 1, 2026 at 1:54 PM Zach Oshri <zach.oshri@csueastbay.edu> wrote:
+Jack,
+I'm the ATI Coordinator at Cal State East Bay, and I'm also one of our Canvas administrators — so I'm involved in this from both directions: the accessibility documentation Jonathan needs for the procurement review, and the Canvas LTI integration itself, which can't be turned on until that review clears. Rather than another round of "it's incomplete," let me give you a specific list. I want this to move as much as you do; the physics department is waiting on it.
+The document I reviewed is the Expert TA VPAT dated May 5, 2026. If a newer file has been sent since, please send it directly to me and I'll review that version instead.
+Why the template matters
+The VPAT isn't a formatting preference on our end. As a CSU campus we are a Title II public entity, and our accessibility reviews are auditable records. What we have to be able to show an auditor is a complete Accessibility Conformance Report (ACR) on the ITI template, with a documented response for every criterion in scope — including the ones that don't apply, marked "Not Applicable" with a short reason. A blank row and a "Not Applicable" row look identical in an audit file: neither shows the criterion was evaluated. That's the entire reason an incomplete document can't be accepted, even a well-written one.
+Your August 17 message noted that Expert TA is using the most recent template available. The gap is which edition. ITI publishes four editions of VPAT 2.5Rev and they cover different WCAG versions: the 508 edition covers WCAG 2.0, the EU edition WCAG 2.1, and the WCAG and INT editions WCAG 2.2. Please use the VPAT 2.5Rev INT edition — it carries WCAG plus the Revised Section 508 chapters in one document and covers everything we need. It's a free download from ITI at itic.org/policy/accessibility/vpat. We review to WCAG 2.1 Level A and AA, so Level AAA is not required — that table can be deleted entirely.
+What's missing from the May 5 document
+1. Nine WCAG Level A/AA criteria have no response. The document answers 41 of the 50 Level A and AA criteria. These nine have no row at all:
+•	1.2.3 Audio Description or Media Alternative (Prerecorded) — Level A
+•	1.2.5 Audio Description (Prerecorded) — Level AA
+•	1.3.4 Orientation — Level AA
+•	1.3.5 Identify Input Purpose — Level AA
+•	1.4.10 Reflow — Level AA
+•	1.4.13 Content on Hover or Focus — Level AA
+•	2.5.1 Pointer Gestures — Level A
+•	2.5.2 Pointer Cancellation — Level A
+•	2.5.4 Motion Actuation — Level A
+The 2.5.x criteria are the WCAG 2.1 pointer-input additions and are directly relevant to a platform with drag-and-drop and hotspot question types. 1.4.10 Reflow matters for students working on tablets. 1.2.3 and 1.2.5 can't be safely skipped given the instructional video library described in your August 17 message.
+2. Three Section 508 chapters are absent entirely. The ACR needs Chapter 3 Functional Performance Criteria (302.1–302.9), Chapter 5 Software (501.1, 502.x, 503.x, 504.x), and Chapter 6 Support Documentation and Services (601–603.3). That's roughly 49 criteria with no response. Chapter 5 in particular includes 504.2 Content Creation or Editing, which applies because instructors author assignments in your platform, and Chapter 6 covers your help documentation and your support desk. Chapter 4 Hardware can be removed as not applicable, but the template requires a note in that section saying so rather than silent deletion.
+3. Required report elements are missing. The ITI Essential Requirements list ten items that must appear in the header. The document has the report date and the author's name. Still needed: report title in the form "Expert TA Accessibility Conformance Report," the VPAT version statement "(Based on VPAT® Version 2.5Rev)" with the service mark, product name and version, product description, contact information, Notes, Applicable Standards/Guidelines, the Terms definitions, and — most important for us — Evaluation Methods Used.
+Two notes on that list. On contact information, the ACR requires an email address for accessibility follow-up questions; the May 5 document is compiled by Jeremy Morton but lists no address, so please include the right contact for whoever should field those.
+On Evaluation Methods, the testing description in your August 17 message is exactly what belongs in that section: seven developers and eight testers, JAWS, NVDA and VoiceOver, across Mac and PC in all major browsers, with no reliance on simulated or third-party automated reports. That's a stronger methodology statement than most ACRs we receive, and right now none of it appears in the document. Putting it in Evaluation Methods converts it from an email claim into part of the record we can rely on.
+One substantive item, separate from completeness
+The May 5 document answers every one of the 51 criteria as either "Supports" or "Not Applicable," and uses several terms that aren't in the template's vocabulary — "Platform Supports," "Content Supports with rare exceptions," "Supported with Exceptions." The template defines exactly five: Supports, Partially Supports, Does Not Support, Not Applicable, Not Evaluated. If you use different terms, they have to be defined in the Terms section.
+More than a vocabulary issue: your own remarks under 1.4.3 Contrast (Minimum) and 1.4.5 Images of Text describe known exceptions, and your August 17 message identifies three question types that are not compliant — drag-and-drop labeling, hotspot, and vector practice. Under the template's definitions those criteria are Partially Supports, not Supports. An ACR that says Partially Supports with a clear remark is a document our reviewers can act on; one that says Supports everywhere is one an auditor will question. An all-"Supports" report reads as unverified, which does your accessibility work a disservice given how much of it has evidently been done.
+Three other things, and then we're moving
+1.	A test account for me — Jonathan requested this in his August 19 note. It lets me verify a sample of the Supports claims directly, and it's usually the fastest way to close out open questions.
+2.	The Zoom walkthrough — yes, please. I'd like to take you up on the offer from your August 17 message, and a recording would be useful for reviewers who can't attend. To be clear, the demo is a supplement, not a substitute for the ACR; the completed document is what goes in the procurement file. But the navigation design and the math-readability work described there are hard to see in a table, and I'd like to see them.
+3.	A remediation timeline for drag-and-drop labeling, hotspot, and vector practice. I appreciate the 99% figure and the instructor-side filter — that's a real mitigation and I'll note it. But "instructors should avoid the format" is a workaround, not a fix, and the current path forward requires a Temporary Alternative Access Plan signed by the department chair, the dean, and our ADA Compliance Officer. A vendor-side fix with a target date shortens that. If the three types aren't on the roadmap, say so plainly and we'll plan around it.
+If it's faster, please loop in whoever authored the May 5 VPAT for the technical items — items 1 and 3 above and the Evaluation Methods section are the ones that need them.
+Once the completed ACR is in hand, Jonathan can finish the accessibility review and I can close out my portion. On the Canvas side the LTI setup itself is quick, but faculty can't enable the integration themselves — it has to be done by our Canvas admin team after the review clears — so the document is genuinely the bottleneck here, not the technical work.
+Happy to get on a call this week if walking through the template together is faster than another email. Thanks for staying with this.
+
+Thank you,
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+From: Jack Cameron <jack@theexpertta.com>
+Sent: Tuesday, September 1, 2026 5:55 AM
+To: J Hale <j.hale@csueastbay.edu>; Zach Oshri <zach.oshri@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>
+Subject: Re: Fw: New online homework system Canvas integration
+
+	You don't often get email from jack@theexpertta.com. Learn why this is important
+
+Jonathan,
+
+The responses for the items that were incomplete are now filled in. What can be done to get this moved through so the instructor can use the resource?
+
+
+Best regards,
+
+Jack Cameron
+918-346-8382
+
+
+On Wed, Aug 19, 2026 at 12:26 PM J Hale <j.hale@csueastbay.edu> wrote:
+Hi Jack,
+The VPAT I received does not include responses for all required sections. I need this in order to begin our initial review. If a criterion is not applicable, please indicate that in the corresponding response section rather than leaving it blank.
+I previously provided the VPAT template to be used for completing this requirement. Let me know if you need me to resent it.
+As a state agency, CSUEB is subject to audits to ensure that software applications we procure meet applicable ATI compliance standards.
+For this reason, I am unable to accept an incomplete or outdated VPAT.
+It would also be helpful if you could create an account for our ATI coordinator to access the product and complete their review.
+
+  
+Thanks,
+Jonathan
+
+
+
+Jonathan Hale
+Business Operations Specialist
+IT Business Operations
+San Francisco Bay Region Network (SFBRN)
+Cal State University, East Bay
+25800 Carlos Bee Blvd.
+Hayward, CA 94542 | Office: LI 2500
+📧 J.Hale@csueastbay.edu | 💬 Teams Chat: Start a chat
+
+
+
+
+________________________________________
+From: Jack Cameron <jack@theexpertta.com>
+Sent: Monday, August 17, 2026 11:01 AM
+To: J Hale <j.hale@csueastbay.edu>
+Cc: Jeremy Morton <jeremy@theexpertta.com>; Zach Oshri <zach.oshri@csueastbay.edu>; Jason Singley <jason.singley@csueastbay.edu>
+Subject: Re: Fw: New online homework system Canvas integration
+
+All,
+
+It appears our message may have been overlooked. Jeremy sent the following below. Based on this, what do you need to move forward?
+
+
+Hi Jonathan,
+
+I would be happy to help you with this information.  I can provide some brief information here. I can also provide more documentation if more detail is needed, but I would be happy to meet via Zoom or Micorsoft teams and show you around our environment. If we do it via Zoom I am happy to record such a meeting and make it available to you, so that you can reference the information later, or share it with anyone else who isn't able to join.
+
+I see that Jack already asked the specific VPAT form you are wanting us to put things in. At present, ours is using the most recently available template that is available and has information listed for all criteria that apply to products like ours. I am happy to provide more information, when we know specifically what that is.
+
+Here are some short answers for now to your other items.
+- Background: Starting two years ago, we made Accessibility the highest priority. What we developed doesn't just check a box, we really wanted to design a good user experience for anyone needing to use these accessibility features. I led the development teams on this particular initiative and know the environments well if you are wanting to see some of the details.
+- Testing: We do not rely on simulated testing or third party automated reports.  Our development team (seven programmers for this initiative) all used JAWS, NVDA, and VoiceOver to verify behavior during the process.  Our testing team (8 people - distinct from the seven programers), tested all three screen-readers across MAC and PC, in all major browsers.  I am happy to show you this testing data.  I
+
+- Filtering out of non-compliant questions:  See the attached image. Faculty can check a box to filter out any questions that are not WCAG Level AA.
+- Coverage of Compliant questions: MOST of our question types are accessible compliant. This includes even our FBD drawing question, which was difficult to implement.   For Drag-and-Drop, all of our Sorting and Ranking exercises are all fully compliant.   The three question types that are NOT compliant: a) Drag-and-Drop Labeling, b) Hotspot Questions where students click on a certain part of an image and c) Vector Practice.  I checked the counts just now. We have 6790 physics questions in our collection of physics questions.  There are 17 vector practice questions,  0 click on image questions, and 54 drag and drop labeling. So the faculty still have ~99% of our questions to utilize (6719 of the 6790 problems).
+
+For a few things that we went above and beyond for.
+- Navagition. We modeled what we do after some things we saw on ada.gov. As a user tabs through our environments, we present them with lots of nice context-specific user menus that provide short easy paths to what they need (reducing the overall number of tabs needed to navigate). Most applications don't go this far.
+- Readibility: we had our SME's do the extra work to provide human-friendly versions of math elements and functions. Standard JAWS will read something like "the component here is cos(45.2)" as "the component here is cos open paren 4 5 point 2 close paren". Students can still hear that version in ours, but can also have it read as "the component here is cosine of forty five point 2.
+- There are other nice things we did that go above just meeting basline compliance, but I will hold off for now and see if you want that detail, or want to meet.
+
+I am very proud of what we put in place for our platform, and our company's attitude towards inclusivity and accessiblity. As such, it is always fun to get to provide a walkthrough to people and show what we have done. I can offer a general tour, and can also run either JAWs or NVDA and show you some of the enhancements I describe above.   Please let m know if a web meeting would be of interest.
+
+Best regards,
+
+Jack Cameron
+918-346-8382
+
+
+On Fri, Aug 14, 2026 at 11:53 AM J Hale <j.hale@csueastbay.edu> wrote:
+Hi Jack,
+The VPAT I received was missing responses in several sections and did not include all of the information needed to complete our accessibility review.
+I’ve attached the CSU guidance for completing a VPAT, which includes the purpose and background. I've also attached the VPAT template (v2.5), including instructions for creating an Accessibility Conformance Report (ACR). Please use this form to submit the ACR for us to conduct the accessibility impact analysis.
+
+Please make sure all sections of the ACR are completed, including sections that do not apply to the product. If a section is not applicable, please indicate "Not Applicable" and provide an explanation where appropriate rather than leaving it blank. Incomplete or blank sections may prevent us from completing the accessibility review. Most impacts are reviewed using AA standards.
+
+
+Thanks,
+Jonathan
+
+
+Jonathan Hale
+Business Operations Specialist
+IT Business Operations
+San Francisco Bay Region Network (SFBRN)
+Cal State University, East Bay
+25800 Carlos Bee Blvd.
+Hayward, CA 94542 | Office: LI 2500
+📧 J.Hale@csueastbay.edu | 💬 Teams Chat: Start a chat
+
+
+
+________________________________________
+From: Jack Cameron <jack@theexpertta.com>
+Sent: Thursday, August 13, 2026 1:50 PM
+To: J Hale <j.hale@csueastbay.edu>; Jeremy Morton <jeremy@theexpertta.com>
+Cc: Zach Oshri <zach.oshri@csueastbay.edu>; Jason Singley <jason.singley@csueastbay.edu>
+Subject: Re: Fw: New online homework system Canvas integration
+
+	You don't often get email from jack@theexpertta.com. Learn why this is important
+
+Hi Jonathan,
+
+I am looping in Jeremy Morton so he can join this thread and provide further explanation. He is now included and will follow up shortly.
+
+In the meantime, could you elaborate on what is missing from the VPAT, and which VPAT template you need us to provide to help move this along? If you can share the preferred source we can get that completed in the updated and preferred form.
+
+Best regards,
+
+Jack Cameron
+918-346-8382
+
+
+On Thu, Aug 13, 2026 at 2:55 PM J Hale <j.hale@csueastbay.edu> wrote:
+Hello Jack,
+I'm working with Zach Oshri to review the accessibility of ExpertTA, which our Physics department has requested to use for coursework submissions.
+The VPAT documentation I received is incomplete, so I’m unable to complete the accessibility review. Is there an updated VPAT or Accessibility Conformance Report (ACR) that includes responses to all applicable WCAG 2.1 Level A and AA criteria?
+
+If an updated document is not currently available, could you provide the following information?
+
+•	Your timeline or roadmap for addressing the outstanding accessibility requirements.
+•	The testing methodology used to determine which features are supported, partially supported, or unsupported, including any assistive technologies and browsers used during testing.
+•	Any known accessibility issues and their expected remediation dates.
+
+One of the primary concerns is the drag-and-drop labeling functionality, which contains images of text that do not scale independently. The current proposed remediation appears to be for instructors to avoid affected question formats rather than providing a vendor-side correction. Could you provide an update on whether a product-level fix is planned for this issue and, if so, the anticipated timeline?
+
+Thanks,
+Jonathan
+
+
+
+Jonathan Hale
+Business Operations Specialist
+IT Business Operations
+San Francisco Bay Region Network (SFBRN)
+Cal State University, East Bay
+25800 Carlos Bee Blvd.
+Hayward, CA 94542 | Office: LI 2500
+📧 J.Hale@csueastbay.edu | 💬 Teams Chat: Start a chat
+
+
+
+________________________________________
+From: Zach Oshri <zach.oshri@csueastbay.edu>
+Sent: Thursday, August 13, 2026 12:17 PM
+To: J Hale <j.hale@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>; Daniel J Fontaine <fontaine@sfsu.edu>; Natalie Granera <natalie.granera@csueastbay.edu>
+Subject: Re: New online homework system Canvas integration
+
+Hi Jonathan,
+
+At the moment, this is the only contact information I have for ExpertTA:
+
+•	Jack Cameron — jack@theexpertta.com
+•	Phone: 918-346-8382
+I don't have contact information for Jeremy Morton.
+
+For the list of faculty who will be using the product, I'll defer to Jason, as he would have the most accurate information regarding faculty adoption and course usage.
+
+Please let me know if you need anything else from me.
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+________________________________________
+From: J Hale <j.hale@csueastbay.edu>
+Sent: Thursday, 13 August 2026 12:12:06
+To: Zach Oshri <zach.oshri@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>; Daniel J Fontaine <fontaine@sfsu.edu>; Natalie Granera <natalie.granera@csueastbay.edu>
+Subject: Re: New online homework system Canvas integration
+
+Hi Zach,
+Thanks for resending the VPAT for review.
+Since the VPAT is incomplete I think we need to reach out to Jeremy Morton (need his email) and request an updated VPAT be provided.
+I'm moving forward with what was provided which I'll use create a Temporary Alternative Access Plan (TAAP). The TAAP will need to be reviewed and signed by the Department Chair/Manager, Dean/Division Vice President, and ADA Compliance Officer.
+Because the current remediation relies on faculty providing accessible alternatives, faculty who plan to use this product as part of course instruction will need to be informed of the known accessibility barriers and the potential need to provide accommodations. Is there a list of faculty members who will be using this product, if so, please forward their names for us to have on file and to add to the TAAP form.
+
+I'm suggesting the following faculty remediation should be followed which they will need to be notifed of:
+
+• Avoid using affected drag-and-drop labeling question formats in required assignments, quizzes, and exams, particularly when the text cannot be independently resized.
+• Use an accessible question format that meets the same learning objective without requiring interaction with images of text.
+• If an affected question must be used, provide an equivalent accessible alternative containing the same instructions, content, and assessment requirements.
+• Make the accessible alternative available at the same time as the original activity so the student does not experience additional work or delays.
+• Do not require a student to attempt the inaccessible format before receiving an accessible alternative.
+• Inform students how to report accessibility barriers or request assistance if they encounter issues that have not already been identified.
+I'll finalize the TAAP and send for signature approvals once I hear back from you.
+
+Thanks,
+Jonathan
+
+Jonathan Hale
+Business Operations Specialist
+IT Business Operations
+San Francisco Bay Region Network (SFBRN)
+Cal State University, East Bay
+25800 Carlos Bee Blvd.
+Hayward, CA 94542 | Office: LI 2500
+📧 J.Hale@csueastbay.edu | 💬 Teams Chat: Start a chat
+
+
+
+________________________________________
+From: Zach Oshri <zach.oshri@csueastbay.edu>
+Sent: Thursday, August 13, 2026 10:59 AM
+To: J Hale <j.hale@csueastbay.edu>
+Subject: Fw: New online homework system Canvas integration
+
+
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+________________________________________
+From: CSUEB Canvas <canvas@csueastbay.edu>
+Sent: Thursday, 30 July 2026 10:47:10
+To: Jason Singley <jason.singley@csueastbay.edu>; Zach Oshri <zach.oshri@csueastbay.edu>; J Hale <j.hale@csueastbay.edu>; CSUEB Canvas <canvas@csueastbay.edu>
+Cc: Margaret Price <margaret.price@csueastbay.edu>; Daniel J Fontaine <fontaine@sfsu.edu>; Natural Sci <naturalsci@csueastbay.edu>
+Subject: RE: New online homework system Canvas integration
+
+Jonathan,
+
+Attached is the ICT Questionnaire. Please also review my findings regarding the VPAT ExpertTA provided there are some issues we would like to discuss before pushing forward. I will be reaching out directly to the vendor to request they follow the standard template as well as share their findings on what was not included in their original VPAT before we can push forward.
+
+Thank you,
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+From: Jason Singley <jason.singley@csueastbay.edu>
+Sent: Tuesday, July 28, 2026 9:57 AM
+To: Zach Oshri <zach.oshri@csueastbay.edu>; J Hale <j.hale@csueastbay.edu>; CSUEB Canvas <canvas@csueastbay.edu>
+Cc: Margaret Price <margaret.price@csueastbay.edu>; Daniel J Fontaine <fontaine@sfsu.edu>; Natural Sci <naturalsci@csueastbay.edu>
+Subject: Re: New online homework system Canvas integration
+
+
+Thanks everyone for the quick response. Zach described the software use accurately. It will be used in PHYS 125/126/135/136 as a required homework system. Students will need to purchase an individual license for the semester ($35).
+
+I've copied Natalie Granera, who provides administrative support for the department.
+
+Our contact at the company is Jack Cameron - jack@theexpertta.com.
+
+Finally, thank for recommending that we keep access to MyOpenMath in Canvas. We may want to continue using this for certain classes in the future.
+
+I appreciate all of your expertise and will await your guidance on our next steps.
+
+Jason
+________________________________________
+From: Zach Oshri <zach.oshri@csueastbay.edu>
+Sent: Monday, July 27, 2026 4:39 PM
+To: J Hale <j.hale@csueastbay.edu>; CSUEB Canvas <canvas@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>; Margaret Price <margaret.price@csueastbay.edu>; Daniel J Fontaine <fontaine@sfsu.edu>
+Subject: RE: New online homework system Canvas integration
+
+Hi Jonathan,
+
+Happy to help move this along. A few answers up front based on Jason's request:
+
+This is a student-facing online homework platform for introductory physics courses, so the users will be students (with faculty authoring/managing assignments). It would be required for coursework in those sections; it is not required for employees to perform job duties. Given that it's required and student-facing, I agree we should loop in Daniel Fontaine to determine whether a formal accessibility review is needed — I've added him here, from my perspective absolutely we need to go through the process.
+
+I'll be requesting their VPAT/ACR and accessibility documentation so I can complete the ICT questionnaire portion of the review.
+
+Thank you,
+
+Zach Oshri
+ATI Coordinator, CSU East Bay
+510-885-3884
+CSU East Bay ATI website: https://www.csueastbay.edu/ati/
+
+From: J Hale <j.hale@csueastbay.edu>
+Sent: Monday, July 27, 2026 3:57 PM
+To: CSUEB Canvas <canvas@csueastbay.edu>; Zach Oshri <zach.oshri@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>; Margaret Price <margaret.price@csueastbay.edu>
+Subject: Re: New online homework system Canvas integration
+
+Hi Manpreet,
+As part of our new procurement process, ATI reviews are completed within P2P. To help with the process, we can use an offline form that includes the same ATI and Information Security questions required in P2P. Please have someone who is familiar with the product complete and return the form.
+
+The most important information we need is:
+
+• Who will be using the product (faculty, staff, students, or others).
+• Whether the product is required for coursework.
+• Whether the product is required for employees to perform their job duties.
+
+If this software is widely used and required for students, we should also include Daniel Fontaine in the conversation. As the SFBRN ATI Coordinator, he can help determine whether a formal accessibility review is needed.
+
+Once we receive the completed form, we can continue the review.
+
+Thanks,
+Jonathan
+
+
+Jonathan Hale
+Business Operations Specialist
+IT Business Operations
+San Francisco Bay Region Network (SFBRN)
+Cal State University, East Bay
+25800 Carlos Bee Blvd.
+Hayward, CA 94542 | Office: LI 2500
+📧 J.Hale@csueastbay.edu | 💬 Teams Chat: Start a chat
+
+
+
+________________________________________
+From: CSUEB Canvas <canvas@csueastbay.edu>
+Sent: Monday, July 27, 2026 3:43 PM
+To: J Hale <j.hale@csueastbay.edu>; Zach Oshri <zach.oshri@csueastbay.edu>
+Cc: Jason Singley <jason.singley@csueastbay.edu>
+Subject: Re: New online homework system Canvas integration
+
+Hi J and Zach,
+
+Can you please help with a new tool review for Expert TA.
+
+Jason - we will need to leave MyOpenMath active for 5 years in case we need to pull any assignments - if no assignments we can sun set the tool.
+
+Many thanks,
+Manpreet
+________________________________________
+From: Jason Singley <jason.singley@csueastbay.edu>
+Sent: Monday, July 27, 2026 2:41 PM
+To: CSUEB Canvas <canvas@csueastbay.edu>
+Subject: New online homework system Canvas integration
+
+
+The physics department would like to change our online homework system for our introductory courses from MyOpenMath to Expert TA. We have been in touch with the new vendor and are ready to start the processes of integrating Expert TA into our Canvas courses. Can you please tell us how best to proceed? I can pass along our contact at Expert TA when it is useful.
+
+Thanks,
+
+Jason Singley
+Professor and Acting Chair
+Department of Physics
+Cal State East Bay
+
+

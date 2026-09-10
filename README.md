@@ -43,6 +43,9 @@ python scripts/review.py matrix <review>       # views × modalities coverage gr
 python scripts/review.py next <review>         # highest-value cell to test next
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
+python scripts/cdp_probe.py [URL] [--ax] [--shot PNG] [--js EXPR] [--key K --ctrl --shift]
+                                               # per-view exploration probe over CDP: frames, text, controls,
+                                               # accessibility-tree summary, screenshot, real key chords
 python scripts/crawl_map.py harvest|map URL... [--out FILE]
                                                # enclosure mapping over CDP: harvest candidate links,
                                                # fingerprint allowlisted views (never auto-follows —
@@ -89,7 +92,9 @@ library solves this:
   review pre-fills its scope file's Step 2 exploration tables (common views,
   user stories, sample types, technologies) and process skeletons with
   **hypotheses** the reviewer confirms, corrects, or deletes during
-  exploration.
+  exploration. Seeding replaces §2.1–2.5 and the process skeletons; the
+  template's §2.6 exploration notes (recon) block is kept, and
+  `save-enclosure` strips it again, because recon is review-specific.
 - `enclosures/products/` — product-specific enclosures saved from completed
   exploration via `save-enclosure`. Re-reviews and similar products seed from
   these instead of a generic archetype, so the library gets better with every

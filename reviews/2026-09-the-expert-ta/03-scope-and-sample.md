@@ -126,7 +126,7 @@ reveals. Test both student and instructor roles.
 |------|-------------|---------------|
 | Answer widgets — multiple choice / true-false / multiple select | Native radio/checkbox inputs with MathJax labels | S3 problems 8–9 (confirmed 2026-09-10) |
 | Answer widgets — numeric ("Algorithm") | Text input + on-screen function/number keypad (~45 buttons) + unit radios | S3 problems 4, 5, 7 (confirmed 2026-09-10) |
-| Answer widgets — symbolic expression ("Equation") | Text input + variable/symbol palette keypad | S3 problems 1, 2, 6, 7 (confirmed 2026-09-10) |
+| Answer widgets — symbolic expression ("Equation") | The **calculator**: custom answer field + variable/symbol palette keypad (reviewer's term, 2026-09-10); a distinct component to test for reachability, button naming, insertion and read-back | S3 problems 1, 2, 6, 7 (confirmed 2026-09-10) |
 | Answer widgets — free-body diagram | SVG drawing tool: Add Force / Reset All, force table (angle, length, delete) | S3 problems 1, 6 (confirmed 2026-09-10) |
 | Answer widgets — drag-and-drop ranking/sorting | jQuery-UI-style draggables into a ranked drop zone; per-question "Show/Hide Accessibility Statement" | S3 problem 3 (confirmed 2026-09-10) |
 | Answer widgets — vendor-admitted inaccessible types | Drag-and-drop labeling, hotspot / click-on-image, vector practice | **Not in the sample assignment** — reviewer must author one (P4) |

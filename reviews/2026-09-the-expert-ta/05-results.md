@@ -28,10 +28,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 ## Table 1: Success Criteria, Level A
 
 ### 1.1.1 Non-text Content (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F12
+- **Remarks:** [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy.
 
 ### 1.2.1 Audio-only and Video-only (Prerecorded) (Level A)
 - **Outcome:** Not Evaluated
@@ -54,7 +54,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.3.1 Info and Relationships (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, V-F1, V-F2 (Minor), V-F5, V-F7
+- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13
 - **Remarks:** [provisional — S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
@@ -130,10 +130,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 2.4.3 Focus Order (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** T1-F2, V-F8
+- **Remarks:** [provisional] 2026-09-10 NVDA on S3: activating a problem link does not move focus into the problem; the vendor's jump-point menu mounts links outside the natural focus path and is itself a hidden tab stop. Vendor-claim discrepancy.
 
 ### 2.4.4 Link Purpose (In Context) (Level A)
 - **Outcome:** Not Evaluated
@@ -198,7 +198,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 3.3.2 Labels or Instructions (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F5
+- **Task findings:** V-F5, V-F13
 - **Remarks:** [provisional] 2026-09-10 S11 popup forms: labels are unassociated table-cell text. Instructor pages show the same (axe R006 59 fields, unconfirmed).
 
 ### 3.3.7 Redundant Entry (Level A)
@@ -210,7 +210,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, V-F3, V-F5, V-F6, V-F7, V-F8
+- **Task findings:** T1-F1, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13
 - **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. Pending confirmation: unnamed answer radios (R004 O1), unnamed jump-point buttons (R001 O2), unlabeled DevExpress editors product-wide. Vendor-claim discrepancy.
 
 ---
@@ -356,7 +356,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 4.1.3 Status Messages (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F9, V-F14 (Minor)
+- **Remarks:** [provisional] 2026-09-10 NVDA on S3: the instruction read-out (Ctrl+Shift+5) is announced correctly via the alert region; the answer read-out (Ctrl+Shift+2) injects raw MathJax markup for math-bearing options, so the status message is unusable; on the drag-and-drop alternative form, placements are not announced and the read-back runs items together. Submission-result dialogs are announced correctly (R017 O10, O14). Vendor-claim discrepancy.

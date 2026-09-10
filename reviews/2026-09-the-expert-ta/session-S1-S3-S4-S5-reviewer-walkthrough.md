@@ -164,7 +164,7 @@ has **no `lang` attribute**, R004 O2 — with a non-English default synthesizer
 voice this matters; with an English one you may hear nothing); what each
 problem link announces (expected: "Problem 1 Click To Activate, link" —
 say whether "Click To Activate" helps or clutters).
-**Feedback (partial):** 2026-09-10 — page change announced as "Take Homework Assignment" on arrival (R016 O13). Language and problem-link announcements still to narrate → R017.
+**Feedback:** 2026-09-10 — page change announced as "Take Homework Assignment" on arrival (R016 O13). `K` walks all nine problem links; Enter activates a problem but focus is not placed in the problem region and, with no headings, it is unclear how to get there → R017 O1, **T1-F2** (2.4.3, 1.3.1, Major). Language/pronunciation: nothing reported.
 
 ### W11 — Jump points on the assignment and the Ctrl+Shift chords (NV3, NV7) — KEY STEP
 
@@ -180,7 +180,7 @@ part on a multi-part problem (try on Problem 1 later, W15).
 (ETACore/ETAAccessibilityFunctions). If they work, several barriers below
 have a documented workaround; if the chords are eaten by the screen reader or
 the live region is silent, the path does not exist for the user. Feeds 4.1.3.
-**Feedback:** _(pending)_
+**Feedback (part 1):** 2026-09-10 — Tabbing reaches a visually hidden div: "Press tab to go to problems. Press enter to open the accessibility shortcuts menu.  button". Enter mounts new links (the shortcuts menu) that move around the page; a keyboard user can Tab to them, NVDA needed browse mode. Reviewer: "very confusing for a screen reader user" — discoverable only by tabbing into a hidden area → R017 O2, V-F8 re-rated Major. **Part 2:** Ctrl+Shift+5 moves NVDA to the alert region: "Multiple Choice. Press Ctrl+Shift+2 keys to read out your answer. Supplemental answer not available. Ctrl+Shift+4 keys for details. Ctrl+Shift+5 keys for instructions." — works. **Ctrl+Shift+2 reads raw MathJax HTML markup** (≈4,400 characters of span/style/attribute source around the answer "T₂ is less than T₁") → R017 O4, **V-F9** (4.1.3, 1.3.1; Blocker for the read-back). Evidence `runs/R017/R017-ctrlshift2-speech.txt`. Ctrl+Shift+4 (details): works, clean text. Ctrl+Shift+2 on a plain-text option: reads correctly; on a math option ("½ g"): raw markup again → V-F9 is math-specific.
 
 ### W12 — Read Problem 8 (multiple choice): statement, math, figure (NV4, NV5) — KEY STEP
 
@@ -197,7 +197,7 @@ describe it?
 **Why it matters:** 1.1.1 on the figures; and the solutions page shows the
 alt-text markup is broken by a missing quote (R014 O1) — this tells us
 whether the same authoring bug hits the student-facing view.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — M₁/M₂ announce as "table" in **focus mode**; in **browse mode** the math is read when the cursor enters the MathJax item → V-F10 withdrawn as a failure (advisory: user must know to switch modes). Figure: `G` finds no graphic, image cannot be right-clicked — empty alt → R017 O8, **V-F12** (1.1.1, Major). Ctrl+Shift+2 reads raw markup in both modes (V-F9 stands). **Still open:** the human-friendly read-out toggle (not seen).
 
 ### W13 — The answer radio buttons on Problems 8 and 9 (NV3, NV6) — KEY STEP (likely Blocker)
 
@@ -212,7 +212,7 @@ accessibility tree shows them nameless. If confirmed, a blind student cannot
 answer any multiple-choice part → T2 **Fail** for no-vision, severity
 Blocker. The vendor's own read-back (`Ctrl+Shift+2`, W11) may mitigate after
 selection but cannot substitute for knowing what you are selecting.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — Arrowing between the radios in browse mode: plain-text options read correctly (NVDA reads the adjacent cell); the math option "½ g" announces only "row 4 table 1" → R017 O6, **V-F11** (1.3.1, 4.1.2; Major, Blocker for math options). Focus mode (Shift+Tab from Submit): enters as "table"; arrowing auto-selects and announces "Radio Button Checked X of X" plus the column-two answer text; MathJax inside options does not reliably play, must leave focus mode to hear it; mixed text+math auto-read breaks → R017 O9, V-F11 updated.
 
 ### W-T1a — Branch P1-a: the same task in Accessibility Mode (S2) — KEY STEP
 
@@ -261,7 +261,7 @@ for the result? Then press `Ctrl+Shift+2`: does it read back your answer?
 **Why it matters:** 4.1.3 status messages and 3.3.1 error identification —
 the grade summary sits below the buttons; the live region is the vendor's
 answer to this.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — Submit opens a mini dialog that voices correct/failure with further options; works as expected. Focus moves to a div close control announced "click to activate" → R017 O10, NV7 pass for submission feedback. One P9 attempt used.
 
 ### W15 — Multi-part problem, symbolic entry (Problem 2, Part a) (NV6, MO1, MO5) — KEY STEP
 
@@ -277,6 +277,23 @@ they announce; (3) whether `Ctrl+Shift+1` moved you between Parts (a)–(c);
 through 45 buttons per part is a Major burden; the palette buttons carry
 titles, so they may be named but still in the way. Also the math read-out of
 "F sub NET".
+**Feedback:** 2026-09-10 — (2) Tab from the field lands directly on Submit: palette not in the tab order → R017 O12 (open: keyboard symbol entry, W20). (3) Ctrl+Shift+1 moves to the first hidden accessibility guide, not the previous part → O13, folded into V-F8. (4) Submit: "Submission Details  dialog  Correct Answer Continue to the next question Click To Activate Close and stay on this question - Click To Activate"; focus on "Continue to the next question, visited link" → O14, pass. Also captured the P9 repeat-answer dialog: "Submission Details  dialog  Incorrect Answer You have previously used this answer. Please refer to your submission history. Close and stay on this question - Click To Activate." — dialog role and close-control name are fine (O11). (1) Nothing identifies the field as F_NET — the MathJax prefix is not associated → R017 O15, **V-F13** (1.3.1, 3.3.2, 4.1.2; Major). Exact focus announcement still to capture. Reviewer (2026-09-10): the F_NET row is the calculator — a separate component (→ W15b); Ctrl+Shift+2 reads the field's content but there is no natural way to navigate to it (R017 O16).
+
+### W15b — The calculator widget (Problem 2 Part (a): answer field + palette) (NV3, NV6, MO1, MO2) — added 2026-09-10
+
+**Do:** From the top of Problem 2, try to reach the F_NET answer field by the
+natural routes only: Tab from the part's jump point; `E`/`F` (next edit /
+form field) in browse mode; then the palette buttons (β, θ, … 7 8 9, √, ←).
+Insert one symbol from the palette (e.g. θ) and one typed character; press
+`Ctrl+Shift+3` (answer with cursor position).
+**Tell me:** (1) Which route, if any, lands on the field and what it
+announces on focus; (2) whether the palette buttons are reachable by
+keyboard at all and what they announce; (3) whether a palette insertion is
+announced and appears in the read-back; (4) whether the read-back is clean
+text or markup (V-F9 pattern).
+**Why it matters:** this is the input surface for every symbolic and
+numeric part — the reviewer identified it as a separate component; V-F13
+and the keyboard-symbol question (R017 O12) are decided here.
 **Feedback:** _(pending)_
 
 ### W16 — Numeric entry with units (Problem 5) (NV6, MO2)
@@ -295,15 +312,30 @@ icon (image button) and open it — it explains the keyboard method. Follow
 it: move the four trial cards into the ranked area in some order, keyboard
 only, screen reader on. Press `Ctrl+Shift+3` (unmatched items) and
 `Ctrl+Shift+2` (your answer) along the way. Submit once.
-**Tell me:** (1) Was the statement itself reachable and readable? (2) The
-exact key method it describes, and whether it worked; (3) what each
-draggable card announces — the cards are block-diagram **images with empty
-alt**, so does the screen reader give you anything to rank by ("½m, 2F"…)?
-(4) Whether the ranked result was announced and what Submit reported.
+**Tell me:** (1) Was the form toggle (the accessibility icon at the top
+right of the part) reachable, and was it clear what it opens? (2) In the
+form (found 2026-09-10: a Bucket / Order / Item table with custom combo boxes,
+"Add Item", "Reset", and a ✖ per row — R017 O18, screenshot in R017): what
+each combo box announces on focus, on opening, while arrowing through the
+options, and after choosing; whether "Add Item" moves focus as its label
+promises; whether the ✖ delete has a name. (3) What the visual cards
+announce outside the form — they are images with empty alt, so does anything
+there give you "½m, 2F"? (4) Whether a placement or the ranked result is
+announced (live region), and what Submit reported.
 **Why it matters:** the vendor states sorting/ranking drag-and-drop is fully
 compliant (email 2026-08-17) while labeling drag-and-drop is not. This is
-the claim test. 2.1.1 / 2.5.7 / 1.1.1.
-**Feedback:** _(pending)_
+the claim test. 2.1.1 / 2.5.7 / 1.1.1 / 4.1.2.
+**Feedback:** 2026-09-10 — (1) Toggle is an exposed button, Tab-reachable,
+announced "Show drag and drop accessibility table button"; activating it
+moves focus into the form. (2) To hear the answer you must use Ctrl+Shift+2;
+the read-back reads only the Item column and runs rows together "like a long
+paragraph" with no announcement of a new item — "not unusable". (4) Placement
+/ ranking not announced in any designed way; derivable by navigating the
+table → R017 O19, **V-F14** (4.1.3, Minor). Vendor's ranking claim largely
+holds on the mechanism. Combo boxes and ✖ delete properly announced; the
+visual cards announce nothing outside the form (empty alt; the form is the
+accessible alternative); Submit → same "Submission Details" dialog, announces
+correct/incorrect. W17 complete.
 
 ### W18 — Free-body diagram (Problem 1, Part a) with the keyboard (MO1, MO2, NV3) — KEY STEP (vendor claim)
 

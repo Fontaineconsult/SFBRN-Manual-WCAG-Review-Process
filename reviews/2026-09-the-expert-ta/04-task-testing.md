@@ -57,7 +57,7 @@ confirmations, error messages, and other feedback are all in scope.
 | **Baselines run** | B5 (NVDA) on S2 — R016; B5 on S1 pending (R015); B2, B3 pending |
 | **Date(s) tested** | 2026-09-10 |
 
-**Sequence notes:** (verdict stays Not run until steps 4–5 are walked; no-vision on S2 so far points to Pass with barriers) 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Steps 4–5 → R017.
+**Sequence notes:** (verdict stays Not run until steps 4–5 are walked; no-vision on S2 so far points to Pass with barriers) 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Step 4 (R017): problem links work with `K`/Enter but focus does not move into the activated problem and there are no headings to find it (T1-F2); the hidden problems jump point mounts a shortcuts menu only after Enter, and NVDA users must switch to browse mode to use it (V-F8). Step 5 pending.
 
 #### Finding T1-F1
 
@@ -70,6 +70,17 @@ confirmations, error messages, and other feedback are all in scope.
 | **Severity** | Major |
 | **Evidence** | R016 (O2–O5); R005 `R005-axe.json` (0 headings / 0 landmarks, link-shaped skip) |
 
+#### Finding T1-F2
+
+| | |
+|---|---|
+| **Where** | Step 4, Take Assignment (S3) — moving from the problem navigator into a problem |
+| **Observed** | The problem links ("Problem N Click To Activate") are reachable with `K` and activate the problem, but focus stays where it was; the activated problem's content is not focused and the page has no headings, so a screen-reader user has no structural way to find the problem they just opened. The vendor's alternative — a visually hidden "Press tab to go to problems. Press enter to open the accessibility shortcuts menu" button that mounts jump links on Enter — requires discovering a hidden tab stop and, under NVDA, a mode switch (V-F8). |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 2.4.3, 1.3.1 |
+| **Severity** | Major |
+| **Evidence** | R017 O1, O2 |
+
 ---
 
 ### Task T2 — Answer and submit a problem — process P2, implements F2 and F8
@@ -78,11 +89,10 @@ confirmations, error messages, and other feedback are all in scope.
 |---|---|
 | **User story** | As a student, I need to enter an answer with the part's widget (multiple choice, numeric with keypad, symbolic expression, drag-and-drop ranking, free-body diagram), submit it, and perceive the result, using hints or feedback when stuck. |
 | **Verdict** | Not run / Pass / Pass with barriers / Fail |
-| **Baselines run** | B1, B2, B3 |
-| **Date(s) tested** | |
+| **Baselines run** | B5 (NVDA) on S3 — R017 (steps 1–3, multiple choice); B2, B3 pending |
+| **Date(s) tested** | 2026-09-10 |
 
-**Sequence notes:** (per-step observations; identify the step where each
-barrier occurs)
+**Sequence notes:** 2026-09-10, NVDA, S3 Problem 9 (multiple choice): step 1 select an option — possible; text options are heard, math options are not (V-F11). Step 2 Submit — a dialog opens and voices correct/incorrect with further options; focus moves to its close control (R017 O10) — works. Step 3 result perceivable — yes via the dialog. Read-back of the chosen answer (Ctrl+Shift+2) unusable for math (V-F9). Branch P2-b (symbolic, Problem 2 a): typing `m*a` and Submit works; "Submission Details" dialog announces Correct Answer and offers Continue / Close controls with proper names; Tab from the field goes straight to Submit (palette not in tab order — keyboard symbol entry still to check, W20); the field itself carries no label identifying it as F_NET (V-F13). Ctrl+Shift+1 goes to the top jump point, not the previous part (R017 O13). Branch P2-c (drag-and-drop ranking, Problem 3): an alternative form (exposed "Show drag and drop accessibility table" button, focus moves into a Bucket/Order/Item table with combo boxes) makes the ranking operable without dragging; placements are not announced and the Ctrl+Shift+2 read-back runs items together (V-F14, Minor). Branches P2-a, d–g pending (W16, W18, W19).
 
 (no findings yet)
 
@@ -252,11 +262,85 @@ differently.
 | | |
 |---|---|
 | **Where** | S2 (and S1) Class Management — the top-of-page "jump point" (`#top_of_page_jump_point`, `div role="button" tabindex="0"`), the first focusable control on every signed-in view |
-| **Observed** | The control has no accessible name (axe `aria-command-name` on all 14 views). On Class Management, Enter changes its text to "No Shortcuts" and navigates nowhere; no shortcuts menu opens. The user meets an unnamed button whose activation produces an unexplained state change. |
+| **Observed** | The controls have no accessible name (axe `aria-command-name` on all 14 views) — NVDA reads only their instruction text plus "button". On Class Management, Enter changes the text to "No Shortcuts" and navigates nowhere. On Take Assignment (R017 O2) the problems jump point is a **visually hidden** tab stop; Enter mounts the "accessibility shortcuts menu" links, which keyboard users can Tab to but NVDA users reach only after switching to browse mode. The reviewer judged the pattern "very confusing for a screen reader user": the bypass mechanism exists but is discoverable only by tabbing into a hidden area. The documented `Ctrl+Shift+1` (previous part) chord moves focus to the top jump point instead (R017 O13). |
 | **Affected users** | Screen reader users; keyboard users |
-| **WCAG criteria failed** | 4.1.2 |
-| **Severity** | Minor on this page (to be re-rated on Take Assignment, where the shortcuts menu is expected — R017) |
-| **Evidence** | R016 O12; R005 / R001 `*-axe.json` |
+| **WCAG criteria failed** | 4.1.2; 2.4.3 |
+| **Severity** | Major (re-rated 2026-09-10 on Take Assignment) — pending the keyboard run's check of focus visibility on the hidden stop (2.4.7) |
+| **Evidence** | R016 O12; R017 O2 (Speech Viewer: "Press tab to go to problems. Press enter to open the accessibility shortcuts menu.  button"); R005 / R001 / R004 `*-axe.json` |
+
+### View S3 — Take Assignment
+
+| | |
+|---|---|
+| **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
+| **Date tested** | 2026-09-10 |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+
+#### Finding V-F9
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — the `Ctrl+Shift+2` "read out your answer" function (live region `#calc-announce`), Problem 9 multiple choice with MathJax in the option text |
+| **Observed** | After selecting an option, `Ctrl+Shift+2` places the option's **raw MathJax HTML source** in the alert live region. NVDA reads roughly 4,400 characters of element, class, style and attribute markup ("span class MathJax_Preview style color inherit display none … data minus mathml ltmath xmlns quot http divided by divided by www.w3.org …") before and around the actual answer text (T₂ is less than T₁). `Ctrl+Shift+5` (instructions) works correctly on the same region, so the mechanism is sound and the defect is the content injected for math-bearing answers. This is the vendor's compensating read-back for parts whose radio buttons have no names (R004 O1), and its "human-friendly spoken math" claim. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.3, 1.3.1 |
+| **Severity** | Blocker for the read-back function (unusable output); Major for Task T2 |
+| **Evidence** | R017 O3, O4; `evidence/runs/R017/R017-ctrlshift2-speech.txt` |
+
+#### Finding V-F10
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — MathJax-rendered mathematics in problem statements (observed: Problem 8, M₁ and M₂) and in multiple-choice options (Problem 8, "½ g") |
+| **Observed** | **Withdrawn as a failure 2026-09-10.** First reading: M₁/M₂ announced as "table". Clarified: that is NVDA **focus-mode** behaviour; in browse mode the browse cursor enters the MathJax item and the math is read (MathJax's assistive MathML is exposed). The statement math is therefore programmatically available. Kept as an advisory: the answer widgets keep NVDA in focus mode, so a user must know to switch modes to read the math around them, and MathJax inside answer options does not reliably play in either mode (that part remains in V-F11). |
+| **Affected users** | — (advisory) |
+| **WCAG criteria failed** | none (withdrawn) |
+| **Severity** | — (advisory) |
+| **Evidence** | R017 O7 (revised), O9 |
+
+#### Finding V-F11
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — multiple-choice answer radio buttons (Problems 8 and 9) |
+| **Observed** | The radios have no accessible name (axe `label` ×5/6, R004 O1; accessibility tree shows unnamed radios). Browse mode: arrowing between options reads the adjacent cell text, so plain-text options are usable; a math option ("½ g") announces only "row 4 table 1". Focus mode (Shift+Tab from Submit, 2026-09-10): the group is entered as "table"; arrowing auto-selects and announces "Radio Button Checked X of X" plus the column-two answer text, but MathJax inside an option does not reliably play and the user must leave focus mode to hear it; the auto-read of an option mixing text and math breaks. `Ctrl+Shift+2` read-back of a math option is unusable in both modes (V-F9). |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 1.3.1, 4.1.2 |
+| **Severity** | Major (Blocker for parts whose options contain math) |
+| **Evidence** | R017 O6, O9; R004 `R004-axe.json` |
+
+#### Finding V-F12
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — the problem figure (observed: Problem 8, two blocks and a pulley; exploration found the same on Problems 6, 7, 9) |
+| **Observed** | NVDA `G` (next graphic) finds no graphic on the page; the figure cannot be right-clicked. The figure `<img>` has an **empty alt**, so it is treated as decorative and hidden from the screen reader, although the statement refers to it ("as shown") and it carries the physical setup. Problems 1, 4, 5 carry descriptive alt (exploration) — so this is per-problem authoring, and the solutions page shows a broken `alt=` quote on some figures (R014 O1). |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 1.1.1 |
+| **Severity** | Major |
+| **Evidence** | R017 O8; exploration 03 §2.6 (empty alt on P6–P9); R014 `R014-axe.json` |
+
+#### Finding V-F13
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — symbolic ("Equation") and, to be confirmed, numeric ("Algorithm") answer fields; observed on Problem 2 Part (a) |
+| **Observed** | Nothing announces the field as the F_NET answer: the visible "F_NET =" prefix is a MathJax expression next to the field, not a label associated with it. On multi-part problems several such fields sit on one page, so a screen-reader user cannot tell which part or quantity a given field asks for without reading the surrounding text in browse mode; the reviewer also found no natural navigation path to the field (R017 O16). The field is the top of the "calculator" widget (field + symbol/number palette), a custom editor rather than a native `<input>`, so the automated sweep did not catch it. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 1.3.1, 3.3.2, 4.1.2 |
+| **Severity** | Major |
+| **Evidence** | R017 O15 (exact focus announcement pending) |
+
+#### Finding V-F14
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — Problem 3 drag-and-drop ranking, the alternative "drag and drop accessibility table" form |
+| **Observed** | The alternative form is discoverable and operable: an exposed button ("Show drag and drop accessibility table") reachable by Tab moves focus into a Bucket / Order / Item table of combo boxes with "Add Item" and "Reset". But a placement, and the resulting ranking, are not announced in any designed way; the user can only derive the state by navigating the table. The `Ctrl+Shift+2` read-back reads only the Item column and runs the rows together "like a long paragraph" with no boundary between items, so the user cannot tell which item is being referenced. The combo boxes and the ✖ delete buttons are properly announced; the visual cards outside the form announce nothing (empty alt), the form's item descriptions being the only accessible rendering of them. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.3 |
+| **Severity** | Minor ("not unusable" — reviewer) |
+| **Evidence** | R017 O18 (DOM structure, `R017-p3-dnd-accessible-form.png`), O19 |
 
 ---
 

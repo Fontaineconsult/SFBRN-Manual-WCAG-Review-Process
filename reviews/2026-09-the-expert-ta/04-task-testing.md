@@ -88,11 +88,11 @@ confirmations, error messages, and other feedback are all in scope.
 | | |
 |---|---|
 | **User story** | As a student, I need to enter an answer with the part's widget (multiple choice, numeric with keypad, symbolic expression, drag-and-drop ranking, free-body diagram), submit it, and perceive the result, using hints or feedback when stuck. |
-| **Verdict** | Not run / Pass / Pass with barriers / Fail |
+| **Verdict** | Fail |
 | **Baselines run** | B5 (NVDA) on S3 — R017 (steps 1–3, multiple choice); B2, B3 pending |
 | **Date(s) tested** | 2026-09-10 |
 
-**Sequence notes:** 2026-09-10, NVDA, S3 Problem 9 (multiple choice): step 1 select an option — possible; text options are heard, math options are not (V-F11). Step 2 Submit — a dialog opens and voices correct/incorrect with further options; focus moves to its close control (R017 O10) — works. Step 3 result perceivable — yes via the dialog. Read-back of the chosen answer (Ctrl+Shift+2) unusable for math (V-F9). Branch P2-b (symbolic, Problem 2 a): typing `m*a` and Submit works; "Submission Details" dialog announces Correct Answer and offers Continue / Close controls with proper names; Tab from the field goes straight to Submit (palette not in tab order — keyboard symbol entry still to check, W20); the field itself carries no label identifying it as F_NET (V-F13). Ctrl+Shift+1 goes to the top jump point, not the previous part (R017 O13). Branch P2-c (drag-and-drop ranking, Problem 3): an alternative form (exposed "Show drag and drop accessibility table" button, focus moves into a Bucket/Order/Item table with combo boxes) makes the ranking operable without dragging; placements are not announced and the Ctrl+Shift+2 read-back runs items together (V-F14, Minor). Branches P2-a, d–g pending (W16, W18, W19).
+**Sequence notes:** 2026-09-10, NVDA, S3 Problem 9 (multiple choice): step 1 select an option — possible; text options are heard, math options are not (V-F11). Step 2 Submit — a dialog opens and voices correct/incorrect with further options; focus moves to its close control (R017 O10) — works. Step 3 result perceivable — yes via the dialog. Read-back of the chosen answer (Ctrl+Shift+2) unusable for math (V-F9). Branch P2-b (symbolic, Problem 2 a): typing `m*a` and Submit works; "Submission Details" dialog announces Correct Answer and offers Continue / Close controls with proper names; Tab from the field goes straight to Submit (palette not in tab order — keyboard symbol entry still to check, W20); the field itself carries no label identifying it as F_NET (V-F13). Ctrl+Shift+1 goes to the top jump point, not the previous part (R017 O13). Branch P2-c (drag-and-drop ranking, Problem 3): an alternative form (exposed "Show drag and drop accessibility table" button, focus moves into a Bucket/Order/Item table with combo boxes) makes the ranking operable without dragging; placements are not announced and the Ctrl+Shift+2 read-back runs items together (V-F14, Minor). Branch P2-d (free-body diagram, Problem 1 a): Add Force, angle/length via the force table, Ctrl+Shift+3 totals and Submit all completed keyboard-only with NVDA — pass, vendor claim confirmed (R017 O20). Branch P2-a (numeric with units, Problem 5): unit radios named and operable; the entry area is the same non-control `div` as the symbolic part (V-F13). Branch P2-e (Hint / Feedback): deductions spoken, but the inserted hint is not announced and cannot be found easily (V-F15). Branch P2-f (I give up!): confirmation modal with Continue / Cancel — pass. Branch P2-g (detailed view / Ctrl+Shift+2): read-back covered under V-F9. Screen-reader pass of T2 complete. **Verdict Fail** (reviewer, 2026-09-10): a screen-reader user cannot complete the assignment because multiple-choice parts whose options contain math cannot be answered knowingly (V-F11, V-F9) — "if they can't complete the entire problem set because a single problem is inaccessible then the whole problem set is not accessible." Keyboard-only (R018): ~20 Tab stops to the first answer field, focus visible on every stop, no traps, palette-only symbols (θ, β, √) enterable by keyboard; the jump-point stops are Enter-to-open hidden menus rather than skips. Low-vision pending.
 
 (no findings yet)
 
@@ -274,7 +274,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
 | **Date tested** | 2026-09-10 |
-| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
 
 #### Finding V-F9
 
@@ -324,12 +324,12 @@ differently.
 
 | | |
 |---|---|
-| **Where** | S3 Take Assignment — symbolic ("Equation") and, to be confirmed, numeric ("Algorithm") answer fields; observed on Problem 2 Part (a) |
-| **Observed** | Nothing announces the field as the F_NET answer: the visible "F_NET =" prefix is a MathJax expression next to the field, not a label associated with it. On multi-part problems several such fields sit on one page, so a screen-reader user cannot tell which part or quantity a given field asks for without reading the surrounding text in browse mode; the reviewer also found no natural navigation path to the field (R017 O16). The field is the top of the "calculator" widget (field + symbol/number palette), a custom editor rather than a native `<input>`, so the automated sweep did not catch it. |
-| **Affected users** | Screen reader users |
-| **WCAG criteria failed** | 1.3.1, 3.3.2, 4.1.2 |
+| **Where** | S3 Take Assignment — the formula/number entry area of symbolic ("Equation") and numeric ("Algorithm") parts; observed on Problem 2 Part (a) and Problem 5 |
+| **Observed** | The entry area is not a form control: it is a `div` (`<div class="problemanswer" id="problem_answer">332 fact( exp( | ) )</div>`, reviewer-pasted) holding the typed expression and a blinking-caret span — no role, no name, no value exposed, not in the Tab order. Nothing announces it as the F_NET (or other quantity) answer: the visible "F_NET =" prefix is a MathJax expression beside it, not an associated label. A screen-reader user cannot reach it directly — only by tabbing to a neighbouring element and arrowing into it in browse mode — and hears its content only through `Ctrl+Shift+2` (empty: "Alert your answer in degrees"; populated: read left to right with no nesting conveyed). The caret can be moved with on-screen ←/→/HOME/END buttons; its position is not announced as it moves, but `Ctrl+Shift+3` reports it on request. Typing works and the keypad buttons are Tab-reachable, so entry is possible once the area is found. |
+| **Affected users** | Screen reader users; keyboard users (no focusable, visible entry stop) |
+| **WCAG criteria failed** | 4.1.2, 1.3.1, 3.3.2, 2.4.3 |
 | **Severity** | Major |
-| **Evidence** | R017 O15 (exact focus announcement pending) |
+| **Evidence** | R017 O15, O16, O17, O22 |
 
 #### Finding V-F14
 
@@ -341,6 +341,17 @@ differently.
 | **WCAG criteria failed** | 4.1.3 |
 | **Severity** | Minor ("not unusable" — reviewer) |
 | **Evidence** | R017 O18 (DOM structure, `R017-p3-dnd-accessible-form.png`), O19 |
+
+#### Finding V-F15
+
+| | |
+|---|---|
+| **Where** | S3 Take Assignment — the **Hint** button (and, by the same mechanism, Feedback) on any part |
+| **Observed** | Activating Hint inserts the hint text below the problem area, but nothing is announced: NVDA's Speech Viewer at that moment shows only "table with 3 rows and 1 column Submissions Info." The reviewer found no clear way to navigate to the inserted hint. Requesting a hint costs a deduction (the percentages are spoken), so a screen-reader user pays for content they are not told has arrived and cannot easily find. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.3, 2.4.3 |
+| **Severity** | Major |
+| **Evidence** | R017 O23; `evidence/runs/R017/R017-hint-speech.txt` |
 
 ---
 

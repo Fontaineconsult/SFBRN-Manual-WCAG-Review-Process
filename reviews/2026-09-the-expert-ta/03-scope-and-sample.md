@@ -196,8 +196,9 @@ been seen in the product yet:
   mitigation. Verify it exists, what it excludes, and whether it defaults on;
   this determines whether the TAAP faculty remediation is enforceable.
 - **Free-body-diagram drawing question** — vendor claims fully accessible.
-  Verify under no-vision (JAWS) and motor (keyboard-only) checks; a drawing
-  interaction that passes both would be unusual.
+  **Resolved 2026-09-10 (R017 O20):** Add Force, angle/length via the force
+  table, the force-totals read-back and Submit all completed keyboard-only
+  under NVDA on Problem 1(a) — claim confirmed; no finding.
 - **Sorting and ranking drag-and-drop** — vendor claims compliant. Verify the
   keyboard alternative (2.1.1) and the announced state changes (4.1.3).
 - **Context-specific keyboard menus while tabbing** (modelled on ada.gov) —

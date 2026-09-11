@@ -11,7 +11,7 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA 2026.2, B5); assistant records |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | **Broken** — reviewer's decision 2026-09-10: "if they can't complete the entire problem set because a single problem is inaccessible then the whole problem set is not accessible." Blocker-level: multiple-choice parts whose options contain math (V-F11 + V-F9). Completable with barriers: text-only multiple choice, symbolic/numeric entry (V-F13), drag-and-drop ranking (V-F14), free-body diagram (pass), hints (V-F15), submission dialogs (pass). |
 
 ## Checks (no-vision)
 
@@ -24,11 +24,11 @@ run's Result is set. Fails cite observation IDs.
 | NV2 — Headings and landmarks exist, are hierarchical, and support navigation | fail | O1 — no headings; after activating a problem link there is no structural way to reach the problem region |
 | NV3 — Every control announces an accurate name, role, and value/state | fail | O2 (jump point unnamed), O6/O9 (answer radios: no name; focus mode reads the column-two text but math in options does not reliably play; mixed text+math auto-read breaks) |
 | NV4 — Images announce appropriate alternatives; decorative images are silent | fail | O8 — the Problem 8 figure is not exposed: `G` finds no graphic, the image cannot be right-clicked; the diagram is hidden from the screen reader. Math (O7) is readable in browse mode — not an NV4 failure |
-| NV5 — Reading order matches the meaning of the visual order | | |
+| NV5 — Reading order matches the meaning of the visual order | pass | no order problem reported while arrowing through statement → parts → answer area → Submit; the answer area's boundaries are simply unmarked (V-F13) |
 | NV6 — Form fields announce labels and instructions; errors are announced and identified | fail | O6/O9 (radios unlabeled), O15 (symbolic answer field: nothing identifies it as F_NET — the visible MathJax prefix is not associated) |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | fail | O3 — Ctrl+Shift+5 works (focus moves to the alert region, instructions read); O4 — Ctrl+Shift+2 "read out your answer" puts raw MathJax HTML markup into the alert region: NVDA reads element and attribute source instead of the answer |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | | |
-| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | | |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | fail | O3 — Ctrl+Shift+5 works; O4 — Ctrl+Shift+2 reads raw MathJax markup for math answers (V-F9); O10/O14 — submission dialogs announced correctly; O19 — drag-and-drop placements not announced (V-F14); O23 — inserted hint not announced (V-F15) |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | fail | O6/O9 — a math-bearing answer option is identified to the screen reader only by its table position ("row 4 table 1"); O23 — the inserted hint is findable only by its position below the problem |
+| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | partial | page has no `lang` attribute (R004 O2 — technical 3.1.1 failure); no mispronunciation reported with an English synthesizer voice |
 
 ## Observations
 
@@ -80,6 +80,16 @@ Format:
   - Recon for W17 (to be verified by the reviewer, not a finding): do the custom combo boxes announce role, name, expanded state and the chosen option under NVDA; is a placement announced; is the form itself discoverable (the toggle is an `<img alt="Show/Hide Accessibility Statement">` inside a clickable element); does the ✖ have a name (AX tree shows 4 unnamed buttons on this state).
 - O19 [clarified] (state: Problem 3, drag-and-drop alternative form, NVDA): (1) the toggle is an exposed **button**, reachable by Tab, announced "Show drag and drop accessibility table button"; activating it **moves focus** into the form. (2) To hear the current answer the reviewer must use `Ctrl+Shift+2`; the read-back reads **only the Item column** and runs the rows together "like a long paragraph" with no announcement of where a new row/item begins — "not unusable", but the user cannot tell which item is which. (4) A placement or the ranked result is **not announced in any designed way**; it can be derived by navigating the table.
   - Classified: NV7 / WCAG 4.1.3 (status of the ranking not conveyed; read-back lacks item boundaries) / **Minor** → finding V-F14. The vendor's "ranking drag-and-drop is fully compliant" claim largely holds on the mechanism (an operable, focus-managed alternative form exists) with these read-back gaps. Answered: the combo boxes are properly announced (role, name, options, choice); the ✖ delete button is properly announced; the visual cards outside the form announce **nothing** (empty alt — the descriptions exist only in the form, which serves as the accessible alternative, so not a separate 1.1.1 failure); Submit opens the same "Submission Details" dialog announcing correct/incorrect (one Problem 3 attempt consumed). W17 complete.
+- O20 [clarified] (state: Problem 1 Part (a), free-body diagram tool, keyboard only + NVDA): Add Force, setting the force's angle and length through the force table, the `Ctrl+Shift+3` force-totals read-back, and Submit were **all successful without a mouse**; the reviewer calls the read-back feature "quite robust". (One Problem 1(a) attempt consumed.)
+  - Classified: NV3, NV6, MO1, MO2, MO7 / **pass** — the vendor's claim that the FBD drawing question is accessible is confirmed for keyboard + NVDA on this problem. No finding. (axe's `empty-table-header` incomplete on the force table, R004 O11 → dismissed: headers announced in use.)
+- O21 [clarified] (state: Problem 5, numeric part with the function keypad — the "calculator"): all keypad buttons are exposed, named and **Tab-reachable**, but only by linear Tab — no arrow-key movement within the keypad. (Contrast O12: on Problem 2's symbol palette Tab skipped straight to Submit.) The on-screen ←, →, HOME and END buttons move the entry cursor. The unit radio buttons **function as expected** (named).
+  - Classified: MO1, MO2 / pass for reachability; advisory on tab-order burden (≈45 stops per part, no arrow navigation) and on the inconsistency between problem types; not a WCAG failure by itself.
+- O22 [clarified] (state: Problem 5, the formula entry area): the reviewer finds **no way to reach the entry field directly** — only by tabbing to the nearest element and arrowing in (browse mode). The entry area is not a form control at all: reviewer-pasted markup `<div class="problemanswer" id="problem_answer">332&nbsp;fact(&nbsp;exp(<span style="color: red; text-decoration: blink">|</span>&nbsp;)&nbsp;)</div>` — a `div` holding the typed expression and a blinking-caret span. Its content is heard only via `Ctrl+Shift+2`: empty → "Alert your answer in degrees" (units context), populated → read left to right, "not PEMDAS" (no nesting/structure conveyed). The caret can be moved with the on-screen buttons, but there is **no feedback on where the caret is** within the formula while authoring.
+  - Classified: NV3, NV6, MO1 / WCAG 4.1.2 (the entry area has no role, name, value or focusable state), 1.3.1, 2.4.3 (not in the focus order; unreachable directly) / **Major** → folded into **V-F13**, which now covers the whole entry area, not just its label. Answered: **`Ctrl+Shift+3` does report where the caret is** — so caret position is available on demand through the vendor's chord, not through the control itself; V-F13's "no caret feedback" narrows to "no feedback while moving the caret; available on request via Ctrl+Shift+3".
+- O23 [clarified] (state: a problem with hints available, **Hint** button activated): the hint text appears below the problem area but **is not announced** when the button is pressed, and the reviewer found no clear way to navigate into it. Speech Viewer at the moment of activation (`R017-hint-speech.txt`): "table  with 3 rows and 1 column  Submissions Info." — NVDA reported only the Submissions Info table, not the hint. The deduction percentages (hints / feedback) **are** spoken.
+  - Classified: NV7 / WCAG 4.1.3 (content added in response to the user's action with no status message), 2.4.3 (focus not managed to the new content) / **Major** (a hint costs a deduction; the screen-reader user pays it and hears nothing) → finding V-F15
+- O24 [clarified] (state: **I give up!** activated): a modal opens with a warning and Continue / Cancel links — confirmation before forfeiting exists.
+  - Classified: NV7, CO4 / pass (3.3.4-style confirmation present; no finding)
 
 ## Notes
 
@@ -94,7 +104,8 @@ Conventions: ontology/testing-tools.md.)
 
 - `R017-ctrlshift2-speech.txt` — reviewer's NVDA Speech Viewer capture of the Ctrl+Shift+5 instruction and the Ctrl+Shift+2 answer read-back (raw MathJax markup), copied from `evidence/mathjax.txt`
 - `R017-p3-dnd-accessible-form.png` — Problem 3 with the drag-and-drop alternative form open (assistant screenshot over CDP during the reviewer's session)
+- `R017-hint-speech.txt` — reviewer's Speech Viewer capture on pressing Hint (only "table with 3 rows and 1 column Submissions Info." spoken), copied from `evidence/hint.txt`
 
 ## Findings raised from this run
 
-- T1-F2 (04 §A); V-F8 re-rated, V-F9, V-F11, V-F12, V-F13, V-F14 (04 §B); V-F10 withdrawn (advisory)
+- T1-F2 (04 §A); V-F8 re-rated, V-F9, V-F11, V-F12, V-F13, V-F14, V-F15 (04 §B); V-F10 withdrawn (advisory)

@@ -21,3 +21,4 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R015 | 2026-09-10 11:17 | S1 | https://dei56mo.theexpertta.com/common/default.aspx | no-vision | nvda | B5 | T1 | Daniel Fontaine (reviewer, NVDA 2026.2); assistant records |
 | R016 | 2026-09-10 12:09 | S2 | https://dei56mo.theexpertta.com/common/default2.aspx | no-vision | nvda | B5 | T1 | Daniel Fontaine (reviewer, NVDA 2026.2); assistant records |
 | R017 | 2026-09-10 12:50 | S3 | UI: Class Management (Accessibility Mode) → row Actions select → Take Assignment → Go | no-vision | nvda | B5 | T1 | Daniel Fontaine (reviewer, NVDA 2026.2, B5); assistant records |
+| R018 | 2026-09-10 16:38 | S3 | UI: Class Management → assignment row → Take Assignment | motor | keyboard | B2 | T2 | Daniel Fontaine (reviewer, keyboard only, NVDA off); assistant records |

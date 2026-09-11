@@ -132,7 +132,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.4.3 Focus Order (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F2, V-F8
+- **Task findings:** T1-F2, V-F8, V-F13, V-F15
 - **Remarks:** [provisional] 2026-09-10 NVDA on S3: activating a problem link does not move focus into the problem; the vendor's jump-point menu mounts links outside the natural focus path and is itself a hidden tab stop. Vendor-claim discrepancy.
 
 ### 2.4.4 Link Purpose (In Context) (Level A)
@@ -358,5 +358,5 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.3 Status Messages (Level AA)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F9, V-F14 (Minor)
+- **Task findings:** V-F9, V-F14 (Minor), V-F15
 - **Remarks:** [provisional] 2026-09-10 NVDA on S3: the instruction read-out (Ctrl+Shift+5) is announced correctly via the alert region; the answer read-out (Ctrl+Shift+2) injects raw MathJax markup for math-bearing options, so the status message is unusable; on the drag-and-drop alternative form, placements are not announced and the read-back runs items together. Submission-result dialogs are announced correctly (R017 O10, O14). Vendor-claim discrepancy.

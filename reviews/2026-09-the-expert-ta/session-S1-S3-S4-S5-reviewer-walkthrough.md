@@ -236,7 +236,9 @@ review has to say (a) whether a student can complete T1 here when standard
 mode fails, and (b) that the accessible version still has no headings or
 landmarks (R005 O4). **Afterwards, switch back with "Non-Accessibility
 Page"** — the mode is stored on the shared account.
-**Feedback:** _(pending)_
+**Feedback:** see the dated feedback above (S2 pass recorded under R016).
+Mode was still Accessibility Mode when the reviewer moved on to Take
+Assignment; switch back before the S1 (standard-mode) pass under R015.
 
 ---
 
@@ -294,7 +296,16 @@ text or markup (V-F9 pattern).
 **Why it matters:** this is the input surface for every symbolic and
 numeric part — the reviewer identified it as a separate component; V-F13
 and the keyboard-symbol question (R017 O12) are decided here.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 (done on Problem 5's function keypad) — All calculator
+buttons exposed, named and Tab-reachable, linear Tab only (no arrow keys
+within the keypad). No direct way to reach the entry area except tabbing to
+the nearest element and arrowing in; the area is a `div.problemanswer`
+(reviewer-pasted markup) with a blinking-caret span — not a form control.
+Ctrl+Shift+2 reads it: empty "Alert your answer in degrees", populated
+left-to-right "not PEMDAS". Caret moves with on-screen ←/→/HOME/END, but no
+feedback on where the caret sits in the formula → R017 O21, O22; **V-F13
+expanded** (4.1.2, 1.3.1, 3.3.2, 2.4.3; Major). Ctrl+Shift+3 does report
+the caret position on request. W15b complete.
 
 ### W16 — Numeric entry with units (Problem 5) (NV6, MO2)
 
@@ -303,7 +314,9 @@ and choose a **unit radio button** next to it, then Submit.
 **Tell me:** Announcements for the field, the function keypad (sin(), cos()
 …) if you tab through it, and the unit radios (are *these* radios named,
 unlike Problems 8/9?). Result announcement after Submit.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — Unit radios function as expected (named). Keypad
+and entry area: see W15b. Submit result on this problem not narrated
+(dialog behaviour already established at W14/W15).
 
 ### W17 — Drag-and-drop ranking (Problem 3) with the keyboard (MO7, NV3) — KEY STEP (vendor claim)
 
@@ -349,7 +362,10 @@ the table headers and controls announce (axe could not tell whether the
 **Why it matters:** the vendor says the FBD question "was difficult to
 implement" but is accessible. A drawing task that passes both keyboard and
 screen reader would be unusual; document exactly how far it goes.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — All of it succeeded without a mouse (Add Force,
+angle/length via the force table, Ctrl+Shift+3 totals, Submit); "the
+readback feature is quite robust" → R017 O20, pass; vendor claim confirmed
+for this problem. axe's empty-table-header incomplete (R004 O11) dismissed.
 
 ### W19 — Hints, Feedback, "I give up!" (NV7, CO3, CO4)
 
@@ -359,7 +375,11 @@ part you don't mind losing, **I give up!**.
 **Tell me:** What each announced, whether the deduction percentages ("4%
 deduction per hint") were spoken, and whether "I give up!" asked for
 confirmation before forfeiting the part.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 — Hint: the hint appears below the problem area but
+is not announced (Speech Viewer: "table with 3 rows and 1 column Submissions
+Info." — `R017-hint-speech.txt`) and there is no clear way to navigate into
+it → R017 O23, **V-F15** (4.1.3, 2.4.3; Major). Deductions are spoken. "I give
+up!" opens a modal with a warning and Continue / Cancel links → O24, pass.
 
 ### W20 — Keyboard-only pass over the whole assignment page (MO1–MO5, MO9, MO11)
 
@@ -371,7 +391,15 @@ Tab/Shift+Tab? Are the small ⊞/⋮/keypad targets at least 24 px?
 **Tell me:** The stop count; any stop with no visible focus ring; any place
 focus got stuck or jumped somewhere unexpected; whether the first Tab stop is
 a usable skip (the jump point) — this settles 2.4.1 for the standard pages.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-10 (NVDA off) — (1) ~20 Tab stops to the first answer
+field. (2) No hidden stops: focus visible throughout. (3) No traps. (4) The
+jump-point stops are not skips — each is an opportunity to press Enter and
+open a hidden accessibility menu, and several of them do the same thing.
+(5) θ / β / √ entered on Problem 2 without the mouse — success → R018
+(MO1–MO5, MO7 pass; MO11 partial: mechanism exists but is not a skip link).
+Reviewer's ruling on R017's Result: **Broken** — "if they can't complete the
+entire problem set because a single problem is inaccessible then the whole
+problem set is not accessible." T2 verdict → Fail.
 
 ---
 

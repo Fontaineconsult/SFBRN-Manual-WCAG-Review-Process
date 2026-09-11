@@ -87,9 +87,15 @@ a false Major finding.
      has no manifest, so a machine change or Python upgrade loses it.
      Fix: `python -m pip install websocket-client`.
    - `%LOCALAPPDATA%\sfbrn-a11y-chrome` exists **and** port 9222 answers
-     **and** the tab is authenticated — see testing-tools.md §axe-core.
+     **and** the tab is authenticated **and** `/json` lists **zero
+     `chrome-extension://` targets** — see testing-tools.md §axe-core.
      The profile can vanish; SSO usually re-authenticates it silently, so
-     check rather than asking the reviewer to sign in.
+     check rather than asking the reviewer to sign in. Launch it only
+     with the full flag set in that doc: without `--disable-extensions
+     --disable-sync`, Chrome's first-run promo syncs the reviewer's
+     personal extensions into the profile (2026-08-14: 22 of them,
+     including Stylus and SkipTo Landmarks, which respectively falsify
+     contrast measurement and *add* the skip link 2.4.1 is about).
 
 Never trust memory or this file for review state — the CLI reads the files
 live.

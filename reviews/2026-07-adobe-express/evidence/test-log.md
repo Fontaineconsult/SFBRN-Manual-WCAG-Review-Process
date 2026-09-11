@@ -40,3 +40,9 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R034 | 2026-08-13 15:43 | S2 | https://new.express.adobe.com/explore/templates | cognition | inspection | — | — | reviewer (D. Fontaine), cross-view closure |
 | R035 | 2026-08-13 15:43 | S3 | https://new.express.adobe.com/id/urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86 | cognition | inspection | — | — | reviewer (D. Fontaine), cross-view closure |
 | R036 | 2026-08-13 15:43 | S4 | https://new.express.adobe.com/your-stuff/files/recent?filter=express | cognition | inspection | — | — | reviewer (D. Fontaine), cross-view closure |
+| R037 | 2026-08-14 11:30 | S3 | https://new.express.adobe.com/id/urn:aaid:sc:US:b1ab530f-f097-4a5f-8a6f-b8923fa65115 | no-vision | nvda | B4 | T2 | reviewer (D. Fontaine), NVDA 2026.1.1 + Chrome 151.0.7922.138 |
+| R038 | 2026-08-14 12:39 | S3 | UI: Home -> new blank document -> three text objects 'text 1' / 'text 2' / 'text 3' (LOCATOR UNRESOLVED - /id/urn:aaid:sc:US:... to be pasted by reviewer, 2026-08-14) | no-vision | nvda | B4 | T2 | reviewer (D. Fontaine), NVDA 2026.1.1 |
+| R039 | 2026-08-14 13:31 | Learn | https://new.express.adobe.com/learn | no-hearing | inspection | — | — | reviewer (D. Fontaine) - cursory pass |
+| R040 | 2026-08-14 13:50 | S1 | 5-page sample across the app (exact page list to be confirmed); counter-example measured on S1 Home | — | wave | — | — | reviewer (D. Fontaine) |
+| R041 | 2026-08-14 14:06 | S4 | UI: cross-cutting error-path probe across S1 Upload, S3 editor, S4 Your stuff (delete modal) and profile settings - session-error-paths-reviewer-walkthrough.md | — | inspection | — | — | reviewer (D. Fontaine) |
+| R042 | 2026-08-14 14:14 | S1 | https://new.express.adobe.com/ - plus S2 /explore/templates, S3 /id/urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86, S4 /your-stuff/files/recent (four-view sweep) | — | inspection | — | — | assistant (CDP structural measurement, Chrome 151, extensions inert) |

@@ -11,7 +11,9 @@
 | **Tool** | zoom |
 | **Baseline** | B3 |
 | **Tester** | assistant (CDP 320px device emulation per testing-tools §zoom) |
-| **Result** | Not set — reflow/spacing closed by measurement; LV4/LV5 (contrast), LV6 (hover), LV7 (focus), LV8 (landscape shot stalled) remain — see O1 |
+| **Result** | Works with issues |
+
+**Result reasoning** (set 2026-08-14). LV1/LV2/LV3/LV7/LV8 pass (reflow, no loss at zoom, spacing, focus at 400%, both orientations); **LV6 passes** on the reviewer's hover confirmation. LV4/LV5 carry the product-wide contrast findings V-F2 and V-F18 rather than S2-specific defects.
 
 ## Checks (low-vision)
 
@@ -25,9 +27,9 @@ run's Result is set. Fails cite observation IDs.
 | LV3 — The view tolerates text-spacing overrides without loss | partial | O1 — no-overflow metric passes; visual confirmation shot stalled (instrument) |
 | LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | | |
 | LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | |
-| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | | |
-| LV7 — Focus indicator remains visible and unobscured at zoom | | |
-| LV8 — The view works in both portrait and landscape | | |
+| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | pass | O-LV17 (R002) — reviewer confirmed with a real pointer 2026-08-14: *"no issues with hover"*. The product-wide flyout finding V-F1 is **withdrawn**; nothing view-specific was ever raised here |
+| LV7 — Focus indicator remains visible and unobscured at zoom | pass | O-LV15 — reviewer at **400% zoom, 2026-08-14**: *"everything is navigable still"*. Nothing is lost or trapped behind sticky content at that magnification → closes **2.4.11 Focus Not Obscured** |
+| LV8 — The view works in both portrait and landscape | pass | O-LV14 — landscape 900x400 by CDP emulation, 2026-08-14: **zero horizontal overflow**. Closes the check that previously stalled on an unstable screenshot — the metric answers it without one |
 
 ## Observations
 
@@ -47,6 +49,38 @@ Format:
   reason).
   - Classified: LV1, LV2 / 1.4.10, 1.4.4 / pass; LV3 / 1.4.12 / partial —
     no finding. Remaining rows (LV4–LV8) queued for measurement/reviewer.
+
+- **O-LV14 [classified]** (2026-08-14, assistant — CDP measurement on the
+  clean debug profile, Chrome 151, extensions inert): low-vision
+  measurement pass on S2.
+
+  | Condition | Horizontal overflow |
+  |---|---|
+  | Baseline 1280 | 0px |
+  | **Landscape 900x400** | **0px** |
+  | **Text scaled 2x (text-only)** | **0px** |
+
+  - **LV8 / 1.3.4 closes: pass.** Landscape holds with no overflow. The
+    earlier attempt stalled on a screenshot that never stabilised; the
+    metric settles it without one.
+  - **1.4.4 Resize Text: the layout holds, but text clips.** Under
+    text-only doubling, horizontal overflow stays at zero — yet
+    **17 text block(s)** overflow fixed-height containers whose
+    `overflow` is hidden: category `sp-card`s need 219-364px in 120px containers.
+  - **Outcome is Supports regardless**, because 1.4.4 is satisfied by
+    browser zoom (Understanding 1.4.4) and this product reflows cleanly at
+    the 320px/400% equivalence. The clipping affects users who scale
+    **text only** rather than zooming the page — a distinct group, and one
+    that skews low-vision. **Wants a reviewer visual check** to see what a
+    user actually gets: truncation, ellipsis, or a scrollbar.
+  - **Instrument honesty:** an earlier version of this measurement
+    reported 57 clipped blocks on S1. Those were
+    screen-reader-only elements (`height:1px`, clipped) whose scrollHeight
+    explodes when fonts are scaled — **not** visible clipped text. The
+    filter now excludes zero-area and visually-hidden nodes. The first
+    number was discarded rather than recorded.
+  - Classified: LV8 / 1.3.4 / pass; LV1 / 1.4.4 / pass with a recorded
+    caveat — no finding
 
 ## Notes
 

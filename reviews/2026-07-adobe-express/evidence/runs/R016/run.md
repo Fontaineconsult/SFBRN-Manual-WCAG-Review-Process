@@ -11,24 +11,39 @@
 | **Tool** | nvda |
 | **Baseline** | B4 |
 | **Tester** | reviewer (D. Fontaine), NVDA 2026.1.1 + Chrome 150.0.7871.187 |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+**Result reasoning** (set 2026-08-14 from the completed check grid). The
+reviewer **completed every step attempted**: created a blank document,
+renamed it by keyboard, added text with correct announcement and automatic
+edit mode, and inserted an image. Not *Works*: four checks fail (NV3, NV4,
+NV7, NV8) — six of seven category tabs are unnamed, image insertion and AI
+generation report nothing, and selected objects carry no identity. **Scope
+note:** this run covers T2 steps 0–2 only; steps 3–5 are R037, and T2's
+*verdict* is the reviewer's (W17), not this Result.
 
 ## Checks (no-vision)
 
 Outcome: pass / fail / partial / n/a — every row must get one before the
 run's Result is set. Fails cite observation IDs.
 
+Grid completed 2026-08-14 by classifying this run's own observations. This
+is the **task walk** for T2 steps 0–2 (create, add text, add an image);
+steps 3–5 are **R037**. Positives are recorded in the same rows as the
+failures — this run found several, and a grid showing only defects would
+misrepresent it.
+
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NV1 — Page/view title identifies its purpose | | |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
-| NV3 — Every control announces an accurate name, role, and value/state | | |
-| NV4 — Images announce appropriate alternatives; decorative images are silent | | |
-| NV5 — Reading order matches the meaning of the visual order | | |
-| NV6 — Form fields announce labels and instructions; errors are announced and identified | | |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | | |
-| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | | |
+| NV1 — Page/view title identifies its purpose | partial | O3 — arrival in the editor **is** announced ("Loading Document, Untitled, Untitled"), the first announced view transition found anywhere in this review. Two defects remain: the announcement is repetitive, and **focus placement is never stated**, so the user knows a document loaded but not where they are in it |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | partial | O5 — the **Text panel is properly structured, with headings per button type** (a genuine positive). Against it, O9 — the **layers region appears in no NVDA navigation view** and is reachable only by traversing the tab order, which matters because it is the sole route to existing objects |
+| NV3 — Every control announces an accurate name, role, and value/state | **fail** | O1 — in **six of the seven** category tabs every option announces as "Clickable Figure Template Button", with no name to tell them apart; O8 — a selected object reports only **"Canvas Graphic"**: a generic role with no identity, so "it is not possible to tell which element is being edited". Real partial credit against these: the **Text control is discoverable in NVDA's lists and by Tab** (O5), and **renaming is fully operable by keyboard** (O4) |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | **fail** | O1 — chooser options are distinguished **only** by their thumbnail, which carries no text alternative; O8 — an inserted image announces as "Canvas Graphic" with no alt text, content or identity. Recorded separately and deliberately **not** as a WCAG outcome: O10, no way to author alt text at all — that is 508 §504.2/.3, not 1.1.1 (see 06 §Concerns) |
+| NV5 — Reading order matches the meaning of the visual order | partial | O6/O9 — the run's structural insight: the same view reads very differently depending on arrival. **Creating** content puts the user directly into an announced, auto-entered edit mode; **returning** to it requires a tab traversal to stop 32 through a region exposed in no navigation view. The order tracks how the object was reached, not what the design looks like |
+| NV6 — Form fields announce labels and instructions; errors are announced and identified | partial | O4 — the document-name field is reachable, labelled and operable by keyboard and NVDA, and the rename succeeded. **No error path was exercised** in this session, so the error half of the row is untested rather than passed |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | **fail** | O7 — **neither image insertion nor "Generate with AI" reports anything**: no progress, no completion, no failure. Worst on AI generation, an asynchronous operation of many seconds where "working", "finished" and "failed" are indistinguishable → T2-F2. The inconsistency is what makes it clear-cut: adding *text* one step earlier announced "edit selected add text" (O5), and document arrival announced too (O3) — the capability exists and is applied unevenly |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | **fail** | O8 — objects of different types are indistinguishable by ear; O1 — chooser options differ only by thumbnail. In both cases the sole differentiator is visual, which is exactly what this check exists to catch |
+| NV9 — Language of the view (and passages) is announced/pronounced from the correct language | partial | Page language correctly declared — `<html lang="en-US">`, measured over CDP 2026-08-14. Instrument evidence, not an ear-check: no mispronunciation pass and no passage-level `lang` audit |
 
 ## Observations
 

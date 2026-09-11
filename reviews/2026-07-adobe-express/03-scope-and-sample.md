@@ -102,6 +102,37 @@ restarts. Consequences to manage rather than discover later:
 - If a finding disappears after the upgrade, that is a browser-behaviour
   change, not a product fix — re-verify rather than withdrawing it.
 
+**The upgrade landed — Chrome 151.0.7922.138, confirmed 2026-08-14** over
+CDP (`/json/version`) on the debug-profile window, not from the staged
+binary. It is a later build than the 151.0.7922.76 that was staged. The
+version line, per the instruction above:
+
+| Instrument version | Runs executed on it |
+|---|---|
+| Chrome 150.0.7871.187 | R001–R036 — every run recorded to date |
+| Chrome 151.0.7922.138 | none yet; **the next run logged is the first** |
+
+So the whole existing record is single-version and internally comparable,
+and the boundary is exactly here. Two consequences for what comes next:
+T2's export walk (W16) will be the first evidence gathered on 151, and any
+re-measurement of an earlier result (the open contrast and focus-at-zoom
+items) crosses the version boundary — note it in the run rather than
+silently overwriting a 150-era number.
+
+**Testing-profile hygiene — corrected 2026-08-14.** The dedicated profile
+(`%LOCALAPPDATA%\sfbrn-a11y-chrome`) was created 2026-08-04 with four
+extensions, none of which alter pages: Eye Dropper, Adobe Acrobat, Chrome
+Web Store Payments, Google Docs Offline. On 2026-08-14 at 11:02, a Chrome
+first-run sync prompt pulled **22 further personal extensions** into it —
+including Stylus (injects CSS), SkipTo Landmarks and Landmark Navigation
+(*add* skip links and landmarks), Freedom, Popup Blocker Pro, Postman
+Interceptor and EditThisCookie. Folder mtimes place all 22 in that one
+minute, so **no run in R001–R036 was affected** — the sweeps on 08-04,
+08-06 and 08-10 predate it. The profile is now launched with
+`--disable-extensions --disable-sync` (zero `chrome-extension://` targets
+verified over CDP before use); nothing was uninstalled. Declared
+environment for runs from here: Chrome 151.0.7922.138, extensions inert.
+
 ## Step 2 — Explore the target product
 
 Seeded from the creative-authoring-tool archetype. Every row is a hypothesis:
@@ -311,6 +342,7 @@ listing — use these in run locators, never display names, which can drift):**
 |---|---|---|
 | Untitled - August 06, 2026 at 13.02.17 | `urn:aaid:sc:US:1fd8af9a-87db-410e-8315-35fa3679dc86` | **S3 sample** ("Text Test" doc) |
 | Untitled - August 10, 2026 at 13.09.20 | `urn:aaid:sc:US:b1ab530f-f097-4a5f-8a6f-b8923fa65115` | **T2 test document** (R016; rename discrepancy above) |
+| **Can-I-find-the-right-text** | `urn:aaid:sc:US:a767278e-deed-4656-b424-f01495fad229` | **R038 multi-object test document** — 5 objects (text 1/2/3, a shape, a photo), built 2026-08-14 for the authoring-at-scale walk that produced **T2-F4**. Also one of the five pages in the R040 WAVE sample. Resolved the day it was created |
 | sdcsdc | `urn:aaid:sc:US:d0ad5936-2a17-4db7-a9e8-bb0fb8eb91a1` | unattributed (likely reviewer NVDA session 2026-08-06) |
 | Kaiser Permanente Mobile App - Letter Details | `urn:aaid:sc:US:0e88a2b4-710d-4577-a664-0ef3d2dde1dc` | reviewer's real document — **do not open in tests** |
 
@@ -318,6 +350,29 @@ listing — use these in run locators, never display names, which can drift):**
   outside assistant permissions, and they are now part of S4's tested state.
   As of 2026-08-10 the listing shows four, which makes S4 a usefully
   populated view for its own run rather than a near-empty one.
+- **Rename discrepancy still unresolved as of 2026-08-14.** The T2 document
+  loaded in R037 still carries the title "Untitled - August 10, 2026 at
+  13.09.20", not "Test-With-Keyboard" — so the keyboard rename performed in
+  R016 has still not surfaced in either the listing or the document title.
+  W24 remains the open step.
+
+**Published output — a state class this review has not sampled (added
+2026-08-14, R037 O6).** The product publishes designs as **hosted webpages**
+at `/publishedV2/…` share links, in addition to exporting PDF, image and
+MP4 files. That surface is inside the declared product boundary (§1.1: "all
+authenticated app content"), but no sample, run or sweep has ever reached
+it, and the first observation of it produced **V-F16** — published pages
+announce as "canvas graphic" and nothing else.
+
+| Artifact class | Locator form | Status |
+|---|---|---|
+| Published page (share link) | `https://express.adobe.com/publishedV2/<id>` — **exact URL outstanding, reviewer to supply** | **Unsampled.** One observation (R037 O6 → V-F16). Needs a sample ID and its own runs if scoped in |
+
+Two things to settle before this becomes testable, both the reviewer's:
+whether published output is inside the WCAG conformance target or carried
+as §504/advisory (06 §Concerns), and the durable locator — a published page
+has a real, stable URL, so the replicable-locator rule is satisfiable here
+and should be satisfied before V-F16 is relied on.
 
 ## Step 3 — Select the representative sample set
 

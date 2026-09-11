@@ -263,12 +263,85 @@ through to the file arriving.
 reachable and labelled? Is progress announced? **Is completion announced**,
 or does the file arrive silently? (4.1.3 has already failed twice on this
 product for exactly this pattern — S2's search results and lazy grid.)
+**Feedback:** 2026-08-14 (run **R037**, Works with issues) — **the export
+flow is the best-behaved thing tested in this review.** Not announced as a
+dialog (`hz-themed-overlay` → `sp-popover` → `x-export-popover-content
+tabindex="0"`), but fully tabbable, Escape exits cleanly, **formats
+reachable and labelled**. Progress announced with beeps; **completion
+announced** — the predicted fifth 4.1.3 instance did *not* occur (the
+feedback is the browser's, not Express's — recorded as such). A separate
+**downloading dialog is unannounced and its Cancel is undiscoverable**
+without enumerating buttons → **T2-F3 (Minor, 4.1.2/4.1.3)**. Formats:
+**PDF, images, MP4**. **Video export carries CC** — captions survive.
+**And the serious one: documents shared via `/publishedV2/` links are
+imperceptible to screen readers — "canvas graphic" and nothing else →
+V-F16.** Reviewer: *"this tool should not be used to share content,
+especially in a course."*
+
+### W18 — KEY STEP, added 2026-08-14: authoring at realistic scale (run logged when you start)
+
+**Why this step exists.** W12–W16 walked T2 on a **one-text, one-image**
+document and every step completed. The reviewer's judgement at W17 is that
+this understates the barrier: *"authoring a meaningful document with
+multiple layers, different images, different text blocks, (animation)
+would be nearly impossible at scale for a blind user."* The mechanism
+supports that — every object announces identically ("Canvas" / "Canvas
+Graphic"), the layers list is the only route to existing objects and its
+rows are unnamed, and there is no way to survey a document (R015 O8/O9,
+R016 O8/O9). But it is **inference from a confirmed mechanism, not an
+observed result**, and the review has twice flagged that a one-object
+document cannot answer it (R015 O8; 03 §3.1). A vendor will attack exactly
+there: *"the reviewer completed the task."* This step closes that gap.
+
+It also settles the **document-level reading** question R015 O8 explicitly
+deferred to "a richer test document" — two open items, one session.
+
+**Do:** Author a design with **five or six objects** — say three text
+blocks and two images. Then, without looking:
+1. Determine **how many objects** the document contains.
+2. Find and select **a specific one** (e.g. "the second text block").
+3. **Edit its content**, and confirm by ear that you changed the right one.
+4. If you add animation, note whether its presence is conveyed at all.
+
+**Tell me:**
+- Could you tell the objects apart, by any means?
+- Could you get to a *chosen* object, or only cycle blindly through them?
+- At what object count did tracking your position break down?
+- Did you ever edit the wrong object, or become unsure which you were on?
+- Your overall judgement: is this workable, burdensome, or not viable?
+
+**Why the answer decides T2's verdict.** *Pass with barriers* says the task
+is completable with substantial burden. *Fail* says it is **not
+completable** by an affected group within the baseline. The distinction
+this step tests is whether the barrier is **linear** (slower with more
+objects) or a **qualitative break** (position becomes unknowable, so
+deliberate authoring stops being possible). Only the second supports Fail.
+
+**Framing to carry into the record** (reviewer, 2026-08-14): *"technically
+WCAG passing but meaningfully probably not accessible."* The right home for
+that is **508 §302.1 Without Vision** — a *functional* requirement for at
+least one non-visual mode of operation, which a product can fail even while
+patching individual success criteria. It is also why WCAG-EM evaluates
+**complete processes** (step 4.2) rather than criteria alone.
+
+**Note:** this creates a persistent artifact — tell me its name so it goes
+into the document registry (03 §2.6) with the others.
 **Feedback:** _(pending)_
 
 ### W17 — T2 verdict
 
 **Tell me:** Could you author and export a usable design end to end? Pass /
 Pass with barriers / Fail, and the step where it was worst.
+
+**Status 2026-08-14: opened, reviewer leaning Fail, held pending W18.**
+Reasoning given: the walked scenario is *"a very simple task"*, while
+authoring *"a meaningful document with multiple layers, different images,
+different text blocks, (animation) would be nearly impossible at scale for
+a blind user."* The verdict is being ruled against the **user story** —
+*"produce and use my work"* — rather than against the minimal probe that
+was walked, which is the correct altitude for a task verdict. W18 was added
+to convert the scale claim from inference into observation before the
+verdict is recorded. **Nothing is written into 04 until W18 reports.**
 **Note the cascade:** as on T1, a Blocker-level failure at any step makes
 S3's no-vision cell **Broken**, which under modality-checks.md forces this
 task's verdict to **Fail** for no-vision users. That is a real possibility

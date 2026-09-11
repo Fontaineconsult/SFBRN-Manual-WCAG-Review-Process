@@ -139,9 +139,45 @@ and zoom walks may find different ones.
 | | |
 |---|---|
 | **User story** | As a user, I need to edit content on the canvas (text, images, shapes) and export the finished design, so that I can produce and use my work. (F2 + F5, 03 §2.2 — the product's core purpose) |
-| **Verdict** | Not run / Pass / Pass with barriers / Fail |
-| **Baselines run** | B4 (NVDA 2026.1.1) — walk opening 2026-08-06 |
-| **Date(s) tested** | |
+| **Verdict** | Pass with barriers |
+| **Baselines run** | B4 (NVDA 2026.1.1 / Chrome 150 then 151) — R016 steps 0–2, R037 export, R038 authoring at scale |
+| **Date(s) tested** | 2026-08-06 (steps 0–2), 2026-08-14 (export; multi-object authoring) |
+
+**Verdict — reviewer decision 2026-08-14 (W17).** Reviewer's words:
+*"this requires TAAP and vendor roadmap, but pass."*
+
+**Recorded as "Pass with barriers" rather than plain "Pass", and the
+reason is stated so the reviewer can correct it in one word.** The task
+vocabulary is fixed (CLAUDE.md): *Pass* means completable **without
+significant barriers**, which by definition would support an **Approved**
+procurement decision and no TAAP. The reviewer's own sentence requires a
+TAAP and a vendor roadmap, and four findings stand against this task —
+three of them Major (T2-F1, T2-F2, T2-F4) plus one Minor (T2-F3). *Pass
+with barriers* — "completable, but Major or Minor findings exist" — is the
+term that carries the reviewer's meaning. The judgement is theirs; only
+the vocabulary was adjusted to match it.
+
+**Why not Fail, given the reviewer was leaning that way earlier.** The
+scale evidence came in (R038) and it cut both ways: authoring a
+five-object design *is* completable by a screen-reader user — every step
+was walked to completion, and the export flow proved the best-behaved in
+the review. What R038 established is that it is **punishing**, not
+impossible: a five-step probe per object, an expert AT command
+(`NVDA+F2`) mid-sequence, and no visited-state tracking. Under
+modality-checks.md, *Fail* requires the task to be **not completable** by
+an affected group within the baseline; it was completed. The reviewer's
+landing point — completable, but only with accommodation and vendor
+commitment — is exactly what *Pass with barriers* plus **Needs TAAP**
+encodes.
+
+**Recorded so a later reader sees Fail was live and was decided, not
+missed.** As with T1, the harsher verdict was available on this evidence.
+The reviewer considered it explicitly on 2026-08-14 (*"I'm leaning toward
+fail… authoring a meaningful document… would be nearly impossible at
+scale for a blind user"*), commissioned W18 to test that claim rather than
+assert it, and revised toward Pass with barriers once the walk completed.
+That sequence — hypothesis, test, revision — is the strongest part of this
+task's record.
 
 **Sequence to walk** (03 §3.3 P2, adapted to the reviewer's chosen scenario
 — authoring a *new* document rather than editing a prepared one, which
@@ -201,7 +237,28 @@ produce accessible output. No run has touched it.
   edited cannot be determined** (R016 O8). The layers region — the only
   route back to existing objects — is absent from NVDA navigation and
   reachable only by a long tab traversal (R016 O9).
-- **Steps 3–5, export.** Not yet walked.
+- **Steps 3–5, export. Walked 2026-08-14 (run R037, B4/NVDA, Chrome 151).
+  The best-performing step of the whole walk.** Export is completable by a
+  screen-reader user: format options are reachable and labelled, the
+  popover is fully tabbable, Escape dismisses it cleanly, and **download
+  progress and completion are announced** (with beeps). Formats offered:
+  **PDF, images, MP4**. Two barriers, both orientation rather than
+  operability: neither the export popover nor the subsequent "downloading"
+  dialog is announced *as* a dialog, and the download dialog's **Cancel**
+  is discoverable only by enumerating the button list (T2-F3). One credit:
+  **video export carries CC** (R037 O5).
+
+**The 4.1.3 prediction failed here, and that is recorded deliberately.**
+Four prior instances made a silent export look near-certain; instead the
+user is informed. The honest qualifier: the feedback comes from the
+**browser's** download UI, not from Express, so it satisfies the user need
+without being evidence that the product emits status messages (R037 O3).
+
+**What the export walk found instead is worse and lies outside the task.**
+Asked to settle which output formats exist, the walk established that the
+product publishes **webpages** — and that those published pages are
+imperceptible to screen readers (**V-F16**). The task passes; its output
+does not.
 
 #### Finding T2-F1
 
@@ -226,6 +283,34 @@ produce accessible output. No run has touched it.
 | **Severity** | Major — and worse for **"Generate with AI"**, which is an asynchronous operation taking many seconds with no progress, completion or error announcement, so "still working", "finished" and "failed" are indistinguishable. That is also the product's most heavily promoted capability (03 §2.2, F8). |
 | **Pattern** | Third instance of this exact defect in the review: S2's lazily-loaded template grid, S2's search results, and now image insertion/generation. All 4.1.3, all "the app did something and did not say so". |
 | **Evidence** | R016 O7 |
+
+#### Finding T2-F3
+
+| | |
+|---|---|
+| **Where** | Steps 3–5 — the export/download flow: the Download/Share popover, and the "downloading" progress dialog that follows it |
+| **Observed** | **Two dialogs, neither announced as one.** The export UI is `<hz-themed-overlay open>` → `<sp-popover open>` → `<x-export-popover-content tabindex="0">` — markup supplied by the reviewer — and conveys no dialog role, so a screen-reader user is not told a dialog opened. A second "downloading" dialog then appears, likewise unannounced, and it contains a **Cancel** control that "would not be knowable unless a user inspects the button list" (R037 O1, O4). **Scope is deliberately narrow, because most of this flow works:** the popover is *fully tabbable*, Escape dismisses it cleanly, format options are reachable and labelled, and download progress and completion are announced. The defect is orientation — being told what opened — not operability. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.2 (dialog role not conveyed, on two dialogs); 4.1.3 (the downloading dialog's appearance is a status change that is not announced) |
+| **Severity** | **Minor** — the task completes, every control is reachable, and Escape works. The sharper edge is the undiscoverable **Cancel**: on MP4 export, the long-running format, a user cannot readily abort an operation in progress. Sized Minor rather than Major because no step is blocked and a reachable workaround (Escape, or completing the export) exists in every case. |
+| **Contrast with the rest of the product** | Worth stating in the report: this is the **best-behaved flow tested in the whole review**. Elsewhere the pattern is "the app did something and did not say so"; here the app does say so. The remaining gap is small and specific. |
+| **Evidence** | R037 O1, O4 (reviewer, NVDA 2026.1.1, Chrome 151) |
+
+#### Finding T2-F4
+
+| | |
+|---|---|
+| **Where** | S3 Editor — locating and editing a **specific** object on a canvas holding several. Walked 2026-08-14 on a five-object document (three text boxes "text 1/2/3", a shape, a photo) with the task: **find "text 2" and edit it, screen reader only** (run R038). |
+| **Observed** | **No canvas object can be identified.** Reaching one requires: NVDA's form-fields list → a control named **"Edit page"** → Tab into the re-order layers area (R038 O1). Arrowing the layers announces, for every object identically: `not selected @hz/shared-ui-components:sortable-list-press-space-to-grab row 1 column N` — **an untranslated localisation key read aloud as the control's name**, plus a grid coordinate, and **no indication of what the layer is** (O2). Enter gives "canvas graphic"; Space *sometimes* opens the Edit pane, whose summary hints at the object's **type** but never its **identity** (O3). Reading the content — the only thing separating "text 2" from "text 1" — requires **NVDA's pass-through (`NVDA+F2`) followed by Enter**, because the product never tells the screen reader that the focused thing warrants focus mode (O4). Then exit and repeat, **with no record of which layers have been visited**, since every row sounds the same. |
+| **The crux — there is no read-only way to inspect the canvas** | Reading an object's content is possible **only from inside edit mode** (R038 O6). So identification is not an inspection operation at all — it is an *editing* operation, performed repeatedly on objects the user does not intend to change. A sighted user identifies all five objects by looking: free, instant, non-mutating, parallel. The screen-reader equivalent is serial, five steps per object, and mutating in kind. **The asymmetry is in the kind of operation available, not in its speed** — which is why the barrier does not simply grow with document size. Cost of finding a known object: *n/2 edit-mode entries on average*, with no visited-state to bound the search. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | **4.1.2** — canvas objects expose no name; layer rows expose a developer message ID as their name; role is not exposed in a way that triggers the AT's focus mode. **1.3.1** — a one-dimensional layer stack is announced as "row 1, column 1–5" (grid semantics on non-tabular content; corroborates V-F11). **2.4.3** — the route in runs through a control named for a different purpose. |
+| **Structural exposure — recorded, not claimed** | Because inspection requires entering a *mutable* state, a stray keystroke during a search lands in document content. **This was not observed**, and a prior hypothesis of exactly this shape ("invisible editing", R015 O5) was raised and **withdrawn** when the reviewer explained the change had been made with a mouse. It is noted as a property of the interaction design — read-requires-write — not as evidence of data loss. A deliberate test would be needed to say more. |
+| **Also engages conformance requirement 4** | *"Only accessibility-supported ways of using technologies."* A technique that works **only when the user suppresses their assistive technology's normal behaviour** is a poor candidate for accessibility support. Recorded distinctly from the criterion failures: the keystroke does reach the application, so **2.1.1 Keyboard is met** — the weaker claim is about the *method*, not about operability. First time this review has engaged one of the five conformance requirements beyond the criterion level. |
+| **Severity** | **Major — with Fail available at the task level, and that is the reviewer's call (W17).** The task *is* completable, so this is not sized Blocker. What it costs: a five-step probe per object, an expert AT command mid-sequence, and no visited-state tracking, on a document of five objects — the smallest realistic size. |
+| **2.1.1 was considered and is NOT failed — twice now** | Recorded so a later reader sees it was checked, not missed. The assistant's first 2.1.1 Blocker was withdrawn on 2026-08-06 when the reviewer found the Tab→Enter→Enter route; the same conclusion was available again here from *"I can't figure out how to do that without a click"*, and was again wrong. On this product, **"I can see no route" has been mistaken every time it has been thought** — the mechanism is created on demand or gated behind AT behaviour, not absent. |
+| **Remediation — one fix collapses the whole procedure** | **Give each layer row an accessible name carrying the object's identity** ("text 2", "Photo — beach.jpg", "Rectangle"). The information exists; the row is where it belongs. That single change removes the per-object probe, supplies visited-state tracking for free (the user tracks by name, not memory), and makes the pass-through unnecessary for *identification*. Separately and trivially: **resolve the `@hz/shared-ui-components:sortable-list-press-space-to-grab` key to real text**, and expose the canvas surface with a role that triggers focus mode. |
+| **Evidence** | R038 O1–O5 (reviewer, NVDA 2026.1.1); extends R015 O2/O3/O9 and R016 O8/O9 from one object to five |
 
 ---
 
@@ -271,16 +356,18 @@ first ~16s after load needs a human watch (R010 O1); 2.5.3 Label in Name is a
 live candidate on the search field (R001 O8); the reviewer walkthrough
 W4–W18/W20 still gates R001, R002, R004 and R010.
 
-#### Finding V-F1
+#### Finding V-F1 — **WITHDRAWN 2026-08-14, not a defect**
 
 | | |
 |---|---|
-| **Where** | S1 Home dashboard — left-rail hover flyout ("Get inspired" panel on rail items) |
-| **Observed** | Hover content violates all three 1.4.13 conditions observed: moving the pointer onto the flyout dismissed it (not hoverable); Esc did not dismiss it (not dismissible); once stuck, it persisted indefinitely over page content through unrelated interactions. Assistant-driven (synthetic hover teleports) — confirm with continuous pointer movement. |
-| **Affected users** | Low-vision magnification users (flyout obscures content they cannot reposition around); motor-impaired users relying on Esc |
-| **WCAG criteria failed** | 1.4.13 |
-| **Severity** | Major |
-| **Evidence** | evidence/runs/R002/R002-flyout-hover.jpg, evidence/runs/R003/R003-grayscale-home.jpg (flyout still open minutes later) (runs R002, R003) |
+| **Status** | **Retracted before reaching the report**, on reviewer confirmation with a real pointer. The ID is retained and never reused (IDs are stable once assigned). |
+| **Was claimed** | That the S1 left-rail hover flyout violated all three 1.4.13 conditions — not hoverable (moving onto it dismissed it), not dismissible (Esc did nothing), and persistent over content through unrelated interactions. Recorded Major. |
+| **Why it was wrong** | The evidence was **assistant-driven synthetic hover teleports** — the pointer was jumped between coordinates rather than moved continuously. That is not how a hover interaction works: a flyout that dismisses when the pointer *teleports* away can behave correctly when the pointer *travels* onto it along a path. The finding recorded this caveat at the time and explicitly requested pointer confirmation. |
+| **Actual outcome** | Reviewer, 2026-08-14, with continuous pointer movement: **"no issues with hover, pass it."** (R002 O-LV17). LV6 passes. |
+| **WCAG criteria failed** | none — withdrawn. **1.4.13 moves from Does Not Support to Supports**, which also removes one of the criteria previously recorded as *worse than the vendor claimed*. |
+| **Severity** | none — withdrawn |
+| **Why this is worth keeping in the record** | It is the **fourth** assistant hypothesis retired by reviewer testing on this review, after the 2.1.1 "pointer-only editing" Blocker, "invisible editing", and the claim that the editor lacks landmark bypass. All four were caught before reaching the report, each because the assistant recorded its own instrument's limitation and routed the item for confirmation. The pattern is now firm enough to state as method: **assistant-driven *interaction* findings on this product must be reviewer-gated**; assistant *measurement* (contrast, geometry, reflow, name comparison) has held up well. |
+| **Evidence** | R002 O-LV17 (reviewer confirmation retracting the original reading); superseded: R002 O4/O5, evidence/runs/R002/R002-flyout-hover.jpg, evidence/runs/R003/R003-grayscale-home.jpg |
 
 #### Finding V-F2
 
@@ -391,10 +478,11 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 | **Where** | S3 Editor — canvas object manipulation |
 | **Observed** | **Rotation and non-text resize cannot be done with the keyboard.** Reviewer-tested under B2 (R031 O4/O7): translation works, z-order works (via the "…" menu), and *text* can be resized through the Edit panel's size controls (with a defect of their own — the +/− steppers announce no resulting size). But **rotation (any object) and canvas resize (the corner-drag) have no keyboard route at all** — for shapes and images, "only translate is available." Core canvas operations are pointer-drag only with no alternatives exposed. |
 | **Affected users** | Keyboard-only users, screen reader users, anyone who cannot perform precise drags (tremor, switch access) |
-| **WCAG criteria failed** | **2.1.1 Keyboard (Level A)**; 2.5.7 Dragging Movements (AA — one of the six criteria the vendor ACR never addressed) |
-| **Severity** | Major — designs requiring rotated or resized non-text elements cannot be authored without a pointer |
-| **Remediation** | Reviewer's own formulation, adopted: **"exposing all orientation manipulation controls in the Edit pane"** — rotation, size and position fields in the properties panel (and/or modifier+arrow equivalents), with announced values |
-| **Evidence** | R031 O4, O7 (reviewer, B2) |
+| **WCAG criteria failed** | **2.1.1 Keyboard (Level A)**; 2.5.7 Dragging Movements (AA — one of the six criteria the vendor ACR never addressed); **2.5.1 Pointer Gestures (Level A — added 2026-08-14)** |
+| **Three criteria, three different reasons — added 2026-08-14 (R031 O8)** | Keep these distinct in negotiation, because a vendor can concede one and miss the others. **2.1.1** fails for want of a **keyboard** route. **2.5.7** fails for want of a **non-dragging** alternative. **2.5.1** fails for want of a **single-pointer non-path** alternative — rotation is performed by *"pressing and holding on the rotate button… then moving the finger in an arc"*, and the arc **is** the input, which is the defining property of a path-based gesture. The "essential" exception does not apply: a numeric angle field would do the same job, so the gesture is not intrinsic to the task. |
+| **Severity** | Major — designs requiring rotated or resized non-text elements cannot be authored without a pointer, and cannot be authored *precisely* by anyone |
+| **Remediation** | Reviewer's own formulation, adopted and sharpened 2026-08-14: a **dedicated transform panel** — *"a 'Translate' tool window that would allow, using a slider, X, Y, Z or Rotate, or resize"* — with typed/announced values. **One control closes all three criteria at once**, which makes it the highest-leverage item in the exhibit. The reviewer's own assessment of the ask: *"low hanging fruit for the dev."* |
+| **Evidence** | R031 O4, O7, **O8** (reviewer, B2; O8's touch description is device-context evidence made outside the declared baselines — the *absence of an alternative* is the B2 result) |
 
 #### Finding V-F15
 
@@ -455,6 +543,90 @@ W4–W18/W20 still gates R001, R002, R004 and R010.
 
 ---
 
+### Product output — artifact classes outside the sampled views (scope decision pending)
+
+Found 2026-08-14 during the T2 export walk (R037). These are **not among
+the four sampled views** — they are the artifacts the product *produces*
+when a user exports or shares a design. Two classes are now evidenced: a
+**hosted published page** (V-F16) and an **exported PDF** (V-F17). They are
+recorded here because the evidence is firm and the findings are
+consequential; **whether they sit inside this review's WCAG conformance
+target is the reviewer's scope call**, and it is the same standing §504
+question, now with much sharper evidence attached.
+
+If the reviewer scopes them in, published pages need their own sample ID
+and runs — a published page is a full page in the WCAG-EM sense, not a
+state of S3 — and exported files need a document-conformance check
+(PDF/UA) rather than a page sweep.
+
+**The pattern across the three output-side findings is the argument.**
+Images cannot be given alt text at all (R016 O10); the tagged PDF export
+therefore carries none, and omits the document title as well (V-F17); and
+published webpages convey nothing whatsoever (V-F16). Captions are the lone
+counter-example — they exist and survive video export (R037 O5). So the
+product's output story is not "one gap" but a consistent one: **the
+accessibility affordances a user would need in order to publish
+responsibly are largely absent, and where one exists it is incomplete.**
+
+#### Finding V-F19
+
+| | |
+|---|---|
+| **Where** | S3 Editor — the **zoom control** in the top bar: `<sp-action-button role="button" aria-label="View options" aria-haspopup="true">`, whose only visible text is the current zoom percentage |
+| **Observed** | **Visible label and accessible name share no words.** The control displays "100%" (or "67%", etc. — it tracks the zoom level); its accessible name computes to **"View options"**. A speech-input user saying *"click one hundred percent"* would not activate it. Found by comparing visible text against computed accessible name across **64 controls on four views** — this is the **only** mismatch (R042 O7). |
+| **Affected users** | Speech-input users (Dragon, Voice Control) primarily; also anyone matching what they hear to what they see |
+| **WCAG criteria failed** | **2.5.3 Label in Name** |
+| **Severity** | **Minor** — one control of 64; the value is dynamic so no user could rely on it as a stable name regardless; and zoom is reachable by other means |
+| **Interpretive question — flagged, not decided** | 2.5.3 governs *labels*. The percentage is arguably a **value** (what the zoom currently is) rather than a **label** (what the control does), and on that reading the criterion is not engaged and S3 passes. Against that reading: it is the control's *only* visible text, so it is what a speech user sees and would say. **Recorded as a failure with the ambiguity stated** — the same treatment V-F14's 2.5.1 question received before the reviewer ruled. A reviewer decision either way is cheap here, because the severity is Minor on both readings. |
+| **Context that makes the product look better, not worse** | All **25** controls whose `aria-label` overrides visible text — the only mechanism that can break this criterion — reproduce that text exactly ("Photos" → "photos", "Files" → "files", "Premium member" → "premium member"). The product handles Label in Name correctly and deliberately almost everywhere; this is a single slip, not a pattern. |
+| **Remediation** | Include the visible text in the accessible name: `aria-label="100% — View options"`, updated as the zoom value changes. |
+| **Evidence** | R042 O7 (assistant, four-view accessible-name comparison; control inspected individually to confirm role and `aria-haspopup`) |
+
+#### Finding V-F18
+
+| | |
+|---|---|
+| **Where** | **S1 Home and S3 the editor** — buttons and icon controls throughout both views. Measured by the reviewer with *Color Contrast Checker*, 2026-08-14 (R002 O-LV16). |
+| **Observed** | **The text passes; the controls holding it do not.** Reviewer's words: *"home page all the text passes color contrast, but some of the button/icons holding the text don't when measured against the background. Same in the content edit view — text itself has enough contrast, but button doesn't."* So label text clears 4.5:1 while the **control's own boundary against the surrounding page falls below 3:1**. |
+| **Affected users** | Low-vision users, and users in poor viewing conditions (glare, low-quality displays, older eyes) |
+| **WCAG criteria failed** | **1.4.11 Non-text Contrast** |
+| **Severity** | **Major** — it applies to buttons across two views including the product's core work surface, and it degrades the most basic affordance an interface offers: knowing that something is clickable |
+| **Why this is a distinct defect and not a duplicate of V-F2** | 1.4.3 governs **text** against its background; 1.4.11 governs **the control's boundary** against what surrounds it. A button can carry perfectly legible 7:1 label text and still fail, because the user must first perceive **that a button is there at all**. That is why the reviewer's result — text passing, containers failing — is a clean 1.4.11 failure and touches 1.4.3 not at all. It is also easy to miss: a contrast tool pointed at the words returns a pass. |
+| **Precision — what is deliberately not claimed** | **No ratio and no count.** The reviewer reported *"some"* controls failing without enumerating which or by how much, and inventing a number would be worse than having none. The finding is sized on the **pattern** — confirmed independently on two views, with different components on each. Enumeration is remediation work for the vendor, who has the design tokens. |
+| **Assistant measurement was attempted and failed** | An automated rendered-pixel sweep was built and produced three successive wrong answers before being abandoned (R042 O6) — a ~56px coordinate offset between `getBoundingClientRect` and `Page.captureScreenshot`. **The reviewer's eyedropper answered in one pass what the instrument could not**, which is the hierarchy `ontology/testing-tools.md` prescribes. Worth stating in the report: this defect is invisible to every automated checker used in this review — axe found nothing of the kind, and WAVE reported zero contrast errors across five pages (R040). |
+| **Remediation** | Raise button and icon-control boundaries (border, fill, or both) to **≥ 3:1 against their adjacent background** on both views. The likeliest offenders from the rendered capture: the app-bar icon buttons on the dark gradient, the search field's edge on near-white, and card boundaries measuring ~1.06:1 (`rgb(248,248,248)` on `rgb(255,255,255)`). Vendor should enumerate against their own design tokens — this is a token-level fix, not a per-component one. |
+| **Evidence** | R002 O-LV16 (reviewer, Color Contrast Checker); rendered reference capture `evidence/runs/R002/R002-lv5-uicontrast-reference-1280.png` |
+
+#### Finding V-F16
+
+| | |
+|---|---|
+| **Where** | **Published output** — a design shared via the product's publish link (`/publishedV2/…`). A hosted webpage produced by Express, distinct from the editor and from an exported file. |
+| **Observed** | **The published page is imperceptible to a screen reader.** The document's entire content announces as **"canvas graphic"** and nothing else — no text, no structure, no alternatives (R037 O6, reviewer, NVDA 2026.1.1). Whatever the author put in the design, a screen-reader reader of the published page receives none of it. The reviewer's own conclusion, recorded verbatim because it is a use-of-product judgement rather than a technical one: *"this tool should not be used to share content, especially in a course."* |
+| **Affected users** | Screen reader users — **and note who they are**: not users of Express, but **readers of content published with it**, who never chose the tool and cannot work around it. |
+| **WCAG criteria failed** | 1.1.1 (the entire page is non-text content with no text alternative); 1.3.1 (no programmatically determinable structure whatsoever) |
+| **Severity** | **Major as recorded — and a reviewer sizing call, because Blocker is available.** No sampled task fails, since publishing is not a step in P1 or P2, which is the only reason this is not sized Blocker outright. If the reviewer scopes published output in and adds a share/publish process as a task, that task is **Fail** for no-vision users on this evidence. |
+| **Relationship to the editor's canvas defect** | Same root class as R015 O9 / exhibit item 10 — content lives in a canvas with no accessibility representation — but with a **categorically wider blast radius**. In the editor it burdens one author; in published output it excludes every reader of every artifact the institution publishes. |
+| **Why the export walk found it and nothing else could** | Automated sweeps are blind to canvas (R014 returned 43 passes and said nothing about it), and a per-view sweep of the four sampled views never reaches the publish path at all. It took walking the task to its actual end — the shared artifact — to surface it. |
+| **Outstanding before this finding is closed** | (1) **Locator** — the exact `/publishedV2/…` URL, per the replicable-locator rule; reviewer to supply. (2) **Scope decision** — inside the WCAG target, or carried as §504/advisory. |
+| **Evidence** | R037 O6 (reviewer, NVDA 2026.1.1, Chrome 151) |
+
+#### Finding V-F17
+
+| | |
+|---|---|
+| **Where** | **Exported PDF** — the PDF export path, with its **"include tags"** option enabled |
+| **Observed** | The exporter offers an option to include tags, and **the tagged output still fails accessibility checks**: on inspection of the exported file, **no alt text and no document title** (R037 O7, reviewer, 2026-08-14). The reviewer's conclusion, adopted: *"PDF accessibility review would still be required even if the tags option were set."* |
+| **Affected users** | Screen reader users **reading a PDF the institution publishes** — again not users of Express, but recipients downstream of it |
+| **WCAG criteria failed** | **1.1.1** (untagged images carry no text alternative) and **2.4.2** (a PDF with no Title fails when published) — **of the exported artifact, not of the Express interface.** These count against this review's conformance target only if the reviewer scopes product output in; the scope call is the same one V-F16 raises |
+| **Primary requirement** | **508 §504.2/§504.3** — authoring tools must be capable of producing conformant output. This is the requirement that applies to Adobe regardless of the scope call; the WCAG criteria above apply to whoever publishes the file |
+| **Severity** | Major — but see the framing note; its significance is larger than its severity |
+| **Why a partial capability is more dangerous than none** | A tags checkbox is the **visible sign** of accessibility support and the natural thing for a vendor to cite when asked whether their tool produces accessible output. Because it exists and is insufficient, the institution would publish PDFs it believes are conformant. An absent feature prompts a check; a present-but-incomplete one suppresses it. |
+| **Two defects, two different causes — and only one is the exporter's fault** | **No alt text is downstream of R016 O10:** there is no way to author alt text anywhere in the editor, so the tagger has nothing to carry. Fixing the exporter cannot fix this — the authoring capability must exist first. **No document title is a pure exporter defect and cheap:** the product already knows the document's name (the editor is the one place in the product that retitles — V-F8's sole exception) and simply does not write it into the PDF's Title metadata. |
+| **Recorded as hypothesis, not finding** | The reviewer's *"I'm sure more complex PDFs would have more issues"* is plausible and **untested** — the exported artifact was simple. Reading order, heading structure, table semantics and language metadata on a multi-element design are all unexamined. It must not reach the report as a result. |
+| **Recommended follow-up if scoped in** | Export one deliberately complex design (headings, an image, a table, multiple text blocks) with tags enabled and run a PDF/UA conformance check. That single artifact would settle the reviewer's hypothesis either way. |
+| **Evidence** | R037 O7 (reviewer, inspection of the exported file) |
+
 ### All sampled views — product-wide findings
 
 Findings that are properties of the view *set* rather than of one view.
@@ -497,7 +669,16 @@ additions. Repeat until no new types or findings appear.
 
 | Random sample | New content type? | New findings? | Action taken |
 |---------------|-------------------|---------------|--------------|
-| R1 | | | |
+| Brands (`/brands`) | No — card grid + header, same components as S1/S4 | No | None needed. Swept in the R040 WAVE sample and the 2026-08-10 crawl (03 §2.6); V-F8's title defect confirmed here, which is why the finding reads "every SPA view" rather than "the four sampled views" |
+| Learn (`/learn`) | **Yes — tutorial video, the only Adobe-authored media in the product** | **Yes — 1.2.3/1.2.5 no audio description (R039 O2)**; 1.2.2 captions pass | **Sample extended.** Learn was tested rather than dismissed: R039 evaluates its media directly. That is the extension WCAG-EM step 4.3 requires, and it produced two Does Not Support outcomes no sampled view would have surfaced |
+| Schedule, Add-ons | No — same shell and card patterns | No | None needed (crawl 2026-08-10) |
+
+**Conclusion.** One random sample surfaced a content type absent from the
+structured set — **Learn's tutorial video** — and the sample was extended
+to cover it (R039), which is exactly the corrective step 4.3 prescribes.
+No further iteration was required: the remaining random samples reuse
+components already characterised on S1–S4, and the second pass produced no
+new content types or findings.
 
 ---
 
@@ -505,9 +686,9 @@ additions. Repeat until no new types or findings appear.
 
 Before moving to `05-results.md`:
 
-- [ ] Every process in 03 §3.3 has a task cluster with a verdict
-- [ ] Every branch sequence was walked, not just default sequences
-- [ ] Every non-process sample has a view-sweep entry
-- [ ] Every finding names at least one WCAG criterion, a severity, and evidence
-- [ ] Random-vs-structured comparison completed (and sample extended if needed)
-- [ ] `05-results.md` updated: every failed criterion cites finding IDs from this file
+- [x] Every process in 03 §3.3 has a task cluster with a verdict — **T1 Pass with barriers, T2 Pass with barriers** (both reviewer-decided). P3 sign-in is out of scope: authentication is the institution's SSO, a different product (R041 O5)
+- [x] Every branch sequence was walked, not just default sequences — P1-a (blank canvas) walked as T2 step 0 (R016 O1–O4); P2-a (upload own media) covered by the upload path under B2 (R004 O5) and the asset-panel insertion walk (R016 O7)
+- [x] Every non-process sample has a view-sweep entry — S1, S2, S3, S4 each carry §B entries; **all 28 view×modality cells run** with Results set
+- [x] Every finding names at least one WCAG criterion, a severity, and evidence — enforced by `review.py validate`, which passes clean. Note V-F17's criteria are of the *exported artifact*, with §504.2/.3 as the primary requirement, and V-F1/V-F6 are withdrawn with reasons recorded
+- [x] Random-vs-structured comparison completed (and sample extended if needed) — §C above; **the sample was extended**: Learn's tutorial video was a content type absent from the structured set, and R039 tested it, producing the 1.2.3/1.2.5 outcomes
+- [x] `05-results.md` updated: every failed criterion cites finding IDs from this file — **all 55 criteria carry an outcome**; 0 Not Evaluated

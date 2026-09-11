@@ -59,7 +59,27 @@ session-restore relaunches drop the flag — so scans use a dedicated profile
 the reviewer signs into once (also better hygiene: a stable, declared test
 environment):
 
-    chrome.exe --remote-debugging-port=9222 --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome
+    chrome.exe --remote-debugging-port=9222 ^
+        --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome ^
+        --disable-extensions --disable-sync --no-first-run --no-default-browser-check
+
+**Every flag after the profile earns its place — do not shorten this
+(learned 2026-08-14, the hard way).** Launched without them, Chrome shows
+its first-run sign-in promo, completes a *sync* sign-in, and pulls the
+reviewer's entire personal extension set into what the process calls a
+"declared test environment": 22 extensions arrived in one minute. Several
+change what an instrument measures — **Stylus** injects CSS (contrast and
+reflow become fiction), **SkipTo Landmarks** and **Landmark Navigation**
+*add* skip links and landmarks to the page, which is the exact subject of a
+2.4.1 finding, and Freedom / Popup Blocker / Postman Interceptor /
+EditThisCookie intercept or block. A scan run in that profile measures the
+extensions as much as the product.
+
+`--disable-extensions` is per-launch and non-destructive — nothing is
+uninstalled — so it is safe to add unconditionally. `--disable-sync`
+stops the set being re-pulled. Never remove a reviewer's extensions to
+fix this; changing browser settings is the reviewer's call (CLAUDE.md
+browser rules).
 
 The profile lives outside the repo — never commit or copy profile
 contents. It normally persists signed-in across sessions, but **do not
@@ -72,6 +92,22 @@ in this order:
 3. The target tab is **authenticated**, not the IMS sign-in page — check
    `http://localhost:9222/json` for a tab titled "Sign in" or a
    `auth.services.adobe.com` / `adobelogin.com` URL.
+4. **No extension is live in the profile:** `http://localhost:9222/json`
+   must list **zero** `chrome-extension://` targets. If it lists any, the
+   window was launched without `--disable-extensions` — relaunch before
+   scanning, and treat anything already measured in that window as
+   suspect. To date the extension set and its install times: the folder
+   mtimes under `…\sfbrn-a11y-chrome\Default\Extensions` say when each
+   arrived, which is how you tell contaminated runs from clean ones.
+
+**Changing the flags means restarting the browser, and only that browser.**
+Filter by command line so the reviewer's everyday Chrome is untouched:
+
+    Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" |
+        Where-Object { $_.CommandLine -like "*sfbrn-a11y-chrome*" } |
+        ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+
+A bare `Stop-Process -Name chrome` kills the reviewer's own session.
 
 A missing directory or a sign-in page means the reviewer must sign in
 once in that window before scanning — **the assistant never
@@ -202,6 +238,29 @@ Tool names below are the exact `--tool` values `log-test` expects
 - **Assistant-driven reflow (works — used 2026-08-13):** CDP
   `Emulation.setDeviceMetricsOverride` to 320×900 on the debug-profile
   Chrome. The 2026-08-04 blocker only applied to the extension channel.
+  **`Page.captureScreenshot` pixels do NOT align with
+  `getBoundingClientRect` coordinates on this product (2026-08-14).** With
+  `fromSurface=true` the captured surface includes the Adobe cross-product
+  app bar in its top ~55 px, but that bar sits outside the document's
+  viewport coordinate space — so every rect samples **~56 px too high**,
+  and controls in the Express bar get measured against the purple Adobe
+  bar above them. `fromSurface=false` is not the fix: it ignores
+  `Emulation.setDeviceMetricsOverride` and returns a differently-sized
+  image (2112×1486 when 1280×900 was set). **Before trusting any
+  pixel-sampled number, save the PNG and look at it**, and verify a known
+  element's rect against what is visibly there. An automated 1.4.11 sweep
+  was built on this basis, produced three successive wrong answers, and
+  was abandoned — see R042 O6. **LV5 (UI component contrast) stays a
+  reviewer eyedropper check**; the assistant's useful contribution is a
+  correctly-rendered capture to sample from, not a ratio.
+
+  **Any hand-written CDP client needs `suppress_origin=True` on
+  `websocket.create_connection` (Chrome 151+, confirmed 2026-08-14).**
+  Without it the handshake fails `403 Forbidden — Rejected an incoming
+  WebSocket connection from the http://127.0.0.1:9222 origin`, and the
+  error names a `--remote-allow-origins` flag that you do *not* need —
+  suppressing the header is the fix. `scripts/axe_scan.py` already does
+  this; copy its `CDP` class rather than writing a fresh client.
   Verify the landed view by *path* before measuring (host-substring
   matching once measured the wrong view). Reflow metric: scrollingElement
   scrollWidth vs 320. **Known limit:** after injecting the text-spacing

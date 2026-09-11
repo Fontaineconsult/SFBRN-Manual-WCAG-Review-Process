@@ -11,7 +11,16 @@
 | **Tool** | grayscale |
 | **Baseline** | — |
 | **Tester** | assistant (CSS grayscale proxy) |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works |
+
+**Result reasoning** (set 2026-08-14). Every applicable check passes: NC1
+and NC3 pass on the captured states, and NC2 is **n/a** — S4 carries no
+body-text links in the captured state. Per modality-checks.md §Result
+semantics, "Works" requires every check in the list to pass; an n/a check
+is not an outstanding one, so this run is closed rather than held. **The
+one no-color cell in this review that closes without a reviewer
+remainder** — S1 (R003) and S2 (R021) still owe the hover/focus cue check,
+and S3 (R022) owes the canvas-in-grayscale look.
 
 ## Checks (no-color)
 

@@ -1,0 +1,16 @@
+{
+ "view": "S4",
+ "locator": "https://dei56mo.theexpertta.com/Common/GradeSheetGradeReport.aspx?z=1&eid=3373&aid=17547",
+ "probed_at": "2026-09-11",
+ "grayscale": {
+  "screenshot": "R100-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 5,
+   "colorOnly": [
+    "Testing Course for CSU East Bay → GradeSheetClassAssignments.aspx?eid=3373",
+    "Chapter 5 Sample Assignment → GradeSheetClassAssignmentProblems.aspx?eid=3373&aid=17547"
+   ]
+  }
+ }
+}

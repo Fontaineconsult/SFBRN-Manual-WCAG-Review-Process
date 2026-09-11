@@ -1,0 +1,459 @@
+{
+ "href": "https://dei56mo.theexpertta.com/Common/AssignmentEditor.aspx?m=2&eid=3373&aid=17547",
+ "title": "Assignment Editor",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/Common/AssignmentEditor.aspx?m=2&eid=3373&aid=17547"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 126,
+  "external": 54,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 14,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 93,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "For help on this page click here",
+    "w": 193,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnSave2_I.dxb-hb",
+    "name": "Save Only",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnSaveAndExit2_I.dxb-hb",
+    "name": "Save & Exit",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnUndoChanges_I.dxb-hb",
+    "name": "Undo Changes",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnDelete2_I.dxb-hb",
+    "name": "Delete Assignment",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnPrintableAssignment2_I.dxb-hb",
+    "name": "Printable Assignment",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnSolution2_I.dxb-hb",
+    "name": "View Solutions",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnExtensions2_I.dxb-hb",
+    "name": "Extensions",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnAccess2_I.dxb-hb",
+    "name": "Security",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnNotifications2_I.dxb-hb",
+    "name": "Messages",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnPreviewAssignment2_I.dxb-hb",
+    "name": "Preview Assignment",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_tbName_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Chapter 5 Sample Assignment",
+    "w": 319,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "a.actionMenu",
+    "name": "Click to view Grade Preferences settings",
+    "w": 122,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_cbGradeTemplate_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Instructor Default - csuit@csueastbay.ed",
+    "w": 308,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_cbAcademicIntegrityTemplate_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Instructor Default - csuit@csueastbay.ed",
+    "w": 308,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys",
+    "name": "1",
+    "w": 68,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div#MainContent_seGradeWeight_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys \"1\""
+   },
+   {
+    "el": "div#MainContent_seGradeWeight_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 10,
+    "clash": "input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys \"1\""
+   },
+   {
+    "el": "span",
+    "name": "Problem Message (click here to edit)",
+    "w": 192,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_1",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_2",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_3",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_4",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_5",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_7",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#pw_8",
+    "name": "1",
+    "w": 46,
+    "h": 21,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "x",
+    "w": 7,
+    "h": 15,
+    "clash": null
+   }
+  ],
+  "failing": [
+   {
+    "el": "div#MainContent_seGradeWeight_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys \"1\""
+   },
+   {
+    "el": "div#MainContent_seGradeWeight_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 10,
+    "clash": "input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys \"1\""
+   },
+   {
+    "el": "div#MainContent_teAssignmentVisibleTime_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teAssignmentVisibleTime_I.dxeEditArea.dxeEditAreaSys \"12:01 AM\""
+   },
+   {
+    "el": "div#MainContent_teAssignmentVisibleTime_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teAssignmentVisibleTime_I.dxeEditArea.dxeEditAreaSys \"12:01 AM\""
+   },
+   {
+    "el": "div#MainContent_teStartTime_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teStartTime_I.dxeEditArea.dxeEditAreaSys \"12:01 AM\""
+   },
+   {
+    "el": "div#MainContent_teStartTime_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teStartTime_I.dxeEditArea.dxeEditAreaSys \"12:01 AM\""
+   },
+   {
+    "el": "div#MainContent_teDueTime_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "div#MainContent_teStartTime_B-3.dxeButton.dxeButtonEditButton \"\""
+   },
+   {
+    "el": "div#MainContent_teDueTime_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teDueTime_I.dxeEditArea.dxeEditAreaSys \"11:59 PM\""
+   },
+   {
+    "el": "div#MainContent_teEndTime_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "div#MainContent_teDueTime_B-3.dxeButton.dxeButtonEditButton \"\""
+   },
+   {
+    "el": "div#MainContent_teEndTime_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teEndTime_I.dxeEditArea.dxeEditAreaSys \"11:59 PM\""
+   },
+   {
+    "el": "div#MainContent_teVisibleTime_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teVisibleTime_I.dxeEditArea.dxeEditAreaSys \"12:00 AM\""
+   },
+   {
+    "el": "div#MainContent_teVisibleTime_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_teVisibleTime_I.dxeEditArea.dxeEditAreaSys \"12:00 AM\""
+   },
+   {
+    "el": "div#MainContent_seTimedMinutes_B-2.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 9,
+    "clash": "input#MainContent_seTimedMinutes_I.dxeEditArea.dxeEditAreaSys \"\""
+   },
+   {
+    "el": "div#MainContent_seTimedMinutes_B-3.dxeButton.dxeButtonEditButton",
+    "name": "",
+    "w": 16,
+    "h": 10,
+    "clash": "input#MainContent_seTimedMinutes_I.dxeEditArea.dxeEditAreaSys \"\""
+   }
+  ]
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Common/AssignmentEditor.aspx?m=2&eid=3373&aid=17547",
+ "view": "S5",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1373,
+   "clientWidth": 305,
+   "overflowing": [
+    "div#container right=1300",
+    "table right=1373",
+    "tbody right=1373",
+    "tr right=1373",
+    "td right=1373",
+    "table right=1373",
+    "tbody right=1373",
+    "tr right=1373",
+    "td right=1373",
+    "tr right=1373",
+    "td right=1373",
+    "div#TemplateMenu1_divUserMenu right=1373"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

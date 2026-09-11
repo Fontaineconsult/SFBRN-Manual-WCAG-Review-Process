@@ -567,6 +567,7 @@ or overlapping (the anti-cheating watermark text over the problem?), and any
 stop with the focus ring hidden.
 **Why it matters:** both pages already scroll horizontally at 1280 px; axe
 cannot test 1.4.10.
+**Measured 2026-09-11 (view_probe, LV1):** at 320 CSS px every one of the 14 views scrolls horizontally — the page is a fixed 1300 px container (`div#container`; S1 scrollWidth 1343, S3 1300, S5 1373). Recorded as a measured fail on each view's low-vision run (R019, R024, R030, R036, R042, R048, R054, R060, R066, R072, R078, R083, R088, R094). **What remains for you:** confirm at real 400 % zoom that content or functionality is lost or overlaps (LV2) and that the focus indicator stays visible (LV7).
 **Feedback:** _(pending)_
 
 ### W30 — Contrast eyedropper (LV4, LV5)
@@ -594,6 +595,7 @@ decoration.
 resize to a portrait-shaped window.
 **Tell me:** Any clipped or overlapping text (MathJax, keypad buttons, the
 problem navigator), and whether portrait works.
+**Measured 2026-09-11 (view_probe, LV3/LV8):** the text-spacing override clips the date cells on Class Management (both modes), the Calendar and Take Assignment (measured fail: R019, R024, R042, R083); the other ten views tolerate it (pass). Orientation: no orientation media query or lock on any view (LV8 pass everywhere). **What remains for you:** a glance at the four clipping views with the override on, to confirm the clipped text is real content loss.
 **Feedback:** _(pending)_
 
 ---
@@ -630,7 +632,7 @@ the marketing site).
 **Tell me:** "None" — or where you found one. The assistant then logs
 no-hearing and no-speech runs as **N/A** for the sampled views, which counts
 as coverage.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-11 — closed by measurement (view_probe; the no-hearing and no-speech runs of every sampled view, R020/R021 … R095/R096): no `<video>`, `<audio>`, media embed/iframe or media link and no speech-input API or microphone control on any of the 14 views. NH1–NH4 and NS1 are n/a everywhere; those runs are closed as N/A. Nothing for the reviewer here.
 
 ---
 

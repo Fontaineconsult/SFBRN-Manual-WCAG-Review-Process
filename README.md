@@ -57,14 +57,14 @@ python scripts/crawl_map.py harvest|map URL... [--out FILE]
                                                # enclosure mapping over CDP: harvest candidate links,
                                                # fingerprint allowlisted views (never auto-follows —
                                                # see ontology/assisted-exploration.md)
-python scripts/review_db.py sync --all|<review>   # rebuild the SQLite mirror (data/reviews.sqlite) from the files
+python scripts/review_db.py sync --all|<review>   # rebuild the review's database reviews/<id>/<id>.sqlite from its files (byte-stable)
 python scripts/review_db.py state <review> [--log]   # review state dashboard from the database: definition of done,
                                                # POUR / FPC / matrix / findings / vendor delta / what moves the needle;
                                                # repeatable (same files → same text); --log appends a row to state-log.md
 python scripts/review_db.py completion <review>   # the definition of done, measured in the database (C1–C12)
 python scripts/review_db.py check <review>     # integrity queries: finding ↔ 05 rollup, withdrawn-but-cited,
                                                # runs cited that don't exist, Works with blank/failed checks …
-python scripts/review_db.py query "SELECT …"   # read-only SQL over criteria / checks / runs / outcomes / findings
+python scripts/review_db.py query "SELECT …" --review <r> | --all   # read-only SQL over criteria / checks / runs / outcomes / findings
 python scripts/review_db.py criteria [--level AA] [--principle 2]
 python scripts/export_report.py <review> [--out PATH]
                                                # render 06-report.md as a styled .docx (real heading

@@ -1,0 +1,157 @@
+{
+ "href": "https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignments.aspx?m=1&eid=3373",
+ "title": "Class Assignments Grade Sheet",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignments.aspx?m=1&eid=3373"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 19,
+  "external": 47,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 14,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 13,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_txtCodeFilter.softCornerBorderLineTextControl",
+    "name": "",
+    "w": 295,
+    "h": 19,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_listExportFormat_I.dxeEditArea.dxeEditAreaSys",
+    "name": "CSV",
+    "w": 133,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_buttonSaveAs_I.dxb-hb",
+    "name": "Export and save",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 12,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignments.aspx?m=1&eid=3373",
+ "view": "S9",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1300,
+   "clientWidth": 320,
+   "overflowing": [
+    "ul right=353",
+    "li right=353",
+    "a right=353",
+    "li#TemplateHeader1_liChangePassword right=353",
+    "a right=353",
+    "li right=353",
+    "a right=353",
+    "div#container right=1300",
+    "table right=1284",
+    "tbody right=1284",
+    "tr right=1284",
+    "td right=1284"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 3,
+   "after": []
+  }
+ }
+}

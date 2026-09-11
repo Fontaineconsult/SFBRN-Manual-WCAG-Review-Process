@@ -1,0 +1,13 @@
+{
+ "view": "R1",
+ "locator": "https://dei56mo.theexpertta.com/Instructor/AcademicIntegrityTemplates.aspx",
+ "probed_at": "2026-09-11",
+ "grayscale": {
+  "screenshot": "R106-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 3,
+   "colorOnly": []
+  }
+ }
+}

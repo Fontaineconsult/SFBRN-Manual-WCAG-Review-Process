@@ -1,0 +1,250 @@
+{
+ "href": "https://dei56mo.theexpertta.com/common/default.aspx",
+ "title": "Class Management",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/common/default.aspx",
+  "https://dei56mo.theexpertta.com/DXR.axd?r=1_0-MM_qh",
+  "https://dei56mo.theexpertta.com/DXR.axd?r=1_0-MM_qh"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 57,
+  "external": 51,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 14,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 24,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_cbClasses_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Testing Course for CSU East Bay",
+    "w": 283,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_lbClassLBMenu_lbMenu_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Please Select...",
+    "w": 283,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "img#MainContent_imgCollapseExpandAssignments.dxGridView_gvDetailExpandedButton",
+    "name": "",
+    "w": 9,
+    "h": 10,
+    "clash": null
+   },
+   {
+    "el": "img.dxGridView_gvDetailCollapsedButton",
+    "name": "",
+    "w": 9,
+    "h": 10,
+    "clash": "div#divActionMenu17547.actionMenu \"⋮\""
+   },
+   {
+    "el": "div#divActionMenu17547.actionMenu",
+    "name": "⋮",
+    "w": 16,
+    "h": 16,
+    "clash": "img.dxGridView_gvDetailCollapsedButton \"\""
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "Chapter 5 Sample Assignment",
+    "w": 258,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "1",
+    "w": 36,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "Aug 01, 2026 12:01 AM",
+    "w": 128,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "Sep 01, 2026 12:01 AM",
+    "w": 128,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "Sep 08, 2026 11:59 PM",
+    "w": 128,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div.actionMenu",
+    "name": "Sep 08, 2026 11:59 PM",
+    "w": 128,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "a.actionMenu",
+    "name": "view",
+    "w": 24,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "img#MainContent_imgCollapseExpandNews.dxGridView_gvDetailExpandedButton",
+    "name": "",
+    "w": 9,
+    "h": 10,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 12,
+    "clash": null
+   }
+  ],
+  "failing": [
+   {
+    "el": "img.dxGridView_gvDetailCollapsedButton",
+    "name": "",
+    "w": 9,
+    "h": 10,
+    "clash": "div#divActionMenu17547.actionMenu \"⋮\""
+   },
+   {
+    "el": "div#divActionMenu17547.actionMenu",
+    "name": "⋮",
+    "w": 16,
+    "h": 16,
+    "clash": "img.dxGridView_gvDetailCollapsedButton \"\""
+   }
+  ]
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/common/default.aspx",
+ "view": "S1",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1343,
+   "clientWidth": 305,
+   "overflowing": [
+    "div#container right=1300",
+    "table right=1343",
+    "tbody right=1343",
+    "tr right=1343",
+    "td right=1343",
+    "table right=1343",
+    "tbody right=1343",
+    "tr right=1343",
+    "td right=1343",
+    "tr right=1343",
+    "td right=1343",
+    "div#TemplateMenu1_divUserMenu right=1343"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 2,
+   "after": [
+    "td#MainContent_gv2_tccell0_4 \"Aug 01, 2026 12:01 AM\"",
+    "td#MainContent_gv2_tccell0_5 \"Sep 01, 2026 12:01 AM\"",
+    "td#MainContent_gv2_tccell0_6 \"Sep 08, 2026 11:59 PM\"",
+    "td#MainContent_gv2_tccell0_7 \"Sep 08, 2026 11:59 PM\"",
+    "div \"Welcome to Testing Course for CSU East B\""
+   ]
+  }
+ }
+}

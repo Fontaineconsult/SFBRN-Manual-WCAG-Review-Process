@@ -1,0 +1,143 @@
+{
+ "href": "https://dei56mo.theexpertta.com/Common/eClass.aspx?m=2&eid=3373",
+ "title": "Class",
+ "lang": null,
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/Common/eClass.aspx?m=2&eid=3373"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 31,
+  "external": 26,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 3,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [
+   "https://dei56mo.theexpertta.com/images/clear.gif"
+  ],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 9,
+  "small": [
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_tbName_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Testing Course for CSU East Bay",
+    "w": 347,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_tbDescription_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Testing Course for CSU East Bay",
+    "w": 347,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_lbTimeZone_I.dxeEditArea.dxeEditAreaSys",
+    "name": "(UTC-08:00) Pacific Time (US & Canada)",
+    "w": 328,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_lbAcademicYear_I.dxeEditArea.dxeEditAreaSys",
+    "name": "2026",
+    "w": 328,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_lbAcademicSemester_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Fall",
+    "w": 328,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_lbSubject_I.dxeEditArea.dxeDisabled",
+    "name": "Physics",
+    "w": 328,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Configure my Class for LMS Integration",
+    "w": 207,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_btnSubmit_I.dxb-hb",
+    "name": "Save",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "input#ASPxRoundPanel2_MainContent_btnCancel_I.dxb-hb",
+    "name": "Cancel",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Common/eClass.aspx?m=2&eid=3373",
+ "view": "S11",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 589,
+   "clientWidth": 320,
+   "overflowing": [
+    "table right=589",
+    "tbody right=589",
+    "tr right=589",
+    "td right=589",
+    "table right=589",
+    "tbody right=589",
+    "tr right=589",
+    "td right=589",
+    "tr right=589",
+    "td right=589",
+    "table#ASPxRoundPanel2 right=589",
+    "tbody right=589"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

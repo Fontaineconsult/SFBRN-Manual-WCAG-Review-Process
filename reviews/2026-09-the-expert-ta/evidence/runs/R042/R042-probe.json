@@ -1,0 +1,181 @@
+{
+ "href": "https://dei56mo.theexpertta.com/common/calendar.aspx",
+ "title": "Calendar",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/common/calendar.aspx",
+  "https://dei56mo.theexpertta.com/DXR.axd?r=1_0-MM_qh"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 11,
+  "external": 33,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 19,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 20,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "a.filterSelectAll",
+    "name": "Select All",
+    "w": 175,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "a.filterOnly",
+    "name": "Only",
+    "w": 24,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "div#assignment-17547.dueBar",
+    "name": "",
+    "w": 788,
+    "h": 17,
+    "clash": null
+   },
+   {
+    "el": "div.dueResizer",
+    "name": "",
+    "w": 10,
+    "h": 17,
+    "clash": null
+   },
+   {
+    "el": "div#assignment-17547.dueBar",
+    "name": "",
+    "w": 472,
+    "h": 17,
+    "clash": null
+   },
+   {
+    "el": "div.dueResizer",
+    "name": "",
+    "w": 10,
+    "h": 17,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 12,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/common/calendar.aspx",
+ "view": "S6",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1330,
+   "clientWidth": 305,
+   "overflowing": [
+    "div#container right=1300",
+    "table right=1330 (in table/exempt)",
+    "tbody right=1330 (in table/exempt)",
+    "tr right=1330 (in table/exempt)",
+    "td right=1330 (in table/exempt)",
+    "table right=1330 (in table/exempt)",
+    "tbody right=1330 (in table/exempt)",
+    "tr right=1330 (in table/exempt)",
+    "td right=1330 (in table/exempt)",
+    "tr right=1330 (in table/exempt)",
+    "td right=1330 (in table/exempt)",
+    "div#TemplateMenu1_divUserMenu right=1330 (in table/exempt)"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": [
+    "div \"30311 Chapter 5 Sample Assignment23456 C\""
+   ]
+  }
+ }
+}

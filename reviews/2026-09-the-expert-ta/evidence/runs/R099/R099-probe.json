@@ -1,0 +1,13 @@
+{
+ "view": "S1",
+ "locator": "https://dei56mo.theexpertta.com/common/default.aspx",
+ "probed_at": "2026-09-11",
+ "grayscale": {
+  "screenshot": "R099-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 3,
+   "colorOnly": []
+  }
+ }
+}

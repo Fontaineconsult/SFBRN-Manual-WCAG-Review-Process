@@ -1,6 +1,5 @@
 __pycache__/
 *.pyc
 
-# derived store — rebuild with: python scripts/review_db.py sync --all
-data/reviews.sqlite
-data/reviews.sqlite-journal
+*.sqlite.tmp
+*.sqlite-journal

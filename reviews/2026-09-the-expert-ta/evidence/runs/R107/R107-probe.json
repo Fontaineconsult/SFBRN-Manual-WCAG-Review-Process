@@ -1,0 +1,15 @@
+{
+ "view": "R2",
+ "locator": "https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignmentProblems.aspx?m=1&eid=3373&aid=17547",
+ "probed_at": "2026-09-11",
+ "grayscale": {
+  "screenshot": "R107-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 4,
+   "colorOnly": [
+    "Grade Sheet - Class: Testing Course for CSU East B → GradeSheetClassAssignments.aspx?eid=3373"
+   ]
+  }
+ }
+}

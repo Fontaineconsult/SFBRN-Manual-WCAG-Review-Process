@@ -1,0 +1,426 @@
+{
+ "href": "https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx",
+ "title": "Take Homework assignment",
+ "lang": null,
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 16,
+  "external": 39,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 14,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 68,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Problem 1 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 2 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 2 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 1 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 3 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 2 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 4 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 3 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 5 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 4 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 6 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 5 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 7 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 6 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 8 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 7 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 9 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 8 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "button#_beta__509.ccb1",
+    "name": "beta",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#_theta__631.ccb1",
+    "name": "theta",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#a_97.ccb1",
+    "name": "a",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#d_100.ccb1",
+    "name": "d",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#g_103.ccb1",
+    "name": "g",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#h_104.ccb1",
+    "name": "h",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#i_105.ccb1",
+    "name": "i",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#j_106.ccb1",
+    "name": "j",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#k_107.ccb1",
+    "name": "k",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#l_108.ccb1",
+    "name": "l",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#m_109.ccb1",
+    "name": "m",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#P_80.ccb1",
+    "name": "P",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#S_83.ccb1",
+    "name": "S",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#t_116.ccb1",
+    "name": "t",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#w_119.ccb1",
+    "name": "w",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#left_paren_button.csb1",
+    "name": "(",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#right_paren_button.csb1",
+    "name": ")",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#seven_button.csb1",
+    "name": "7",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#eight_button.csb1",
+    "name": "8",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#nine_button.csb1",
+    "name": "9",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#home_button.csb2Clear",
+    "name": "HOME: Move the cursor to the first posit",
+    "w": 56,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#exponent_up_button.csb1",
+    "name": "Exponent Up",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#exponent_down_button.csb1",
+    "name": "Exponent Down",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "button#four_button.csb1",
+    "name": "4",
+    "w": 28,
+    "h": 24,
+    "clash": null
+   }
+  ],
+  "failing": [
+   {
+    "el": "a",
+    "name": "Problem 1 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 2 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 2 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 1 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 3 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 2 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 4 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 3 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 5 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 4 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 6 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 5 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 7 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 6 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 8 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 7 Click To Activate\""
+   },
+   {
+    "el": "a",
+    "name": "Problem 9 Click To Activate",
+    "w": 8,
+    "h": 18,
+    "clash": "a \"Problem 8 Click To Activate\""
+   }
+  ]
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547",
+ "view": "S3",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1300,
+   "clientWidth": 320,
+   "overflowing": [
+    "ul right=353",
+    "li right=353",
+    "a right=353",
+    "li#TemplateHeader1_liChangePassword right=353",
+    "a right=353",
+    "li right=353",
+    "a right=353",
+    "div#container right=1300",
+    "table right=1274 (in table/exempt)",
+    "tbody right=1274 (in table/exempt)",
+    "tr right=1274 (in table/exempt)",
+    "td right=1274 (in table/exempt)"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 4,
+   "after": [
+    "div \"6M79-C9-72-46-B37E-17547\""
+   ]
+  }
+ }
+}

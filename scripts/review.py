@@ -610,6 +610,7 @@ def cmd_new(args):
                 .replace("{{REVIEW_ID}}", review_id)
                 .replace("{{DATE}}", today.isoformat()))
         (dest / tpl.name).write_text(text, encoding="utf-8")
+    db_sync(dest)
     print(f"Review scaffolded: {dest}")
     if args.enclosure:
         apply_enclosure(dest, resolve_enclosure(args.enclosure))
@@ -1024,7 +1025,7 @@ def _completion_summary(review):
     if not db_sync(review):
         return None
     import review_db
-    con = review_db.connect()
+    con = review_db.connect(review)
     rows = review_db.completion(con, review.name)
     con.close()
     short = [f"{r['name'].split(' ')[0]} {r['done']}/{r['total']}" for r in rows if not (r['total'] and r['done'] >= r['total'])]
@@ -1114,7 +1115,7 @@ def cmd_validate(args):
     done_rows, complete = [], False
     if db_sync(review):
         import review_db
-        con = review_db.connect()
+        con = review_db.connect(review)
         done_rows = review_db.completion(con, review.name)
         for r in done_rows:
             if r["total"] and r["done"] >= r["total"]:

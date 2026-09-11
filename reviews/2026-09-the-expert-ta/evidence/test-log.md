@@ -102,3 +102,16 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R096 | 2026-09-11 14:13 | S7 | https://login.theexpertta.com/Login.aspx | no-speech | probe | — | — | assistant (view_probe) |
 | R097 | 2026-09-11 14:13 | S7 | https://login.theexpertta.com/Login.aspx | motor | probe | — | — | assistant (view_probe) |
 | R098 | 2026-09-11 14:13 | S7 | https://login.theexpertta.com/Login.aspx | cognition | probe | — | — | assistant (view_probe) |
+| R099 | 2026-09-11 15:55 | S1 | https://dei56mo.theexpertta.com/common/default.aspx | no-color | probe | — | — | assistant (view_probe) |
+| R100 | 2026-09-11 15:55 | S4 | https://dei56mo.theexpertta.com/Common/GradeSheetGradeReport.aspx?z=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
+| R101 | 2026-09-11 15:55 | S5 | https://dei56mo.theexpertta.com/Common/AssignmentEditor.aspx?m=2&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
+| R102 | 2026-09-11 15:55 | S6 | https://dei56mo.theexpertta.com/common/calendar.aspx | no-color | probe | — | — | assistant (view_probe) |
+| R103 | 2026-09-11 15:56 | S9 | https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignments.aspx?m=1&eid=3373 | no-color | probe | — | — | assistant (view_probe) |
+| R104 | 2026-09-11 15:56 | S10 | https://dei56mo.theexpertta.com/Common/vwMates.aspx?m=1&eid=3373 | no-color | probe | — | — | assistant (view_probe) |
+| R105 | 2026-09-11 15:56 | S12 | https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373 | no-color | probe | — | — | assistant (view_probe) |
+| R106 | 2026-09-11 15:56 | R1 | https://dei56mo.theexpertta.com/Instructor/AcademicIntegrityTemplates.aspx | no-color | probe | — | — | assistant (view_probe) |
+| R107 | 2026-09-11 15:57 | R2 | https://dei56mo.theexpertta.com/Common/GradeSheetClassAssignmentProblems.aspx?m=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
+| R108 | 2026-09-11 15:57 | S11 | https://dei56mo.theexpertta.com/Common/eClass.aspx?m=2&eid=3373 | no-color | probe | — | — | assistant (view_probe) |
+| R109 | 2026-09-11 15:57 | S3 | https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
+| R110 | 2026-09-11 15:57 | S8 | https://dei56mo.theexpertta.com/Common/ViewAssignmentSolutionsV2.aspx?z=1&vmid=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
+| R111 | 2026-09-11 15:58 | S2 | UI: Class Management → "Accessibility Page" button (lands on /common/default2.aspx) | no-color | probe | — | — | assistant (view_probe) |

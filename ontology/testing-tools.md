@@ -271,11 +271,14 @@ Tool names below are the exact `--tool` values `log-test` expects
   this; copy its `CDP` class rather than writing a fresh client.
   Verify the landed view by *path* before measuring (host-substring
   matching once measured the wrong view). Reflow metric: scrollingElement
-  scrollWidth vs 320. **Known limit:** after injecting the text-spacing
-  override across shadow roots, `Page.captureScreenshot` can hang
-  indefinitely on heavy views (renderer never reaches a stable frame) —
-  keep the *metric* (scrollWidth delta) as the LV3 outcome and mark the
-  visual confirmation partial rather than fighting the screenshot.
+  scrollWidth vs 320. **Screenshot hang — cause found 2026-09-11:**
+  `Page.captureScreenshot` hangs whenever the debug window is occluded or
+  in the background (no frame is ever produced), not because a view is
+  heavy. Call `Page.bringToFront` immediately before the capture — it then
+  returns in well under a second, with vision-deficiency emulation on as
+  well. (The window pops to the foreground on the reviewer's desktop; say
+  so before a batch.) Keep the *metric* (scrollWidth delta) as the LV3
+  outcome regardless; the screenshot is the visual confirmation.
 - **Text spacing (LV3):** apply the standard override to the page and re-read:
   `line-height 1.5× font size; paragraph spacing 2×; letter spacing 0.12×;
   word spacing 0.16×` (bookmarklet or injected CSS — record which).

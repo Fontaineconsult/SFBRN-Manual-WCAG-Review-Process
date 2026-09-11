@@ -90,8 +90,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.1.2 No Keyboard Trap (Level A)
 - **Outcome:** Not Evaluated
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** (V-F4 withdrawn)
-- **Remarks:** 2026-09-10: an initial keyboard-trap report on the Class Menu popups was withdrawn — each popup has an exposed, working Cancel/Close button; only Esc is unsupported. Full check in the S11 motor run.
+- **Task findings:**
+- **Remarks:**  (V-F4 popup-escape finding withdrawn 2026-09-10 — no citation.) MO3 passed on S3 (R018); other views untested. 2026-09-10: an initial keyboard-trap report on the Class Menu popups was withdrawn — each popup has an exposed, working Cancel/Close button; only Esc is unsupported. Full check in the S11 motor run.
 
 ### 2.1.4 Character Key Shortcuts (Level A)
 - **Outcome:** Not Evaluated
@@ -120,8 +120,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.4.1 Bypass Blocks (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F3 (Minor)
-- **Remarks:** [provisional] 2026-09-10 NVDA on S2: the section skip links work (focus moves to the next section) and a top-of-page jump point exists, so a bypass mechanism is present in Accessibility Mode; the controls are links by role and confusingly worded (V-F3). Standard mode (S1) relies on the vendor's jump points alone — pending R015. Vendor claim not contradicted so far.
+- **Task findings:** V-F1 (Major)
+- **Remarks:**  2026-09-11 rollup correction (db integrity: V-F1 names 2.4.1; V-F3 does not): V-F1 fails 2.4.1 in combination with V-F3's skip controls. [provisional] 2026-09-10 NVDA on S2: the section skip links work (focus moves to the next section) and a top-of-page jump point exists, so a bypass mechanism is present in Accessibility Mode; the controls are links by role and confusingly worded (V-F3). Standard mode (S1) relies on the vendor's jump points alone — pending R015. Vendor claim not contradicted so far.
 
 ### 2.4.2 Page Titled (Level A)
 - **Outcome:** Not Evaluated
@@ -136,10 +136,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional] 2026-09-10 NVDA on S3: activating a problem link does not move focus into the problem; the vendor's jump-point menu mounts links outside the natural focus path and is itself a hidden tab stop. Vendor-claim discrepancy.
 
 ### 2.4.4 Link Purpose (In Context) (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Partially Supports
 - **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Task findings:** V-F3 (Minor)
+- **Remarks:** 2026-09-11 rollup derived from V-F3 (S2 skip controls read as links whose text does not state their purpose; reviewer-confirmed 2026-09-10, R016 O4). Link purpose on S3 (NV10) and the remaining views still to be walked.
 
 ### 2.5.1 Pointer Gestures (Level A)
 - **Outcome:** Not Evaluated

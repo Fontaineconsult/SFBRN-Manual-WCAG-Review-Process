@@ -166,7 +166,7 @@ if nobody said the word "test".
   ones; never renumber or reuse.
 - **Markdown authors, the database measures.** The stage files and run
   files are the first artifact — write there, with all the detail the
-  narrative needs. What gets extracted into `data/reviews.sqlite` is fixed
+  narrative needs. What gets extracted into `reviews/<id>/<id>.sqlite` is fixed
   by the extraction contract in `ontology/data-store.md`; **review
   completion is the database's verdict** (`review_db.py completion`, the
   `[done]` lines of `validate`), never a reading of the files. If a fact
@@ -175,7 +175,7 @@ if nobody said the word "test".
 - **Verify with SQL, not by re-reading markdown.** Every structured fact
   (criteria, checks, runs, check outcomes, observations, findings, 05
   outcomes, tasks, probe/axe measurements) is mirrored deterministically into
-  `data/reviews.sqlite` (`scripts/review_db.py`; rebuilt by `validate`,
+  `reviews/<id>/<id>.sqlite` (`scripts/review_db.py`; rebuilt by `validate`,
   `coverage`, `log-test`, the probe). Before asserting a count, a
   cross-reference ("finding X is rolled up under 1.3.1"), or a comparison
   across reviews, run the query. The markdown remains the record; the DB is
@@ -252,6 +252,6 @@ That is the only sanctioned way the process changes.
 - `enclosures/` — archetype + saved product enclosures
 - `reviews/<id>/` — the system of record, one dir per review
 - `scripts/review.py` — the management CLI; `scripts/import_acr.py` — ACR
-  importer; `scripts/review_db.py` — the SQLite mirror (`data/reviews.sqlite`,
-  git-ignored, rebuilt from the files) and its integrity checks
+  importer; `scripts/review_db.py` — the SQLite mirror (`reviews/<id>/<id>.sqlite`,
+  one per review, committed, rebuilt deterministically from the files) and its integrity checks
 - `tools/` — W3C evaluation-tools catalog

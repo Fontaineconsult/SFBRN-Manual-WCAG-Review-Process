@@ -1,0 +1,115 @@
+{
+ "href": "https://login.theexpertta.com/Login.aspx",
+ "title": "Expert TA - Login",
+ "lang": null,
+ "xmlLang": null,
+ "docs": [
+  "https://login.theexpertta.com/Login.aspx"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 9,
+  "external": 10,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 3,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [
+  {
+   "type": "text",
+   "name": "ctl00$MainContent$UserName",
+   "id": "MainContent_UserName",
+   "label": "User Name:",
+   "autocomplete": null,
+   "personal": "personal"
+  }
+ ],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 11,
+  "small": [
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_UserName.softCornerBorderLineTextControl",
+    "name": "",
+    "w": 355,
+    "h": 19,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 226,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 12,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://login.theexpertta.com/Login.aspx",
+ "view": "S7",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1024,
+   "clientWidth": 320,
+   "overflowing": [
+    "div#container right=1024",
+    "table right=994",
+    "tbody right=994",
+    "tr right=994",
+    "td right=994",
+    "table right=994",
+    "tbody right=994",
+    "tr right=994",
+    "td right=994",
+    "tr right=994",
+    "td right=994",
+    "div right=979"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

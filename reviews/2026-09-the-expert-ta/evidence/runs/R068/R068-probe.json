@@ -1,0 +1,150 @@
+{
+ "href": "https://dei56mo.theexpertta.com/Instructor/AcademicIntegrityTemplates.aspx",
+ "title": "Academic Integrity Templates",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://dei56mo.theexpertta.com/Instructor/AcademicIntegrityTemplates.aspx"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 33,
+  "external": 45,
+  "unreadable": [
+   "https://cdn.theexpertta.com/scripts/libs/mj/MathJax.js?config=ETAMQ_240412"
+  ],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 14,
+   "timers": 1
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 12,
+  "small": [
+   {
+    "el": "a",
+    "name": "theExpertTA.com",
+    "w": 122,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "My Account",
+    "w": 92,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a.membership",
+    "name": "Log Out",
+    "w": 70,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Class Management",
+    "w": 133,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a#aMIInstructor.aMIInstructor",
+    "name": "Instructor",
+    "w": 80,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "Help",
+    "w": 50,
+    "h": 24,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 75,
+    "h": 18,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_ASPxRoundPanel1_cboTemplateOptions_I.dxeEditArea.dxeEditAreaSys",
+    "name": "Please Select...",
+    "w": 153,
+    "h": 15,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_ASPxRoundPanel2_ASPxCallbackPanel1_GradeProfilesControl1_btnSave_I.dxb-hb",
+    "name": "Save Preferences",
+    "w": 1,
+    "h": 1,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 12,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Instructor/AcademicIntegrityTemplates.aspx",
+ "view": "R1",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1300,
+   "clientWidth": 305,
+   "overflowing": [
+    "div#container right=1300",
+    "table right=1300",
+    "tbody right=1300",
+    "tr right=1300",
+    "td right=1300",
+    "table right=1300",
+    "tbody right=1300",
+    "tr right=1300",
+    "td right=1300",
+    "tr right=1300",
+    "td right=1300",
+    "div#TemplateMenu1_divUserMenu right=1300"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

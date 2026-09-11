@@ -102,9 +102,9 @@ a false Major finding.
 7. **Environment pre-flight — only if this session will run tools.** It rots
    silently between sessions (both of these were dead on 2026-08-06 having
    worked on 2026-08-04):
-   - `python -c "import websocket"` — `axe_scan.py`'s dependency; the repo
-     has no manifest, so a machine change or Python upgrade loses it.
-     Fix: `python -m pip install websocket-client`.
+   - `python -c "import websocket"` — `axe_scan.py`'s dependency; a machine
+     change or Python upgrade loses it. Fix: `python -m pip install -r
+     requirements.txt` (the manifest; README §Continuing on another machine).
    - `%LOCALAPPDATA%\sfbrn-a11y-chrome` exists **and** port 9222 answers
      **and** the tab is authenticated **and** `/json` lists **zero
      `chrome-extension://` targets** — see testing-tools.md §axe-core.

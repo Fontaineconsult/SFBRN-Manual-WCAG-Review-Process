@@ -1,0 +1,4 @@
+# Python dependencies for scripts/ (Python 3.10+). Install: python -m pip install -r requirements.txt
+websocket-client>=1.6   # CDP clients: axe_scan.py, cdp_probe.py, crawl_map.py, view_probe.py
+python-docx>=1.1        # export_report.py (.docx rendering)
+# sqlite3, json, re, pathlib, hashlib, subprocess, urllib: standard library

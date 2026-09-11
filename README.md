@@ -155,3 +155,29 @@ Each review contains:
   vendor-claim lines; `axe_scan.py` — per-view automated sweep: runs the
   vendored axe-core inside the authenticated Chrome session via the
   DevTools port and saves raw JSON into the run's evidence folder)
+
+## Continuing on another machine
+
+Everything the review needs is in the repo: the stage files, the runs and
+their evidence, the walkthrough, the state log, and the review's database
+(`reviews/<id>/<id>.sqlite`, committed and byte-stable — a sync on a machine
+whose files are identical leaves it untouched). What is *not* in the repo,
+and must exist on the machine:
+
+1. **Python 3.10+** and `python -m pip install -r requirements.txt`.
+2. **The debug-profile Chrome** — launch with the full flag set in
+   `ontology/testing-tools.md` §axe-core (the profile directory is created on
+   first launch), then **sign in once in that window** with the review's
+   account; the assistant never authenticates. Products with a one-session
+   rule (Expert TA) must not be open in another browser at the same time.
+3. **The screen reader** for reviewer sessions (NVDA/JAWS, versions in
+   `03` §1.3/§1.5).
+
+First commands on the new machine, from the repo root:
+
+    python scripts/review_db.py state <review> --log   # where things stand, from the database
+    python scripts/review.py validate <review>         # [md] extraction health, [done], [db]
+    python scripts/review.py gaps <review> --view S#   # the reviewer's question list
+
+The `.sqlite` will show as modified after the first sync only if the
+markdown differs from what built it — commit it together with the markdown.

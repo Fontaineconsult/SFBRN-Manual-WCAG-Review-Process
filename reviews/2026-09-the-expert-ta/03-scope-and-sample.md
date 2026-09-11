@@ -338,6 +338,23 @@ assignment (problem 9 left active — someone had left problem 8 active before).
   in Accessibility Mode (R005 O1), and the `#FF6347` randomized-variable
   colour at 2.94:1 on S3/S4/S8 (R004 O10).
 - **Mode state (2026-09-10, W4):** the shared account was in **Accessibility Mode** when the reviewer started (the assistant had restored standard mode at 10:49). The reviewer switched it on before W4 (answered). Every run now records the mode; the S1 (standard) no-vision pass is still owed under R015.
+- **Instrument caveat (found 2026-09-11 on merging the updated process
+  docs):** CLAUDE.md now requires the debug-profile Chrome to be launched
+  with `--disable-extensions --disable-sync`, because Chrome's first-run
+  sync pulls the reviewer's personal extensions into the profile — on the
+  Adobe Express review that included SkipTo Landmarks (which *adds* a skip
+  link) and Stylus (which alters styles and falsifies contrast). The
+  2026-09-10 sessions here ran **without** those flags and `/json` listed
+  `chrome-extension://` targets (an "Offscreen Audio Player & GIF Generator"
+  among them). Consequences to check before any finding is finalised:
+  (a) every skip/jump mechanism recorded (V-F3 skip links, V-F8 jump
+  points) is vendor code — confirmed from the page source
+  (`javascript:skipper(...)`, `ETAAccessibilityFunctions.js`) — so not an
+  extension artefact; (b) the axe contrast numbers (R001–R014) could be
+  affected only if a style-injecting extension was active — re-measure the
+  quoted values by eyedropper in the low-vision run before promoting them;
+  (c) relaunch the debug Chrome with the full flag set for every further
+  session and record the extension-free state in the run notes.
 - **Document registry:** class eid=3373 "Testing Course for CSU East Bay";
   assignment aid=17547 "Chapter 5 Sample Assignment" (9 problems, weight 1,
   due 2026-09-08 — already past due: late-work rules apply to any

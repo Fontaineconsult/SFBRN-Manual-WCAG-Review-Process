@@ -57,9 +57,20 @@ a false Major finding.
 
 ## Session start (every session, before anything else)
 
-1. `python scripts/review.py list` — reviews and their states.
+1. `python scripts/review.py list` — reviews and their states, then
+   `python scripts/review_db.py state <review> --log` — the review-state
+   dashboard (definition of done, POUR, FPC, matrix, findings, vendor
+   delta, what moves the needle), logged as a row in
+   `reviews/<id>/state-log.md` so progress between sessions is a diff of
+   two rows. `status`
+   ends with the completion line (predicates of the definition of done
+   satisfied, from the database).
 2. Working a review? `python scripts/review.py status <review>` then
-   `validate <review>` — the gap list IS the to-do list.
+   `validate <review>` — the gap list IS the to-do list — then
+   `coverage <review>`, and read the `[db]` lines of `validate` — integrity
+   queries over the SQLite mirror (`ontology/data-store.md`). Which criteria, POUR principles and 508 FPC have an
+   **answered** check, and its reliability flags (an Outcome with no check
+   behind it, a failed check not rolled up, runs behind the checklist).
 3. **Is a session already in flight?** `ls reviews/<id>/session-*-walkthrough.md`.
    A walkthrough with `**Feedback:** _(pending)_` lines **is** the saved
    place — it holds the ordered remaining steps, why each matters, and what
@@ -74,13 +85,21 @@ a false Major finding.
      sweeping.
    - **runs without a Result** — these are half-finished sessions, usually
      blocked on the reviewer, not on you.
-5. Testing? `python scripts/review.py next <review>` names the target.
+5. **Reduce the reviewer's workload first.** Every sampled view gets
+   `python scripts/view_probe.py <review> --view S# --url URL` before the
+   reviewer is asked anything: it answers by measurement what a structural
+   fact decides (no video → captions n/a; no speech API → NS1 n/a; `lang`,
+   title, target size, reflow, text spacing, autocomplete) and names the
+   rest. The reviewer's question list is what `gaps` shows *after* that.
+   Never point the authenticated tab at the sign-in page (it ends the
+   session) — sign-in views use the signed-out profile on port 9223.
+6. Testing? `python scripts/review.py next <review>` names the target.
    Don't invent priorities; `next` already encodes them (vendor-claim
    discrepancies first). Then
    `python scripts/review.py gaps <review> --view S#` prints the unanswered
    check rows — **that is the session's question list**; never improvise one
    or ask the reviewer things the runs already answer.
-6. **Environment pre-flight — only if this session will run tools.** It rots
+7. **Environment pre-flight — only if this session will run tools.** It rots
    silently between sessions (both of these were dead on 2026-08-06 having
    worked on 2026-08-04):
    - `python -c "import websocket"` — `axe_scan.py`'s dependency; the repo
@@ -116,12 +135,15 @@ if nobody said the word "test".
 | Intake / vendor info | the stage file's own template text | `01-intake.md`, `02-vendor.md` |
 | Import a vendor ACR | `scripts/import_acr.py --help` | `vendor-acr/`, claim lines in `05-results.md` |
 | Explore the product (WCAG-EM step 2) | `ontology/assisted-exploration.md` | `03-scope-and-sample.md` §1.1, §2, §3.1 proposals |
+| Take work off the reviewer before a session (instrument-answerable checks) | `ontology/modality-checks.md` §Assistant-answerable checks, `ontology/testing-tools.md` §view_probe | `scripts/view_probe.py` → the cell's run (pass / n/a / measured fail + `R###-probe.json`); sign-in views only via the signed-out profile |
 | Test (the loop) | `ontology/testing-loop.md`, `ontology/modality-checks.md`, `ontology/testing-tools.md` | run file → `04-task-testing.md` → `05-results.md` → enclosure |
 | Log/scaffold a run | `review.py log-test` (only way) | `evidence/runs/R###/` |
 | Reviewer-driven session (JAWS, zoom, confirmations) | `ontology/testing-loop.md` §Reviewer session walkthroughs | `reviews/<id>/session-<sample>-reviewer-walkthrough.md` + the runs it feeds |
 | Results rollup / report | `05`/`06` template text | `05-results.md`, `06-report.md` |
 | Finish a review | `review.py validate` until clean | `06-report.md`, then `save-enclosure` |
 | Export the report for distribution | `scripts/export_report.py --help`, ontology/reporting.md §Distribution | `reviews/<id>/<id>-report.docx` — generated output; edit the .md and re-export, never the .docx |
+| Export the WCAG-EM report (org-neutral, for outside the CSU) | ontology/reporting.md §Second output, `templates/review/wcag-em-report.html` | `reviews/<id>/<id>-wcag-em-report.html` — generated from 01/03/05/06; never hand-edited, never carries decision/TAAP/procurement fields |
+| Verify a result, count, or cross-reference | `ontology/data-store.md` | nothing — `python scripts/review_db.py query "SQL"` / `check <review>`; the SQLite mirror is the place to verify, the files stay the record |
 | Change the process itself | the doc being changed | `ontology/` + `templates/` + `scripts/` + README together — never just deviate in-session |
 
 ## Hard rules
@@ -142,6 +164,30 @@ if nobody said the word "test".
   content edits go through Edit/Write or a Python script.
 - **IDs are stable once assigned** (C/F/S/P/T/R and finding IDs). Append new
   ones; never renumber or reuse.
+- **Markdown authors, the database measures.** The stage files and run
+  files are the first artifact — write there, with all the detail the
+  narrative needs. What gets extracted into `data/reviews.sqlite` is fixed
+  by the extraction contract in `ontology/data-store.md`; **review
+  completion is the database's verdict** (`review_db.py completion`, the
+  `[done]` lines of `validate`), never a reading of the files. If a fact
+  must count toward completion it must be in an extracted field — a
+  sentence in prose does not count.
+- **Verify with SQL, not by re-reading markdown.** Every structured fact
+  (criteria, checks, runs, check outcomes, observations, findings, 05
+  outcomes, tasks, probe/axe measurements) is mirrored deterministically into
+  `data/reviews.sqlite` (`scripts/review_db.py`; rebuilt by `validate`,
+  `coverage`, `log-test`, the probe). Before asserting a count, a
+  cross-reference ("finding X is rolled up under 1.3.1"), or a comparison
+  across reviews, run the query. The markdown remains the record; the DB is
+  how you check it. `review_db.py check <review>` lists what the files
+  contradict.
+- **Coverage is tracked at the check row, not the run.** A criterion counts
+  as tested only when a check mapped to it is answered (pass/fail/partial/n/a)
+  in a logged run; `05` Outcomes without that are validate failures. Every
+  WCAG 2.2 AA criterion has a check row and every check maps to a criterion
+  or FPC (modality-checks.md §Completeness contract). If you add or rename a
+  check row, run `review.py sync-checks` on every in-flight review. Report
+  coverage in POUR and 508-FPC terms (`coverage`), never as run counts.
 - **Findings cite runs.** Exploration observations are recon → `03` §2.6,
   phrased "verify X under check Y in a run". No run, no finding.
 - **Every run carries a replicable locator** — validate enforces it. A real
@@ -206,5 +252,6 @@ That is the only sanctioned way the process changes.
 - `enclosures/` — archetype + saved product enclosures
 - `reviews/<id>/` — the system of record, one dir per review
 - `scripts/review.py` — the management CLI; `scripts/import_acr.py` — ACR
-  importer
+  importer; `scripts/review_db.py` — the SQLite mirror (`data/reviews.sqlite`,
+  git-ignored, rebuilt from the files) and its integrity checks
 - `tools/` — W3C evaluation-tools catalog

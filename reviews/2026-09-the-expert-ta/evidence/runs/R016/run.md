@@ -11,7 +11,7 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA 2026.2, baseline B5); assistant records |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Not set — NV4, NV5, NV10 need the reviewer (jaws, B1); measured fail on NV2, NV3, NV6, NV8 awaits confirmation |
 
 ## Checks (no-vision)
 
@@ -29,6 +29,9 @@ run's Result is set. Fails cite observation IDs.
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | pass | O13 — Actions → Take Assignment → Go: page change announced ("Take Homework Assignment") |
 | NV8 — Nothing is conveyed only by visual position, shape, or size | fail | O3 — the two grids are distinguishable only by position/order (identical captions) |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | lang="en"; no pronunciation issue reported |
+| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | (row added 2026-09-11 by sync-checks — not part of the original session; answer or mark n/a) |
+| NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O14 — no <video>, media iframe or embed on the view |
+**view_probe 2026-09-11:** answered NV11=n/a by measurement; facts in `R016-probe.json`.
 
 ## Observations
 
@@ -65,6 +68,10 @@ Format:
   - Classified: NV3 / WCAG 4.1.2 (button without an accessible name; state change without a name) / **Minor on this page** (may rise on Take Assignment where the menu is expected — W11) → finding V-F8 (product-wide family: R001 O2, R004–R014 `aria-command-name`)
 - O13 [clarified] (state: row Actions select → "Take Assignment" → Go): NVDA announced the page change, "Take Homework Assignment". Task T1 step 3 completed in Accessibility Mode.
   - Classified: NV7 / pass; T1 step 3 → S3 run R017
+
+
+- O14 [measured] (state: view as loaded, 2026-09-11 view_probe): no <video>, media iframe or embed on the view
+  - Classified: NV11 / WCAG 1.2.3, 1.2.5 / measured → n/a
 
 ## Notes
 

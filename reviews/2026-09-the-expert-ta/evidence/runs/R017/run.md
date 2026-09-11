@@ -11,7 +11,9 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA 2026.2, B5); assistant records |
-| **Result** | **Broken** — reviewer's decision 2026-09-10: "if they can't complete the entire problem set because a single problem is inaccessible then the whole problem set is not accessible." Blocker-level: multiple-choice parts whose options contain math (V-F11 + V-F9). Completable with barriers: text-only multiple choice, symbolic/numeric entry (V-F13), drag-and-drop ranking (V-F14), free-body diagram (pass), hints (V-F15), submission dialogs (pass). |
+| **Result** | Broken |
+
+**Result reasoning.** reviewer's decision 2026-09-10: "if they can't complete the entire problem set because a single problem is inaccessible then the whole problem set is not accessible." Blocker-level: multiple-choice parts whose options contain math (V-F11 + V-F9). Completable with barriers: text-only multiple choice, symbolic/numeric entry (V-F13), drag-and-drop ranking (V-F14), free-body diagram (pass), hints (V-F15), submission dialogs (pass).
 
 ## Checks (no-vision)
 
@@ -29,6 +31,9 @@ run's Result is set. Fails cite observation IDs.
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | fail | O3 — Ctrl+Shift+5 works; O4 — Ctrl+Shift+2 reads raw MathJax markup for math answers (V-F9); O10/O14 — submission dialogs announced correctly; O19 — drag-and-drop placements not announced (V-F14); O23 — inserted hint not announced (V-F15) |
 | NV8 — Nothing is conveyed only by visual position, shape, or size | fail | O6/O9 — a math-bearing answer option is identified to the screen reader only by its table position ("row 4 table 1"); O23 — the inserted hint is findable only by its position below the problem |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | partial | page has no `lang` attribute (R004 O2 — technical 3.1.1 failure); no mispronunciation reported with an English synthesizer voice |
+| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | (row added 2026-09-11 by sync-checks — not part of the original session; answer or mark n/a) |
+| NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O25 — no <video>, media iframe or embed on the view |
+**view_probe 2026-09-11:** answered NV11=n/a by measurement; facts in `R017-probe.json`.
 
 ## Observations
 
@@ -90,6 +95,9 @@ Format:
   - Classified: NV7 / WCAG 4.1.3 (content added in response to the user's action with no status message), 2.4.3 (focus not managed to the new content) / **Major** (a hint costs a deduction; the screen-reader user pays it and hears nothing) → finding V-F15
 - O24 [clarified] (state: **I give up!** activated): a modal opens with a warning and Continue / Cancel links — confirmation before forfeiting exists.
   - Classified: NV7, CO4 / pass (3.3.4-style confirmation present; no finding)
+
+- O25 [measured] (state: view as loaded, 2026-09-11 view_probe): no <video>, media iframe or embed on the view
+  - Classified: NV11 / WCAG 1.2.3, 1.2.5 / measured → n/a
 
 ## Notes
 

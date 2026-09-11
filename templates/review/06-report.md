@@ -108,7 +108,8 @@ listed too.
 
 *The same findings sliced by the Section 508 Functional Performance
 Criteria (302.1–302.9) — procurement's vocabulary. Derive from the
-modality→WCAG map in `ontology/modality-checks.md` and the coverage matrix;
+modality→WCAG map in `ontology/modality-checks.md` and `review.py coverage`
+(the FPC table gives the "Coverage so far" column: views, checks answered/blank, fails);
 one row per modality, every modality present even when the row is
 N/A or untested (an absent row reads as "fine", which is never what an
 untested modality means).*
@@ -169,7 +170,9 @@ none.)
 
 ## Coverage & limitations of this review
 
-(Honesty box, from `validate`/`matrix`: which views × modalities were
+(Honesty box, from `validate`/`matrix`/`coverage`: paste the `coverage`
+principle and FPC tables — criteria with an answered check per POUR
+principle, and per 508 FPC — then: which views × modalities were
 tested with which instruments; what remains untested; standing caveats such
 as single-AT evidence or sample-document limits. An INTERIM report must
 make incompleteness impossible to miss.)

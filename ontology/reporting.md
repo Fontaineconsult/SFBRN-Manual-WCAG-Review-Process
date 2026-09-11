@@ -54,7 +54,7 @@ Every section is filled from the live files, never from memory:
 - **Remediation exhibit** ← findings that carry a specific fix; each row
   names its verification method (NVDA re-test step, axe rule, or
   measurement).
-- **Coverage & limitations** ← `validate` + `matrix` output, instruments
+- **Coverage & limitations** ← `validate` + `matrix` + `coverage` output, instruments
   and baselines from `03` §1.3/§1.5, plus any standing caveats (e.g. a
   single-AT evidence base).
 - **Findings by modality (508 FPC)** ← the modality→WCAG map in
@@ -131,3 +131,103 @@ fill Word-side metadata (document title, author) there.
 - **No new facts in 06.** Everything cites a finding ID, run ID, or `05`
   entry. If the report needs a fact that exists nowhere else, the fact goes
   into the run/finding first.
+
+## Second output: the WCAG-EM report (org-neutral, for use outside the CSU)
+
+Added 2026-09-11. A review now produces **two** reports from the same
+evidence base:
+
+| | Internal review report (`06-report.md`) | WCAG-EM report (`<id>-wcag-em-report.html`) |
+|---|---|---|
+| Audience | CSU procurement, decision-maker, campus officers, negotiators | anyone outside the org: the vendor, other institutions, auditors, a public-records request |
+| Shape | this doc's sections (decision, TAAP, ACR audit, remediation exhibit) | the W3C WCAG-EM Report Tool structure, verbatim |
+| Carries | procurement context: decision, TAAP inputs, requisition, campus needs, vendor-ACR reliability | conformance evidence only |
+| Never carries | — | the procurement decision, TAAP, requisition/department/requestor, cost or contract language, the vendor-ACR audit, internal-only caveats |
+| Status | INTERIM / FINAL | same value, copied — an interim `06` can only yield an interim EM report |
+| Source of truth | `01`–`05` | the same files; **no fact may exist only in the EM report** |
+
+The internal report is the deliverable; the EM report is its **appendix**
+in the W3C's interchange shape, so a reader who has never seen this process
+can still verify scope, sample, method and per-criterion results. It is
+generated, never authored: `python scripts/export_report.py <review>
+--format wcag-em` fills `templates/review/wcag-em-report.html`
+(**generator not yet written** — the template and this section come first so
+the script has a contract to meet). Output:
+`reviews/<id>/<id>-wcag-em-report.html`, generated output like the .docx —
+regenerate, never hand-edit.
+
+### Template provenance
+
+The template is the WCAG-EM Report Tool's own HTML export (2.2 AA, 55
+criteria, saved 2026-09-11) with values replaced by `{{…}}` placeholders and
+one browser-extension artefact (`data-landmark-index`) stripped. The section
+order, headings, guideline tables and result vocabulary are kept **exactly**
+so the file is recognisably EM-conformant and comparable with reports from
+other evaluators. Two additions are ours: a status line under the H1, and
+the product name in `<title>`/H1.
+
+### Derivation (mechanical, like `06`)
+
+| EM section / placeholder | Filled from | Notes |
+|---|---|---|
+| `{{REPORT_CREATOR}}` | `01` Reviewer(s) | team name, not individuals' emails |
+| `{{COMMISSIONER}}` | `01` Requesting department, org-level wording | "California State University, <campus>" — no requestor name/email, no PO |
+| `{{REPORT_DATE}}`, `{{REPORT_STATUS}}`, `{{REVIEW_ID}}` | `06` header table | status is copied, never upgraded |
+| `{{EXECUTIVE_SUMMARY}}` | `06` §Executive summary | with internal references (decision bucket, TAAP, campus) removed; states the task outcomes and the character of the barriers |
+| `{{PRODUCT_NAME}}`, `{{PRODUCT_SCOPE}}` | `01` Product name + Version; `03` §1.1 boundary, inclusions, exclusions with justification | scope is the enclosure boundary, not the sample |
+| `{{WCAG_VERSION}}`, `{{CONFORMANCE_TARGET}}` | `03` §1.2 | "2.2" / "AA (WCAG 2.1 AA primary target; 2.2 additions also evaluated)" — the dual target is stated, not hidden |
+| `{{SUPPORT_BASELINE}}` | `03` §1.3 rows **actually used** | OS + browser + AT + versions, as a list; unused baseline rows are omitted |
+| `{{ADDITIONAL_REQUIREMENTS}}` | `03` §1.4 | "None" when empty |
+| Summary counts `{{N_*}}` | computed from the mapped results | `{{N_REPORTED}}` = 55 − Not checked |
+| `{{R:x.y.z}}` | `05` Outcome via the mapping below | |
+| `{{O:x.y.z}}` | `05` Task findings + Remarks, expanded | see "Observations" below |
+| `{{SAMPLE_SET}}` | `03` §3.1 structured + §3.2 random | one list item per S/R row: ID, view name, durable locator, what it represents; random items flagged "(random)" with the selection method stated once |
+| `{{TECHNOLOGY}}` | `03` §2.4 | technologies relied upon, with versions where known |
+| `{{EVALUATION_SPECIFICS}}` | `03` §1.5 tools + versions; run count and date range from `evidence/runs`; coverage from `coverage` (principle and FPC tables) and `matrix`/`validate`; the sweep-triage summary from `06` §Automated sweep record | instrument blind spots demonstrated on this product are stated here, same as in `06` |
+
+### Outcome mapping (ACR vocabulary → WCAG-EM result)
+
+`05` keeps the fixed ACR vocabulary; the EM report uses the Report Tool's.
+The mapping is one-way and is applied only by the generator:
+
+| `05` Outcome | EM Result | Observations must open with |
+|---|---|---|
+| Supports | Passed | what was tested and where (sample IDs), so a pass is evidence, not silence |
+| Partially Supports | Failed | "Partially supports —" then the failing functionality; the ACR distinction is preserved in the text because EM has no partial result |
+| Does Not Support | Failed | "Does not support —" then the failing functionality |
+| Not Applicable | Not present | why the criterion has no applicable content in the sample |
+| Not Evaluated | Not checked | nothing (interim reports only; a FINAL report has zero) |
+| Not Evaluated **and** Remarks record "Unmeasured" with the instrument that could not reach it | Cannot tell | the instrument limit, and what would resolve it |
+
+`Cannot tell` is the only result the generator derives from Remarks rather
+than Outcome; it is never written into `05` (the ACR vocabulary is fixed).
+
+### Observations (the per-criterion cell)
+
+Each cell is self-contained for a reader without repo access:
+
+- the outcome phrase from the mapping table;
+- one sentence per cited finding: **what** fails, **where** (sample ID and
+  view name; the durable locator for the view), **for whom** (the modality
+  blocked), and the finding ID in parentheses for traceability;
+- the method: instrument and baseline (e.g., "NVDA 2026.2 / Chrome 152,
+  B5"), never a tool-only claim — an axe result appears only as
+  "confirmed under NVDA" or as the refuting measurement;
+- for Passed: the sample items and method on which it passed.
+
+Run IDs, evidence file names, reviewer quotations and internal caveats stay
+in `04`/`05`; observations are prose, not pointers.
+
+### Rules specific to the EM report
+
+- **Org-neutral means org-neutral.** Nothing about the decision, TAAP,
+  budget, requisition, department, or campus needs. If a fact is needed to
+  understand a barrier, it belongs in the observation as product behaviour.
+- **No positives lost.** Every Supports becomes a Passed with its evidence;
+  a report that lists only failures misrepresents the product to outsiders
+  just as it would to procurement.
+- **Same status, same date** as the `06` it was generated with; regenerate
+  both together.
+- **Accessibility of the output**: the template's own markup (headings,
+  `scope`d table headers, `aria-labelledby` tables, `lang`) is preserved;
+  the generator adds no colour-only meaning and no scripts.

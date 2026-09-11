@@ -59,6 +59,7 @@ and creates the run's evidence folder.
 |------|------|--------------|---------|-------------------------|
 | JAWS (Freedom Scientific) | Screen reader — manual testing | | Walk task sequences and inspect views as a screen reader user | Action/announced/expected notes, speech history excerpts, screenshots |
 | WAVE (WebAIM) browser extension | Automated checker | | Sweep every sampled view and state | Summary counts, error list, annotated screenshots |
+| view_probe (`scripts/view_probe.py`, CDP) | Structural measurement — assistant-run | Chrome (debug profile) + CDP | Answer the instrument-decidable checks per view (media absent → n/a, lang, title, target size, reflow, text spacing, autocomplete) before the reviewer session | `R###-probe.json` facts + outcomes in the run |
 
 ## Step 2 — Explore the target product
 

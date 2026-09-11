@@ -40,9 +40,16 @@ python scripts/review.py log-test <review> --view S1 --modality no-vision \
     --tool jaws --url URL --baseline B1        # log a test run; creates its evidence folder
 python scripts/review.py runs <review>         # list logged test runs
 python scripts/review.py matrix <review>       # views × modalities coverage grid
+python scripts/review.py coverage <review>     # criteria → POUR principles → 508 FPC: which have an
+                                               # answered check, and whether 05 agrees (reliability flags)
+python scripts/review.py sync-checks <review>  # add check rows introduced after a run was logged
 python scripts/review.py next <review>         # highest-value cell to test next
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
+python scripts/view_probe.py <review> --view S# --url URL [--dry-run]
+                                               # answer the instrument-decidable checks of a view by
+                                               # measurement (media absent → n/a, lang, title, target size,
+                                               # reflow, text spacing, autocomplete) into its runs
 python scripts/cdp_probe.py [URL] [--ax] [--shot PNG] [--js EXPR] [--key K --ctrl --shift]
                                                # per-view exploration probe over CDP: frames, text, controls,
                                                # accessibility-tree summary, screenshot, real key chords
@@ -50,9 +57,21 @@ python scripts/crawl_map.py harvest|map URL... [--out FILE]
                                                # enclosure mapping over CDP: harvest candidate links,
                                                # fingerprint allowlisted views (never auto-follows —
                                                # see ontology/assisted-exploration.md)
+python scripts/review_db.py sync --all|<review>   # rebuild the SQLite mirror (data/reviews.sqlite) from the files
+python scripts/review_db.py state <review> [--log]   # review state dashboard from the database: definition of done,
+                                               # POUR / FPC / matrix / findings / vendor delta / what moves the needle;
+                                               # repeatable (same files → same text); --log appends a row to state-log.md
+python scripts/review_db.py completion <review>   # the definition of done, measured in the database (C1–C12)
+python scripts/review_db.py check <review>     # integrity queries: finding ↔ 05 rollup, withdrawn-but-cited,
+                                               # runs cited that don't exist, Works with blank/failed checks …
+python scripts/review_db.py query "SELECT …"   # read-only SQL over criteria / checks / runs / outcomes / findings
+python scripts/review_db.py criteria [--level AA] [--principle 2]
 python scripts/export_report.py <review> [--out PATH]
                                                # render 06-report.md as a styled .docx (real heading
                                                # styles + tables; needs `pip install python-docx`)
+python scripts/export_report.py <review> --format wcag-em
+                                               # (planned) render the org-neutral WCAG-EM report
+                                               # (templates/review/wcag-em-report.html) from 01/03/05/06
 ```
 
 Testing runs as an interactive loop (`ontology/testing-loop.md`): `next`

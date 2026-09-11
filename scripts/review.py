@@ -227,6 +227,14 @@ def run_meta(run_dir):
         meta[key] = m.group(1) if m else ""
     if meta["result"].startswith("Not set"):
         meta["result"] = "Not set"
+    else:
+        # accept "**Broken** — reasoning…" but normalise to the bare term; the
+        # reasoning belongs in the **Result reasoning.** paragraph (RUN_TEMPLATE)
+        bare = meta["result"].strip("*` ")
+        for term in ("Works with issues", "Works", "Broken", "N/A"):
+            if bare.startswith(term):
+                meta["result"] = term
+                break
     return meta
 
 
@@ -279,6 +287,209 @@ def sc_to_modalities():
         for sc in set(re.findall(r"\b\d+\.\d+\.\d+\b", sec.group(0))):
             mapping.setdefault(sc, set()).add(m)
     return mapping
+
+
+# ---- Criterion / POUR-principle / 508-FPC coverage --------------------------
+# The matrix answers "which views × modalities have a run"; these answer
+# "which criteria have an answered check, and does 05 agree" — the unit of
+# reliability is the check row (ontology/modality-checks.md §Coverage
+# tracking).
+
+PRINCIPLES = {"1": "Perceivable", "2": "Operable", "3": "Understandable", "4": "Robust"}
+
+# Section 508 Functional Performance Criteria per matrix modality
+# (36 CFR 1194 Chapter 3; collapsed where testing is identical).
+FPC = {
+    "no-vision": [("302.1", "Without Vision")],
+    "low-vision": [("302.2", "With Limited Vision")],
+    "no-color": [("302.3", "Without Perception of Color")],
+    "no-hearing": [("302.4", "Without Hearing"), ("302.5", "With Limited Hearing")],
+    "no-speech": [("302.6", "Without Speech")],
+    "motor": [("302.7", "With Limited Manipulation"),
+              ("302.8", "With Limited Reach and Strength")],
+    "cognition": [("302.9", "With Limited Language, Cognitive, and Learning Abilities")],
+}
+
+CHECK_OUTCOMES = {"pass": "pass", "fail": "fail", "partial": "partial",
+                  "n/a": "n/a", "na": "n/a"}
+# Checks that legitimately map to no WCAG criterion (FPC-only) — anything
+# else without a criterion is a map error.
+FPC_ONLY_CHECKS = {"NS1"}
+
+
+def sc_key(sc):
+    return [int(x) for x in sc.split(".")]
+
+
+def sc_targets():
+    """[(sc, name, level)] — the conformance target, from the 05 template."""
+    return re.findall(r"(?m)^### (\d+\.\d+\.\d+) (.+?) \(Level (A+)\)",
+                      read(TEMPLATES / "05-results.md"))
+
+
+def check_map():
+    """check id -> {"modality", "sc": set, "text"} for every check row in
+    ontology/modality-checks.md (sweep checks W# map to modality "" and no SC)."""
+    text = read(ROOT / "ontology" / "modality-checks.md")
+    out = {}
+    for m in REQUIRED_MODALITIES + [None]:
+        if m is None:
+            sec = re.search(r"(?ms)^## Supporting instrument.*?(?=^## |\Z)", text)
+        else:
+            sec = re.search(rf"(?ms)^## {re.escape(m)} — .*?(?=^## |\Z)", text)
+        if not sec:
+            continue
+        for line in sec.group(0).splitlines():
+            mm = re.match(r"^\|\s*([A-Z]+\d+)\s*\|(.*)\|\s*$", line)
+            if not mm:
+                continue
+            cells = [c.strip() for c in mm.group(2).split("|")]
+            wcag = cells[1] if len(cells) > 1 else ""
+            out[mm.group(1)] = {"modality": m or "",
+                                "sc": set(re.findall(r"\b\d+\.\d+\.\d+\b", wcag)),
+                                "text": cells[0]}
+    return out
+
+
+def run_checks(run_dir):
+    """[(check id, outcome, notes)] from a run's Checks table. Outcome is
+    normalised to pass/fail/partial/n/a, "" (unanswered) or "?" (unrecognised)."""
+    rows = []
+    for cid, _label, outcome, notes in re.findall(
+            r"(?m)^\|\s*([A-Z]+\d+)\s*—\s*(.+?)\s*\|(.*?)\|(.*?)\|?\s*$",
+            read(run_dir / "run.md")):
+        raw = outcome.strip().strip("*`_ ").lower()   # runs sometimes bold the outcome
+        norm = "" if not raw else CHECK_OUTCOMES.get(raw.split()[0].rstrip(",;:"), "?")
+        rows.append((cid, norm, notes.strip()))
+    return rows
+
+
+def criteria_outcomes(review):
+    """sc -> ACR outcome (normalised to OUTCOMES vocabulary) from 05-results.md."""
+    out = {}
+    for block in re.split(r"(?=^### )", read(review / STAGES[4]), flags=re.M):
+        h = re.match(r"### (\d+\.\d+\.\d+) ", block)
+        o = re.search(r"- \*\*Outcome:\*\* (.+)", block)
+        if h and o:
+            raw = o.group(1).strip()
+            out[h.group(1)] = next((x for x in OUTCOMES if raw.startswith(x)), raw)
+    return out
+
+
+def coverage_data(review):
+    targets = sc_targets()
+    cmap = check_map()
+    outcomes = criteria_outcomes(review)
+    runs = [(run_meta(d), run_checks(d)) for d in run_dirs(review)]
+
+    per_sc = {}
+    for sc, name, level in targets:
+        per_sc[sc] = {"sc": sc, "name": name, "level": level,
+                      "checks": sorted(c for c, v in cmap.items() if sc in v["sc"]),
+                      "answered": [], "failed": [],
+                      "outcome": outcomes.get(sc, "Not Evaluated")}
+
+    stale, unrecognised = [], []
+    per_mod = {m: {"runs": 0, "views": set(), "answered": 0, "unanswered": 0,
+                   "fails": 0, "na_runs": 0} for m in REQUIRED_MODALITIES}
+    for meta, checks in runs:
+        mod = meta["modality"].lower()
+        if mod in REQUIRED_MODALITIES:
+            pm = per_mod[mod]
+            pm["runs"] += 1
+            pm["views"].add(meta["view"].upper())
+            if meta["result"] == "N/A":
+                pm["na_runs"] += 1
+            expected = [cid for cid, _ in modality_checklist(mod)]
+            have = {cid for cid, _, _ in checks}
+            missing = [c for c in expected if c not in have]
+            if missing:
+                stale.append({"run": meta["run"], "missing": missing})
+        for cid, outcome, _ in checks:
+            if outcome == "?":
+                unrecognised.append(f"{meta['run']} {cid}")
+                continue
+            if mod in REQUIRED_MODALITIES:
+                per_mod[mod]["answered" if outcome else "unanswered"] += 1
+                if outcome in ("fail", "partial"):
+                    per_mod[mod]["fails"] += 1
+            if not outcome:
+                continue
+            for sc in cmap.get(cid, {}).get("sc", ()):
+                if sc in per_sc:
+                    per_sc[sc]["answered"].append(
+                        {"run": meta["run"], "view": meta["view"], "check": cid, "outcome": outcome})
+                    if outcome in ("fail", "partial"):
+                        per_sc[sc]["failed"].append(
+                            {"run": meta["run"], "view": meta["view"], "check": cid})
+
+    principles = []
+    for p, pname in PRINCIPLES.items():
+        rows = [v for sc, v in per_sc.items() if sc.startswith(p + ".")]
+        principles.append({
+            "principle": f"{p} {pname}",
+            "criteria": len(rows),
+            "with_check_row": sum(1 for v in rows if v["checks"]),
+            "answered": sum(1 for v in rows if v["answered"]),
+            "failed": sum(1 for v in rows if v["failed"]),
+            "outcome_set": sum(1 for v in rows if v["outcome"] != "Not Evaluated"),
+            "unanswered": sorted((v["sc"] for v in rows if not v["answered"]), key=sc_key),
+        })
+
+    n_views = len(sample_views(review))
+    fpc_rows = []
+    for m in REQUIRED_MODALITIES:
+        pm = per_mod[m]
+        if pm["runs"] == 0:
+            status = "not exercised"
+        elif pm["answered"] == 0:
+            status = "runs logged, nothing answered"
+        elif pm["unanswered"] or pm["views"] and len(pm["views"]) < n_views:
+            status = "in progress"
+        else:
+            status = "complete"
+        fpc_rows.append({"modality": m,
+                         "fpc": ", ".join(f"{c} {n}" for c, n in FPC[m]),
+                         "runs": pm["runs"], "views": sorted(pm["views"]),
+                         "sample_views": n_views,
+                         "answered": pm["answered"], "unanswered": pm["unanswered"],
+                         "fails": pm["fails"], "na_runs": pm["na_runs"],
+                         "status": status})
+
+    evidence_gaps = [f"{v['sc']} ({v['outcome']}; checks {', '.join(v['checks']) or 'none'})"
+                     for v in per_sc.values()
+                     if v["outcome"] != "Not Evaluated" and not v["answered"]]
+    rollup_gaps = [f"{v['sc']} (05 still Not Evaluated; failed "
+                   + ", ".join(f"{f['check']}@{f['run']}" for f in v["failed"]) + ")"
+                   for v in per_sc.values()
+                   if v["failed"] and v["outcome"] == "Not Evaluated"]
+    no_check_row = [v["sc"] for v in per_sc.values() if not v["checks"]]
+    orphan_checks = [c for c, v in cmap.items()
+                     if v["modality"] and not v["sc"] and c not in FPC_ONLY_CHECKS]
+    fpc_unexercised = [r["fpc"] for r in fpc_rows if r["answered"] == 0]
+
+    return {"review": review.name,
+            "criteria": list(per_sc.values()),
+            "principles": principles,
+            "fpc": fpc_rows,
+            "evidence_gaps": evidence_gaps,
+            "rollup_gaps": rollup_gaps,
+            "stale_runs": stale,
+            "unrecognised_outcomes": unrecognised,
+            "fpc_unexercised": fpc_unexercised,
+            "static": {"no_check_row": no_check_row, "orphan_checks": orphan_checks}}
+
+
+def db_sync(review):
+    """Refresh the SQLite mirror for a review (scripts/review_db.py). Quiet;
+    never fatal — the files remain the record if the DB cannot be written."""
+    try:
+        import review_db
+        review_db.sync(review, quiet=True)
+        return True
+    except Exception as e:  # noqa: BLE001
+        print(f"(db sync skipped: {e})", file=sys.stderr)
+        return False
 
 
 def vendor_claims(review):
@@ -442,6 +653,7 @@ def cmd_log_test(args):
                 f"| {fields['modality']} | {args.tool} "
                 f"| {fields['baseline']} | {fields['task']} | {fields['tester']} |\n")
 
+    db_sync(review)
     print(f"Run {rid} logged: {run_dir.relative_to(ROOT)}")
     print(f"  view={args.view}  modality={fields['modality']}  tool={args.tool}  "
           f"baseline={fields['baseline']}")
@@ -628,6 +840,97 @@ def cmd_matrix(args):
     emit(data, args.json, text)
 
 
+def cmd_coverage(args):
+    """Criterion / POUR-principle / 508-FPC coverage from answered checks."""
+    review = resolve(args.review)
+    db_sync(review)
+    d = coverage_data(review)
+
+    def text(d):
+        print(f"Coverage — {d['review']}  (criteria → POUR principles → 508 FPC; "
+              "from answered check rows in logged runs, cross-checked with 05)\n")
+        print(f"{'Principle':<18}{'criteria':>9}{'check row':>11}{'answered':>10}"
+              f"{'failed':>8}{'05 set':>8}")
+        for p in d["principles"]:
+            print(f"{p['principle']:<18}{p['criteria']:>9}{p['with_check_row']:>11}"
+                  f"{p['answered']:>10}{p['failed']:>8}{p['outcome_set']:>8}")
+        tot = {k: sum(p[k] for p in d["principles"])
+               for k in ("criteria", "with_check_row", "answered", "failed", "outcome_set")}
+        print(f"{'Total':<18}{tot['criteria']:>9}{tot['with_check_row']:>11}"
+              f"{tot['answered']:>10}{tot['failed']:>8}{tot['outcome_set']:>8}\n")
+
+        wf = max(len(r["fpc"]) for r in d["fpc"])
+        print(f"{'508 FPC':<{wf}}  {'modality':<11}{'runs':>5}{'views':>8}"
+              f"{'answered':>10}{'blank':>7}{'fails':>7}  status")
+        for r in d["fpc"]:
+            print(f"{r['fpc']:<{wf}}  {r['modality']:<11}{r['runs']:>5}"
+                  f"{len(r['views']):>4}/{r['sample_views']:<3}"
+                  f"{r['answered']:>10}{r['unanswered']:>7}{r['fails']:>7}  {r['status']}")
+
+        print("\nCriteria with no answered check yet:")
+        for p in d["principles"]:
+            if p["unanswered"]:
+                print(f"  {p['principle']}: {', '.join(p['unanswered'])}")
+        if not any(p["unanswered"] for p in d["principles"]):
+            print("  none — every target criterion has at least one answered check")
+
+        flags = []
+        for g in d["evidence_gaps"]:
+            flags.append(f"05 Outcome set without an answered check: {g}")
+        for g in d["rollup_gaps"]:
+            flags.append(f"check failed, 05 needs a decision: {g}")
+        for r in d["stale_runs"]:
+            flags.append(f"{r['run']} is behind the checklist — missing "
+                         f"{', '.join(r['missing'])} (run: review.py sync-checks)")
+        for u in d["unrecognised_outcomes"]:
+            flags.append(f"unrecognised check outcome (use pass/fail/partial/n/a): {u}")
+        for f in d["fpc_unexercised"]:
+            flags.append(f"508 FPC not exercised on any view: {f}")
+        for sc in d["static"]["no_check_row"]:
+            flags.append(f"target criterion has no check row in modality-checks.md: {sc}")
+        for c in d["static"]["orphan_checks"]:
+            flags.append(f"check maps to no criterion and is not FPC-only: {c}")
+        print("\nRELIABILITY FLAGS" + ("" if flags else ": none"))
+        for f in flags:
+            print(f"  - {f}")
+
+    emit(d, args.json, text)
+
+
+def cmd_sync_checks(args):
+    """Append check rows added to ontology/modality-checks.md after a run was
+    logged, so gaps/coverage see them as unanswered instead of absent."""
+    review = resolve(args.review)
+    today = datetime.date.today().isoformat()
+    changed = 0
+    for d in run_dirs(review):
+        meta = run_meta(d)
+        mod = meta["modality"].lower()
+        if mod not in REQUIRED_MODALITIES:
+            continue
+        expected = modality_checklist(mod)
+        have = {cid for cid, _, _ in run_checks(d)}
+        missing = [(cid, text) for cid, text in expected if cid not in have]
+        if not missing:
+            continue
+        path = d / "run.md"
+        lines = read(path).splitlines(keepends=True)
+        last = max(i for i, ln in enumerate(lines)
+                   if re.match(r"^\|\s*[A-Z]+\d+\s*—", ln))
+        eol = "\r\n" if lines[last].endswith("\r\n") else "\n"
+        new = [f"| {cid} — {text} | | (row added {today} by sync-checks — "
+               f"not part of the original session; answer or mark n/a) |{eol}"
+               for cid, text in missing]
+        lines[last + 1:last + 1] = new
+        path.write_text("".join(lines), encoding="utf-8")
+        changed += 1
+        print(f"{meta['run']} ({meta['view']} × {mod}): added "
+              + ", ".join(cid for cid, _ in missing))
+    if changed:
+        db_sync(review)
+    print(f"{changed} run(s) updated." if changed else "All runs match the current checklist.")
+
+
 def cmd_enclosures(args):
     rows = []
     for p in enclosure_paths():
@@ -716,6 +1019,19 @@ def cmd_list(args):
     emit(rows, args.json, text)
 
 
+def _completion_summary(review):
+    """Compact definition-of-done summary from the mirror, for status."""
+    if not db_sync(review):
+        return None
+    import review_db
+    con = review_db.connect()
+    rows = review_db.completion(con, review.name)
+    con.close()
+    short = [f"{r['name'].split(' ')[0]} {r['done']}/{r['total']}" for r in rows if not (r['total'] and r['done'] >= r['total'])]
+    return {"satisfied": sum(1 for r in rows if r['total'] and r['done'] >= r['total']),
+            "predicates": len(rows), "short": short}
+
+
 def cmd_status(args):
     review = resolve(args.review)
     counts = criteria_counts(review)
@@ -730,6 +1046,7 @@ def cmd_status(args):
         "tasks": [{"id": i, "name": n, "verdict": v} for i, n, v in t],
         "findings": len(f),
         "test_runs": len(run_dirs(review)),
+        "completion": _completion_summary(review),
         "evidence_files": len([p for p in (review / "evidence").rglob("*")
                                if p.is_file() and p.name not in ("run.md", "test-log.md")])
         if (review / "evidence").exists() else 0,
@@ -745,89 +1062,88 @@ def cmd_status(args):
               f"evidence files: {d['evidence_files']}")
         for task in d["tasks"]:
             print(f"  task {task['id']}: {task['verdict']}  ({task['name']})")
+        if d["completion"]:
+            c = d["completion"]
+            print(f"  completion (db): {c['satisfied']}/{c['predicates']} predicates — "
+                  + ", ".join(c["short"]))
 
     emit(data, args.json, text)
 
 
 def cmd_validate(args):
+    """The finish line, measured in the database (ontology/data-store.md).
+
+    Three layers, all from one command:
+      [md]  extraction health — the files still have the shapes the templates
+            define (a parse regression is a broken edit, CLAUDE.md);
+      [done] the definition of done — review_db.COMPLETION, every predicate
+            a query over the mirror;
+      [db]  integrity — cross-file consistency the markdown cannot express.
+    """
     review = resolve(args.review)
     issues = []
 
-    for s in STAGES:
-        if not (review / s).exists():
-            issues.append(f"missing stage file: {s}")
-
+    # ---- [md] extraction health
+    for st in STAGES:
+        if not (review / st).exists():
+            issues.append(f"[md] missing stage file: {st}")
     counts = criteria_counts(review)
-    if counts["Not Evaluated"]:
-        issues.append(f"{counts['Not Evaluated']} criteria still 'Not Evaluated' in 05-results.md")
     if counts["(unrecognized)"]:
-        issues.append(f"{counts['(unrecognized)']} Outcome lines in 05-results.md not using ACR vocabulary")
-
-    t = tasks(review)
-    if not t:
-        issues.append("no task clusters defined in 04-task-testing.md")
-    for tid, name, verdict in t:
-        if verdict in ("Not run", "?"):
-            issues.append(f"task {tid} has no verdict")
-
-    real_findings = 0
-    for fid, crit in findings(review):
-        if not crit or crit.startswith("(e.g.") or crit.startswith("(step"):
-            issues.append(f"finding {fid} lists no WCAG criteria failed")
-        else:
-            real_findings += 1
-    if real_findings and not run_dirs(review):
-        issues.append(f"{real_findings} finding(s) recorded but no test runs logged "
-                      "(log-test) — findings need replicable run evidence")
-
+        issues.append(f"[md] {counts['(unrecognized)']} Outcome lines in 05-results.md not using ACR vocabulary")
+    if not tasks(review):
+        issues.append("[md] no task clusters defined in 04-task-testing.md")
     runs = [run_meta(d) for d in run_dirs(review)]
-    unset = [r["run"] for r in runs if r["result"] == "Not set"]
-    if unset:
-        issues.append(f"{len(unset)} run(s) without a Result "
-                      f"(Works / Works with issues / Broken): {', '.join(unset)}")
-    # Every run needs a replicable locator: a real URL, or an explicit
-    # UI-action path ("UI: ...") for states with no address. Placeholders
-    # ("recorded when created", TBD/TBC) and empty fields fail review
-    # replication and vendor rebuttal alike.
     no_locator = [r["run"] for r in runs
                   if not (("http" in r["url"]) or r["url"].startswith("UI:"))
-                  or any(p in r["url"] for p in ("recorded when", "TBD", "TBC"))]
+                  or any(ph in r["url"] for ph in ("recorded when", "TBD", "TBC"))]
     if no_locator:
-        issues.append(f"{len(no_locator)} run(s) without a replicable URL/locator "
+        issues.append(f"[md] {len(no_locator)} run(s) without a replicable URL/locator "
                       f"(real URL or 'UI: <action path>'): {', '.join(no_locator)}")
-    views = sample_views(review)
-    if views:
-        gaps = [f"{vid}×{m}" for vid, _ in views for m in REQUIRED_MODALITIES
-                if not any(r["view"].lower() == vid.lower()
-                           and r["modality"].lower() == m for r in runs)]
-        if gaps:
-            issues.append(f"modality coverage: {len(gaps)} view×modality cell(s) "
-                          "not yet run (see review.py matrix)")
-        unswept = [vid for vid, _ in views
-                   if not any(r["view"].lower() == vid.lower()
-                              and r["tool"].lower() in SWEEP_TOOLS for r in runs)]
-        if unswept:
-            issues.append(f"automated sweep (axe/wave) missing for view(s): {', '.join(unswept)}")
+    cov = coverage_data(review)
+    if cov["static"]["no_check_row"]:
+        issues.append(f"[md] {len(cov['static']['no_check_row'])} target criteria have no check row in "
+                      f"ontology/modality-checks.md: {', '.join(cov['static']['no_check_row'])}")
+    if cov["static"]["orphan_checks"]:
+        issues.append("[md] check rows mapping to no criterion (and not FPC-only): "
+                      + ", ".join(cov["static"]["orphan_checks"]))
+    if cov["stale_runs"]:
+        issues.append(f"[md] {len(cov['stale_runs'])} run(s) behind the checklist (review.py sync-checks): "
+                      + ", ".join(r["run"] for r in cov["stale_runs"]))
 
-    unchecked = len(re.findall(r"^- \[ \]", read(review / STAGES[3]), re.M))
-    if unchecked:
-        issues.append(f"{unchecked} coverage-check boxes unchecked in 04-task-testing.md")
+    # ---- [done] + [db] from the mirror
+    done_rows, complete = [], False
+    if db_sync(review):
+        import review_db
+        con = review_db.connect()
+        done_rows = review_db.completion(con, review.name)
+        for r in done_rows:
+            if r["total"] and r["done"] >= r["total"]:
+                continue
+            head = ", ".join(str(m) for m in r["missing"][:6]) + (f" … +{len(r['missing']) - 6}" if len(r["missing"]) > 6 else "")
+            issues.append(f"[done] {r['name']}: {r['done']}/{r['total']} — {r['description']}"
+                          + (f" — missing: {head}" if head else ""))
+        for i in review_db.integrity(con, review.name):
+            head = "; ".join(i["items"][:4]) + (f"; … {i['count'] - 4} more" if i["count"] > 4 else "")
+            issues.append(f"[db] {i['check']} ({i['count']}): {head}")
+        con.close()
+        complete = all(r["total"] and r["done"] >= r["total"] for r in done_rows)
+    else:
+        issues.append("[db] mirror unavailable — completion not measured")
 
-    if decision(review) == "Pending":
-        issues.append("procurement decision not set in 06-report.md")
-
-    data = {"review": review.name, "issues": issues, "complete": not issues}
+    data = {"review": review.name, "issues": issues, "completion": done_rows,
+            "complete": complete and not issues}
 
     def text(d):
+        sat = sum(1 for r in d["completion"] if r["total"] and r["done"] >= r["total"])
         if d["complete"]:
-            print(f"{d['review']}: complete — no validation issues.")
+            print(f"{d['review']}: complete — {sat}/{len(d['completion'])} predicates satisfied, no issues.")
         else:
-            print(f"{d['review']}: {len(d['issues'])} issue(s)")
+            print(f"{d['review']}: {len(d['issues'])} issue(s); completion {sat}/{len(d['completion'])} predicates")
             for i in d["issues"]:
                 print(f"  - {i}")
 
     emit(data, args.json, text)
-    sys.exit(0 if not issues else 1)
+    sys.exit(0 if data["complete"] else 1)
 
 
 def main():
@@ -860,6 +1176,7 @@ def main():
                                    ("enclosures", cmd_enclosures, False),
                                    ("runs", cmd_runs, True),
                                    ("matrix", cmd_matrix, True),
+                                   ("coverage", cmd_coverage, True),
                                    ("next", cmd_next, True)]:
         sp = sub.add_parser(name, help=f"{name}")
         if needs_review:
@@ -873,6 +1190,11 @@ def main():
     p_gaps.add_argument("--view", help="limit to one sample ID (e.g. S1)")
     p_gaps.add_argument("--json", action="store_true", help="machine-readable output")
     p_gaps.set_defaults(fn=cmd_gaps)
+
+    p_sync = sub.add_parser("sync-checks",
+                            help="append check rows added to modality-checks.md since each run was logged")
+    p_sync.add_argument("review", help="review directory name or unique substring")
+    p_sync.set_defaults(fn=cmd_sync_checks)
 
     p_seed = sub.add_parser("seed", help="apply an enclosure to an existing review")
     p_seed.add_argument("review", help="review directory name or unique substring")

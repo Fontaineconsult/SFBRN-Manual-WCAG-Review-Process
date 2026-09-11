@@ -78,6 +78,7 @@ and creates the run's evidence folder.
 | WAVE (WebAIM) browser extension | Automated checker | | Sweep every sampled view and state | Summary counts, error list, annotated screenshots |
 | axe-core via `scripts/axe_scan.py` | Automated checker (primary sweep) | 4.10.3 in Chrome 153.0.8010.36 | Sweep every sampled view and state over CDP (no shadow DOM here, so WAVE is usable too) | Raw `R###-axe.json` + summary |
 | CDP exploration probes (`scripts/crawl_map.py`, `scripts/cdp_probe.py`) | Recon instrument — step 2 only | Chrome 151 debug profile | Fingerprints, accessibility-tree summaries, screenshots during mapping; never a source of findings | `crawl-map-<date>.md` beside the review |
+| view_probe (`scripts/view_probe.py`, CDP) | Structural measurement — assistant-run | Chrome (debug profile) + CDP | Answer the instrument-decidable checks per view (media absent → n/a, lang, title, target size, reflow, text spacing, autocomplete) before the reviewer session | `R###-probe.json` facts + outcomes in the run |
 
 ## Step 2 — Explore the target product
 
@@ -182,6 +183,18 @@ Pre-exploration recon from the procurement email thread (`evidence/email.txt`,
 2026-07-27 → 2026-09-01) and the web scout of 2026-09-08 — nothing below has
 been seen in the product yet:
 
+- **Replication quirks (2026-09-11, view_probe batch):** (a) `default2.aspx`
+  (S2) is not directly addressable — the app redirects it to `default.aspx`
+  unless Accessibility Mode was entered through the "Accessibility Page"
+  button; S2 runs therefore carry a `UI:` locator. (b) S3 and S8 *are*
+  addressable once `eid`/`aid` are appended:
+  `/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547` and
+  `/Common/ViewAssignmentSolutionsV2.aspx?z=1&vmid=1&eid=3373&aid=17547`.
+  (c) S11's popup content is the standalone page `/Common/eClass.aspx?m=2&eid=3373`
+  (probed directly; popup/modal semantics still need the in-context check).
+  (d) Loading `login.theexpertta.com/Login.aspx` in the authenticated tab
+  **ends the session** — S7 is probed only from the signed-out profile
+  (testing-tools.md §view_probe).
 - **Drag-and-drop labeling questions** — vendor admits non-compliant (54 physics
   questions); campus reports they contain images of text that do not scale
   independently. Verify under 1.4.5 / 1.4.4 (low-vision zoom check), 2.1.1

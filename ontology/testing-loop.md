@@ -105,7 +105,12 @@ skipped.
      this sample, grouped by run. Start here: it is the walkthrough's
      backbone, and each row becomes a **Tell me** line.
    - `review.py validate` — runs without Results, missing WAVE sweeps
+   - `scripts/view_probe.py` first — the instrument-answerable checks are
+     written by measurement so the reviewer never verifies by hand what a
+     structural fact already decides (modality-checks.md §Assistant-answerable)
    - `review.py matrix` — unrun view×modality cells for this sample
+   - `review.py coverage` — criteria / POUR / 508-FPC with an answered check,
+     and whether `05` agrees (the reliability flags)
    - `review.py next` — the priority rationale (vendor-claim discrepancies)
    - each run's `run.md` — check rows left empty or marked "reviewer",
      instrument caveats in Notes

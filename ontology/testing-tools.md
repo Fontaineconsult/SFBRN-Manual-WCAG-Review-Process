@@ -99,6 +99,14 @@ in this order:
    suspect. To date the extension set and its install times: the folder
    mtimes under `…\sfbrn-a11y-chrome\Default\Extensions` say when each
    arrived, which is how you tell contaminated runs from clean ones.
+   **Timing (learned 2026-09-11):** poll `/json` at least ~10 s after
+   launch. In the first few seconds Chrome 152 briefly lists two
+   `chrome-extension://…/service_worker.js` targets that are Chrome's own
+   built-in component extensions (IDs `admccjkmockfdflocgggjfgdacdodkdf`,
+   `fignfifoniblkonapihmkfakmlgkbkcf`; not present under
+   `Default\Extensions`); they spin down on their own and a second poll
+   shows zero. Only a *persistent* `chrome-extension://` target means the
+   flag was missing.
 
 **Changing the flags means restarting the browser, and only that browser.**
 Filter by command line so the reviewer's everyday Chrome is untouched:
@@ -397,3 +405,49 @@ evidence/
 - The run log satisfies WCAG-EM step 5.2 (record evaluation specifics): which
   page, when, with what tool, under which baseline — enough to replicate any
   result.
+
+## view_probe — instrument-answerable checks per view (assistant-run)
+
+`python scripts/view_probe.py <review> --view S# --url URL [--dry-run]`
+answers the checks listed in modality-checks.md §Assistant-answerable checks
+and writes them into the view's runs. Run it on every sampled view before
+the reviewer session; `--dry-run --facts-out FILE` shows what it would write.
+
+**How each fact is measured, and its limits (state them in the run when they bite):**
+
+- **Media / speech / motion / audio API / orientation lock** — DOM query of
+  the view and its same-origin frames plus a regex scan of inline scripts and
+  every external script the page can `fetch` with credentials. Cross-origin
+  CDN scripts that refuse the fetch are listed as *unreadable* in the
+  observation; an n/a for NS1/MO10/NH4 rests on the readable set only.
+- **Reflow (LV1)** — `Emulation.setDeviceMetricsOverride` to 320 CSS px,
+  read `scrollingElement.scrollWidth`, list elements whose right edge passes
+  320. Only *data* tables (a `th`, a `caption`, or `role=grid/table`) count as
+  exempt; layout tables do not. Metrics are cleared afterwards.
+- **Text spacing (LV3)** — inject the standard override, compare the set of
+  text containers with hidden/clip overflow whose scroll size exceeds their
+  client size before and after. Newly clipped containers = fail. Overlap
+  without clipping is not detected — the reviewer's zoom pass still looks.
+- **Target size (MO9)** — bounding boxes of visible targets (links, buttons,
+  inputs, ARIA widgets, `[onclick]` except table structure/containers, which
+  are event delegation). Exceptions applied: inline-in-text links, native
+  checkbox/radio (user-agent sized), spacing (no other target within a 24 px
+  circle; ancestors/descendants are not neighbours). *Essential* and
+  *equivalent* exceptions are the reviewer's call — the fail lists the pairs.
+- **Autocomplete (CO9)** — personal-data fields recognised by name/id/label/
+  placeholder; bare "name" fields are candidates only.
+- **Wrong-view guard** — refuses if the landed path differs from the
+  requested one; use a `UI: …` locator after reaching the view by hand.
+
+**Sign-in views need a second, signed-out profile.** Navigating the
+authenticated tab to `Login.aspx` ended the Expert TA session on 2026-09-11
+(the app redirected everything to sign-in afterwards; the assistant never
+authenticates, so the reviewer had to sign in again). Probe such views with:
+
+    chrome.exe --remote-debugging-port=9223 ^
+        --user-data-dir=%LOCALAPPDATA%\sfbrn-a11y-chrome-anon ^
+        --disable-extensions --disable-sync --no-first-run --no-default-browser-check
+    python scripts/view_probe.py <review> --view S7 --url <sign-in URL> --port 9223
+
+The anonymous profile holds no session, so the product's one-session rule
+is not triggered.

@@ -52,6 +52,8 @@ landmarks (R), forms mode. Copy exact announcements from Speech History
 | NV7 | Dynamic updates (toasts, async results, validation) are announced without stealing focus | 4.1.3 |
 | NV8 | Nothing is conveyed only by visual position, shape, or size | 1.3.3 |
 | NV9 | Language of the view (and passages) is announced/pronounced from the correct language | 3.1.1, 3.1.2 |
+| NV10 | Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | 2.4.4 |
+| NV11 | Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | 1.2.3, 1.2.5 |
 
 ## low-vision — With Limited Vision (302.2)
 
@@ -68,6 +70,7 @@ contrast inspected (WAVE contrast data assists).
 | LV6 | Content appearing on hover/focus is dismissible, hoverable, persistent | 1.4.13 |
 | LV7 | Focus indicator remains visible and unobscured at zoom | 2.4.7, 2.4.11 |
 | LV8 | The view works in both portrait and landscape | 1.3.4 |
+| LV9 | Text is real text, not images of text (logos and essential presentation excepted) — at 400% zoom image text pixelates or stops reflowing | 1.4.5 |
 
 ## no-color — Without Perception of Color (302.3)
 
@@ -131,6 +134,10 @@ Structured inspection of the view's demands on memory, language, and attention.
 | CO6 | Authentication does not require transcription or memorization (no cognitive-function test) | 3.3.8 |
 | CO7 | Time limits are adjustable/extendable; moving content can be paused | 2.2.1, 2.2.2 |
 | CO8 | Focus/input does not trigger unexpected context changes | 3.2.1, 3.2.2 |
+| CO9 | Fields collecting the user's own information (name, email, address, phone, …) carry the matching `autocomplete` purpose so browsers and AT can fill them | 1.3.5 |
+| CO10 | Each view is reachable in more than one way (navigation plus search, site map, index, or related links) unless it is a step in a process | 2.4.5 |
+| CO11 | Submissions with legal, financial, or data-changing consequences are reversible, checked for input errors, or confirmable before commit | 3.3.4 |
+| CO12 | Nothing flashes more than three times per second (photosensitive-safety check; WCAG-only — no 508 FPC counterpart) | 2.3.1 |
 
 ## Modality → WCAG map (the report's spine)
 
@@ -144,17 +151,122 @@ under every modality whose users it affects.
 
 | Modality | 508 FPC | WCAG criteria exercised (via checks above) |
 |----------|---------|--------------------------------------------|
-| no-vision | 302.1 | 1.1.1, 1.3.1, 1.3.2, 1.3.3, 2.4.2, 2.4.6, 2.5.3, 3.1.1, 3.1.2, 3.3.1, 3.3.2, 4.1.2, 4.1.3 |
-| low-vision | 302.2 | 1.3.4, 1.4.3, 1.4.4, 1.4.10, 1.4.11, 1.4.12, 1.4.13, 2.4.7, 2.4.11 |
+| no-vision | 302.1 | 1.1.1, 1.2.3, 1.2.5, 1.3.1, 1.3.2, 1.3.3, 2.4.2, 2.4.4, 2.4.6, 2.5.3, 3.1.1, 3.1.2, 3.3.1, 3.3.2, 4.1.2, 4.1.3 |
+| low-vision | 302.2 | 1.3.4, 1.4.3, 1.4.4, 1.4.5, 1.4.10, 1.4.11, 1.4.12, 1.4.13, 2.4.7, 2.4.11 |
 | no-color | 302.3 | 1.4.1 |
 | no-hearing | 302.4, 302.5 | 1.1.1, 1.2.1, 1.2.2, 1.2.4, 1.4.2 |
 | no-speech | 302.6 | — (FPC-only; any voice feature needs a non-speech alternative) |
 | motor | 302.7, 302.8 | 2.1.1, 2.1.2, 2.1.4, 2.4.1, 2.4.3, 2.4.7, 2.4.11, 2.5.1, 2.5.2, 2.5.4, 2.5.7, 2.5.8 |
-| cognition | 302.9 | 2.2.1, 2.2.2, 3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.6, 3.3.2, 3.3.3, 3.3.7, 3.3.8 |
+| cognition | 302.9 | 1.3.5, 2.2.1, 2.2.2, 2.3.1, 2.4.5, 3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.6, 3.3.2, 3.3.3, 3.3.4, 3.3.7, 3.3.8 |
 
-Criteria in the WCAG 2.2 AA target not exercised by any modality checklist
-row (verify they are covered by task walks or sweeps rather than assumed:
-1.3.5, 1.4.5, 2.2.1 timing beyond CO7, 3.2.5 n/a-AA, 4.1.1 removed).
+### Completeness contract (enforced 2026-09-11)
+
+**Every criterion in the WCAG 2.2 AA target (the 55 blocks of `05`) has at
+least one check row above, and every check row maps to at least one
+criterion or to a 508 FPC** (`NS1` is FPC-only; `CO12` is WCAG-only). That
+is what makes "we tested for X" a property of the *process* rather than of
+a reviewer's memory. `review.py validate` checks the map statically on every
+run — a future edit that orphans a criterion (as happened before this date:
+1.2.3, 1.2.5, 1.3.5, 1.4.5, 2.3.1, 2.4.4, 2.4.5 and 3.3.4 had no check row,
+and 2.4.4 was already being cited in findings) fails validation until a row
+is added. `review.py coverage <review>` then reports, per review, which
+criteria / POUR principles / FPC have an **answered** check in a logged run.
+
+**Adding or renaming a check row is a process change**: after editing this
+file run `review.py sync-checks <review>` on every in-flight review so its
+existing runs gain the new rows (blank, dated) instead of silently lacking
+them; `validate` lists runs that are behind the checklist.
+
+## Assistant-answerable checks (`scripts/view_probe.py`)
+
+The reviewer's time goes to what only a person can judge. Every check that a
+**structural fact about the view** decides is answered by the assistant first,
+over CDP in the debug-profile Chrome, before the reviewer is asked anything:
+`python scripts/view_probe.py <review> --view S# --url URL` (run it on every
+sampled view as soon as the sample exists; then `gaps` lists only the human
+rows). The probe writes into the cell's run — the latest run for that view ×
+modality, or a new one logged with `--tool probe` — and never overwrites an
+outcome a person entered. The reviewer completes that same run (updating
+**Tool**/**Baseline** to the instrument actually used) rather than logging a
+second run for the cell.
+
+| Check | Fact the probe establishes | Answer it may write |
+|---|---|---|
+| NH1, NH2, NH3 | no `<video>`/`<audio>`/media embed, iframe or media link in the view or its same-origin frames | **n/a** (by absence); if media exists: nothing — the reviewer inspects captions/transcripts |
+| NH4 | as above **and** no `Audio()`/`AudioContext` use in readable scripts | **n/a** |
+| NV11 | no video/media embed | **n/a** |
+| NS1 | no SpeechRecognition / getUserMedia / speechSynthesis use and no microphone/voice control | **n/a** |
+| NV1 | `document.title` non-empty and not generic ("Untitled", a filename) | **pass** (wording confirmed on the NVDA walk); empty title → **fail** |
+| NV9 | `<html lang>` present and well-formed / absent | **pass** / **fail** (pronunciation of foreign passages stays with the reviewer) |
+| MO9 | every visible target ≥ 24×24 CSS px, or smaller ones spacing-exempt (no other target inside a 24 px circle), inline-in-text, or user-agent-sized checkbox/radio | **pass**; clashes → **fail** with the element list (reviewer rules on essential/equivalent exceptions) |
+| MO10 | no devicemotion/deviceorientation use in scripts | **n/a** |
+| LV1 | `scrollWidth` at 320 CSS px (≈400 % of 1280) ≤ 320, or overflow confined to data tables / canvas / images | **pass**; other overflow → **fail** with the widest elements |
+| LV3 | text-spacing override (line 1.5, letter 0.12 em, word 0.16 em, paragraph 2 em) creates no newly clipped text container | **pass**; new clipping → **fail** with the containers |
+| LV8 | no orientation media query and no `screen.orientation.lock` | **pass** |
+| CO6 | no password field **and** no sign-in form | **n/a** (on a sign-in view: nothing — the reviewer judges) |
+| CO9 | no field collects the user's own data; or all such fields carry `autocomplete`; or some lack it | **n/a** / **pass** / **fail** ("name"-only candidates are listed, not decided) |
+| CO12 | no CSS animation, animated image, marquee/blink, canvas, SVG animation or video | **n/a** |
+
+Everything else — reading order, names on focus, error announcement,
+contrast, focus visibility, consistency, help, timing — needs the person and
+is never answered by the probe. Facts it gathers but cannot decide (timer
+text for CO7, "name" fields for CO9, unreadable cross-origin scripts) are
+printed and saved in `<RID>-probe.json` so the reviewer starts from evidence.
+
+**A measured fail is not a finding.** It is a `fail` outcome with the
+measurement as its observation; the reviewer confirms it (or rules an
+exception) before it is promoted in `04`. The run's Result stays unset and
+names the outstanding rows, exactly as §Result semantics requires.
+
+**Wrong-view guard.** The probe refuses when the tab lands on a different
+path than requested (2026-09-11: `default2.aspx` silently redirected to
+`default.aspx` and the first attempt measured the standard page under the
+Accessibility Mode label). Views with no stable URL are reached through the
+UI first and probed with a `UI: …` locator.
+
+**Sign-in views.** Never navigate the authenticated tab to the product's
+sign-in page — on Expert TA (2026-09-11) that ended the reviewer's session and
+the assistant cannot restore it. Probe sign-in views in a second, signed-out
+debug profile (testing-tools.md §view_probe).
+
+## Coverage tracking — criterion, principle, FPC
+
+The matrix (`review.py matrix`) tracks *views × modalities*. That is
+necessary but not sufficient: a run can exist with half its checks blank,
+and a `05` Outcome can be typed without any check behind it. Three views of
+the same evidence are therefore kept, all computed live from the run files:
+
+| Question | Command | Unit |
+|---|---|---|
+| Which views × modalities have a run? | `matrix` | cell |
+| Which checks are still unanswered? | `gaps` | check row |
+| Which **criteria**, **POUR principles** and **508 FPC** have an answered check, and does `05` agree? | `coverage` | criterion → principle / FPC |
+
+`coverage` counts a criterion as **exercised** when at least one check
+mapped to it carries `pass`, `fail`, `partial` or `n/a` in any logged run
+(blank = not answered; anything else = unrecognised, reported). It then
+rolls up by principle (1 Perceivable … 4 Robust) and by FPC (302.1–302.9
+via the modality table at the top of this file), and flags:
+
+- **outcome without evidence** — a `05` Outcome other than Not Evaluated on
+  a criterion with no answered check (typed from memory or from a tool;
+  either is a process violation);
+- **failed check without rollup** — a `fail`/`partial` check on a criterion
+  whose `05` Outcome is still Not Evaluated or Supports;
+- **runs behind the checklist** — runs logged before a check row existed
+  (fix: `sync-checks`);
+- **FPC never exercised** — a modality with no answered check on any view.
+
+`validate` raises each of these as an issue, so a review cannot reach FINAL
+with a criterion, principle or FPC that was asserted but never checked.
+`06` §Coverage & limitations and the WCAG-EM report's evaluation specifics
+quote the `coverage` tables; §Findings by modality takes its "Coverage so
+far" column from the FPC rows.
+
+The unit of reliability is the **check row**: a criterion is only as
+covered as the checks that cite it, on the views where they were answered.
+`coverage` never infers a pass from silence — an unanswered check is a gap,
+not a Supports.
 
 ## Supporting instrument — automated sweep (axe-core / WAVE)
 

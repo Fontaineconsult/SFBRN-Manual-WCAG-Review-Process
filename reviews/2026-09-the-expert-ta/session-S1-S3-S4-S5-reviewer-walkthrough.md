@@ -655,3 +655,148 @@ as coverage.
 6. `review.py validate` and `matrix` re-run; `next` decides the following
    session (remaining view×modality cells: S6, S8, S9, S10, S11, S12, R1, R2
    under the manual modalities, and cognition on S1/S5).
+
+---
+
+## 2026-09-14 — Session 2: what is left, in order
+
+**State at open** (`review_db.py state`): done 3/12 — 9/55 criteria decided,
+1/5 tasks with a verdict, 13 of the steps above still pending, and 40
+fail/partial check outcomes on criteria whose `05` block is still Not
+Evaluated (37 of them measured by the probe on 2026-09-11 and waiting on
+your confirmation). Since 2026-09-11 the assistant closed R017's NV10 row
+from your narration and drafted three `05` outcomes as *provisional* (W36).
+
+**Pre-flight (assistant, 2026-09-14):** the debug-profile Chrome (port 9222)
+was not running; relaunched with the full flag set and it landed on
+`login.theexpertta.com` — the shared session has expired. **Sign in there
+before W34** (the assistant never authenticates). Nothing browser-side can
+be measured until then (the hover check in W35 (d), any re-probe).
+
+**Order for this session:** W34 → W35 → W36 → W37 → W6 → W21 → W22 → W23 →
+W24 → W25 → W26 → W27 → W28 → W29 → W30 → W31 → W32. W34 first because T1's
+verdict depends on it and it has been owed since 2026-09-10; W35/W36 next
+because each is a one-word answer that decides a `05` block.
+
+### W34 — Standard-mode Class Management with NVDA (S1, run R015) — KEY STEP (T1 verdict)
+
+**Do:** On Class Management, look at the mode button. If it reads
+**"Non-Accessibility Page"** you are still in Accessibility Mode (the shared
+account stores the mode; it was left there on 2026-09-10) — activate it. The
+button must read "Accessibility Page" and the URL must be `default.aspx`,
+not `default2.aspx`. Then repeat W4–W9 on this page: `NVDA+T`; `H`, `D`,
+`NVDA+F7`; arrow from the top to the bottom; Tab once from the top (the
+`aria-hidden` logo link, R001 O3); focus the two DevExpress editors
+"Classes" / "Class Menu" and open each with `Alt+Down`; the jump point;
+the assignment row's **⋮** action menu without the mouse (Enter, Space,
+Applications key on the row and on the ⋮ cell); `G` for any graphic.
+**Tell me:** one line per row of R015 — NV2 headings/landmarks; NV3
+the editors' and the ⋮ menu's name/role/value on focus; NV4 what `G` finds
+and what the logo announces; NV5 reading order; NV6 whether the editors
+announce "Classes"/"Class Menu" at all; NV7 what is announced when the ⋮
+menu opens (if it opens); NV8 anything you could only place by position;
+NV10 the link texts you heard.
+**Why it matters:** standard mode is what every student lands on; the only
+human run of Class Management is R016 on the vendor's alternate page (S2).
+It decides whether V-F1, V-F7 and V-F8 (all "also S1 per axe") are
+confirmed on S1, whether the ⋮ menu is keyboard-operable (T1 step 3 — if
+not, T1 fails in standard mode and the Accessibility Page is the only
+route), and it lets T1 get a verdict.
+**Feedback:** _(pending)_
+
+### W35 — Confirm or rule out the measured fails (six `05` decisions) — KEY STEP
+
+Each item was measured by `view_probe` on 2026-09-11 in the run(s) named. A
+measured fail is not a finding until you confirm it or rule an exception
+(modality-checks.md §Assistant-answerable). Answer each with **confirmed**,
+**exception — <reason>**, or **look again — <what>**. On "confirmed" the
+assistant writes the finding named, the `05` outcome, and sets each run's
+rows; nothing is written before your word.
+
+- **(a) 1.4.10 Reflow — every one of the 14 views.** The layout is a fixed
+  1300 px container (`div#container`); at 320 CSS px every page scrolls in
+  two dimensions (LV1 fail on R019, R024, R030, R036, R042, R048, R054,
+  R060, R066, R072, R078, R083, R088, R094; S11's popup measures 589 px,
+  the sign-in page 1024 px). Proposed: **V-F16**, Major, 1.4.10,
+  product-wide; `05` → Does Not Support. W29's real-zoom look still decides
+  LV2 (loss/overlap) and LV7 (focus ring) — those are separate rows.
+- **(b) 1.4.12 Text Spacing — S1, S2, S3, S6.** Under the override, text is
+  newly clipped in: S1 the four date cells of the assignment row and the
+  "Welcome to Testing Course…" line; S2 the assignment-name cell and a
+  grid caption; S3 the assignment-code div ("6M79-C9-72-46-B37E-17547");
+  S6 a calendar event ("30311 Chapter 5 Sample Assignment…"). The other ten
+  views tolerate it (LV3 fail on R019, R024, R083, R042). Proposed:
+  **V-F17**, Minor if the clipped text is still readable / Major if the due
+  dates on S1 are cut off; `05` → Partially Supports. W31 is the look.
+- **(c) 2.5.8 Target Size — S1, S3, S5.** S1: the row's **⋮** menu
+  (16×16 px) beside the 9×10 px expand glyph (R022). S3: the nine
+  problem-navigator links are **8×18 px** and adjacent to each other
+  (R018). S5: the DevExpress spin/time editor up/down buttons are 16×9 px,
+  14 of them (R039). Proposed: **V-F18**, Minor (the ⋮ has an equivalent
+  — the Accessibility Page's Actions select; the S3 problem links have
+  none), 2.5.8; `05` → Partially Supports. Your ruling per group:
+  essential / equivalent-exempt / confirmed.
+- **(d) 1.4.1 Use of Color — links in running text told apart by colour
+  only, six views.** S4 and S8 the class and assignment links at the top;
+  S3 "detailed view"; S6 "Select All" / "Only"; R2 the "Grade Sheet -
+  Class" link; S2 the "Tab for Class News" skip link (NC2 fail on R100,
+  R110, R109, R102, R107, R111). The probe measured the resting state only.
+  Proposed: **V-F19**, Minor, 1.4.1; `05` → Partially Supports **unless**
+  the links gain an underline on hover and focus and sit at ≥ 3:1 against
+  the surrounding text (the accepted technique) — the assistant measures
+  hover/focus over CDP once you are signed in, before you answer. W32's
+  grayscale look (NC1, NC3) is separate.
+- **(e) 1.3.5 Identify Input Purpose — Sign in (S7).** The "User Name:"
+  field carries no `autocomplete` (CO9 fail on R098, signed-out profile).
+  Proposed: **V-F20**, Minor, 1.3.5; `05` → Partially Supports. Question:
+  is the user name an email address or a username (both have an
+  `autocomplete` token, so the fail stands either way), and does the
+  password field carry one (the probe listed only the user-name field)?
+- **(f) 3.1.1 Language of Page — S3, S7, S11.** No `lang` on Take
+  Assignment (R004 O2 axe; R017 NV9 partial), Sign in (R093) and the Edit
+  Class popup (R077); the other 11 views declare `en`. Proposed: **V-F21**,
+  Minor (an English default voice masks it; a user whose synthesizer
+  defaults to another language hears the assignment mispronounced), 3.1.1;
+  `05` → Partially Supports. 3.1.2 is drafted in W36.
+
+**Feedback:** _(pending)_
+
+### W36 — Four `05` judgments drafted from your 2026-09-10 narration — confirm or overrule
+
+Written into `05` as **(provisional)** on 2026-09-14; the remark of each
+block carries the reasoning. Say "agree" or give the outcome you want.
+
+- **2.4.6 Headings and Labels → Supports (provisional).** The criterion
+  requires headings and labels *that exist* to be descriptive; it does not
+  require headings. No-headings is V-F1 / T1-F1 under 1.3.1; the visible
+  captions and labels are descriptive; their missing association is 1.3.1
+  / 3.3.2 / 4.1.2.
+- **1.3.3 Sensory Characteristics → Supports (provisional).** No
+  instruction relies on shape, position, size or colour; the position-only
+  identification NV8 recorded (grids, math option, hint) are consequences
+  of the 1.3.1 / 4.1.3 defects already found.
+- **3.1.2 Language of Parts → Not Applicable (provisional).** No passage in
+  another language in the sample.
+- **3.3.1 Error Identification → still Not Evaluated, on purpose.** The NV6
+  fails on R016/R017 are *label* defects (3.3.2). Error identification has
+  one pass so far — the "Incorrect Answer … refer to your submission
+  history" dialog (R017 O11) — and no test of a validated form (sign-in
+  with a wrong password, the Create/Edit Assignment popup with an empty
+  Name). Process change 2026-09-14: NV6 now covers labels only and a new
+  row **NV12** covers errors (3.3.1); `sync-checks` added NV12 to every
+  no-vision run. NV12 on S7 (sign in, wrong password) and S11 (empty
+  required field) are the two steps that decide 3.3.1 — W37.
+
+**Feedback:** _(pending)_
+
+### W37 — Error identification on a validated form (NV12, CO4) — decides 3.3.1
+
+Runs: the existing no-vision runs for S11 (R077) and S7 (R093 — signed-out
+profile only; never point the signed-in tab at the sign-in page).
+**Do:** (1) S11: Class Menu → "Edit Class" (or Create Assignment) popup;
+clear the Name field; Save. (2) S7, in the **signed-out** window on port
+9223 only: enter a wrong password; submit.
+**Tell me:** For each: is an error message announced without hunting; does
+it say *which* field and *what* is wrong; is the field itself marked
+(`aria-invalid`, the label changing); is a fix suggested (CO4 / 3.3.3).
+**Feedback:** _(pending)_

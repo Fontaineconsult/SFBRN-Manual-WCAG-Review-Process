@@ -64,10 +64,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 1.3.3 Sensory Characteristics (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Supports (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-14 by the assistant from the reviewer's 2026-09-10 narration; reviewer confirms at walkthrough W36] No instruction in the sampled views refers to shape, colour, size, position or sound alone (the vendor's jump-point and chord instructions name keys and controls). The NV8 fails on R016 (grids told apart only by order) and R017 (a math option identified only as "row 4 table 1"; the inserted hint findable only by its position) are *consequences* of missing structure and status messages, already rolled up under 1.3.1 (V-F2, V-F11) and 4.1.3 / 2.4.3 (V-F15) — not instructions that rely on sensory characteristics.
 
 ### 1.4.1 Use of Color (Level A)
 - **Outcome:** Not Evaluated
@@ -290,10 +290,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 2.4.6 Headings and Labels (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Supports (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-14 by the assistant from the reviewer's 2026-09-10 narration; reviewer confirms at walkthrough W36] 2.4.6 requires that headings and labels *which exist* describe topic or purpose; it does not require headings. The sample has no programmatic headings at all (NV2 fail on R016, R017) — that is rolled up under 1.3.1 (V-F1, T1-F1) and 2.4.1. The visible section captions ("Classes", "Class Menu", "Class Assignments", "Class News"), the popup form labels (S11) and the assignment-editor labels are descriptive where present; the missing *association* of those labels is 1.3.1 / 3.3.2 / 4.1.2 (V-F5, V-F7, V-F13), not 2.4.6. Skip-control wording (V-F3) is rolled up under 2.4.4.
 
 ### 2.4.7 Focus Visible (Level AA)
 - **Outcome:** Not Evaluated
@@ -320,10 +320,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 3.1.2 Language of Parts (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Not Applicable (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-14 by the assistant; reviewer confirms at walkthrough W36] No passage or phrase in a language other than English was found in any sampled view (NV9 on R016, R017: nothing mispronounced with an English synthesizer voice; probe language facts on all 14 views). Mathematical notation is not a language change. The page-level `lang` defect on three views is 3.1.1.
 
 ### 3.2.3 Consistent Navigation (Level AA)
 - **Outcome:** Not Evaluated

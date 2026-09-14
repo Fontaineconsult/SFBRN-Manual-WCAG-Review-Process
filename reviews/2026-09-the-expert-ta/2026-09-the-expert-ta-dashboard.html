@@ -1,0 +1,344 @@
+<!doctype html><html lang='en'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>The Expert TA review dashboard</title><style>
+:root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--line:#dcdbd6;--ink:#0b0b0b;--ink2:#52514e;--ink3:#7d7c78;
+--track:#e8e7e3;--fill:#2a78d6;--good:#0ca30c;--warning:#fab219;--serious:#ec835a;--critical:#d03b3b;--neutral:#9a9994;
+--good-bg:#e4f5e4;--warning-bg:#fff3d6;--serious-bg:#fde6dc;--critical-bg:#f9dcdc;--neutral-bg:#ecebe8;--pending-bg:#e6effa;--link:#1d5fb0}
+@media (prefers-color-scheme: dark){:root{color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#33332f;--ink:#fff;--ink2:#c3c2b7;--ink3:#8f8e87;
+--track:#2a2a27;--fill:#3987e5;--good-bg:#173d17;--warning-bg:#4a3a0e;--serious-bg:#4d2a1c;--critical-bg:#4d1f1f;--neutral-bg:#2c2c29;--pending-bg:#1c2c40;--link:#7db3f0}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,Segoe UI,Roboto,sans-serif;padding:16px}
+main{max-width:1440px;margin:0 auto}a{color:var(--link)}h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:0 0 10px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink2)}
+h3{font-size:13px;margin:14px 0 6px;color:var(--ink2)}.sub{color:var(--ink2);margin:0 0 14px}.sub code{font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:16px;align-items:start}
+section{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+section.wide{grid-column:1/-1}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink2);font-weight:600;white-space:nowrap}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}.scroll{overflow-x:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--neutral-bg);font-size:12px;white-space:nowrap}
+.chip.good{background:var(--good-bg);border-color:var(--good)}.chip.warning{background:var(--warning-bg);border-color:var(--warning)}
+.chip.serious{background:var(--serious-bg);border-color:var(--serious)}.chip.critical{background:var(--critical-bg);border-color:var(--critical)}
+.chip.pending{background:var(--pending-bg);border-color:var(--fill)}
+.done{display:grid;grid-template-columns:minmax(150px,auto) 1fr auto;gap:4px 12px;align-items:center;font-variant-numeric:tabular-nums}
+.done .name{white-space:nowrap}.done .name.ok::before{content:"✓ ";color:var(--good)}.done .name.no::before{content:"✗ ";color:var(--ink3)}
+.bar{height:10px;background:var(--track);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--fill);border-radius:4px}
+.bar.ok i{background:var(--good)}.done .n{color:var(--ink2);font-size:12px;white-space:nowrap}
+.hero{font-size:34px;font-weight:700;line-height:1;margin:2px 0 10px}.hero small{font-size:14px;font-weight:400;color:var(--ink2);margin-left:6px}
+.cgrid{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}.cell{width:46px;height:34px;border-radius:5px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;line-height:1.1;text-decoration:none;color:var(--ink)}
+.cell b{font-size:12px}.cell.good{background:var(--good-bg);border-color:var(--good)}.cell.serious{background:var(--serious-bg);border-color:var(--serious)}
+.cell.critical{background:var(--critical-bg);border-color:var(--critical)}.cell.neutral{background:var(--neutral-bg)}.cell.empty{background:transparent;color:var(--ink3);border-style:dashed}
+.cell.empty.ev{border-style:solid;border-color:var(--fill);color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--ink2);margin:6px 0}.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;border:1px solid var(--line);margin-right:5px;vertical-align:-1px}
+.legend .good::before{background:var(--good-bg);border-color:var(--good)}.legend .serious::before{background:var(--serious-bg);border-color:var(--serious)}
+.legend .critical::before{background:var(--critical-bg);border-color:var(--critical)}.legend .neutral::before{background:var(--neutral-bg)}
+.legend .warning::before{background:var(--warning-bg);border-color:var(--warning)}.legend .pending::before{background:var(--pending-bg);border-color:var(--fill)}
+.legend .empty::before{border-style:dashed}.legend .ev::before{border-color:var(--fill)}
+.mx td{padding:3px 5px;text-align:center;white-space:nowrap}.mx td.v{text-align:left;max-width:280px;overflow:hidden;text-overflow:ellipsis}
+.mx a{display:inline-block;min-width:44px;padding:2px 4px;border-radius:4px;border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:11px;line-height:1.2}
+.mx a.good{background:var(--good-bg);border-color:var(--good)}.mx a.warning{background:var(--warning-bg);border-color:var(--warning)}
+.mx a.critical{background:var(--critical-bg);border-color:var(--critical)}.mx a.neutral{background:var(--neutral-bg)}.mx a.pending{background:var(--pending-bg);border-color:var(--fill)}
+.mx span.none{color:var(--ink3)}ul{margin:4px 0 8px 18px;padding:0}li{margin:2px 0}.muted{color:var(--ink3)}.key{font-weight:700;color:var(--serious)}
+.needle li{margin:4px 0}.small{font-size:12px}
+</style><main>
+<h1>The Expert TA <span class='muted'>· 2026-09-the-expert-ta</span></h1>
+<p class='sub'>decision <b>Pending</b> · report <b>INTERIM (testing in progress) / FINAL</b> · 111 runs · 15 live findings (2 withdrawn) · source <code>7e30e725193e</code> · generated by <code>scripts/dashboard.py</code> from <code>2026-09-the-expert-ta.sqlite</code> — never hand-edited</p>
+<div class='chips'><span class="chip ">· T1 Not run</span><span class="chip critical">✗ T2 Fail</span><span class="chip ">· T3 Not run</span><span class="chip ">· T4 Not run</span><span class="chip ">· T5 Not run</span></div>
+<div class='grid'>
+<section><h2>Definition of done</h2>
+<div class='hero'>3<small>of 12 predicates</small></div><div class='done'>
+<span class='name no' title='every target criterion has a 05 Outcome other than Not Evaluated'>C1 criteria decided</span><span class='bar '><i style='width:22%'></i></span><span class='n'>12/55</span>
+<span class='name no' title='every target criterion has at least one answered check in a run'>C2 criteria evidenced</span><span class='bar '><i style='width:69%'></i></span><span class='n'>38/55</span>
+<span class='name no' title='every task cluster has a verdict'>C3 tasks verdict</span><span class='bar '><i style='width:20%'></i></span><span class='n'>1/5</span>
+<span class='name no' title='every run has a Result'>C4 runs resulted</span><span class='bar '><i style='width:26%'></i></span><span class='n'>29/111</span>
+<span class='name no' title='every check row in every run has an outcome'>C5 checks answered</span><span class='bar '><i style='width:35%'></i></span><span class='n'>272/767</span>
+<span class='name no' title='every sampled view × modality has a run with a Result'>C6 cells run</span><span class='bar '><i style='width:30%'></i></span><span class='n'>29/98</span>
+<span class='name ok' title='every sampled view has an automated sweep run (axe/wave)'>C7 views swept</span><span class='bar ok'><i style='width:100%'></i></span><span class='n'>14/14</span>
+<span class='name ok' title='every 508 FPC has an answered check on at least one view'>C8 FPC exercised</span><span class='bar ok'><i style='width:100%'></i></span><span class='n'>9/9</span>
+<span class='name ok' title='every live finding names a criterion, a severity and a run'>C9 findings evidenced</span><span class='bar ok'><i style='width:100%'></i></span><span class='n'>15/15</span>
+<span class='name no' title='every 04 §D coverage box is checked'>C10 coverage boxes</span><span class='bar '><i style='width:0%'></i></span><span class='n'>0/6</span>
+<span class='name no' title='no integrity issue (see `check`)'>C11 integrity clean</span><span class='bar '><i style='width:0%'></i></span><span class='n'>0/1</span>
+<span class='name no' title='06 procurement decision set and report status FINAL — the reviewer&#x27;s act, never the assistant&#x27;s'>C12 decision (human)</span><span class='bar '><i style='width:0%'></i></span><span class='n'>0/2</span>
+</div><p class='small muted'>C12 is the reviewer's act alone. Source: <code>review_db.py completion</code>.</p>
+<h3>Coverage — POUR</h3><div class='scroll'><table><tr><th>principle</th><th class='num'>criteria</th><th class='num'>decided</th><th class='num'>evidenced</th><th class='num'>failing</th></tr>
+<tr><td>1 Perceivable</td><td class='num'>20</td><td class='num'>3</td><td class='num'>15</td><td class='num'>2</td></tr>
+<tr><td>2 Operable</td><td class='num'>20</td><td class='num'>5</td><td class='num'>16</td><td class='num'>4</td></tr>
+<tr><td>3 Understandable</td><td class='num'>13</td><td class='num'>2</td><td class='num'>5</td><td class='num'>1</td></tr>
+<tr><td>4 Robust</td><td class='num'>2</td><td class='num'>2</td><td class='num'>2</td><td class='num'>2</td></tr>
+</table></div>
+<h3>Coverage — 508 FPC</h3><div class='scroll'><table><tr><th>FPC</th><th>modality</th><th class='num'>views with a Result</th><th class='num'>answered</th><th class='num'>blank</th><th class='num'>fails</th></tr>
+<tr><td>302.1</td><td>no-vision</td><td class='num'>1/14</td><td class='num'>57</td><td class='num'>111</td><td class='num'>14</td></tr>
+<tr><td>302.2</td><td>low-vision</td><td class='num'>0/14</td><td class='num'>42</td><td class='num'>84</td><td class='num'>18</td></tr>
+<tr><td>302.3</td><td>no-color</td><td class='num'>0/14</td><td class='num'>13</td><td class='num'>26</td><td class='num'>6</td></tr>
+<tr><td>302.4, 302.5</td><td>no-hearing</td><td class='num'>14/14</td><td class='num'>56</td><td class='num'>0</td><td class='num'>0</td></tr>
+<tr><td>302.6</td><td>no-speech</td><td class='num'>14/14</td><td class='num'>14</td><td class='num'>0</td><td class='num'>0</td></tr>
+<tr><td>302.7, 302.8</td><td>motor</td><td class='num'>0/14</td><td class='num'>36</td><td class='num'>118</td><td class='num'>4</td></tr>
+<tr><td>302.9</td><td>cognition</td><td class='num'>0/14</td><td class='num'>40</td><td class='num'>128</td><td class='num'>1</td></tr>
+</table></div>
+<h3>Vendor claim vs verified</h3><div class='chips'><span class="chip ">11 decided</span><span class="chip critical">8 worse than claimed</span><span class="chip ">0 better</span><span class="chip ">3 as claimed</span></div>
+<div class='scroll'><table><tr><th>SC</th><th>vendor claim</th><th>verified</th></tr>
+<tr><td>1.1.1</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+<tr><td>1.3.1</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Does Not Support</td></tr>
+<tr><td>2.4.1</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+<tr><td>2.4.3</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+<tr><td>2.5.3</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+<tr><td>3.1.2</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Not Applicable</td></tr>
+<tr><td>3.3.2</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+<tr><td>4.1.2</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Does Not Support</td></tr>
+<tr><td>4.1.3</td><td class='small'>Supports (2026-05-05 VPAT as reported by CSUEB — every answered criter</td><td>Partially Supports</td></tr>
+</table></div>
+</section>
+<section class='needle'><h2>What moves the needle</h2>
+<h3>Walkthrough — 17 of 39 steps pending</h3><ul>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W6</a> — Read the page top to bottom (NV5, NV8)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W21</a> — Open your grade report after the submissions above (NV2, NV3, NV5)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W22</a> — Instructor side: class grade sheet (P5 step 4) (NV3, NV5)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W23</a> — Late-work rules are perceivable before submitting (CO3, NV5)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W24</a> <span class=key>KEY</span> — Session timeout and extension (CO7 / 2.2.1) — KEY STEP</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W25</a> — Grant an extension / extended time (instructor; branch P3-a) (CO3, A4)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W26</a> <span class=key>KEY</span> — Create an assignment with the &quot;Accessibility(AA) Only&quot; filter (NV6, MO1, MO2) — KEY STEP (TAAP dependency)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W27</a> — Branch P4-a: build the inaccessible-types assignment</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W28</a> <span class=key>KEY</span> — Student pass on the three admitted types (screen reader, then keyboard) — KEY STEP (vendor admission, TAAP scope)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W29</a> <span class=key>KEY</span> — Reflow at 400 % on Class Management and Take Assignment (LV1, LV2, LV7) — KEY STEP</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W30</a> — Contrast eyedropper (LV4, LV5)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W31</a> — Text spacing and orientation (LV3, LV8)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W32</a> — Grayscale read of the assignment and the grade report (NC1, NC2, NC3)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W34</a> <span class=key>KEY</span> — Standard-mode Class Management with NVDA (S1, run R015) — KEY STEP (T1 verdict)</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W35</a> <span class=key>KEY</span> — Confirm or rule out the measured fails (six `05` decisions) — KEY STEP</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W36</a> — Four `05` judgments drafted from your 2026-09-10 narration — confirm or overrule</li>
+<li><a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>W37</a> — Error identification on a validated form (NV12, CO4) — decides 3.3.1</li>
+</ul><p class='small muted'>file: <a href='session-S1-S3-S4-S5-reviewer-walkthrough.md'>session-S1-S3-S4-S5-reviewer-walkthrough.md</a></p>
+<h3>05 decisions waiting on a fail / partial check (6 criterion×check)</h3><ul>
+<li><b>1.3.5</b> Identify Input Purpose — CO9 on <a href='evidence/runs/R098/run.md'>R098</a></li>
+<li><b>1.4.1</b> Use of Color — NC2 on <a href='evidence/runs/R100/run.md'>R100</a>, <a href='evidence/runs/R102/run.md'>R102</a>, <a href='evidence/runs/R107/run.md'>R107</a>, <a href='evidence/runs/R109/run.md'>R109</a>, <a href='evidence/runs/R110/run.md'>R110</a>, <a href='evidence/runs/R111/run.md'>R111</a></li>
+<li><b>1.4.10</b> Reflow — LV1 on <a href='evidence/runs/R019/run.md'>R019</a>, <a href='evidence/runs/R024/run.md'>R024</a>, <a href='evidence/runs/R030/run.md'>R030</a>, <a href='evidence/runs/R036/run.md'>R036</a>, <a href='evidence/runs/R042/run.md'>R042</a>, <a href='evidence/runs/R048/run.md'>R048</a>, <a href='evidence/runs/R054/run.md'>R054</a>, <a href='evidence/runs/R060/run.md'>R060</a>, <a href='evidence/runs/R066/run.md'>R066</a>, <a href='evidence/runs/R072/run.md'>R072</a>, <a href='evidence/runs/R078/run.md'>R078</a>, <a href='evidence/runs/R083/run.md'>R083</a>, <a href='evidence/runs/R088/run.md'>R088</a>, <a href='evidence/runs/R094/run.md'>R094</a></li>
+<li><b>1.4.12</b> Text Spacing — LV3 on <a href='evidence/runs/R019/run.md'>R019</a>, <a href='evidence/runs/R024/run.md'>R024</a>, <a href='evidence/runs/R042/run.md'>R042</a>, <a href='evidence/runs/R083/run.md'>R083</a></li>
+<li><b>2.5.8</b> Target Size (Minimum) — MO9 on <a href='evidence/runs/R018/run.md'>R018</a>, <a href='evidence/runs/R022/run.md'>R022</a>, <a href='evidence/runs/R039/run.md'>R039</a></li>
+<li><b>3.1.1</b> Language of Page — NV9 on <a href='evidence/runs/R017/run.md'>R017</a>, <a href='evidence/runs/R077/run.md'>R077</a>, <a href='evidence/runs/R093/run.md'>R093</a></li>
+</ul>
+<h3>Task walks without a verdict</h3><p><b>T1</b> (Not run), <b>T3</b> (Not run), <b>T4</b> (Not run), <b>T5</b> (Not run) — <a href='04-task-testing.md'>04-task-testing.md</a> §A</p>
+<h3>Unanswered check rows by modality</h3><div class='chips'><span class="chip ">cognition 128</span><span class="chip ">motor 118</span><span class="chip ">no-vision 111</span><span class="chip ">low-vision 84</span><span class="chip ">sweep triage W1–W3 28</span><span class="chip ">no-color 26</span></div>
+<h3>Integrity (C11)</h3><ul>
+<li><b>failed check, 05 undecided</b> (31) <span class='muted'>— a fail/partial check outcome on a criterion whose 05 Outcome is still Not Evaluated</span><br><span class='small'>1.3.5 via CO9@R098; 1.4.1 via NC2@R100; 1.4.1 via NC2@R102; 1.4.1 via NC2@R107; 1.4.1 via NC2@R109; 1.4.1 via NC2@R110; 1.4.1 via NC2@R111; 1.4.10 via LV1@R019 … +23</span></li>
+</ul>
+</section>
+<section class='wide'><h2>WCAG 2.2 AA — 55 criteria (05 outcome)</h2>
+<div class='legend'><span class='good'>✓ Supports</span><span class='serious'>! Partially Supports</span><span class='critical'>✗ Does Not Support</span><span class='neutral'>– Not Applicable</span><span class='empty'>· Not Evaluated</span><span class='empty ev'>· Not Evaluated, but a check is answered</span></div>
+<h3>1 Perceivable <span class='muted'>— 3/20 decided</span></h3><div class='cgrid'>
+<a class='cell serious' href='05-results.md' title='1.1.1 Non-text Content (A) — Partially Supports; findings: V-F12; 1 failing check row(s); check evidence'><b>1.1.1</b><span>! A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.2.1 Audio-only and Video-only (Prerecorded) (A) — Not Evaluated; check evidence'><b>1.2.1</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.2.2 Captions (Prerecorded) (A) — Not Evaluated; check evidence'><b>1.2.2</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.2.3 Audio Description or Media Alternative (Prerecorded) (A) — Not Evaluated; check evidence'><b>1.2.3</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.2.4 Captions (Live) (AA) — Not Evaluated; check evidence'><b>1.2.4</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.2.5 Audio Description (Prerecorded) (AA) — Not Evaluated; check evidence'><b>1.2.5</b><span>· AA</span></a>
+<a class='cell critical' href='05-results.md' title='1.3.1 Info and Relationships (A) — Does Not Support; findings: T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13; 2 failing check row(s); check evidence'><b>1.3.1</b><span>✗ A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.3.2 Meaningful Sequence (A) — Not Evaluated; check evidence'><b>1.3.2</b><span>· A</span></a>
+<a class='cell good' href='05-results.md' title='1.3.3 Sensory Characteristics (A) — Supports; 2 failing check row(s); check evidence'><b>1.3.3</b><span>✓ A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.3.4 Orientation (AA) — Not Evaluated; check evidence'><b>1.3.4</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.3.5 Identify Input Purpose (AA) — Not Evaluated; 1 failing check row(s); check evidence'><b>1.3.5</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.4.1 Use of Color (A) — Not Evaluated; 6 failing check row(s); check evidence'><b>1.4.1</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.4.2 Audio Control (A) — Not Evaluated; check evidence'><b>1.4.2</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='1.4.3 Contrast (Minimum) (AA) — Not Evaluated; no answered check'><b>1.4.3</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='1.4.4 Resize Text (AA) — Not Evaluated; no answered check'><b>1.4.4</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='1.4.5 Images of Text (AA) — Not Evaluated; no answered check'><b>1.4.5</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.4.10 Reflow (AA) — Not Evaluated; 14 failing check row(s); check evidence'><b>1.4.10</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='1.4.11 Non-text Contrast (AA) — Not Evaluated; no answered check'><b>1.4.11</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='1.4.12 Text Spacing (AA) — Not Evaluated; 4 failing check row(s); check evidence'><b>1.4.12</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='1.4.13 Content on Hover or Focus (AA) — Not Evaluated; no answered check'><b>1.4.13</b><span>· AA</span></a>
+</div>
+<h3>2 Operable <span class='muted'>— 5/20 decided</span></h3><div class='cgrid'>
+<a class='cell empty ev' href='05-results.md' title='2.1.1 Keyboard (A) — Not Evaluated; check evidence'><b>2.1.1</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.1.2 No Keyboard Trap (A) — Not Evaluated; check evidence'><b>2.1.2</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.1.4 Character Key Shortcuts (A) — Not Evaluated; check evidence'><b>2.1.4</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='2.2.1 Timing Adjustable (A) — Not Evaluated; no answered check'><b>2.2.1</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='2.2.2 Pause, Stop, Hide (A) — Not Evaluated; no answered check'><b>2.2.2</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.3.1 Three Flashes or Below Threshold (A) — Not Evaluated; check evidence'><b>2.3.1</b><span>· A</span></a>
+<a class='cell serious' href='05-results.md' title='2.4.1 Bypass Blocks (A) — Partially Supports; findings: V-F1 (Major); 1 failing check row(s); check evidence'><b>2.4.1</b><span>! A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.4.2 Page Titled (A) — Not Evaluated; check evidence'><b>2.4.2</b><span>· A</span></a>
+<a class='cell serious' href='05-results.md' title='2.4.3 Focus Order (A) — Partially Supports; findings: T1-F2, V-F8, V-F13, V-F15; check evidence'><b>2.4.3</b><span>! A</span></a>
+<a class='cell serious' href='05-results.md' title='2.4.4 Link Purpose (In Context) (A) — Partially Supports; findings: V-F3 (Minor); 1 failing check row(s); check evidence'><b>2.4.4</b><span>! A</span></a>
+<a class='cell empty' href='05-results.md' title='2.4.5 Multiple Ways (AA) — Not Evaluated; no answered check'><b>2.4.5</b><span>· AA</span></a>
+<a class='cell good' href='05-results.md' title='2.4.6 Headings and Labels (AA) — Supports; 2 failing check row(s); check evidence'><b>2.4.6</b><span>✓ AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.4.7 Focus Visible (AA) — Not Evaluated; check evidence'><b>2.4.7</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.4.11 Focus Not Obscured (Minimum) (AA) — Not Evaluated; check evidence'><b>2.4.11</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.5.1 Pointer Gestures (A) — Not Evaluated; check evidence'><b>2.5.1</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='2.5.2 Pointer Cancellation (A) — Not Evaluated; no answered check'><b>2.5.2</b><span>· A</span></a>
+<a class='cell serious' href='05-results.md' title='2.5.3 Label in Name (A) — Partially Supports; findings: V-F7; 2 failing check row(s); check evidence'><b>2.5.3</b><span>! A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.5.4 Motion Actuation (A) — Not Evaluated; check evidence'><b>2.5.4</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.5.7 Dragging Movements (AA) — Not Evaluated; check evidence'><b>2.5.7</b><span>· AA</span></a>
+<a class='cell empty ev' href='05-results.md' title='2.5.8 Target Size (Minimum) (AA) — Not Evaluated; 3 failing check row(s); check evidence'><b>2.5.8</b><span>· AA</span></a>
+</div>
+<h3>3 Understandable <span class='muted'>— 2/13 decided</span></h3><div class='cgrid'>
+<a class='cell empty ev' href='05-results.md' title='3.1.1 Language of Page (A) — Not Evaluated; 3 failing check row(s); check evidence'><b>3.1.1</b><span>· A</span></a>
+<a class='cell neutral' href='05-results.md' title='3.1.2 Language of Parts (AA) — Not Applicable; 3 failing check row(s); check evidence'><b>3.1.2</b><span>– AA</span></a>
+<a class='cell empty' href='05-results.md' title='3.2.1 On Focus (A) — Not Evaluated; no answered check'><b>3.2.1</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='3.2.2 On Input (A) — Not Evaluated; no answered check'><b>3.2.2</b><span>· A</span></a>
+<a class='cell empty' href='05-results.md' title='3.2.3 Consistent Navigation (AA) — Not Evaluated; no answered check'><b>3.2.3</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='3.2.4 Consistent Identification (AA) — Not Evaluated; no answered check'><b>3.2.4</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='3.2.6 Consistent Help (A) — Not Evaluated; no answered check'><b>3.2.6</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='3.3.1 Error Identification (A) — Not Evaluated; check evidence'><b>3.3.1</b><span>· A</span></a>
+<a class='cell serious' href='05-results.md' title='3.3.2 Labels or Instructions (A) — Partially Supports; findings: V-F5, V-F13; 2 failing check row(s); check evidence'><b>3.3.2</b><span>! A</span></a>
+<a class='cell empty' href='05-results.md' title='3.3.3 Error Suggestion (AA) — Not Evaluated; no answered check'><b>3.3.3</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='3.3.4 Error Prevention (Legal, Financial, Data) (AA) — Not Evaluated; no answered check'><b>3.3.4</b><span>· AA</span></a>
+<a class='cell empty' href='05-results.md' title='3.3.7 Redundant Entry (A) — Not Evaluated; no answered check'><b>3.3.7</b><span>· A</span></a>
+<a class='cell empty ev' href='05-results.md' title='3.3.8 Accessible Authentication (Minimum) (AA) — Not Evaluated; check evidence'><b>3.3.8</b><span>· AA</span></a>
+</div>
+<h3>4 Robust <span class='muted'>— 2/2 decided</span></h3><div class='cgrid'>
+<a class='cell critical' href='05-results.md' title='4.1.2 Name, Role, Value (A) — Does Not Support; findings: T1-F1, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13; 2 failing check row(s); check evidence'><b>4.1.2</b><span>✗ A</span></a>
+<a class='cell serious' href='05-results.md' title='4.1.3 Status Messages (AA) — Partially Supports; findings: V-F9, V-F14 (Minor), V-F15; 1 failing check row(s); check evidence'><b>4.1.3</b><span>! AA</span></a>
+</div>
+<p class='small muted'>Hover a cell for the name, outcome, findings and check evidence; click for <a href='05-results.md'>05-results.md</a>.</p></section>
+<section class='wide'><h2>Views × modalities — latest run of each cell</h2>
+<div class='legend'><span class='good'>✓ Works</span><span class='warning'>! Works with issues</span><span class='critical'>✗ Broken</span><span class='neutral'>n N/A</span><span class='pending'>? logged, no Result (blank rows in brackets)</span><span class='empty'>· not run</span></div>
+<div class='scroll'><table class='mx'><tr><th>view</th><th title='no-vision'>NV</th><th title='low-vision'>LV</th><th title='no-color'>NC</th><th title='no-hearing'>NH</th><th title='no-speech'>NS</th><th title='motor'>MO</th><th title='cognition'>CO</th><th>sweep</th></tr>
+<tr><td class='v' title='Class Management (standard mode) — proposed 2026-09-10'><b>S1</b> Class Management (standard mode) — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R015/run.md' title='R015 — Not set — nvda'>? R015 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R019/run.md' title='R019 — Not set — probe'>? R019 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R099/run.md' title='R099 — Not set — probe'>? R099 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R020/run.md' title='R020 — N/A — probe'>n R020</a></td>
+<td><a class='neutral' href='evidence/runs/R021/run.md' title='R021 — N/A — probe'>n R021</a></td>
+<td><a class='pending' href='evidence/runs/R022/run.md' title='R022 — Not set — probe'>? R022 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R023/run.md' title='R023 — Not set — probe'>? R023 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R001/run.md'>R001</a></td></tr>
+<tr><td class='v' title='Class Management — Accessibility Mode — proposed 2026-09-10'><b>S2</b> Class Management — Accessibility Mode — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R016/run.md' title='R016 — Not set — nvda'>? R016 (3)</a></td>
+<td><a class='pending' href='evidence/runs/R024/run.md' title='R024 — Not set — probe'>? R024 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R111/run.md' title='R111 — Not set — probe'>? R111 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R025/run.md' title='R025 — N/A — probe'>n R025</a></td>
+<td><a class='neutral' href='evidence/runs/R026/run.md' title='R026 — N/A — probe'>n R026</a></td>
+<td><a class='pending' href='evidence/runs/R027/run.md' title='R027 — Not set — probe'>? R027 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R028/run.md' title='R028 — Not set — probe'>? R028 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R005/run.md'>R005</a></td></tr>
+<tr><td class='v' title='Take Assignment — &quot;Chapter 5 Sample Assignment&quot;, problems 1–9 — proposed 2026-09-10'><b>S3</b> Take Assignment — &quot;Chapter 5 Sample Assignment&quot;, problems 1–9 — proposed 2026-09-10</td>
+<td><a class='critical' href='evidence/runs/R017/run.md' title='R017 — Broken — nvda'>✗ R017</a></td>
+<td><a class='pending' href='evidence/runs/R083/run.md' title='R083 — Not set — probe'>? R083 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R109/run.md' title='R109 — Not set — probe'>? R109 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R084/run.md' title='R084 — N/A — probe'>n R084</a></td>
+<td><a class='neutral' href='evidence/runs/R085/run.md' title='R085 — N/A — probe'>n R085</a></td>
+<td><a class='pending' href='evidence/runs/R018/run.md' title='R018 — Not set — keyboard'>? R018 (1)</a></td>
+<td><a class='pending' href='evidence/runs/R086/run.md' title='R086 — Not set — probe'>? R086 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R004/run.md'>R004</a></td></tr>
+<tr><td class='v' title='View Grade Report — proposed 2026-09-10'><b>S4</b> View Grade Report — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R029/run.md' title='R029 — Not set — probe'>? R029 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R030/run.md' title='R030 — Not set — probe'>? R030 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R100/run.md' title='R100 — Not set — probe'>? R100 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R031/run.md' title='R031 — N/A — probe'>n R031</a></td>
+<td><a class='neutral' href='evidence/runs/R032/run.md' title='R032 — N/A — probe'>n R032</a></td>
+<td><a class='pending' href='evidence/runs/R033/run.md' title='R033 — Not set — probe'>? R033 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R034/run.md' title='R034 — Not set — probe'>? R034 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R007/run.md'>R007</a></td></tr>
+<tr><td class='v' title='Assignment Editor (edit) — proposed 2026-09-10'><b>S5</b> Assignment Editor (edit) — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R035/run.md' title='R035 — Not set — probe'>? R035 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R036/run.md' title='R036 — Not set — probe'>? R036 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R101/run.md' title='R101 — Not set — probe'>? R101 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R037/run.md' title='R037 — N/A — probe'>n R037</a></td>
+<td><a class='neutral' href='evidence/runs/R038/run.md' title='R038 — N/A — probe'>n R038</a></td>
+<td><a class='pending' href='evidence/runs/R039/run.md' title='R039 — Not set — probe'>? R039 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R040/run.md' title='R040 — Not set — probe'>? R040 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R006/run.md'>R006</a></td></tr>
+<tr><td class='v' title='Calendar — proposed 2026-09-10'><b>S6</b> Calendar — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R041/run.md' title='R041 — Not set — probe'>? R041 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R042/run.md' title='R042 — Not set — probe'>? R042 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R102/run.md' title='R102 — Not set — probe'>? R102 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R043/run.md' title='R043 — N/A — probe'>n R043</a></td>
+<td><a class='neutral' href='evidence/runs/R044/run.md' title='R044 — N/A — probe'>n R044</a></td>
+<td><a class='pending' href='evidence/runs/R045/run.md' title='R045 — Not set — probe'>? R045 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R046/run.md' title='R046 — Not set — probe'>? R046 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R008/run.md'>R008</a></td></tr>
+<tr><td class='v' title='Sign in — proposed 2026-09-10'><b>S7</b> Sign in — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R093/run.md' title='R093 — Not set — probe'>? R093 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R094/run.md' title='R094 — Not set — probe'>? R094 (6)</a></td>
+<td><span class='none'>·</span></td>
+<td><a class='neutral' href='evidence/runs/R095/run.md' title='R095 — N/A — probe'>n R095</a></td>
+<td><a class='neutral' href='evidence/runs/R096/run.md' title='R096 — N/A — probe'>n R096</a></td>
+<td><a class='pending' href='evidence/runs/R097/run.md' title='R097 — Not set — probe'>? R097 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R098/run.md' title='R098 — Not set — probe'>? R098 (10)</a></td>
+<td><a class='neutral' href='evidence/runs/R003/run.md'>R003</a></td></tr>
+<tr><td class='v' title='View Assignment Solutions — proposed 2026-09-10'><b>S8</b> View Assignment Solutions — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R087/run.md' title='R087 — Not set — probe'>? R087 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R088/run.md' title='R088 — Not set — probe'>? R088 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R110/run.md' title='R110 — Not set — probe'>? R110 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R089/run.md' title='R089 — N/A — probe'>n R089</a></td>
+<td><a class='neutral' href='evidence/runs/R090/run.md' title='R090 — N/A — probe'>n R090</a></td>
+<td><a class='pending' href='evidence/runs/R091/run.md' title='R091 — Not set — probe'>? R091 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R092/run.md' title='R092 — Not set — probe'>? R092 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R014/run.md'>R014</a></td></tr>
+<tr><td class='v' title='Class Assignments Grade Sheet — proposed 2026-09-10'><b>S9</b> Class Assignments Grade Sheet — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R047/run.md' title='R047 — Not set — probe'>? R047 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R048/run.md' title='R048 — Not set — probe'>? R048 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R103/run.md' title='R103 — Not set — probe'>? R103 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R049/run.md' title='R049 — N/A — probe'>n R049</a></td>
+<td><a class='neutral' href='evidence/runs/R050/run.md' title='R050 — N/A — probe'>n R050</a></td>
+<td><a class='pending' href='evidence/runs/R051/run.md' title='R051 — Not set — probe'>? R051 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R052/run.md' title='R052 — Not set — probe'>? R052 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R009/run.md'>R009</a></td></tr>
+<tr><td class='v' title='Manage Class Roster — proposed 2026-09-10'><b>S10</b> Manage Class Roster — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R053/run.md' title='R053 — Not set — probe'>? R053 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R054/run.md' title='R054 — Not set — probe'>? R054 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R104/run.md' title='R104 — Not set — probe'>? R104 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R055/run.md' title='R055 — N/A — probe'>n R055</a></td>
+<td><a class='neutral' href='evidence/runs/R056/run.md' title='R056 — N/A — probe'>n R056</a></td>
+<td><a class='pending' href='evidence/runs/R057/run.md' title='R057 — Not set — probe'>? R057 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R058/run.md' title='R058 — Not set — probe'>? R058 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R010/run.md'>R010</a></td></tr>
+<tr><td class='v' title='Edit Class popup — proposed 2026-09-10'><b>S11</b> Edit Class popup — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R077/run.md' title='R077 — Not set — probe'>? R077 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R078/run.md' title='R078 — Not set — probe'>? R078 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R108/run.md' title='R108 — Not set — probe'>? R108 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R079/run.md' title='R079 — N/A — probe'>n R079</a></td>
+<td><a class='neutral' href='evidence/runs/R080/run.md' title='R080 — N/A — probe'>n R080</a></td>
+<td><a class='pending' href='evidence/runs/R081/run.md' title='R081 — Not set — probe'>? R081 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R082/run.md' title='R082 — Not set — probe'>? R082 (10)</a></td>
+<td><a class='neutral' href='evidence/runs/R002/run.md'>R002</a></td></tr>
+<tr><td class='v' title='Student Practice Area — proposed 2026-09-10'><b>S12</b> Student Practice Area — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R059/run.md' title='R059 — Not set — probe'>? R059 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R060/run.md' title='R060 — Not set — probe'>? R060 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R105/run.md' title='R105 — Not set — probe'>? R105 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R061/run.md' title='R061 — N/A — probe'>n R061</a></td>
+<td><a class='neutral' href='evidence/runs/R062/run.md' title='R062 — N/A — probe'>n R062</a></td>
+<td><a class='pending' href='evidence/runs/R063/run.md' title='R063 — Not set — probe'>? R063 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R064/run.md' title='R064 — Not set — probe'>? R064 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R011/run.md'>R011</a></td></tr>
+<tr><td class='v' title='Academic Integrity Preferences — proposed 2026-09-10'><b>R1</b> Academic Integrity Preferences — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R065/run.md' title='R065 — Not set — probe'>? R065 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R066/run.md' title='R066 — Not set — probe'>? R066 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R106/run.md' title='R106 — Not set — probe'>? R106 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R067/run.md' title='R067 — N/A — probe'>n R067</a></td>
+<td><a class='neutral' href='evidence/runs/R068/run.md' title='R068 — N/A — probe'>n R068</a></td>
+<td><a class='pending' href='evidence/runs/R069/run.md' title='R069 — Not set — probe'>? R069 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R070/run.md' title='R070 — Not set — probe'>? R070 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R012/run.md'>R012</a></td></tr>
+<tr><td class='v' title='View Grades (Spreadsheet) — proposed 2026-09-10'><b>R2</b> View Grades (Spreadsheet) — proposed 2026-09-10</td>
+<td><a class='pending' href='evidence/runs/R071/run.md' title='R071 — Not set — probe'>? R071 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R072/run.md' title='R072 — Not set — probe'>? R072 (6)</a></td>
+<td><a class='pending' href='evidence/runs/R107/run.md' title='R107 — Not set — probe'>? R107 (2)</a></td>
+<td><a class='neutral' href='evidence/runs/R073/run.md' title='R073 — N/A — probe'>n R073</a></td>
+<td><a class='neutral' href='evidence/runs/R074/run.md' title='R074 — N/A — probe'>n R074</a></td>
+<td><a class='pending' href='evidence/runs/R075/run.md' title='R075 — Not set — probe'>? R075 (9)</a></td>
+<td><a class='pending' href='evidence/runs/R076/run.md' title='R076 — Not set — probe'>? R076 (9)</a></td>
+<td><a class='neutral' href='evidence/runs/R013/run.md'>R013</a></td></tr>
+</table></div></section>
+<section class='wide'><h2>Findings</h2><div class='chips'><span class="chip critical">✗ Blocker 1</span><span class="chip serious">! Major 10</span><span class="chip warning">! Minor 4</span><span class="chip ">withdrawn 2</span></div>
+<div class='scroll'><table><tr><th>ID</th><th>severity</th><th>where</th><th>criteria</th><th>runs</th></tr>
+<tr><td><a href='04-task-testing.md'>V-F9</a></td><td><span class="chip critical">Blocker for the read-back function (unusable output); Major </span></td><td class='small'>S3 Take Assignment — the `Ctrl+Shift+2` &quot;read out your answer&quot; function (live region `#calc-announce`), Problem 9 multiple choice with MathJ</td><td>1.3.1, 4.1.3</td><td><a href="evidence/runs/R004/run.md">R004</a> <a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>T1-F1</a></td><td><span class="chip serious">Major</span></td><td class='small'>Step 2, Class Management in Accessibility Mode (S2) — reaching the assignments table</td><td>1.3.1, 4.1.2</td><td><a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>T1-F2</a></td><td><span class="chip serious">Major</span></td><td class='small'>Step 4, Take Assignment (S3) — moving from the problem navigator into a problem</td><td>1.3.1, 2.4.3</td><td><a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F1</a></td><td><span class="chip serious">Major</span></td><td class='small'>S2 Class Management (Accessibility Mode) — whole page; also S1 (axe R001) and every other signed-in view (axe R004–R014)</td><td>1.3.1, 2.4.1</td><td><a href="evidence/runs/R001/run.md">R001</a> <a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F11</a></td><td><span class="chip serious">Major (Blocker for parts whose options contain math)</span></td><td class='small'>S3 Take Assignment — multiple-choice answer radio buttons (Problems 8 and 9)</td><td>1.3.1, 4.1.2</td><td><a href="evidence/runs/R004/run.md">R004</a> <a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F12</a></td><td><span class="chip serious">Major</span></td><td class='small'>S3 Take Assignment — the problem figure (observed: Problem 8, two blocks and a pulley; exploration found the same on Problems 6, 7, 9)</td><td>1.1.1</td><td><a href="evidence/runs/R014/run.md">R014</a> <a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F13</a></td><td><span class="chip serious">Major</span></td><td class='small'>S3 Take Assignment — the formula/number entry area of symbolic (&quot;Equation&quot;) and numeric (&quot;Algorithm&quot;) parts; observed on Problem 2 Part (a) </td><td>1.3.1, 2.4.3, 3.3.2, 4.1.2</td><td><a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F15</a></td><td><span class="chip serious">Major</span></td><td class='small'>S3 Take Assignment — the **Hint** button (and, by the same mechanism, Feedback) on any part</td><td>2.4.3, 4.1.3</td><td><a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F5</a></td><td><span class="chip serious">Major</span></td><td class='small'>S11 — the popup forms (e.g. Edit Class: Class Name, Class Description, Time Zone, Academic Year, Semester, Subject)</td><td>1.3.1, 3.3.2, 4.1.2</td><td><a href="evidence/runs/R002/run.md">R002</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F7</a></td><td><span class="chip serious">Major</span></td><td class='small'>S2 Class Management (Accessibility Mode) — the &quot;Classes:&quot; and &quot;Class Menu:&quot; `&lt;select&gt;` controls at the top of the page</td><td>1.3.1, 2.5.3, 4.1.2</td><td><a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F8</a></td><td><span class="chip serious">Major (re-rated 2026-09-10 on Take Assignment) — pending the</span></td><td class='small'>S2 (and S1) Class Management — the top-of-page &quot;jump point&quot; (`#top_of_page_jump_point`, `div role=&quot;button&quot; tabindex=&quot;0&quot;`), the first focusab</td><td>2.4.3, 4.1.2</td><td><a href="evidence/runs/R001/run.md">R001</a> <a href="evidence/runs/R004/run.md">R004</a> <a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a> <a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F14</a></td><td><span class="chip warning">Minor (&quot;not unusable&quot; — reviewer)</span></td><td class='small'>S3 Take Assignment — Problem 3 drag-and-drop ranking, the alternative &quot;drag and drop accessibility table&quot; form</td><td>4.1.3</td><td><a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F2</a></td><td><span class="chip warning">Minor (revised 2026-09-10)</span></td><td class='small'>S2 Class Management — Class Assignments and Class News grids (DevExpress)</td><td>1.3.1</td><td><a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F3</a></td><td><span class="chip warning">Minor</span></td><td class='small'>S2 Class Management — the skip links &quot;Tab for Assignments, Enter to skip…&quot; and &quot;Tab for Class News, Enter to skip&quot;</td><td>2.4.4, 4.1.2</td><td><a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr><td><a href='04-task-testing.md'>V-F6</a></td><td><span class="chip warning">Minor</span></td><td class='small'>S2 Class Management (Accessibility Mode) — the per-row **Actions** `&lt;select&gt;` in the Class Assignments grid, the control that leads to Take </td><td>4.1.2</td><td><a href="evidence/runs/R005/run.md">R005</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+<tr style='opacity:.55'><td><a href='04-task-testing.md'>V-F10</a></td><td><span class="chip ">withdrawn</span></td><td class='small'>S3 Take Assignment — MathJax-rendered mathematics in problem statements (observed: Problem 8, M₁ and M₂) and in multiple-choice options (Pro</td><td></td><td><a href="evidence/runs/R017/run.md">R017</a></td></tr>
+<tr style='opacity:.55'><td><a href='04-task-testing.md'>V-F4</a></td><td><span class="chip ">withdrawn</span></td><td class='small'>S11 — the Class Menu popups (Create Class / Edit Class / Student-TA Registration / Create News / Copy Assignment: DevExpress popup iframes o</td><td></td><td><a href="evidence/runs/R002/run.md">R002</a> <a href="evidence/runs/R016/run.md">R016</a></td></tr>
+</table></div></section>
+<section class='wide'><h2>History — state-log.md</h2>
+<div class='scroll'><table><tr><th>date</th><th>done</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>C6</th><th>C7</th><th>C8</th><th>C9</th><th>C10</th><th>C11</th><th>C12</th><th>runs</th><th>findings</th><th>integrity</th></tr>
+<tr><td class='small'>2026-09-11</td><td class='small'>2/12</td><td class='small'>8/55</td><td class='small'>36/55</td><td class='small'>1/5</td><td class='small'>29/98</td><td class='small'>256/714</td><td class='small'>29/98</td><td class='small'>14/14</td><td class='small'>8/9</td><td class='small'>15/15</td><td class='small'>0/6</td><td class='small'>0/1</td><td class='small'>0/2</td><td class='small'>98</td><td class='small'>15</td><td class='small'>38</td></tr>
+<tr><td class='small'>2026-09-11</td><td class='small'>3/12</td><td class='small'>9/55</td><td class='small'>38/55</td><td class='small'>1/5</td><td class='small'>29/111</td><td class='small'>270/753</td><td class='small'>29/98</td><td class='small'>14/14</td><td class='small'>9/9</td><td class='small'>15/15</td><td class='small'>0/6</td><td class='small'>0/1</td><td class='small'>0/2</td><td class='small'>111</td><td class='small'>15</td><td class='small'>41</td></tr>
+<tr><td class='small'>2026-09-14</td><td class='small'>3/12</td><td class='small'>12/55</td><td class='small'>38/55</td><td class='small'>1/5</td><td class='small'>29/111</td><td class='small'>272/767</td><td class='small'>29/98</td><td class='small'>14/14</td><td class='small'>9/9</td><td class='small'>15/15</td><td class='small'>0/6</td><td class='small'>0/1</td><td class='small'>0/2</td><td class='small'>111</td><td class='small'>15</td><td class='small'>31</td></tr>
+</table></div>
+<p class='small muted'>Runs with blank rows: <a href='evidence/runs/R082/run.md' title='S11 × cognition (probe)'>R082</a> (10), <a href='evidence/runs/R098/run.md' title='S7 × cognition (probe)'>R098</a> (10), <a href='evidence/runs/R015/run.md' title='S1 × no-vision (nvda)'>R015</a> (9), <a href='evidence/runs/R022/run.md' title='S1 × motor (probe)'>R022</a> (9), <a href='evidence/runs/R023/run.md' title='S1 × cognition (probe)'>R023</a> (9), <a href='evidence/runs/R027/run.md' title='S2 × motor (probe)'>R027</a> (9), <a href='evidence/runs/R028/run.md' title='S2 × cognition (probe)'>R028</a> (9), <a href='evidence/runs/R029/run.md' title='S4 × no-vision (probe)'>R029</a> (9), <a href='evidence/runs/R033/run.md' title='S4 × motor (probe)'>R033</a> (9), <a href='evidence/runs/R034/run.md' title='S4 × cognition (probe)'>R034</a> (9), <a href='evidence/runs/R035/run.md' title='S5 × no-vision (probe)'>R035</a> (9), <a href='evidence/runs/R039/run.md' title='S5 × motor (probe)'>R039</a> (9), <a href='evidence/runs/R040/run.md' title='S5 × cognition (probe)'>R040</a> (9), <a href='evidence/runs/R041/run.md' title='S6 × no-vision (probe)'>R041</a> (9), <a href='evidence/runs/R045/run.md' title='S6 × motor (probe)'>R045</a> (9), <a href='evidence/runs/R046/run.md' title='S6 × cognition (probe)'>R046</a> (9), <a href='evidence/runs/R047/run.md' title='S9 × no-vision (probe)'>R047</a> (9), <a href='evidence/runs/R051/run.md' title='S9 × motor (probe)'>R051</a> (9), <a href='evidence/runs/R052/run.md' title='S9 × cognition (probe)'>R052</a> (9), <a href='evidence/runs/R053/run.md' title='S10 × no-vision (probe)'>R053</a> (9), <a href='evidence/runs/R057/run.md' title='S10 × motor (probe)'>R057</a> (9), <a href='evidence/runs/R058/run.md' title='S10 × cognition (probe)'>R058</a> (9), <a href='evidence/runs/R059/run.md' title='S12 × no-vision (probe)'>R059</a> (9), <a href='evidence/runs/R063/run.md' title='S12 × motor (probe)'>R063</a> (9), <a href='evidence/runs/R064/run.md' title='S12 × cognition (probe)'>R064</a> (9), <a href='evidence/runs/R065/run.md' title='R1 × no-vision (probe)'>R065</a> (9), <a href='evidence/runs/R069/run.md' title='R1 × motor (probe)'>R069</a> (9), <a href='evidence/runs/R070/run.md' title='R1 × cognition (probe)'>R070</a> (9), <a href='evidence/runs/R071/run.md' title='R2 × no-vision (probe)'>R071</a> (9), <a href='evidence/runs/R075/run.md' title='R2 × motor (probe)'>R075</a> (9) … +52</p>
+<p class='small muted'>Stage files: <a href='01-intake.md'>01-intake.md</a> · <a href='02-vendor.md'>02-vendor.md</a> · <a href='03-scope-and-sample.md'>03-scope-and-sample.md</a> · <a href='04-task-testing.md'>04-task-testing.md</a> · <a href='05-results.md'>05-results.md</a> · <a href='06-report.md'>06-report.md</a></p></section>
+</div></main>

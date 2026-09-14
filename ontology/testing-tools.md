@@ -108,6 +108,13 @@ in this order:
    shows zero. Only a *persistent* `chrome-extension://` target means the
    flag was missing.
 
+`python scripts/preflight.py` runs 1–4 in one call (`--launch --url <product
+home>` starts the browser with the full flag set when the port is dead;
+`--anon` adds the signed-out profile on 9223) and exits 1 on any failure.
+Added 2026-09-14 after the hand-typed `curl | python -c` check produced a
+traceback instead of "port dead". A sign-in tab is printed as the
+reviewer's next action; the script never authenticates.
+
 **Changing the flags means restarting the browser, and only that browser.**
 Filter by command line so the reviewer's everyday Chrome is untouched:
 

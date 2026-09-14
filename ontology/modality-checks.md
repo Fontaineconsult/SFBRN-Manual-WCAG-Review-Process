@@ -48,12 +48,13 @@ landmarks (R), forms mode. Copy exact announcements from Speech History
 | NV3 | Every control announces an accurate name, role, and value/state | 4.1.2, 2.5.3 |
 | NV4 | Images announce appropriate alternatives; decorative images are silent | 1.1.1 |
 | NV5 | Reading order matches the meaning of the visual order | 1.3.2 |
-| NV6 | Form fields announce labels and instructions; errors are announced and identified | 3.3.1, 3.3.2 |
+| NV6 | Form fields announce labels and instructions (the visible label is the accessible name, or the name says the same thing) | 3.3.2 |
 | NV7 | Dynamic updates (toasts, async results, validation) are announced without stealing focus | 4.1.3 |
 | NV8 | Nothing is conveyed only by visual position, shape, or size | 1.3.3 |
 | NV9 | Language of the view (and passages) is announced/pronounced from the correct language | 3.1.1, 3.1.2 |
 | NV10 | Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | 2.4.4 |
 | NV11 | Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | 1.2.3, 1.2.5 |
+| NV12 | Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | 3.3.1 |
 
 ## low-vision — With Limited Vision (302.2)
 
@@ -176,6 +177,14 @@ criteria / POUR principles / FPC have an **answered** check in a logged run.
 file run `review.py sync-checks <review>` on every in-flight review so its
 existing runs gain the new rows (blank, dated) instead of silently lacking
 them; `validate` lists runs that are behind the checklist.
+
+**One row, one kind of failure.** A row that bundles two criteria whose
+failures are independent turns every fail into a false alarm on the other
+criterion: until 2026-09-14 NV6 read "labels and instructions; errors are
+announced and identified" and mapped to 3.3.1 + 3.3.2, so a label defect
+(3.3.2) raised "failed check, 05 undecided" on 3.3.1, which nobody had
+tested. Split it (NV6 labels → 3.3.2; NV12 errors → 3.3.1). When a fail
+on a row could belong to only one of its criteria, split the row.
 
 ## Assistant-answerable checks (`scripts/view_probe.py`)
 

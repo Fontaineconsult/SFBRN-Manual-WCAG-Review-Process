@@ -64,7 +64,10 @@ a false Major finding.
    `reviews/<id>/state-log.md` so progress between sessions is a diff of
    two rows. `status`
    ends with the completion line (predicates of the definition of done
-   satisfied, from the database).
+   satisfied, from the database). The same data as a page:
+   `reviews/<id>/<id>-dashboard.html` (`scripts/dashboard.py`, regenerated
+   by every sync; `--open` shows it) — the reviewer's map of the review,
+   every run and step a link. Point the reviewer at it; never hand-edit it.
 2. Working a review? `python scripts/review.py status <review>` then
    `validate <review>` — the gap list IS the to-do list — then
    `coverage <review>`, and read the `[db]` lines of `validate` — integrity
@@ -99,9 +102,14 @@ a false Major finding.
    `python scripts/review.py gaps <review> --view S#` prints the unanswered
    check rows — **that is the session's question list**; never improvise one
    or ask the reviewer things the runs already answer.
-7. **Environment pre-flight — only if this session will run tools.** It rots
-   silently between sessions (both of these were dead on 2026-08-06 having
-   worked on 2026-08-04):
+7. **Environment pre-flight — only if this session will run tools.**
+   `python scripts/preflight.py [--launch --url <product home>] [--anon]`
+   runs every check below in one call and exits 1 on any failure; with
+   `--launch` it starts the debug-profile Chrome (full flag set) when its
+   port is dead. A sign-in tab is reported as the reviewer's next action —
+   never yours. The checks, for when you need to do one by hand — they rot
+   silently between sessions (dead on 2026-08-06 and again on 2026-09-14
+   having worked the session before):
    - `python -c "import websocket"` — `axe_scan.py`'s dependency; the repo
      has no manifest, so a machine change or Python upgrade loses it.
      Fix: `python -m pip install websocket-client`.

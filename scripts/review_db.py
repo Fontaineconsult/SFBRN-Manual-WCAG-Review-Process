@@ -465,6 +465,15 @@ def sync(review=None, quiet=False):
             tmp.unlink()
         counts["changed"] = changed
         out[r.name] = counts
+        # the HTML dashboard is derived from the database exactly as the
+        # database is derived from the files — regenerate it here so it is
+        # never more than one command behind (scripts/dashboard.py)
+        try:
+            import dashboard
+            dashboard.write(r)
+        except Exception as ex:  # noqa: BLE001 — the DB is the measure; the page is a view of it
+            if not quiet:
+                print(f"(dashboard not rendered: {ex})", file=sys.stderr)
         if not quiet:
             print(f"synced {r.name} → {final.relative_to(ROOT)}"
                   + (" (updated)" if changed else " (unchanged — file untouched)") + ": "

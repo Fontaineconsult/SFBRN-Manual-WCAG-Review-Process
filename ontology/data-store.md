@@ -97,6 +97,32 @@ row. The log is append-only and idempotent — an unchanged state adds no
 row — so the review's progress is the diff between rows, versioned with
 the review. Open every session with it; log again at the end.
 
+## The dashboard page — `scripts/dashboard.py <review> [--open]`
+
+`reviews/<id>/<id>-dashboard.html` is `state` as a page: the definition of
+done, what moves the needle (pending walkthrough steps, `05` decisions
+waiting on a fail/partial check, tasks without a verdict, unanswered rows
+by modality, integrity issues), the 55-criterion grid coloured by `05`
+outcome (with a mark for "Not Evaluated but a check is answered"), POUR and
+508 FPC coverage, the vendor-claim comparison, the views × modalities grid
+with the **latest run of each cell** (blank-row counts in brackets), the
+findings table and the state-log history. Every run, step and stage file
+is a relative link, so opened from the review folder it is the reviewer's
+map of the review. Added 2026-09-14 at the reviewer's request ("we really
+need some sort of dashboard, that pulls from the database, that helps me
+stay oriented").
+
+Rules: it is **derived from the database exactly as the database is derived
+from the files** — `review_db.py sync` regenerates it (so `validate`,
+`status`, `coverage`, `log-test` and the probe all keep it current), it
+carries no timestamp (the header shows the source hash) so a diff on the
+committed page means the review changed, and it is never hand-edited.
+Colour never carries meaning alone: every status has a glyph and a word,
+and a hover title spells out what the cell holds. Regular Chrome cannot
+open `file://` pages through the browser extension; `--open` uses the
+default browser, or serve the folder (`python -m http.server`) when a
+screenshot is needed.
+
 ## Integrity checks — `review_db.py check <review>` (the `[db]` lines of `validate`, and C11)
 
 | Check | What it catches |
@@ -116,7 +142,10 @@ the review. Open every session with it; log again at the end.
 
 Before asserting a count, a cross-reference ("V-F3 is rolled up under
 2.4.4"), a comparison ("worse than the vendor claimed on N criteria"), or a
-coverage figure, run the query — `review_db.py query "…"` (read-only).
+coverage figure, run the query — `review_db.py query --review <id> "…"`
+(read-only; `--review` or `--all` is required even when the SQL names the
+review — the database is per review and the command has to know which
+file to open. `--json` for tooling).
 
     -- vendor claim vs verified outcome, where they differ
     SELECT sc, vendor_claim, outcome FROM criterion_outcomes

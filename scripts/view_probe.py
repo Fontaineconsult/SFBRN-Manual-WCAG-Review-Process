@@ -208,22 +208,54 @@ OVERFLOW_JS = r"""(() => {
 
 # NC2 — links inside running text that differ from their surroundings by colour only
 LINK_CUES_JS = r"""(() => {
-  const out = {inText: 0, colorOnly: []};
+  // Resting state: does the link differ from its surrounding text by anything
+  // but colour? If not, the accepted technique (WCAG G183) still passes when
+  // the link is >= 3:1 against the surrounding text AND gains a non-colour cue
+  // on hover and on focus. Hover cues are read from the same-origin
+  // stylesheets (rules whose selector carries :hover and matches the link);
+  // focus cues are measured for real by focusing the element.
+  const out = {inText: 0, colorOnly: [], failing: [], unreadableSheets: 0};
   const vis = e => { const r = e.getBoundingClientRect(); const cs = getComputedStyle(e);
     return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'; };
+  const lum = c => { const m = c.match(/[\d.]+/g); if (!m) return null; const [r,g,b] = m.slice(0,3).map(Number).map(v => { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }); return 0.2126*r + 0.7152*g + 0.0722*b; };
+  const ratio = (c1, c2) => { const a = lum(c1), b = lum(c2); if (a === null || b === null) return null; const [h,l] = a > b ? [a,b] : [b,a]; return Math.round((h+0.05)/(l+0.05)*100)/100; };
+  const cueIn = (st, base) => /underline|overline|line-through/.test(st.textDecorationLine || st.textDecoration || '') || (st.borderBottomStyle && st.borderBottomStyle !== 'none') || (st.outlineStyle && st.outlineStyle !== 'none' && parseFloat(st.outlineWidth) > 0) || (st.backgroundColor && st.backgroundColor !== 'rgba(0, 0, 0, 0)' && st.backgroundColor !== base.backgroundColor) || (parseInt(st.fontWeight) >= parseInt(base.fontWeight) + 200);
+  // hover rules from stylesheets
+  const hoverRules = [];
+  for (const sh of Array.from(document.styleSheets)) {
+    let rules; try { rules = sh.cssRules; } catch (x) { out.unreadableSheets++; continue; }
+    const walk = rs => { for (const r of Array.from(rs || [])) { if (r.cssRules && !r.selectorText) walk(r.cssRules); if (r.selectorText && /:hover/.test(r.selectorText)) hoverRules.push(r); } };
+    walk(rules);
+  }
+  const hoverCue = a => { for (const r of hoverRules) { const sel = r.selectorText.split(',').map(s => s.trim()).filter(s => /:hover/.test(s)).map(s => s.replace(/:hover/g, ''));
+      let hit = false; for (const s of sel) { try { if (s && a.matches(s)) { hit = true; break; } } catch (x) {} }
+      if (!hit) continue; const st = r.style; if (/underline/.test(st.textDecoration || st.textDecorationLine || '') || (st.borderBottom && st.borderBottom !== 'none') || st.backgroundColor || parseInt(st.fontWeight) >= 600 || st.outline) return r.selectorText.slice(0, 60); }
+    return null; };
   for (const a of document.querySelectorAll('a[href]')) {
     if (!vis(a)) continue;
     const p = a.parentElement; if (!p) continue;
     const own = (a.textContent || '').trim(); if (!own) continue;
-    const around = (p.textContent || '').trim();
-    if (around.length < own.length + 15) continue;            // not in running text
+    // "running text" = the parent has its OWN text nodes around the link (a
+    // sentence), not merely other child elements (a breadcrumb or a list of
+    // links is not running text, and its parent's colour is not "the
+    // surrounding text" — learned 2026-09-14 when the S4 breadcrumb measured 1:1)
+    const direct = Array.from(p.childNodes).filter(n => n.nodeType === 3).map(n => n.textContent).join('').replace(/\s+/g, ' ').trim();
+    if (direct.length < 15) continue;                          // not in running text
     out.inText++;
     const ca = getComputedStyle(a), cp = getComputedStyle(p);
     const underlined = /underline|overline|line-through/.test(ca.textDecorationLine) || ca.borderBottomStyle !== 'none' || ca.backgroundColor !== cp.backgroundColor && ca.backgroundColor !== 'rgba(0, 0, 0, 0)';
     const bold = parseInt(ca.fontWeight) >= parseInt(cp.fontWeight) + 200 || ca.fontStyle !== cp.fontStyle || ca.fontFamily !== cp.fontFamily;
-    if (!underlined && !bold) out.colorOnly.push((a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 50) + ' → ' + (a.getAttribute('href') || '').slice(0, 60));
+    if (underlined || bold) continue;
+    const label = (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 50) + ' → ' + (a.getAttribute('href') || '').slice(0, 60);
+    const contrast = ratio(ca.color, cp.color);
+    const hover = hoverCue(a);
+    let focus = null;
+    try { const prev = document.activeElement; a.focus({preventScroll: true}); const cf = getComputedStyle(a); if (cueIn(cf, cp)) focus = 'focus: ' + (cf.textDecorationLine !== 'none' ? cf.textDecorationLine : cf.outlineStyle !== 'none' ? 'outline' : 'style change'); a.blur(); if (prev && prev.focus) prev.focus({preventScroll: true}); } catch (x) {}
+    const rec = {label, contrast, hover, focus};
+    out.colorOnly.push(rec);
+    if (!(hover && focus && contrast !== null && contrast >= 3)) out.failing.push(rec);
   }
-  out.colorOnly = out.colorOnly.slice(0, 20);
+  out.colorOnly = out.colorOnly.slice(0, 20); out.failing = out.failing.slice(0, 20);
   return out;
 })()"""
 
@@ -355,9 +387,14 @@ def log_run(review, view, modality, locator):
     return review / "evidence" / "runs" / m.group(1)
 
 
-def write_answers(run_dir, answers, facts, modality, today):
+def write_answers(run_dir, answers, facts, modality, today, refresh=()):
     """Fill blank check rows; append measured observations; set Result when
-    every row is answered with pass/n-a. Returns a summary dict."""
+    every row is answered with pass/n-a. Returns a summary dict.
+
+    `refresh`: check IDs whose row may be re-measured — overwritten only when
+    the existing outcome is itself a measurement (its note says "measured");
+    an outcome a person entered is never touched (2026-09-14: NC2 gained a
+    hover/focus measurement and the resting-state rows had to be replaced)."""
     path = run_dir / "run.md"
     text = path.read_text(encoding="utf-8")
     eol = "\r\n" if "\r\n" in text else "\n"
@@ -371,8 +408,11 @@ def write_answers(run_dir, answers, facts, modality, today):
             skipped.append(f"{cid} (no row)")
             continue
         if m.group(2).strip():
-            skipped.append(f"{cid} (already {m.group(2).strip()})")
-            continue
+            if cid in refresh and "measured" in m.group(3):
+                note = f"{note} (re-measured {today}; replaces the earlier resting-state measurement)"
+            else:
+                skipped.append(f"{cid} (already {m.group(2).strip()})")
+                continue
         onum += 1
         cell_note = f"O{onum} — {note}"
         cell_note = cell_note.replace("|", "/")
@@ -445,15 +485,25 @@ def grayscale(c, review, view, locator, today, dry_run=False):
     finally:
         c.cmd("Emulation.setEmulatedVisionDeficiency", {"type": "none"})
     png = base64.b64decode(shot.get("data", "")) if shot else b""
-    if cues["colorOnly"]:
-        nc2 = ("fail", f"{len(cues['colorOnly'])} of {cues['inText']} link(s) in running text differ from surrounding text by colour only "
-                       f"(no underline, border, weight or style change) — measured: " + "; ".join(cues["colorOnly"][:6]))
+    def fmt(r):
+        return (f"{r['label']} [{r['contrast'] if r['contrast'] is not None else '?'}:1 vs text; "
+                f"hover {'cue: ' + r['hover'] if r['hover'] else 'none'}; {r['focus'] or 'focus: none'}]")
+    failing, rest = cues.get("failing", []), cues.get("colorOnly", [])
+    if failing:
+        nc2 = ("fail", f"{len(failing)} of {cues['inText']} link(s) in running text are told from the surrounding text by colour only — "
+                       f"no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) "
+                       f"does not hold — measured: " + "; ".join(fmt(r) for r in failing[:6])
+                       + (f"; {len(rest) - len(failing)} colour-only link(s) DO satisfy G183" if len(rest) > len(failing) else "")
+                       + (f"; {cues['unreadableSheets']} cross-origin stylesheet(s) unreadable for hover rules" if cues.get("unreadableSheets") else ""))
+    elif rest:
+        nc2 = ("pass", f"{len(rest)} of {cues['inText']} link(s) in running text are colour-only at rest but satisfy G183 (≥ 3:1 against the text, "
+                       f"non-colour cue on hover and on focus) — measured: " + "; ".join(fmt(r) for r in rest[:6]))
     elif cues["inText"]:
         nc2 = ("pass", f"all {cues['inText']} link(s) in running text carry a non-colour cue (underline/border/weight) — measured")
     else:
         nc2 = ("n/a", "no links inside running text on the view (links are standalone controls/menu items) — measured")
     print(f"  [no-color] screenshot {len(png) // 1024} KB (achromatopsia emulation); NC2={nc2[0]}"
-          + (f" — {len(cues['colorOnly'])} colour-only link(s)" if cues["colorOnly"] else ""))
+          + (f" — {len(failing)} failing / {len(rest)} colour-only link(s)" if rest else ""))
     if dry_run:
         return
     run_dir = latest_run(review, view, "no-color") or log_run(review, view, "no-color", locator)
@@ -463,7 +513,7 @@ def grayscale(c, review, view, locator, today, dry_run=False):
              "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia", "link_cues": cues}}
     ans = {"NC2": nc2,
            }
-    s = write_answers(run_dir, ans, facts, "no-color", today)
+    s = write_answers(run_dir, ans, facts, "no-color", today, refresh={"NC2"})
     # name the evidence for the reviewer in the Result line
     path = run_dir / "run.md"
     text = path.read_text(encoding="utf-8")

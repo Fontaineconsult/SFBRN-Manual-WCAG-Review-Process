@@ -215,6 +215,7 @@ second run for the cell.
 | CO6 | no password field **and** no sign-in form | **n/a** (on a sign-in view: nothing — the reviewer judges) |
 | CO9 | no field collects the user's own data; or all such fields carry `autocomplete`; or some lack it | **n/a** / **pass** / **fail** ("name"-only candidates are listed, not decided) |
 | CO12 | no CSS animation, animated image, marquee/blink, canvas, SVG animation or video | **n/a** |
+| NC2 | (`--grayscale`) links inside *running text* — the parent has ≥ 15 characters of its own text around the link; a breadcrumb or list of links is not running text — either carry a non-colour cue at rest (underline, border, weight) or satisfy G183: ≥ 3:1 against the surrounding text **and** a non-colour cue on hover (read from the same-origin stylesheets) **and** on focus (measured by focusing the link) | **pass** / **n/a** (no such links); otherwise **fail** with each link's contrast, hover and focus facts (reviewer confirms by looking — since 2026-09-14; the resting-state-only rule before that over-reported) |
 
 Everything else — reading order, names on focus, error announcement,
 contrast, focus visibility, consistency, help, timing — needs the person and
@@ -226,6 +227,13 @@ printed and saved in `<RID>-probe.json` so the reviewer starts from evidence.
 measurement as its observation; the reviewer confirms it (or rules an
 exception) before it is promoted in `04`. The run's Result stays unset and
 names the outstanding rows, exactly as §Result semantics requires.
+**The confirmation request is a reproduction recipe**, not a label: the
+page in words with its address and state, the exact setup (window width,
+zoom level, the bookmarklet to paste, the grayscale switch), the element to
+look at, and what a fail looks like — so the reviewer can answer
+"confirmed / exception / can't reproduce" from the step alone. The
+reviewer may also **delegate** a measured fail ("your call"); record the
+delegation in the finding's Observed cell and rate it on the measurement.
 
 **Wrong-view guard.** The probe refuses when the tab lands on a different
 path than requested (2026-09-11: `default2.aspx` silently redirected to

@@ -1,15 +1,15 @@
 {
  "view": "S2",
- "locator": "UI: Class Management → \"Accessibility Page\" button (lands on /common/default2.aspx)",
- "probed_at": "2026-09-11",
+ "locator": "UI: Class Management → \"Accessibility Page\" (default2.aspx)",
+ "probed_at": "2026-09-14",
  "grayscale": {
   "screenshot": "R111-grayscale.png",
   "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
   "link_cues": {
-   "inText": 4,
-   "colorOnly": [
-    "Tab for Class News, Enter to skip → javascript:skipper('Feedback');"
-   ]
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 0
   }
  }
 }

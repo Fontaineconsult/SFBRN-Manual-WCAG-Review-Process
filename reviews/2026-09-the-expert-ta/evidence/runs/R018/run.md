@@ -28,7 +28,7 @@ run's Result is set. Fails cite observation IDs.
 | MO6 — Single-character shortcuts can be switched off or remapped | n/a | no single-character shortcuts; the vendor's chords are Ctrl+Shift+digit |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | pass | drag-and-drop ranking has the alternative form (R017 O18/O19); FBD via force table (R017 O20) |
 | MO8 — Pointer actions can be cancelled (up-event activation) | | pending — quick mouse check on a keypad button and a problem link (press, move off, release) |
-| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O6 — 9 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): a "Problem 1 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 2 Click To Activate" 8×18 px next to a "Problem 1 Click To Activate"; a "Problem 3 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 4 Click To Activate" 8×18 px next to a "Problem 3 Click To Activate"; a "Problem 5 Click To Activate" 8×18 px next to a "Problem 4 Click To Activate"; a "Problem 6 Click To Activate" 8×18 px next to a "Problem 5 Click To Activate" |
+| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O6 — 9 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): a "Problem 1 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 2 Click To Activate" 8×18 px next to a "Problem 1 Click To Activate"; a "Problem 3 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 4 Click To Activate" 8×18 px next to a "Problem 3 Click To Activate"; a "Problem 5 Click To Activate" 8×18 px next to a "Problem 4 Click To Activate"; a "Problem 6 Click To Activate" 8×18 px next to a "Problem 5 Click To Activate" Reviewer 2026-09-14: confirmed — "no alternative found" for the problem-navigator links → finding V-F21. |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | no motion-actuated function |
 | MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | partial | O4 — the first Tab stop is a jump point: not a skip, but Enter opens a hidden accessibility menu whose links move around the page (R017 O2); several stops do the same thing. Mechanism exists; it is not a skip link and is not self-explanatory |
 
@@ -55,8 +55,7 @@ Format:
   - Classified: MO1, MO2 / pass (closes R017 O12's open question)
 
 - O6 [measured] (state: view as loaded, 2026-09-11 view_probe): 9 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): a "Problem 1 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 2 Click To Activate" 8×18 px next to a "Problem 1 Click To Activate"; a "Problem 3 Click To Activate" 8×18 px next to a "Problem 2 Click To Activate"; a "Problem 4 Click To Activate" 8×18 px next to a "Problem 3 Click To Activate"; a "Problem 5 Click To Activate" 8×18 px next to a "Problem 4 Click To Activate"; a "Problem 6 Click To Activate" 8×18 px next to a "Problem 5 Click To Activate"
-  - Classified: MO9 / WCAG 2.5.8 / measured → fail
-
+  - Classified: MO9 / WCAG 2.5.8 / measured → fail → reviewer 2026-09-14: confirmed → V-F21
 ## Notes
 
 (JAWS: Action / Announced / Expected-vs-actual triplets — copy exact speech

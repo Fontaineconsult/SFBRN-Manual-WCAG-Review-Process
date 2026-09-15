@@ -53,11 +53,11 @@ confirmations, error messages, and other feedback are all in scope.
 | | |
 |---|---|
 | **User story** | As a student, I need to reach my class, open an assignment, and read a problem (text, math, figure) so that I can learn and work the material. (F1) |
-| **Verdict** | Not run |
-| **Baselines run** | B5 (NVDA) on S2 — R016; B5 on S1 pending (R015); B2, B3 pending |
-| **Date(s) tested** | 2026-09-10 |
+| **Verdict** | Pass with barriers |
+| **Baselines run** | B5 (NVDA) on S2 — R016; B5 on S1 — R015 (2026-09-14); B2, B3 pending |
+| **Date(s) tested** | 2026-09-10, 2026-09-14 |
 
-**Sequence notes:** (verdict stays Not run until steps 4–5 are walked; no-vision on S2 so far points to Pass with barriers) 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Step 4 (R017): problem links work with `K`/Enter but focus does not move into the activated problem and there are no headings to find it (T1-F2); the hidden problems jump point mounts a shortcuts menu only after Enter, and NVDA users must switch to browse mode to use it (V-F8). Step 5 pending.
+**Sequence notes:** **Verdict Pass with barriers (reviewer, 2026-09-14):** in standard mode — the page every student lands on — step 3 cannot be completed from the keyboard: the assignment row's action menu opens only by mouse click (T1-F3). The reviewer accepts the Accessibility Mode page as the vendor's alternate route: "not an ideal solution, but it does allow access. Not fail." So the task passes through branch P1-a (Accessibility Mode, S2 → S3) with the barriers T1-F1, T1-F2 and T1-F3's discoverability cost (the user must find the "Accessibility Page" button first; the mode is then stored on the account). 2026-09-14, NVDA, standard mode (S1, R015): title "Class Management"; no headings/landmarks (V-F1 confirmed); reading order fine but the grids are told apart by position (V-F2 confirmed); the Classes / Class Menu editors announce an instruction, not a label (V-F7 confirmed); the first Tab stop is the hidden instruction div; the grids' expand controls are unnamed clickable graphics (V-F16). Earlier: 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Step 4 (R017): problem links work with `K`/Enter but focus does not move into the activated problem and there are no headings to find it (T1-F2); the hidden problems jump point mounts a shortcuts menu only after Enter, and NVDA users must switch to browse mode to use it (V-F8). Step 5 pending.
 
 #### Finding T1-F1
 
@@ -80,6 +80,17 @@ confirmations, error messages, and other feedback are all in scope.
 | **WCAG criteria failed** | 2.4.3, 1.3.1 |
 | **Severity** | Major |
 | **Evidence** | R017 O1, O2 |
+
+#### Finding T1-F3
+
+| | |
+|---|---|
+| **Where** | Step 3, Class Management in standard mode (S1) — opening the assignment row's action menu (⋮) to reach "Take Assignment" |
+| **Observed** | In standard mode the Class Assignments grid row has no focusable control: Tab reaches nothing in the row, and Enter, Space and the Applications key do nothing on the row or the ⋮ cell. The reviewer: "Only way to nav is by clicking the table row." The action menu, and with it "Take Assignment", "View Grade Report" and the rest, opens by mouse click only; when it is opened with the mouse, its appearance is not announced to NVDA and its items are read only on mouse-over (R015 O12). The Accessibility Mode page (S2) replaces the menu with an Actions select plus Go button that does work (R016 O13), so the route exists only after the user finds the "Accessibility Page" button and switches modes; the mode is stored on the account. The exploration record (R001 O7) showed the row as plain cells with a click handler; this confirms it. |
+| **Affected users** | Keyboard-only users; screen reader users (the default page dead-ends the core task) |
+| **WCAG criteria failed** | 2.1.1 (menu operable by pointer only); 4.1.2 (no control exposed for the row action) |
+| **Severity** | Minor (reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version — "not an ideal solution, but it does allow access" — so the defect is the standard page's own operability and the discoverability of the alternate, not a task stop. Would be a Blocker for the standard page alone.) |
+| **Evidence** | R015 O10; R001 `R001-axe.json` (row cells with click handler, no role) |
 
 ---
 
@@ -168,9 +179,31 @@ differently.
 
 | | |
 |---|---|
-| **Baselines run** | (pending — R015 open; axe R001) |
-| **Date tested** | |
-| **Findings** | (none yet — R001 observations await confirmation) |
+| **Baselines run** | B5 NVDA (R015, 2026-09-14 — NV7/NV10 open); axe (R001); probe runs R019–R023 |
+| **Date tested** | 2026-09-14 |
+| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F21 (also S3) |
+
+#### Finding V-F21
+
+| | |
+|---|---|
+| **Where** | Class Management, standard mode (S1) — the assignment row's **⋮** menu icon (16 × 16 px) beside the **+** expand glyph (9 × 10 px); Take Assignment (S3) — the nine **problem-number links** in the left navigator (8 × 18 px each, adjacent). The Assignment Editor's spinner/time arrows (S5, 16 × 9 px) were measured too but are exempt: the values can be typed directly (R039). |
+| **Observed** | Measured by the probe (targets under 24 × 24 CSS px with another target inside the 24 px circle). The reviewer ruled on the exceptions 2026-09-14: the ⋮ menu — "no other way found" on this page (the Accessibility Mode page's Actions select is a different page); the problem links — "no alternative found" (the Ctrl+Shift chords and the post-submit "Continue" link do not replace direct problem selection); the editor arrows — exempt, "yes, can be typed directly". A pointer user with a tremor or a coarse pointer hits the neighbouring target: the wrong problem, or the expand glyph instead of the menu. |
+| **Affected users** | Users with limited fine motor control; touch and coarse-pointer users |
+| **WCAG criteria failed** | 2.5.8 |
+| **Severity** | Minor |
+| **Evidence** | R022 O2 (S1, element list in `R022-probe.json`); R018 O6 (S3, `R018-probe.json`); R039 O2 (S5, exempt) |
+
+#### Finding V-F16
+
+| | |
+|---|---|
+| **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids |
+| **Observed** | `G` (next graphic) stops on two controls announced as "collapsed graphic clickable": the DevExpress detail-expand glyphs (`img.dxGridView_gvDetailCollapsedButton`). They are clickable images with no role (not a button) and no name — a screen-reader user hears that something collapsed is clickable but not what it expands. The site logo, the only other graphic, has alt text. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
+| **Severity** | Minor |
+| **Evidence** | R015 O11; R022 O2 (the same glyphs measured at 9×10 px for 2.5.8) |
 
 ### View S2 — Class Management, Accessibility Mode
 
@@ -189,7 +222,7 @@ differently.
 | **Affected users** | Screen reader users (no structural navigation); keyboard users (extra tab stops with no purpose) |
 | **WCAG criteria failed** | 1.3.1 (visual headings not programmatically determinable); 2.4.1 in combination with V-F3 |
 | **Severity** | Major |
-| **Evidence** | R016 O2, O5 (reviewer-pasted markup of `#assignmentsTitle`); R005 `R005-axe.json` (`page-has-heading-one`, `landmark-one-main`, `region` ×29); R001 for S1 |
+| **Evidence** | R016 O2, O5 (reviewer-pasted markup of `#assignmentsTitle`); R005 `R005-axe.json` (`page-has-heading-one`, `landmark-one-main`, `region` ×29); R015 O6 (S1 confirmed with NVDA 2026-09-14); R001 for S1 |
 
 #### Finding V-F2
 
@@ -200,7 +233,7 @@ differently.
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1 (table identification) |
 | **Severity** | Minor (revised 2026-09-10) |
-| **Evidence** | R016 O3; R005 `R005-axe.json` (captions in DOM) |
+| **Evidence** | R016 O3; R015 O7 (S1 confirmed 2026-09-14: same generic captions and headers in standard mode); R005 `R005-axe.json` (captions in DOM) |
 
 #### Finding V-F3
 
@@ -255,7 +288,7 @@ differently.
 | **Affected users** | Screen reader users; speech-input users (the visible label is not in the name) |
 | **WCAG criteria failed** | 1.3.1, 2.5.3, 4.1.2 |
 | **Severity** | Major |
-| **Evidence** | R016 O11 (Speech Viewer excerpt) |
+| **Evidence** | R016 O11 (Speech Viewer excerpt); R015 O8 (S1 confirmed 2026-09-14: the DevExpress editors in standard mode announce the same instruction sentence and no label; the purpose is first heard on the adjacent Go button) |
 
 #### Finding V-F8
 
@@ -274,7 +307,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
 | **Date tested** | 2026-09-10 |
-| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F21 (recorded under S1) (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
 
 #### Finding V-F9
 
@@ -352,6 +385,36 @@ differently.
 | **WCAG criteria failed** | 4.1.3, 2.4.3 |
 | **Severity** | Major |
 | **Evidence** | R017 O23; `evidence/runs/R017/R017-hint-speech.txt` |
+
+#### Finding V-F18
+
+| | |
+|---|---|
+| **Where** | Take Assignment (S3, `/Common/TakeTutorialAssignment…`), Sign in (S7, `login.theexpertta.com/Login.aspx`) and the Edit Class popup (S11, Class Management → Class Menu → Edit Class → Go) — the `<html>` element |
+| **Observed** | These three pages declare no `lang` attribute; the other eleven sampled views declare `lang="en"`. A screen reader whose synthesizer defaults to another language reads the assignment, the sign-in form and the popup with the wrong voice; with an English default nothing is audible (the reviewer heard no mispronunciation, R017 NV9). Measured by axe (R004 O2, `html-has-lang`) and the probe (R093, R077); confirmed as a finding by the reviewer's delegation 2026-09-14 ("your call"). |
+| **Affected users** | Screen reader users whose default synthesizer language is not English |
+| **WCAG criteria failed** | 3.1.1 |
+| **Severity** | Minor |
+| **Evidence** | R017 NV9; R004 O2 `R004-axe.json`; R093 O4, R077 O4 (`R093-probe.json`, `R077-probe.json`) |
+
+### View S7 — Sign in
+
+| | |
+|---|---|
+| **Baselines run** | probe (R093–R098, signed-out profile); axe (R003) |
+| **Date tested** | 2026-09-11 (measured), 2026-09-14 (reviewer) |
+| **Findings** | V-F17; V-F18 applies here |
+
+#### Finding V-F17
+
+| | |
+|---|---|
+| **Where** | Sign in (S7, `login.theexpertta.com/Login.aspx`) — the "User Name:" field |
+| **Observed** | The user-name field carries no `autocomplete` attribute, so its purpose (username) is not programmatically identified for browsers and assistive technologies that fill or label fields from it (1.3.5 requires the token on fields collecting the user's own data). The reviewer notes the practical mitigation: "no app specific autocomplete but works fine with chrome password manager" — Chrome's heuristic fill still works, which is why the severity is Minor. |
+| **Affected users** | Users with cognitive or motor disabilities who rely on autofill and purpose-aware AT |
+| **WCAG criteria failed** | 1.3.5 |
+| **Severity** | Minor |
+| **Evidence** | R098 O3 (`R098-probe.json`) |
 
 ---
 

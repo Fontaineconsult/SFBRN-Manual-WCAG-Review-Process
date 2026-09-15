@@ -30,8 +30,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.1.1 Non-text Content (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F12
-- **Remarks:** [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy.
+- **Task findings:** V-F12, V-F16 (Minor)
+- **Remarks:** 2026-09-14 S1: the grids' expand controls are clickable images with no text alternative (V-F16). [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy.
 
 ### 1.2.1 Audio-only and Video-only (Prerecorded) (Level A)
 - **Outcome:** Not Evaluated
@@ -55,7 +55,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13
-- **Remarks:** [provisional — S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
+- **Remarks:** 2026-09-14 S1 confirmed with NVDA (R015): no headings/landmarks, grids told apart by position, editors unlabelled — V-F1, V-F2, V-F7 now stand on both Class Management pages. [provisional — S1 and S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
 - **Outcome:** Not Evaluated
@@ -82,10 +82,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 2.1.1 Keyboard (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** T1-F3 (Minor)
+- **Remarks:** Reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version, so the standard page's mouse-only row menu is a barrier, not a task stop — Partially Supports. In standard mode the assignment row's action menu — the only route to Take Assignment, View Grade Report and the other row actions — opens by mouse click only; nothing in the row is focusable and no key opens it (R015 O10). The Accessibility Mode page provides an operable Actions select + Go (R016 O13), so the functionality is reachable only after switching modes. Elsewhere the keyboard holds: on Take Assignment every widget exercised (symbol palette, keypad, drag-and-drop alternative form, free-body diagram) was operable without a mouse (R017 O20–O21, R018). Vendor-claim discrepancy.
 
 ### 2.1.2 No Keyboard Trap (Level A)
 - **Outcome:** Not Evaluated
@@ -166,10 +166,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 3.1.1 Language of Page (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F18 (Minor)
+- **Remarks:** 2026-09-14: three of the fourteen sampled views declare no `lang` — Take Assignment (S3), Sign in (S7), the Edit Class popup (S11); the other eleven declare `en` (probe runs R015 … R093). Confirmed on the reviewer's delegation ("your call"); Minor because an English default voice masks it. Vendor-claim discrepancy.
 
 ### 3.2.1 On Focus (Level A)
 - **Outcome:** Not Evaluated
@@ -210,8 +210,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13
-- **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. Pending confirmation: unnamed answer radios (R004 O1), unnamed jump-point buttons (R001 O2), unlabeled DevExpress editors product-wide. Vendor-claim discrepancy.
+- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16
+- **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). Pending confirmation: unnamed answer radios (R004 O1), unnamed jump-point buttons (R001 O2), unlabeled DevExpress editors on the instructor pages. Vendor-claim discrepancy.
 
 ---
 
@@ -236,10 +236,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 1.3.5 Identify Input Purpose (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F17 (Minor)
+- **Remarks:** 2026-09-14: the sign-in "User Name:" field carries no `autocomplete` token (measured, R098 O3); the reviewer confirms there is no app-specific autocomplete and that Chrome's password manager still fills the field, hence Minor. No other field in the sample collects the user's own data (the instructor pages hold class and assignment data). Vendor-claim discrepancy.
 
 ### 1.4.3 Contrast (Minimum) (Level AA)
 - **Outcome:** Not Evaluated
@@ -314,10 +314,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 2.5.8 Target Size (Minimum) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F21 (Minor)
+- **Remarks:** 2026-09-14, reviewer's rulings on the probe's measurements: the Class Management ⋮ menu beside the expand glyph (S1) and the Take Assignment problem-navigator links (S3) have no equivalent on their pages — confirmed; the Assignment Editor spinner/time arrows (S5) are exempt because the values can be typed directly. The other eleven views measured no undersized, unspaced targets. Vendor-claim discrepancy.
 
 ### 3.1.2 Language of Parts (Level AA)
 - **Outcome:** Not Applicable (provisional)

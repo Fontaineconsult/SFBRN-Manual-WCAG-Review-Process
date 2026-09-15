@@ -111,8 +111,12 @@ def criteria_counts(review):
     other = 0
     for m in re.finditer(r"- \*\*Outcome:\*\*\s*(.*)", text):
         val = m.group(1).strip()
-        if val in counts:
-            counts[val] += 1
+        # Same rule as review_db.py: the ACR term the cell *starts with*
+        # ("Supports (provisional)" → Supports), so the file check and the
+        # database never disagree (they did on 2026-09-14).
+        term = next((o for o in OUTCOMES if val.startswith(o)), None)
+        if term:
+            counts[term] += 1
         else:
             other += 1
     counts["(unrecognized)"] = other

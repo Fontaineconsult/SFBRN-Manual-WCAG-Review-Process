@@ -109,7 +109,11 @@ user does not see, or vice versa. Note especially what is announced for the
 **first focusable item** — the site logo link is marked `aria-hidden` but
 is still in the tab order (R001 O3): press Tab once from the top and tell me
 what, if anything, is spoken.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-14 (on S1, standard mode, during W34) — arrowing down
+follows the expected order; nothing extra or missing reported apart from the
+grids' meaningless captions/columns (V-F2). The first Tab stop is the hidden
+accessibility-instruction div (read in full), not the logo link — the
+`aria-hidden` logo was not reported as a stop → R015 O7, O9.
 
 ### W7 — The Classes and Class Menu combo boxes (NV3, NV6) — KEY STEP
 
@@ -655,3 +659,310 @@ as coverage.
 6. `review.py validate` and `matrix` re-run; `next` decides the following
    session (remaining view×modality cells: S6, S8, S9, S10, S11, S12, R1, R2
    under the manual modalities, and cognition on S1/S5).
+
+---
+
+## 2026-09-14 — Session 2: what is left, in order
+
+**State at open** (`review_db.py state`): done 3/12 — 9/55 criteria decided,
+1/5 tasks with a verdict, 13 of the steps above still pending, and 40
+fail/partial check outcomes on criteria whose `05` block is still Not
+Evaluated (37 of them measured by the probe on 2026-09-11 and waiting on
+your confirmation). Since 2026-09-11 the assistant closed R017's NV10 row
+from your narration and drafted three `05` outcomes as *provisional* (W36).
+
+**Pre-flight (assistant, 2026-09-14):** the debug-profile Chrome (port 9222)
+was not running; relaunched with the full flag set and it landed on
+`login.theexpertta.com` — the shared session has expired. **Sign in there
+before W34** (the assistant never authenticates). Nothing browser-side can
+be measured until then (the hover check in W35 (d), any re-probe).
+
+**Order for this session:** W34 → W35 → W36 → W37 → W6 → W21 → W22 → W23 →
+W24 → W25 → W26 → W27 → W28 → W29 → W30 → W31 → W32. W34 first because T1's
+verdict depends on it and it has been owed since 2026-09-10; W35/W36 next
+because each is a one-word answer that decides a `05` block.
+
+### W34 — Standard-mode Class Management with NVDA (S1, run R015) — KEY STEP (T1 verdict)
+
+**Do:** On Class Management, look at the mode button. If it reads
+**"Non-Accessibility Page"** you are still in Accessibility Mode (the shared
+account stores the mode; it was left there on 2026-09-10) — activate it. The
+button must read "Accessibility Page" and the URL must be `default.aspx`,
+not `default2.aspx`. Then repeat W4–W9 on this page: `NVDA+T`; `H`, `D`,
+`NVDA+F7`; arrow from the top to the bottom; Tab once from the top (the
+`aria-hidden` logo link, R001 O3); focus the two DevExpress editors
+"Classes" / "Class Menu" and open each with `Alt+Down`; the jump point;
+the assignment row's **⋮** action menu without the mouse (Enter, Space,
+Applications key on the row and on the ⋮ cell); `G` for any graphic.
+**Tell me:** one line per row of R015 — NV2 headings/landmarks; NV3
+the editors' and the ⋮ menu's name/role/value on focus; NV4 what `G` finds
+and what the logo announces; NV5 reading order; NV6 whether the editors
+announce "Classes"/"Class Menu" at all; NV7 what is announced when the ⋮
+menu opens (if it opens); NV8 anything you could only place by position;
+NV10 the link texts you heard.
+**Why it matters:** standard mode is what every student lands on; the only
+human run of Class Management is R016 on the vendor's alternate page (S2).
+It decides whether V-F1, V-F7 and V-F8 (all "also S1 per axe") are
+confirmed on S1, whether the ⋮ menu is keyboard-operable (T1 step 3 — if
+not, T1 fails in standard mode and the Accessibility Page is the only
+route), and it lets T1 get a verdict.
+**Feedback:** 2026-09-14 — Done in standard mode (assistant asked first: the
+tab was still on `default2.aspx` and the first narration matched S2; reviewer
+confirmed the switch — "the table is different, no Go button"). Title
+"Class Management" (NV1). No headings or landmarks (NV2 → V-F1 confirmed on
+S1). First Tab stop: the hidden accessibility-instruction div, read out in
+full. Reading order as expected; the grid captions and columns are not
+meaningful for Class Management vs Class News (NV8 → V-F2 confirmed).
+Classes / Class Menu editors: an instruction on focus, no meaningful label,
+the purpose first heard at the Go button (NV6 → V-F7 confirmed). Jump point
+reads the div text. **⋮ row menu: not focusable — "Only way to nav is by
+clicking the table row"** → R015 O10, **T1-F3** (2.1.1, 4.1.2; Major, Blocker
+for the page alone), **T1 verdict drafted Fail**, 05 2.1.1 → Does Not
+Support (provisional). Logo has alt; two "collapsed graphic clickable"
+expand controls without role or name → **V-F16** (Minor). **Open:** NV7 (is
+the mouse-opened menu announced?) and NV10 (Links list) — two questions in
+R015; Result is set to Broken once answered. Reviewer to confirm the T1
+verdict and the alternate-version ruling on T1-F3.
+
+### W35 — Confirm or rule out the measured fails (six `05` decisions) — KEY STEP
+
+Each item was measured by `view_probe` on 2026-09-11 in the run(s) named. A
+measured fail is not a finding until you confirm it or rule an exception
+(modality-checks.md §Assistant-answerable). Answer each with **confirmed**,
+**exception — <reason>**, or **look again — <what>**. On "confirmed" the
+assistant writes the finding named, the `05` outcome, and sets each run's
+rows; nothing is written before your word.
+
+- **(a) 1.4.10 Reflow — every one of the 14 views.** The layout is a fixed
+  1300 px container (`div#container`); at 320 CSS px every page scrolls in
+  two dimensions (LV1 fail on R019, R024, R030, R036, R042, R048, R054,
+  R060, R066, R072, R078, R083, R088, R094; S11's popup measures 589 px,
+  the sign-in page 1024 px). Proposed: **V-F19**, Major, 1.4.10,
+  product-wide; `05` → Does Not Support. W29's real-zoom look still decides
+  LV2 (loss/overlap) and LV7 (focus ring) — those are separate rows.
+- **(b) 1.4.12 Text Spacing — S1, S2, S3, S6.** Under the override, text is
+  newly clipped in: S1 the four date cells of the assignment row and the
+  "Welcome to Testing Course…" line; S2 the assignment-name cell and a
+  grid caption; S3 the assignment-code div ("6M79-C9-72-46-B37E-17547");
+  S6 a calendar event ("30311 Chapter 5 Sample Assignment…"). The other ten
+  views tolerate it (LV3 fail on R019, R024, R083, R042). Proposed:
+  **V-F20**, Minor if the clipped text is still readable / Major if the due
+  dates on S1 are cut off; `05` → Partially Supports. W31 is the look.
+- **(c) 2.5.8 Target Size — S1, S3, S5.** S1: the row's **⋮** menu
+  (16×16 px) beside the 9×10 px expand glyph (R022). S3: the nine
+  problem-navigator links are **8×18 px** and adjacent to each other
+  (R018). S5: the DevExpress spin/time editor up/down buttons are 16×9 px,
+  14 of them (R039). Proposed: **V-F21**, Minor (the ⋮ has an equivalent
+  — the Accessibility Page's Actions select; the S3 problem links have
+  none), 2.5.8; `05` → Partially Supports. Your ruling per group:
+  essential / equivalent-exempt / confirmed.
+- **(d) 1.4.1 Use of Color — links in running text told apart by colour
+  only, six views.** S4 and S8 the class and assignment links at the top;
+  S3 "detailed view"; S6 "Select All" / "Only"; R2 the "Grade Sheet -
+  Class" link; S2 the "Tab for Class News" skip link (NC2 fail on R100,
+  R110, R109, R102, R107, R111). The probe measured the resting state only.
+  Proposed: **V-F22**, Minor, 1.4.1; `05` → Partially Supports **unless**
+  the links gain an underline on hover and focus and sit at ≥ 3:1 against
+  the surrounding text (the accepted technique) — the assistant measures
+  hover/focus over CDP once you are signed in, before you answer. W32's
+  grayscale look (NC1, NC3) is separate.
+- **(e) 1.3.5 Identify Input Purpose — Sign in (S7).** The "User Name:"
+  field carries no `autocomplete` (CO9 fail on R098, signed-out profile).
+  Proposed: **V-F17**, Minor, 1.3.5; `05` → Partially Supports. Question:
+  is the user name an email address or a username (both have an
+  `autocomplete` token, so the fail stands either way), and does the
+  password field carry one (the probe listed only the user-name field)?
+- **(f) 3.1.1 Language of Page — S3, S7, S11.** No `lang` on Take
+  Assignment (R004 O2 axe; R017 NV9 partial), Sign in (R093) and the Edit
+  Class popup (R077); the other 11 views declare `en`. Proposed: **V-F18**,
+  Minor (an English default voice masks it; a user whose synthesizer
+  defaults to another language hears the assignment mispronounced), 3.1.1;
+  `05` → Partially Supports. 3.1.2 is drafted in W36.
+
+**Feedback:** 2026-09-14 — Reviewer: "(a) no reflow detected. (b) can't
+reproduce. Also, I don't know what S1 S2 S3 S4 means, update your guidance
+to refer to specific pages and page states for me to reproduce your
+findings. (c) again I don't know what that means. (e) no app-specific
+autocomplete but works fine with Chrome password manager. (f) your call."
+Recorded: **(e)** → **V-F17** (1.3.5, Minor, the password-manager
+mitigation in the finding), 05 → Partially Supports. **(f)** → **V-F18**
+(3.1.1, Minor, on delegation), 05 → Partially Supports. **(a), (b), (c) not
+answerable as written** — the steps named view codes and gave no
+reproduction recipe; rewritten as W38–W40 below with the page named in
+words and the exact setup. Process fixed the same day (testing-loop.md
+§How to build one step 5; modality-checks.md §Assistant-answerable). The
+remaining proposals are renumbered: (a) V-F19, (b) V-F20, (c) V-F21,
+(d) V-F22. **(d) measured 2026-09-14** (probe extended: hover cue from the
+stylesheets, focus cue by focusing the link, link-vs-text contrast; "running
+text" now means the parent has its own text around the link, which dropped
+the breadcrumb-style link lists): the Calendar's "Select All"/"Only", the
+spreadsheet's grade-sheet link, Take Assignment's "detailed view" and the
+Accessibility Mode skip link are **not in running text** → NC2 n/a on
+R102, R107, R109, R111. What remains: on **View Grade Report** and **View
+Assignment Solutions**, in the title line at the top ("Grade Sheet - Class:
+Testing Course for CSU East Bay - Assignment: Chapter 5 Sample
+Assignment"), the class name and the assignment name are links with **the
+same colour as the surrounding text (1:1)**, no underline; they gain an
+underline on hover and an outline on focus (R100, R110). → W41.
+
+### W36 — Four `05` judgments drafted from your 2026-09-10 narration — confirm or overrule
+
+Written into `05` as **(provisional)** on 2026-09-14; the remark of each
+block carries the reasoning. Say "agree" or give the outcome you want.
+
+- **2.4.6 Headings and Labels → Supports (provisional).** The criterion
+  requires headings and labels *that exist* to be descriptive; it does not
+  require headings. No-headings is V-F1 / T1-F1 under 1.3.1; the visible
+  captions and labels are descriptive; their missing association is 1.3.1
+  / 3.3.2 / 4.1.2.
+- **1.3.3 Sensory Characteristics → Supports (provisional).** No
+  instruction relies on shape, position, size or colour; the position-only
+  identification NV8 recorded (grids, math option, hint) are consequences
+  of the 1.3.1 / 4.1.3 defects already found.
+- **3.1.2 Language of Parts → Not Applicable (provisional).** No passage in
+  another language in the sample.
+- **3.3.1 Error Identification → still Not Evaluated, on purpose.** The NV6
+  fails on R016/R017 are *label* defects (3.3.2). Error identification has
+  one pass so far — the "Incorrect Answer … refer to your submission
+  history" dialog (R017 O11) — and no test of a validated form (sign-in
+  with a wrong password, the Create/Edit Assignment popup with an empty
+  Name). Process change 2026-09-14: NV6 now covers labels only and a new
+  row **NV12** covers errors (3.3.1); `sync-checks` added NV12 to every
+  no-vision run. NV12 on S7 (sign in, wrong password) and S11 (empty
+  required field) are the two steps that decide 3.3.1 — W37.
+
+**Feedback:** _(pending)_
+
+### W37 — Error identification on a validated form (NV12, CO4) — decides 3.3.1
+
+Runs: the existing no-vision runs for S11 (R077) and S7 (R093 — signed-out
+profile only; never point the signed-in tab at the sign-in page).
+**Do:** (1) S11: Class Menu → "Edit Class" (or Create Assignment) popup;
+clear the Name field; Save. (2) S7, in the **signed-out** window on port
+9223 only: enter a wrong password; submit.
+**Tell me:** For each: is an error message announced without hunting; does
+it say *which* field and *what* is wrong; is the field itself marked
+(`aria-invalid`, the label changing); is a fix suggested (CO4 / 3.3.3).
+**Feedback:** _(pending)_
+
+### Page key — what the view codes mean (added 2026-09-14 at the reviewer's request)
+
+The codes are the process's bookkeeping. Every step from here on names the
+page in words; this table is the translation for anything above.
+
+| Code | Page, in words | How to get there |
+|---|---|---|
+| S1 | **Class Management, standard mode** | `https://dei56mo.theexpertta.com/common/default.aspx` — the mode button reads "Accessibility Page" |
+| S2 | **Class Management, Accessibility Mode** | same page after pressing "Accessibility Page" (`default2.aspx`) — the button then reads "Non-Accessibility Page" |
+| S3 | **Take Assignment** — "Chapter 5 Sample Assignment", problems 1–9 | Class Management → assignment row → Take Assignment (row ⋮ menu in standard mode; Actions select → Go in Accessibility Mode) |
+| S4 | **View Grade Report** for that assignment | assignment row → "View Grade Report (shows your detailed work)" |
+| S5 | **Assignment Editor** (editing the assignment) | Class Menu → Edit Class Assignment (or the row's Edit) |
+| S6 | **Calendar** | top menu → Calendar (`/common/calendar.aspx`) |
+| S7 | **Sign in** | `https://login.theexpertta.com/Login.aspx` — **only in the signed-out window** (port 9223); opening it in the signed-in window ends the session |
+| S8 | **View Assignment Solutions** | assignment row → View Solutions |
+| S9 | **Class Assignments Grade Sheet** (instructor pivot grid) | Class Menu → View/Manage Class Grades |
+| S10 | **Manage Class Roster** | Class Menu → View/Manage Class Roster |
+| S11 | **Edit Class popup** | Class Management → Class Menu → Edit Class → Go (opens in a popup) |
+| S12 | **Student Practice Area** | top menu → Practice |
+| R1 | **Academic Integrity Preferences** | Class Menu → Academic Integrity Preferences |
+| R2 | **View Grades, spreadsheet view** | Class Menu → View/Manage Class Grades → spreadsheet view |
+
+### W38 — Reflow: does the page fit a narrow window without sideways scrolling? (replaces W35 (a); decides 1.4.10)
+
+**Page:** Class Management, standard mode (`/common/default.aspx`), then
+Take Assignment (any problem).
+**Setup — do exactly this:** make the Chrome window about **1280 px wide**
+(Windows key + Left snaps it to half of a 2560-wide screen; on a 1920
+screen un-maximise and drag it to roughly two-thirds width). Then press
+`Ctrl` + `+` until the zoom indicator in the address bar reads **400%**
+(eight presses from 100%). Press `Ctrl` + `0` afterwards to reset.
+**Look at:** the bottom edge of the window. A **horizontal scrollbar**
+appears if the page does not reflow; drag it or press `Shift` + scroll to
+see the right-hand part of the page.
+**What "fail" looks like:** at 400% you must scroll sideways to read a
+line of text or to reach a control (the assignment row's ⋮, the Go
+buttons, the problem's Submit button). What "pass" looks like: the page
+re-stacks into one column and only vertical scrolling is needed.
+**What the instrument says:** the layout is a fixed 1300 px-wide box
+(`div#container`), so at 400% on a 1280 px window it should overflow by a
+factor of four on every page.
+**Tell me:** "sideways scrollbar, yes/no" for each of the two pages, and
+whether anything is cut off or overlaps (the anti-cheating watermark,
+the problem navigator, the keypad).
+**Feedback:** _(pending)_
+
+### W39 — Text spacing: does widened text get clipped? (replaces W35 (b); decides 1.4.12)
+
+**Page:** Class Management, standard mode, then Take Assignment.
+**Setup — do exactly this:** create a bookmark whose address is the line
+below (Chrome: `Ctrl` + `Shift` + `O` → ⋮ → Add new bookmark → paste the
+line into the URL field, name it "Text spacing"), then click it while on
+the page:
+
+```
+javascript:(function(){var s=document.createElement('style');s.textContent='*{line-height:1.5!important;letter-spacing:0.12em!important;word-spacing:0.16em!important}p{margin-bottom:2em!important}';document.head.appendChild(s);})();
+```
+
+Reload the page to undo it.
+**Look at:** the assignment row's four date cells (publish / start / due /
+end), the "Welcome to Testing Course…" line, and on Take Assignment the
+assignment code under the title (looks like `6M79-C9-72-46-B37E-17547`).
+**What "fail" looks like:** text is cut off mid-word, the end of a date is
+hidden, or two texts overlap after the bookmarklet runs. "Pass": everything
+is still readable, just more spread out.
+**What the instrument says:** the date cells and the welcome line on Class
+Management, the assignment name cell in Accessibility Mode, the assignment
+code on Take Assignment and one Calendar event clip under this override.
+**Tell me:** which of those texts (if any) is actually unreadable after the
+bookmarklet, and whether the due date is one of them.
+**Feedback:** _(pending)_
+
+### W40 — Small click targets (replaces W35 (c); decides 2.5.8)
+
+WCAG 2.5.8 says a clickable thing should be at least **24 × 24 px**, or
+have empty space around it so a neighbouring target is not hit by mistake
+— unless the same action is available another way on the page, or the
+size is essential. The instrument found three groups smaller than that
+with a neighbour inside the 24 px circle. You rule on each group.
+
+**Page 1 — Class Management, standard mode:** the assignment row's **⋮**
+menu icon (16 × 16 px) sits right beside the small **+** expand glyph
+(9 × 10 px). *Question:* is there another way, on this same page, to do
+what the ⋮ menu does? (If the only alternative is switching to
+Accessibility Mode, say so — that is a different page.)
+**Page 2 — Take Assignment:** the nine **problem-number links** in the
+navigator on the left are 8 × 18 px each, side by side. *Question:* is
+there another way on the page to move to a given problem (the
+Ctrl+Shift chords? the "Continue to the next question" link after a
+submit?), or is the navigator the only route?
+**Page 3 — Assignment Editor:** the tiny **up/down arrows** on the Weight
+spinner and the three time fields (16 × 9 px each). *Question:* can the
+same values be typed into the field directly? (If yes, the arrows are
+exempt — an equivalent control exists.)
+**Tell me:** for each of the three groups: "exempt — <the other way>" or
+"confirmed — no other way".
+**Feedback:** 2026-09-14 — (1) "no other way found" → confirmed; (2) "no
+alternative found" → confirmed; (3) "yes, can be typed directly" → exempt.
+→ R022 MO9 fail, R018 MO9 fail (confirmed), R039 MO9 → pass (exempt);
+finding **V-F21** (2.5.8, Minor, S1 + S3); 05 2.5.8 → Partially Supports.
+Also closed from the same message: R015 NV7 — the ⋮ menu's opening is not
+announced, items only on mouse-over (O12); R015 NV10 — the Links list is
+empty (O13, n/a). R015 Result → **Broken**.
+
+### W41 — Are the two title-line links recognisable as links? (replaces W35 (d); decides 1.4.1)
+
+**Page:** View Grade Report (Class Management → assignment row → "View
+Grade Report"), then View Assignment Solutions (assignment row → "View
+Assignment Solutions").
+**Look at:** the title line at the top of each page: "Grade Sheet - Class:
+Testing Course for CSU East Bay - Assignment: Chapter 5 Sample Assignment".
+The class name and the assignment name are links to the class grade sheet
+and the assignment grade sheet.
+**What the instrument says:** both links are the **same colour as the rest
+of the line** and have no underline until the mouse is over them (then
+underlined) or they have keyboard focus (then outlined).
+**Tell me:** without moving the mouse over them, can you tell they are
+links at all? If not: "confirmed" (they are indistinguishable at rest —
+1.4.1 / F73); if something I have not measured marks them (a different
+weight, an icon), say what.
+**Feedback:** _(pending)_

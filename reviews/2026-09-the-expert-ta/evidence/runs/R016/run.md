@@ -31,6 +31,7 @@ run's Result is set. Fails cite observation IDs.
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | lang="en"; no pronunciation issue reported |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | fail | O4 — the section skip controls are exposed as links whose text ("Tab for Assignments, Enter to skip…") does not state a destination; confirmed finding V-F3 (2.4.4). Filled 2026-09-11 from the reviewer's 2026-09-10 narration — no new judgment (row added by sync-checks). |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O14 — no <video>, media iframe or embed on the view |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | | (row added 2026-09-14 by sync-checks — not part of the original session; answer or mark n/a) |
 **view_probe 2026-09-11:** answered NV11=n/a by measurement; facts in `R016-probe.json`.
 
 ## Observations

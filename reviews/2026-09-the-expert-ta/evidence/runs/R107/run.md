@@ -11,7 +11,7 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R107-grayscale.png` (achromatopsia emulation) or the OS filter; measured fail on NC2 awaits confirmation |
+| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R107-grayscale.png` (achromatopsia emulation) or the OS filter |
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -28,10 +28,14 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
-| NC2 — Links are distinguishable from surrounding text without color | fail | O2 — 1 of 4 link(s) in running text differ from surrounding text by colour only (no underline, border, weight or style change) — measured: Grade Sheet - Class: Testing Course for CSU East B → GradeSheetClassAssignments.aspx?eid=3373 |
+| NC2 — Links are distinguishable from surrounding text without color | n/a | O4 — no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement) |
 | NC3 — Everything remains operable and understandable in grayscale | | |
 
 **view_probe 2026-09-11:** answered NC2=fail by measurement; facts in `R107-probe.json`.
+
+**view_probe 2026-09-14:** answered NC2=fail by measurement; facts in `R107-probe.json`.
+
+**view_probe 2026-09-14:** answered NC2=n/a by measurement; facts in `R107-probe.json`.
 
 ## Observations
 
@@ -44,6 +48,12 @@ Format:
 
 - O2 [measured] (state: view as loaded, 2026-09-11 view_probe): 1 of 4 link(s) in running text differ from surrounding text by colour only (no underline, border, weight or style change) — measured: Grade Sheet - Class: Testing Course for CSU East B → GradeSheetClassAssignments.aspx?eid=3373
   - Classified: NC2 / WCAG 1.4.1 / measured → fail
+
+- O3 [measured] (state: view as loaded, 2026-09-14 view_probe): 1 of 4 link(s) in running text are told from the surrounding text by colour only — no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) does not hold — measured: Grade Sheet - Class: Testing Course for CSU East B → GradeSheetClassAssignments.aspx?eid=3373 [1:1 vs text; hover cue: a:hover; focus: outline] (re-measured 2026-09-14; replaces the earlier resting-state measurement)
+  - Classified: NC2 / WCAG 1.4.1 / measured → fail
+
+- O4 [measured] (state: view as loaded, 2026-09-14 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement)
+  - Classified: NC2 / WCAG 1.4.1 / measured → n/a
 
 ## Notes
 

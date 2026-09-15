@@ -134,6 +134,19 @@ skipped.
    asking for precisely what the check outcome needs; a why-it-matters line
    whenever the step confirms/refutes a pending finding or vendor claim
    (mark those **KEY STEP**); `**Feedback:** _(pending)_`.
+   **Name the page in words, every time** (learned 2026-09-14: the reviewer
+   answered "I don't know what S1 S2 S3 S4 means" to a confirmation list
+   written in view codes). View IDs are the process's bookkeeping, not the
+   reviewer's vocabulary: every **Do** says *which page and which state* —
+   "Class Management in standard mode (`/common/default.aspx`, the button
+   reads 'Accessibility Page')", "Take Assignment → Problem 8" — with the
+   S# in brackets after it, never alone. A confirmation of a **measured
+   fail** carries the reproduction recipe inside the step (window width,
+   zoom level, the bookmarklet text to paste, which element to look at, and
+   what "fail" looks like) — "confirm the reflow fail" and "target size" are
+   not instructions ("I don't know what that means" is the reviewer's
+   correct answer to them). Test: could a reviewer who has never seen the
+   scope file reproduce the finding from the step alone?
 6. **End with a close-out block**: the assistant's write-back duties, every
    Feedback line filled-or-skipped, `validate` re-run, and the
    next-target decision.

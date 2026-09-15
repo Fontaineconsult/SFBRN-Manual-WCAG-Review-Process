@@ -1,15 +1,15 @@
 {
  "view": "S3",
- "locator": "https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547",
- "probed_at": "2026-09-11",
+ "locator": "https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx",
+ "probed_at": "2026-09-14",
  "grayscale": {
   "screenshot": "R109-grayscale.png",
   "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
   "link_cues": {
-   "inText": 4,
-   "colorOnly": [
-    "detailed view → #"
-   ]
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 0
   }
  }
 }

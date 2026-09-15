@@ -48,12 +48,13 @@ landmarks (R), forms mode. Copy exact announcements from Speech History
 | NV3 | Every control announces an accurate name, role, and value/state | 4.1.2, 2.5.3 |
 | NV4 | Images announce appropriate alternatives; decorative images are silent | 1.1.1 |
 | NV5 | Reading order matches the meaning of the visual order | 1.3.2 |
-| NV6 | Form fields announce labels and instructions; errors are announced and identified | 3.3.1, 3.3.2 |
+| NV6 | Form fields announce labels and instructions (the visible label is the accessible name, or the name says the same thing) | 3.3.2 |
 | NV7 | Dynamic updates (toasts, async results, validation) are announced without stealing focus | 4.1.3 |
 | NV8 | Nothing is conveyed only by visual position, shape, or size | 1.3.3 |
 | NV9 | Language of the view (and passages) is announced/pronounced from the correct language | 3.1.1, 3.1.2 |
 | NV10 | Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | 2.4.4 |
 | NV11 | Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | 1.2.3, 1.2.5 |
+| NV12 | Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | 3.3.1 |
 
 ## low-vision — With Limited Vision (302.2)
 
@@ -177,6 +178,14 @@ file run `review.py sync-checks <review>` on every in-flight review so its
 existing runs gain the new rows (blank, dated) instead of silently lacking
 them; `validate` lists runs that are behind the checklist.
 
+**One row, one kind of failure.** A row that bundles two criteria whose
+failures are independent turns every fail into a false alarm on the other
+criterion: until 2026-09-14 NV6 read "labels and instructions; errors are
+announced and identified" and mapped to 3.3.1 + 3.3.2, so a label defect
+(3.3.2) raised "failed check, 05 undecided" on 3.3.1, which nobody had
+tested. Split it (NV6 labels → 3.3.2; NV12 errors → 3.3.1). When a fail
+on a row could belong to only one of its criteria, split the row.
+
 ## Assistant-answerable checks (`scripts/view_probe.py`)
 
 The reviewer's time goes to what only a person can judge. Every check that a
@@ -206,6 +215,7 @@ second run for the cell.
 | CO6 | no password field **and** no sign-in form | **n/a** (on a sign-in view: nothing — the reviewer judges) |
 | CO9 | no field collects the user's own data; or all such fields carry `autocomplete`; or some lack it | **n/a** / **pass** / **fail** ("name"-only candidates are listed, not decided) |
 | CO12 | no CSS animation, animated image, marquee/blink, canvas, SVG animation or video | **n/a** |
+| NC2 | (`--grayscale`) links inside *running text* — the parent has ≥ 15 characters of its own text around the link; a breadcrumb or list of links is not running text — either carry a non-colour cue at rest (underline, border, weight) or satisfy G183: ≥ 3:1 against the surrounding text **and** a non-colour cue on hover (read from the same-origin stylesheets) **and** on focus (measured by focusing the link) | **pass** / **n/a** (no such links); otherwise **fail** with each link's contrast, hover and focus facts (reviewer confirms by looking — since 2026-09-14; the resting-state-only rule before that over-reported) |
 
 Everything else — reading order, names on focus, error announcement,
 contrast, focus visibility, consistency, help, timing — needs the person and
@@ -217,6 +227,13 @@ printed and saved in `<RID>-probe.json` so the reviewer starts from evidence.
 measurement as its observation; the reviewer confirms it (or rules an
 exception) before it is promoted in `04`. The run's Result stays unset and
 names the outstanding rows, exactly as §Result semantics requires.
+**The confirmation request is a reproduction recipe**, not a label: the
+page in words with its address and state, the exact setup (window width,
+zoom level, the bookmarklet to paste, the grayscale switch), the element to
+look at, and what a fail looks like — so the reviewer can answer
+"confirmed / exception / can't reproduce" from the step alone. The
+reviewer may also **delegate** a measured fail ("your call"); record the
+delegation in the finding's Observed cell and rate it on the measurement.
 
 **Wrong-view guard.** The probe refuses when the tab lands on a different
 path than requested (2026-09-11: `default2.aspx` silently redirected to

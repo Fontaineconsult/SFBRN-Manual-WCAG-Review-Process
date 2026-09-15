@@ -35,7 +35,7 @@ run's Result is set. Fails cite observation IDs.
 | MO6 — Single-character shortcuts can be switched off or remapped | | |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | |
 | MO8 — Pointer actions can be cancelled (up-event activation) | | |
-| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O2 — 2 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): img.dxGridView_gvDetailCollapsedButton "" 9×10 px next to div#divActionMenu17547.actionMenu "⋮"; div#divActionMenu17547.actionMenu "⋮" 16×16 px next to img.dxGridView_gvDetailCollapsedButton "" |
+| MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O2 — 2 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): img.dxGridView_gvDetailCollapsedButton "" 9×10 px next to div#divActionMenu17547.actionMenu "⋮"; div#divActionMenu17547.actionMenu "⋮" 16×16 px next to img.dxGridView_gvDetailCollapsedButton "" Reviewer 2026-09-14: confirmed — "no other way found" on this page for the ⋮ menu / expand glyph → finding V-F21. |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (57 inline + 51 external scripts scanned, 1 unreadable) |
 | MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |
 
@@ -51,7 +51,7 @@ Format:
   - Classified: <check ID> / WCAG <SC> / <severity> → finding <ID> | dismissed: <reason>
 
 - O2 [measured] (state: view as loaded, 2026-09-11 view_probe): 2 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): img.dxGridView_gvDetailCollapsedButton "" 9×10 px next to div#divActionMenu17547.actionMenu "⋮"; div#divActionMenu17547.actionMenu "⋮" 16×16 px next to img.dxGridView_gvDetailCollapsedButton ""
-  - Classified: MO9 / WCAG 2.5.8 / measured → fail
+  - Classified: MO9 / WCAG 2.5.8 / measured → fail → reviewer 2026-09-14: confirmed → V-F21
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): no devicemotion/deviceorientation use in scripts (57 inline + 51 external scripts scanned, 1 unreadable)
   - Classified: MO10 / WCAG 2.5.4 / measured → n/a
 

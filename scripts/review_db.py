@@ -95,6 +95,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 CREATE TABLE IF NOT EXISTS views (
   review_id TEXT NOT NULL, view_id TEXT NOT NULL, name TEXT, locator TEXT, represents TEXT,
   kind TEXT,                      -- structured / random
+  removed TEXT NOT NULL DEFAULT '',  -- 'YYYY-MM-DD: reason' when the row was taken out of the sample (03 name suffix " — removed …"); '' = in the sample
   PRIMARY KEY (review_id, view_id)
 );
 CREATE TABLE IF NOT EXISTS tasks (
@@ -248,9 +249,11 @@ def parse_views(review):
         name = cells[0] if cells else ""
         if not name:
             continue
+        rem = rv.REMOVED_RE.search(name)
+        removed = (rem.group(1) + (": " + rem.group(2).strip() if rem.group(2) else "")) if rem else ""
         out.append((m.group(1), name, cells[1] if len(cells) > 1 else "",
                     cells[2] if len(cells) > 2 else "",
-                    "random" if m.group(1).startswith("R") else "structured"))
+                    "random" if m.group(1).startswith("R") else "structured", removed))
     return out
 
 
@@ -384,8 +387,8 @@ def sync_review(con, review):
     source = hashlib.sha256(b"".join((review / st).read_bytes() for st in rv.STAGES if (review / st).exists())).hexdigest()
     cur.execute("INSERT OR REPLACE INTO reviews VALUES (?,?,?,?,?)",
                 (rid, rv.product_name(review), rv.decision(review), status.group(1) if status else "", source))
-    cur.executemany("INSERT INTO views VALUES (?,?,?,?,?,?)",
-                    [(rid, vid, n, loc, rep, kind) for vid, n, loc, rep, kind in parse_views(review)])
+    cur.executemany("INSERT INTO views VALUES (?,?,?,?,?,?,?)",
+                    [(rid, vid, n, loc, rep, kind, removed) for vid, n, loc, rep, kind, removed in parse_views(review)])
     cur.executemany("INSERT INTO tasks VALUES (?,?,?,?,?,?)",
                     [(rid, *t) for t in parse_tasks(review)])
     boxes = re.findall(r"(?m)^- \[( |x|X)\]\s*(.*)$", rv.read(review / rv.STAGES[3]))
@@ -585,18 +588,18 @@ COMPLETION = [
      "SELECT COUNT(*) FROM check_outcomes WHERE review_id=:r",
      "SELECT run_id || ' ' || check_id FROM check_outcomes WHERE review_id=:r AND outcome NOT IN ('pass','fail','partial','n/a')"),
     ("C6 cells run", "every sampled view × modality has a run with a Result",
-     """SELECT COUNT(*) FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r AND EXISTS (
+     """SELECT COUNT(*) FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r AND v.removed='' AND EXISTS (
           SELECT 1 FROM runs r WHERE r.review_id=v.review_id AND UPPER(r.view_id)=UPPER(v.view_id)
           AND r.modality=m.modality AND r.result IN ('Works','Works with issues','Broken','N/A'))""",
-     "SELECT COUNT(*) FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r",
-     """SELECT v.view_id || '×' || m.modality FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r AND NOT EXISTS (
+     "SELECT COUNT(*) FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r AND v.removed=''",
+     """SELECT v.view_id || '×' || m.modality FROM views v CROSS JOIN fpc_mod m WHERE v.review_id=:r AND v.removed='' AND NOT EXISTS (
           SELECT 1 FROM runs r WHERE r.review_id=v.review_id AND UPPER(r.view_id)=UPPER(v.view_id)
           AND r.modality=m.modality AND r.result IN ('Works','Works with issues','Broken','N/A'))"""),
     ("C7 views swept", "every sampled view has an automated sweep run (axe/wave)",
-     """SELECT COUNT(*) FROM views v WHERE v.review_id=:r AND EXISTS (
+     """SELECT COUNT(*) FROM views v WHERE v.review_id=:r AND v.removed='' AND EXISTS (
           SELECT 1 FROM runs r WHERE r.review_id=v.review_id AND UPPER(r.view_id)=UPPER(v.view_id) AND LOWER(r.tool) IN ('axe','wave'))""",
-     "SELECT COUNT(*) FROM views WHERE review_id=:r",
-     """SELECT view_id FROM views v WHERE v.review_id=:r AND NOT EXISTS (
+     "SELECT COUNT(*) FROM views WHERE review_id=:r AND removed=''",
+     """SELECT view_id FROM views v WHERE v.review_id=:r AND v.removed='' AND NOT EXISTS (
           SELECT 1 FROM runs r WHERE r.review_id=v.review_id AND UPPER(r.view_id)=UPPER(v.view_id) AND LOWER(r.tool) IN ('axe','wave'))"""),
     ("C8 FPC exercised", "every 508 FPC has an answered check on at least one view",
      """SELECT COUNT(*) FROM fpc f WHERE EXISTS (
@@ -697,20 +700,25 @@ def state_data(con, rid):
         pour.append({"principle": f"{pno} {pname}", "criteria": len(crit), "decided": decided,
                      "evidenced": evidenced, "failing": failing})
     # FPC
-    n_views = q("SELECT COUNT(*) FROM views WHERE review_id=:r")[0][0]
+    n_views = q("SELECT COUNT(*) FROM views WHERE review_id=:r AND removed=''")[0][0]
+    removed = [{"view": v, "name": n, "removed": r} for v, n, r in q(
+        "SELECT view_id, name, removed FROM views WHERE review_id=:r AND removed<>'' ORDER BY CASE WHEN view_id LIKE 'S%' THEN 0 ELSE 1 END, CAST(substr(view_id,2) AS INTEGER)")]
     fpc = []
     for m in rv.REQUIRED_MODALITIES:
         codes = ", ".join(c for c, _ in rv.FPC[m])
-        views_resulted = q("""SELECT COUNT(DISTINCT UPPER(view_id)) FROM runs WHERE review_id=:r AND modality=:m
-                              AND result IN ('Works','Works with issues','Broken','N/A')""", m=m)[0][0]
-        views_any = q("SELECT COUNT(DISTINCT UPPER(view_id)) FROM runs WHERE review_id=:r AND modality=:m", m=m)[0][0]
+        views_resulted = q("""SELECT COUNT(DISTINCT UPPER(r.view_id)) FROM runs r JOIN views v ON v.review_id=r.review_id AND UPPER(v.view_id)=UPPER(r.view_id)
+                              WHERE r.review_id=:r AND r.modality=:m AND v.removed=''
+                              AND r.result IN ('Works','Works with issues','Broken','N/A')""", m=m)[0][0]
+        views_any = q("""SELECT COUNT(DISTINCT UPPER(r.view_id)) FROM runs r JOIN views v ON v.review_id=r.review_id AND UPPER(v.view_id)=UPPER(r.view_id)
+                         WHERE r.review_id=:r AND r.modality=:m AND v.removed=''""", m=m)[0][0]
         ans, blank, fails = q("""SELECT SUM(ck.outcome IN ('pass','fail','partial','n/a')), SUM(ck.outcome=''),
                                  SUM(ck.outcome IN ('fail','partial')) FROM runs r JOIN check_outcomes ck USING (review_id, run_id)
-                                 WHERE r.review_id=:r AND r.modality=:m""", m=m)[0]
+                                 JOIN views v ON v.review_id=r.review_id AND UPPER(v.view_id)=UPPER(r.view_id)
+                                 WHERE r.review_id=:r AND r.modality=:m AND v.removed=''""", m=m)[0]
         fpc.append({"fpc": codes, "modality": m, "views_resulted": views_resulted, "views_any": views_any,
                     "views": n_views, "answered": ans or 0, "blank": blank or 0, "fails": fails or 0})
     # matrix
-    views = q("SELECT view_id, name FROM views WHERE review_id=:r ORDER BY CASE WHEN view_id LIKE 'S%' THEN 0 ELSE 1 END, CAST(substr(view_id,2) AS INTEGER)")
+    views = q("SELECT view_id, name FROM views WHERE review_id=:r AND removed='' ORDER BY CASE WHEN view_id LIKE 'S%' THEN 0 ELSE 1 END, CAST(substr(view_id,2) AS INTEGER)")
     matrix = []
     for vid, name in views:
         cells = {}
@@ -741,7 +749,8 @@ def state_data(con, rid):
                     WHERE ck.review_id=:r AND ck.outcome IN ('fail','partial') AND co.outcome='Not Evaluated'
                     GROUP BY cc.sc, ck.check_id ORDER BY 3 DESC, 1""")
     unanswered_by_mod = q("""SELECT r.modality, COUNT(*) FROM runs r JOIN check_outcomes ck USING (review_id, run_id)
-                             WHERE r.review_id=:r AND ck.outcome='' GROUP BY r.modality ORDER BY 2 DESC""")
+                             JOIN views v ON v.review_id=r.review_id AND UPPER(v.view_id)=UPPER(r.view_id)
+                             WHERE r.review_id=:r AND ck.outcome='' AND v.removed='' GROUP BY r.modality ORDER BY 2 DESC""")
     walkthrough = q("""SELECT file, step_id, title, key_step FROM walkthrough_steps WHERE review_id=:r AND feedback=''
                        ORDER BY file, ordinal""")
     wt_total = q("SELECT COUNT(*) FROM walkthrough_steps WHERE review_id=:r")[0][0]
@@ -752,7 +761,7 @@ def state_data(con, rid):
             "runs": q("SELECT COUNT(*) FROM runs WHERE review_id=:r")[0][0],
             "findings_live": sum(sev.values()), "findings_withdrawn": withdrawn, "severity": sev,
             "tasks": [{"task": t, "verdict": v} for t, v in tasks_],
-            "completion": done, "pour": pour, "fpc": fpc, "matrix": matrix,
+            "completion": done, "pour": pour, "fpc": fpc, "matrix": matrix, "removed": removed,
             "vendor": {"decided": worse + better + same, "worse": worse, "better": better, "same": same},
             "integrity": [{"check": i["check"], "count": i["count"]} for i in integ],
             "measured_pending": [{"sc": s, "check": c, "runs": n} for s, c, n in measured],
@@ -788,6 +797,8 @@ def render_state(d):
         label = f"{m['view']} {m['name']}"[:wv]
         L.append(f"{label:<{wv}}  " + "  ".join(f"{m['cells'][k]:>2}" for k in rv.REQUIRED_MODALITIES) + f"   {'✓' if m['swept'] else '·'}")
     L.append("  ✓ works  ! with issues  ✗ broken  n n/a  ? logged, no result  · not run")
+    if d["removed"]:
+        L.append("  removed from the sample (kept on record): " + "; ".join(f"{v['view']} ({v['removed']})" for v in d["removed"]))
     L.append("")
     s = d["severity"]
     L.append(f"FINDINGS  Blocker {s['Blocker']} · Major {s['Major']} · Minor {s['Minor']}"

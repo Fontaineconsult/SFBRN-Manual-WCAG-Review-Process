@@ -137,6 +137,8 @@ barrier occurs)
 **Sequence notes:** (per-step observations; identify the step where each
 barrier occurs)
 
+**Scope note 2026-09-15:** the reviewer removed every instructor-facing view from the sample (03 §1.1 Exclusions); this task is instructor-only, so it is not walked unless the reviewer rules otherwise. Verdict stays Not run.
+
 (no findings yet)
 
 ---
@@ -181,7 +183,29 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R015, 2026-09-14 — NV7/NV10 open); axe (R001); probe runs R019–R023 |
 | **Date tested** | 2026-09-14 |
-| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F21 (also S3) |
+| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) |
+
+#### Finding V-F19
+
+| | |
+|---|---|
+| **Where** | Every sampled page — the whole application is laid out in a fixed-width 1300 px box (`div#container`); measured on all 14 views (S1–S12, R1, R2) and confirmed by the reviewer on Class Management, standard mode (S1) and Take Assignment (S3). |
+| **Observed** | At 320 CSS px wide (the 1.4.10 reflow viewport, ≈ 400 % zoom in a 1280 px window) every page scrolls in two dimensions — the content does not re-stack into one column (probe, 2026-09-11: S1 scrollWidth 1343, S3 1300, S5 1373; the Edit Class popup 589 px, the sign-in page 1024 px). Reviewer 2026-09-15 at real 400 % zoom: "nothing is hidden or lost at 400%, but no reflow" on both pages — everything stays reachable, but a line of text or a row of controls is read by scrolling sideways and back for each line. No data table, canvas or image exemption applies to the page layout itself. |
+| **Affected users** | Low-vision users who enlarge content with browser zoom; anyone on a narrow viewport (a phone, a split screen, a magnifier's reduced viewport) |
+| **WCAG criteria failed** | 1.4.10 |
+| **Severity** | Major |
+| **Evidence** | R019 O2, O5 (S1); R083 O2, O5 (S3); measured LV1 O2 on R024, R030, R036, R042, R048, R054, R060, R066, R072, R078, R088, R094 (`R###-probe.json` each) |
+
+#### Finding V-F23
+
+| | |
+|---|---|
+| **Where** | Class Management, standard mode (S1) — the "Classes" / "Class Menu" captions, the "Class Assignments" and "Class News" section headings, and the grey welcome / news body text. The same colour family recurs across the product (axe `color-contrast` violations on 11 of 14 views): the orange section headings on the Assignment Editor (S5) and Student Practice Area (S12); grey 12 px notice text on View Grade Report (S4) and Manage Class Roster (S10); red randomized-variable values (`#FF6347`, 2.94:1) and red MathJax values (`#FF0000`, 3.99:1) on View Grade Report (S4), View Assignment Solutions (S8) and View Printable Assignment (S13, confirmed 2026-09-15); the orange deduction percentage (`#FF9900`, 2.14:1) on Take Assignment (S3); the Calendar event bar (white on `#8EA9DB`, 2.37:1); "User Name:" on Sign in (4.05:1); the selected profile on Academic Integrity Preferences (white on `#A0A0A0`, 2.61:1). |
+| **Observed** | Eyedropper by the reviewer, 2026-09-15, Class Management at 100 %: teal captions `#48848C` on white — "Large pass, Fail regular for AA" (the captions are 16 px, so the 4.5:1 threshold applies; 4.23:1); "Class Assignments" `#EFBB75` on white — "fail for all levels" (1.74:1); grey `#808080` text — "fails over white for AAA and only passes for large in AA" (12 px body text; 3.94:1). The other pages' values are axe measurements (R001–R014 `R###-axe.json`) confirmed page by page in W43–W55; the Take Assignment deduction percentage and the grade-report variable values are information a student acts on, not decoration. |
+| **Affected users** | Low-vision users and anyone reading on a dim or glare-lit screen; colour-vision-deficient users for the orange/red items |
+| **WCAG criteria failed** | 1.4.3 |
+| **Severity** | Major (confirmed by the reviewer 2026-09-15) |
+| **Evidence** | R019 O6 (S1, eyedropper); R024 O6 (S2); R030 O6 (S4, eyedropper); axe R001 (S1), R005 (S2), R004 (S3), R007 (S4), R006 (S5), R008 (S6), R003 (S7), R014 (S8), R010 (S10), R011 (S12), R012 (R1) `violations:color-contrast` |
 
 #### Finding V-F21
 
@@ -203,7 +227,7 @@ differently.
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
 | **Severity** | Minor |
-| **Evidence** | R015 O11; R022 O2 (the same glyphs measured at 9×10 px for 2.5.8) |
+| **Evidence** | R015 O11; R022 O2 (the same glyphs measured at 9×10 px for 2.5.8); R059 O3 (S12, 2026-09-15: the sections grid's expand image — `alt="[Collapse]"`, onclick, no role, not focusable) |
 
 ### View S2 — Class Management, Accessibility Mode
 
@@ -222,7 +246,7 @@ differently.
 | **Affected users** | Screen reader users (no structural navigation); keyboard users (extra tab stops with no purpose) |
 | **WCAG criteria failed** | 1.3.1 (visual headings not programmatically determinable); 2.4.1 in combination with V-F3 |
 | **Severity** | Major |
-| **Evidence** | R016 O2, O5 (reviewer-pasted markup of `#assignmentsTitle`); R005 `R005-axe.json` (`page-has-heading-one`, `landmark-one-main`, `region` ×29); R015 O6 (S1 confirmed with NVDA 2026-09-14); R001 for S1 |
+| **Evidence** | R059 O3 (S12 confirmed 2026-09-15: "no headings, no tabs"); R016 O2, O5 (reviewer-pasted markup of `#assignmentsTitle`); R005 `R005-axe.json` (`page-has-heading-one`, `landmark-one-main`, `region` ×29); R015 O6 (S1 confirmed with NVDA 2026-09-14); R001 for S1 |
 
 #### Finding V-F2
 
@@ -266,7 +290,7 @@ differently.
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1, 3.3.2, 4.1.2 |
 | **Severity** | Major |
-| **Evidence** | R016 O7; R002 `R002-axe.json` |
+| **Evidence** | R016 O7; R002 `R002-axe.json`; R059 O3 (S12 confirmed 2026-09-15: "no forms have labels" — Books / Chapters selects, difficulty checkboxes; R011 `R011-axe.json` 12 unlabeled) |
 
 #### Finding V-F6
 
@@ -299,7 +323,7 @@ differently.
 | **Affected users** | Screen reader users; keyboard users |
 | **WCAG criteria failed** | 4.1.2; 2.4.3 |
 | **Severity** | Major (re-rated 2026-09-10 on Take Assignment) — pending the keyboard run's check of focus visibility on the hidden stop (2.4.7) |
-| **Evidence** | R016 O12; R017 O2 (Speech Viewer: "Press tab to go to problems. Press enter to open the accessibility shortcuts menu.  button"); R005 / R001 / R004 `*-axe.json` |
+| **Evidence** | R016 O12; R017 O2 (Speech Viewer: "Press tab to go to problems. Press enter to open the accessibility shortcuts menu.  button"); R005 / R001 / R004 `*-axe.json`; R063 O4 (S12, 2026-09-15: "their ctrl alt 1 doesn't do anything") |
 
 ### View S3 — Take Assignment
 
@@ -307,7 +331,18 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
 | **Date tested** | 2026-09-10 |
-| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F21 (recorded under S1) (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F19 (recorded under S1), V-F21 (recorded under S1), V-F23 (recorded under S1), V-F24 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+
+#### Finding V-F24
+
+| | |
+|---|---|
+| **Where** | Take Assignment (S3) — the problem figures (`<img>` per problem; the same images on View Grade Report, S4 — confirmed 2026-09-15 — View Assignment Solutions, S8, and View Printable Assignment, S13). Problems 1 and 6 in particular: text drawn over the graphic. |
+| **Observed** | The figures are low-resolution raster images that contain text — "usually math" (reviewer, 2026-09-15): labels, values and formulas a student needs to solve the problem are pixels, not text, although the same page renders its statement mathematics with MathJax (real text). At 400 % zoom they "don't scale well … they are blurry" — the math in them stops being readable exactly when a low-vision user enlarges it. On Problems 1 and 6 the text sits over a graphic and "fail[s] color contrast" (reviewer, eyedropper). Related: the same images have empty `alt` for screen-reader users (V-F12, 1.1.1). |
+| **Affected users** | Low-vision users (zoom, magnification); users with colour-vision or contrast sensitivity loss; screen-reader users via V-F12 |
+| **WCAG criteria failed** | 1.4.5, 1.4.3 |
+| **Severity** | Major (confirmed by the reviewer 2026-09-15) |
+| **Evidence** | R083 O6, O8, O9 (S3); R030 O5 (S4); R014 `R014-axe.json` (S8: 14 figure images without alt); V-F12 (R017 O8) |
 
 #### Finding V-F9
 
@@ -397,6 +432,63 @@ differently.
 | **Severity** | Minor |
 | **Evidence** | R017 NV9; R004 O2 `R004-axe.json`; R093 O4, R077 O4 (`R093-probe.json`, `R077-probe.json`) |
 
+### View S12 — Student Practice Area
+
+| | |
+|---|---|
+| **Baselines run** | axe (R011); probe runs R059–R064, R105; reviewer 2026-09-15 — NVDA (R059), keyboard (R063), eyedropper (R060) |
+| **Date tested** | 2026-09-11 (measured), 2026-09-15 (reviewer) |
+| **Findings** | V-F28; V-F1, V-F5, V-F16, V-F19, V-F23 confirmed here; V-F8 (inert Ctrl+Alt+1) |
+
+#### Finding V-F28
+
+| | |
+|---|---|
+| **Where** | Student Practice Area (S12) — `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` (Class Menu → Student Practice Area → Go): the sections grid that holds the practice problems ("Problems to Help Students Learn Expert TA" and the chapter sections), its expand controls and its per-problem checkboxes. |
+| **Observed** | Reviewer, 2026-09-15: "this page is hard to navigate … the sections table requires an expansion to view the content, but the expand buttons are not appropriately labeled, no forms have labels, no headings, tabbing focus is lost outside of the initial buttons and dropdowns, their ctrl alt 1 doesn't do anything. can't tab into the check boxes, there is no obvious way to find the tutorial content". The markup the reviewer saved (`R059-sections-table.html`) explains it: the content is four nested tables with no captions, headers or headings; the expand control is an `<img alt="[Collapse]">` with an `onclick` and no role or tabindex; the problem checkboxes are DevExpress `<span>`s, not inputs. So a keyboard user's Tab stops at the Books / Chapters selects and the buttons and then focus vanishes — the practice problems can never be reached or selected; a screen-reader user has no heading, landmark or caption to find them and hears unnamed graphics and unlabeled fields. This is the student's self-study entry point (F1 access course content). |
+| **Affected users** | Keyboard-only and switch users (cannot reach the content at all); screen-reader users (cannot find or identify it); low-vision users navigating by focus |
+| **WCAG criteria failed** | 2.1.1, 2.4.7, 1.3.1, 4.1.2 |
+| **Severity** | Blocker for this page (assistant's rating — reviewer to confirm) |
+| **Evidence** | R063 O4 (keyboard); R059 O3 (NVDA); `R059-sections-table.html` (reviewer-saved markup); R011 `R011-axe.json` (12 unlabeled fields, no headings, no landmarks) |
+
+### View S4 — View Grade Report
+
+| | |
+|---|---|
+| **Baselines run** | axe (R007); probe runs R029–R034, R100; zoom + eyedropper (R030, 2026-09-15 — reviewer) |
+| **Date tested** | 2026-09-11 (measured), 2026-09-15 (reviewer) |
+| **Findings** | V-F19, V-F23 (recorded under S1) and V-F24 (recorded under S3) confirmed here; V-F27 |
+
+#### Finding V-F27
+
+| | |
+|---|---|
+| **Where** | View Grade Report (S4) — the per-problem grade tables (score / submission date / answer cells); Calendar (S6) — the month grid's lines (confirmed 2026-09-15). |
+| **Observed** | The tables' cell borders "are too small and fail color contrast at all levels" (reviewer, eyedropper, 2026-09-15): thin lines below 3:1 against white, so the cell boundaries that separate one submission's date and score from the next are hard to make out for a low-vision reader; the table is the page's only presentation of the grade breakdown. |
+| **Affected users** | Low-vision users; users with reduced contrast sensitivity |
+| **WCAG criteria failed** | 1.4.11 |
+| **Severity** | Minor (confirmed by the reviewer 2026-09-15) |
+| **Evidence** | R030 O8 (S4); R042 O8 (S6) |
+
+### View S5 — Assignment Editor
+
+| | |
+|---|---|
+| **Baselines run** | axe (R006); probe runs R035–R040, R101; zoom + eyedropper (R036, 2026-09-15 — reviewer) |
+| **Date tested** | 2026-09-11 (measured), 2026-09-14 (W40 ruling), 2026-09-15 (reviewer) |
+| **Findings** | V-F19, V-F23 (recorded under S1) confirmed here; V-F21 exempt here (spinner values typeable); V-F26 |
+
+#### Finding V-F26
+
+| | |
+|---|---|
+| **Where** | Assignment Editor (S5) — the videos in the expanding area under **Library** (YouTube embeds), `UI: Assignment Editor → Library → expand`. |
+| **Observed** | The videos carry captions, but they are YouTube **auto-generated** captions (reviewer, 2026-09-15: "they have captions and are YouTube embeds … they are auto generated"). Auto-generated captions are not an equivalent for the audio — speaker attribution, punctuation and, in physics content, symbols and units are unreliable — so 1.2.2 is not met by them. Not yet checked: whether the videos autoplay (1.4.2) and whether an audio description or transcript exists (1.2.3 / 1.2.5 — NV11 on R035). The probe's media sweep missed these embeds because the panel opens on demand. |
+| **Affected users** | Deaf and hard-of-hearing users; users watching without sound |
+| **WCAG criteria failed** | 1.2.2 |
+| **Severity** | Major (confirmed by the reviewer 2026-09-15). **Kept in the report at the reviewer's ruling 2026-09-15 although the Assignment Editor (S5) left the sample as instructor-facing.** |
+| **Evidence** | R037 O6 (reviewer); R035 (NV11 reopened) |
+
 ### View S7 — Sign in
 
 | | |
@@ -417,6 +509,25 @@ differently.
 | **Evidence** | R098 O3 (`R098-probe.json`) |
 
 ---
+
+### View S11 — Edit Class popup
+
+| | |
+|---|---|
+| **Baselines run** | axe (R002); probe runs R073–R078; zoom (R078, 2026-09-15 — reviewer) |
+| **Date tested** | 2026-09-11 (measured), 2026-09-15 (reviewer) |
+| **Findings** | V-F5 (recorded under S2); V-F18 applies here; V-F25 |
+
+#### Finding V-F25
+
+| | |
+|---|---|
+| **Where** | Edit Class popup (S11) — `UI: Class Management → Class Menu → Edit Class → Go`; by construction the same for the other Class Menu popups (Create Class, Student/TA Registration, Create New Assignment). |
+| **Observed** | The popup is a fixed-size (589 px) modal and the page behind it is locked against scrolling while it is open. Once browser zoom passes 175 % the popup no longer fits the viewport and "we can't scroll the page when it is active" (reviewer, 2026-09-15) — the fields, and the Save / Cancel buttons at the bottom, that fall outside the viewport cannot be reached by any means. At 200 % zoom (the 1.4.4 threshold) the form cannot be completed; at 400 % most of it is unreachable. Elsewhere in the product zoom loses nothing (LV2 pass on S1–S5). |
+| **Affected users** | Low-vision users working at 200 % zoom or more; anyone on a small or narrow window |
+| **WCAG criteria failed** | 1.4.4, 1.4.10 |
+| **Severity** | Major (Blocker for the popup alone; confirmed by the reviewer 2026-09-15). **Kept in the report at the reviewer's ruling 2026-09-15 although the Edit Class popup (S11) left the sample as instructor-facing.** |
+| **Evidence** | R078 O5 (reviewer); R078 O2 (probe: popup width 589 px, `R078-probe.json`) |
 
 ## C. Sample comparison (WCAG-EM step 4.3 — random vs structured)
 

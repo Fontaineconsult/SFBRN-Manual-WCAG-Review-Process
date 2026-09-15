@@ -1,0 +1,41 @@
+{
+ "view": "S13",
+ "locator": "https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx",
+ "probed_at": "2026-09-15",
+ "grayscale": {
+  "screenshot": "R119-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 2,
+   "colorOnly": [
+    {
+     "label": "Class: Testing Course for CSU East Bay → GradeSheetClassAssignments.aspx?eid=3373",
+     "contrast": 1,
+     "hover": "a:hover",
+     "focus": null
+    },
+    {
+     "label": "Assignment: Chapter 5 Sample Assignment → GradeSheetClassAssignmentProblems.aspx?eid=3373&aid=17547",
+     "contrast": 1,
+     "hover": "a:hover",
+     "focus": null
+    }
+   ],
+   "failing": [
+    {
+     "label": "Class: Testing Course for CSU East Bay → GradeSheetClassAssignments.aspx?eid=3373",
+     "contrast": 1,
+     "hover": "a:hover",
+     "focus": null
+    },
+    {
+     "label": "Assignment: Chapter 5 Sample Assignment → GradeSheetClassAssignmentProblems.aspx?eid=3373&aid=17547",
+     "contrast": 1,
+     "hover": "a:hover",
+     "focus": null
+    }
+   ],
+   "unreadableSheets": 0
+  }
+ }
+}

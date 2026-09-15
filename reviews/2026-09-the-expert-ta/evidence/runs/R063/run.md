@@ -8,10 +8,10 @@
 | **Page URL / location** | https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373 |
 | **Task / process** | — |
 | **Modality** | motor |
-| **Tool** | probe |
-| **Baseline** | — |
+| **Tool** | probe; keyboard (reviewer, W53) |
+| **Baseline** | B2 |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — MO1, MO2, MO3, MO4, MO5, MO6, MO7, MO8, MO11 need the reviewer (keyboard, B2) |
+| **Result** | Not set — MO2, MO3, MO5, MO6, MO7, MO8, MO11 need the reviewer; answered: MO1 fail, MO4 fail (V-F28), MO9 pass, MO10 n/a |
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -27,10 +27,10 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
+| MO1 — Every interactive element can be reached with the keyboard | fail | O4 — "can't tab into the check boxes"; the expand controls are unfocusable images; Tab covers only the initial buttons and dropdowns (reviewer; markup: checkboxes are spans) → V-F28 |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | | |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | | |
-| MO4 — A visible focus indicator exists at all times | | |
+| MO4 — A visible focus indicator exists at all times | fail | O4 — "tabbing focus is lost outside of the initial buttons and dropdowns" (reviewer) → V-F28 |
 | MO5 — Focus order follows the meaning and operation order of the view | | |
 | MO6 — Single-character shortcuts can be switched off or remapped | | |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | |
@@ -54,6 +54,8 @@ Format:
   - Classified: MO9 / WCAG 2.5.8 / measured → pass
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): no devicemotion/deviceorientation use in scripts (38 inline + 49 external scripts scanned, 1 unreadable)
   - Classified: MO10 / WCAG 2.5.4 / measured → n/a
+- O4 [classified] (state: Student Practice Area, keyboard only, 2026-09-15, reviewer, W53 narration): "tabbing focus is lost outside of the initial buttons and dropdowns, their ctrl alt 1 doesn't do anything. can't tab into the check boxes, there is no obvious way to find the tutorial content" — after the Books / Chapters selects and the buttons, Tab leaves no visible focus; the sections grid (expand images, problem checkboxes) is not in the tab order; the product's Ctrl+Alt+1 accessibility shortcut is inert here. Markup facts from the table the reviewer saved (`R059-sections-table.html`, 22 KB): 4 nested tables, 0 `<caption>`, 0 `<th>`, 0 headings, 0 `<label>`, 0 ARIA roles; the expand control is an `<img alt="[Collapse]">` with an `onclick` and no role or tabindex; the checkboxes are `<span class="dxWeb_edtCheckBoxUnchecked">` DevExpress spans, not `<input>` elements, so nothing in the grid can take keyboard focus; the section title "Problems to Help Students Learn Expert TA" is plain text.
+  - Classified: MO1 / WCAG 2.1.1 → fail; MO4 / WCAG 2.4.7 → fail → V-F28 (Blocker for this page — assistant's rating, reviewer to confirm); the inert Ctrl+Alt+1 → V-F8 (evidence extended)
 
 ## Notes
 
@@ -68,4 +70,4 @@ Conventions: ontology/testing-tools.md.)
 
 ## Findings raised from this run
 
-- (finding IDs recorded in 04-task-testing.md, or "none")
+- V-F28 (recorded under S12); V-F8 extended (inert Ctrl+Alt+1)

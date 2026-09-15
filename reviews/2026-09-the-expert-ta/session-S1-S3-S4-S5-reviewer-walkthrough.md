@@ -441,7 +441,7 @@ headers can be sorted from the keyboard; what the filter box and the Points
 View check box announce (both unlabeled per R009); what the **Export**
 control announces (on the spreadsheet view it is a `div` with an
 `aria-label` but no role — R013 O3).
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
 
 ---
 
@@ -484,7 +484,7 @@ Roster`) for an accommodation column.
 **Tell me:** Where the accommodation lives, what it is called, and whether it
 is per student. This fills §2.5 A4 in the scope file. Do **not** save a
 change on the shared account unless you note it here.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
 
 ---
 
@@ -723,6 +723,11 @@ expand controls without role or name → **V-F16** (Minor). **Open:** NV7 (is
 the mouse-opened menu announced?) and NV10 (Links list) — two questions in
 R015; Result is set to Broken once answered. Reviewer to confirm the T1
 verdict and the alternate-version ruling on T1-F3.
+**Update 2026-09-14 (later the same day, recorded in `04`/`05`):** the reviewer
+overruled the draft — T1-F3 re-rated **Minor** (Accessibility Mode accepted as
+the alternate route: "not an ideal solution, but it does allow access. Not
+fail"), **T1 verdict = Pass with barriers**, `05` 2.1.1 → **Partially
+Supports**. NV7/NV10 closed under W40; R015 Result = Broken. W34 is done.
 
 ### W35 — Confirm or rule out the measured fails (six `05` decisions) — KEY STEP
 
@@ -863,7 +868,7 @@ page in words; this table is the translation for anything above.
 | S9 | **Class Assignments Grade Sheet** (instructor pivot grid) | Class Menu → View/Manage Class Grades |
 | S10 | **Manage Class Roster** | Class Menu → View/Manage Class Roster |
 | S11 | **Edit Class popup** | Class Management → Class Menu → Edit Class → Go (opens in a popup) |
-| S12 | **Student Practice Area** | top menu → Practice |
+| S12 | **Student Practice Area** (the student library browser) | direct address `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` — the top-menu "Practice" link goes elsewhere (Practice Mode for the assignment, which the demo does not enable; corrected 2026-09-15) |
 | R1 | **Academic Integrity Preferences** | Class Menu → Academic Integrity Preferences |
 | R2 | **View Grades, spreadsheet view** | Class Menu → View/Manage Class Grades → spreadsheet view |
 
@@ -889,7 +894,11 @@ factor of four on every page.
 **Tell me:** "sideways scrollbar, yes/no" for each of the two pages, and
 whether anything is cut off or overlaps (the anti-cheating watermark,
 the problem navigator, the keypad).
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-15 — Class Management (`default.aspx`): "nothing is
+hidden or lost at 400%, but no reflow". Take Assignment: "nothing is lost,
+but no reflow". → LV1 confirmed fail on R019 and R083 (O5 each), LV2 pass
+on both; finding **V-F19** (1.4.10, Major, product-wide — the same fixed
+container measured on all 14 pages); `05` 1.4.10 → **Does Not Support**.
 
 ### W39 — Text spacing: does widened text get clipped? (replaces W35 (b); decides 1.4.12)
 
@@ -915,7 +924,45 @@ Management, the assignment name cell in Accessibility Mode, the assignment
 code on Take Assignment and one Calendar event clip under this override.
 **Tell me:** which of those texts (if any) is actually unreadable after the
 bookmarklet, and whether the due date is one of them.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-15 — Reviewer: "bookmarklet don't know what this
+means"; at 400 % without the override "nothing in the list is cut off"
+(that is the LV2 answer, already recorded under W38 — not LV3). Step
+re-done by the assistant: the override is applied over the debug Chrome
+and the clipped spots are screenshotted into each run folder
+(`R019-textspacing*.png`, `R083-textspacing*.png`, `R042-textspacing*.png`)
+so the question becomes "look at these pictures — is the cut-off text
+still readable?" → see W39b below. Still open.
+
+### W39b — Text spacing: look at three pictures (replaces the bookmarklet; decides 1.4.12)
+
+The assistant applied the text-spacing override through the debug Chrome
+and photographed the spots that clip. Open the files (they are in the
+review folder under `evidence/runs/`) and answer per picture.
+
+1. **`R019/R019-textspacing-5.png`** — Class Management. Every date on the
+   assignment row has lost its **AM/PM** ("Sep 08, 2026 11:59" — no PM)
+   and the Start date its last minute digit. *Is a due date without AM/PM
+   information a student needs?* → "confirmed" (content loss) or
+   "exception — <why>".
+2. **`R083/R083-textspacing-2.png`** — Take Assignment. The red box under
+   the Submit / Hint buttons is where the assignment code
+   (`6M79-C9-72-46-B37E-17547`) normally shows; under the override it is
+   **empty** — the code is pushed out of its box. *Does a student ever need
+   that code (support requests, integrity checks)?* → confirmed / exception.
+3. **`R042/R042-textspacing-1.png`** — Calendar. A scrollbar appears over
+   the grid and covers the right half of every **Saturday date number**;
+   the event bars are intact. → confirmed / exception (minor).
+
+Accessibility Mode (S2) could not be photographed — the account is in
+standard mode and `default2.aspx` redirects — its measured clip is the
+assignment-name cell and a grid caption, the same table as picture 1.
+**Tell me:** three words — one per picture — and, if any is "confirmed",
+whether you rate the finding Minor (cosmetic clipping) or Major (the
+due-date AM/PM).
+**Feedback:** 2026-09-15 — "no issues noted with text spacing" → LV3 pass
+on R019, R024, R083, R042 (reviewer's ruling over the measurement; the
+pictures and measurements stay in the runs); no finding; `05` 1.4.12 →
+**Supports**. R019 Result → **Works with issues** (V-F19, V-F23).
 
 ### W40 — Small click targets (replaces W35 (c); decides 2.5.8)
 
@@ -966,3 +1013,430 @@ links at all? If not: "confirmed" (they are indistinguishable at rest —
 1.4.1 / F73); if something I have not measured marks them (a different
 weight, an icon), say what.
 **Feedback:** _(pending)_
+
+## 2026-09-15 — Session 3: complete no-vision (302.1) and low-vision (302.2) on every page
+
+**State at open** (dashboard §1): no-vision tested on 2 of 14 pages
+(Class Management standard mode R015, Take Assignment R017 — both Broken);
+low-vision on 0 of 14. Every cell already has a run — the probe's — so no
+`log-test` is needed: your narration completes **that run** (the assistant
+sets its Tool/Baseline to the instrument you used). The rows still open:
+
+| Instrument | Pages | Rows per page |
+|---|---|---|
+| NVDA (no-vision) | 11 pages: NV2 NV3 NV4 NV5 NV6 NV7 NV8 NV10 NV12; Accessibility Mode only NV4 NV5 NV12 | 9 (3 on Accessibility Mode) |
+| Zoom + eyedropper (low-vision) | all 14 pages: LV2 LV4 LV5 LV6 LV7 LV9 (LV1/LV3/LV8 measured; W38/W39 decide LV1/LV3) | 6 |
+
+**Pre-flight (assistant, 2026-09-15):** the debug-profile Chrome (port 9222)
+is on `login.theexpertta.com` — the shared session expired again. **Sign in
+there first** (the assistant never authenticates). Sign-in page steps use
+the signed-out window on port 9223 only.
+
+**Order:** W38 → W39 (two answers that close LV1/LV3 on all 14 runs) →
+Part I zoom, one page at a time (W42–W55) → Part J NVDA, one page at a time
+(W56–W67). Zoom first because it needs no screen reader and the eyedropper
+targets are already listed; switch NVDA on once for Part J. Say the step
+number when you start; skip or reorder freely — just say so.
+
+### Part I — Low-vision, page by page (LV2, LV4, LV5, LV6, LV7, LV9)
+
+**Setup once:** window about 1280 px wide (Windows key + Left on a wide
+screen). For each page: press `Ctrl` + `+` until the address bar reads
+**400%** (eight presses), look, then `Ctrl` + `0` back to 100 % for the
+eyedropper. Eyedropper: PowerToys Color Picker (`Win+Shift+C`) or DevTools;
+measure the rendered pixel, not the CSS value. The axe ratios in brackets
+already resolved a plain background — say "matches" when they do.
+
+**Every page, the same five things to tell me:**
+- **(LV2) at 400 %** — is anything cut off, overlapping, or no longer
+  reachable (a control you cannot scroll to)? Ignore the sideways scrolling
+  itself — W38 records that.
+- **(LV7) at 400 %** — Tab through three or four controls: is the focus
+  ring visible each time, and not hidden under a sticky header or edge?
+- **(LV9) at 400 %** — is any text actually a picture (it goes blurry or
+  blocky instead of crisp)? Logos are exempt.
+- **(LV4/LV5) at 100 %** — eyedropper the elements listed for the page.
+  Text needs 4.5:1 (3:1 if it is 18 pt+ or 14 pt bold); control borders,
+  icons and the focus ring need 3:1. DevExpress buttons (Go, Save, the
+  toolbar) are painted with an image, so axe could not measure them —
+  measure one on each page that has them.
+- **(LV6)** — does anything appear when you hover or Tab onto something
+  (a tooltip, a popover)? If yes: can you dismiss it with `Esc`, can you
+  move the mouse onto it without it vanishing, does it stay until you move
+  away? If nothing appears anywhere on the page, say "nothing" → n/a.
+
+### W42 — Class Management, standard mode (S1, run R019)
+
+**Page:** `https://dei56mo.theexpertta.com/common/default.aspx` — the mode
+button reads "Accessibility Page".
+**Eyedropper:** "Classes" / "Class Menu" captions teal `#48848C` on white
+[4.23:1 — fails 4.5]; "Class Assignments" heading `#EFBB75` [1.74:1]; "Class
+News" heading `#E58F65` [2.48:1]; the grey "Welcome to Testing Course…" line
+`#808080` [3.94:1]; the **⋮** row-menu glyph [unmeasured]; the **Go** button
+text and border [unmeasured, image background]; the Classes / Class Menu
+editor borders [unmeasured].
+**Feedback:** 2026-09-15 — LV2 pass (from W38). "focus ring visible with
+tab" → LV7 pass. "no text goes blurry" → LV9 pass (the blurry assignment
+figures belong to Take Assignment → R083 O6, W44). Eyedropper: teal on
+white "Large pass, Fail regular for AA" (captions are 16 px → fail);
+`#EFBB75` "fail for all levels"; `#808080` "only passes for large in AA"
+(12 px → fail) → LV4 fail, finding **V-F23** (1.4.3, Major — confirm the
+rating), `05` 1.4.3 → Partially Supports. "Pass for UI component" → LV5
+pass. "Only thing that appears when tabbed … is the accessibility
+instructions" → LV6 pass. R019 now waits only on LV3 (W39b).
+
+### W43 — Class Management, Accessibility Mode (S2, run R024)
+
+**Page:** press "Accessibility Page" (`default2.aspx`); the button then
+reads "Non-Accessibility Page".
+**Eyedropper:** "Class Assignments" `#EFBB75` [1.74:1]; "Class News" `#E58F65`
+[2.48:1]; grey welcome line `#808080` [3.94:1]; the native **Go** buttons and
+the Actions select border [unmeasured].
+**Feedback:** 2026-09-15 — "no for accessibility mode at 400" → LV2 pass.
+"No blurry text other than the images. Focus ring is fine, Go button
+passes contrast and is not blurry." → LV9, LV7, LV5 pass. LV4 fail on the
+same heading/notice colours as standard mode (V-F23; axe R005 measured the
+identical hex values the reviewer eyedroppered on S1). "no hover issues" →
+LV6 pass. **R024 Result → Works with issues** (V-F19, V-F23).
+
+### W44 — Take Assignment (S3, run R083)
+
+**Page:** assignment row → Take Assignment; look at Problem 1 (free-body
+diagram), Problem 2 (symbolic entry + palette), Problem 8 (multiple choice
+with math).
+**At 400 % also:** the problem navigator on the left, the keypad / palette,
+the anti-cheating watermark over the problem text, the MathJax formulas
+(MathJax renders as text — it should stay crisp).
+**Eyedropper:** hint/feedback deduction "4%" orange `#FF9900` [2.14:1]; red
+randomized-variable values `#FF6347` (Problem 1: "25", "13") [2.94:1];
+problem-navigator numbers `#3A7C89` on `#F5F5F5` [4.35:1 — fails 4.5];
+"Part (b)" identifiers [4.35:1]; the **Submit** button; the palette keys.
+**Feedback:** 2026-09-15 — LV2 pass (W38). "No new issues are obvious for
+assignment pages at 400: this can be passed" → LV7 pass. "The blurry images
+do contain text, usually math" → LV9 fail; "1 and 6 contain images that
+fail color contrast as they contain text over a graphic" → LV4 fail;
+finding **V-F24** (1.4.5 + 1.4.3, Major — confirm the rating), `05` 1.4.5
+→ Partially Supports. Also: View Printable Assignment
+(`/Common/ViewAssignmentDetails.aspx`) recorded as **S13** in 03 §3.1 at
+the reviewer's request → W68/W69. "Submit button and others pass
+contrast, Nothing." → LV5 pass, LV6 pass. **R083 Result → Works with
+issues** (V-F19, V-F23, V-F24). Take Assignment low-vision complete.
+
+### W45 — View Grade Report (S4, run R030)
+
+**Page:** assignment row → "View Grade Report (shows your detailed work)".
+**Eyedropper:** red variable values `#FF6347` [2.94:1]; red "11000"-style
+MathJax values `#FF0000` [3.99:1]; grey italic "All date times are displayed
+in Pacific Standard Time" `#808080` [3.94:1]; red "Red submission date times
+indicate late work." `#FF0000` [3.99:1] — this one also carries meaning by
+colour; note it for the grayscale pass (W32).
+**At 400 % also:** the per-problem tables — data tables may scroll sideways,
+but nothing in them should be cut off.
+**Feedback:** 2026-09-15 — "at 400 nothing cut off, requires horizontal
+scrolling, same images don't scale and are blurry" → LV2 pass, LV1
+confirmed (V-F19), LV9 fail (V-F24 extended to this page). "Red on white
+fails AAA, passes large AA and fails regular AA, same for grey, randomized
+math values fail all color contrast" → LV4 fail (V-F23). "no hover or focus
+issues" → LV6 pass, LV7 pass. "line borders are too small and fail color
+contrast at all levels" → LV5 fail, finding **V-F27** (1.4.11, Minor —
+confirm), `05` 1.4.11 → Partially Supports. **R030 Result → Works with
+issues.** View Grade Report low-vision complete.
+
+### W46 — Assignment Editor (S5, run R036)
+
+**Page:** Class Menu → Edit Class Assignment (or the row's Edit).
+**Eyedropper:** "Assignment Details" heading `#DB715C` [3.21:1]; "Library"
+heading `#EFBB75` [1.74:1]; "Books" `#3A7C89` on `#EDEDED` [4.05:1]; the
+toolbar buttons (Save Only, Extensions, Messages) [unmeasured — image
+background]; the spin-button arrows on Weight [unmeasured, UI component,
+3:1].
+**At 400 % also:** the library browser panel and the details panel side by
+side — does one hide the other?
+**Feedback:** 2026-09-15 — "everything is reachable at 400. Nothing hidden"
+→ LV2 pass. "Assignment Details fails AAA contrast and only passes large
+for AA, Library fails All" → LV4 fail (V-F23). "No hover or focus issues"
+→ LV6, LV7 pass. "Just the buttons are blurry" (the image-painted faces,
+not the captions) → LV9 pass. "contrast is fine" → LV5 pass. **R036 Result
+→ Works with issues** (V-F19, V-F23). Videos found "in the expanding area
+under library … they are auto generated" → R037 NH1 partial, finding
+**V-F26** (1.2.2, Major — confirm), `05` 1.2.2 → Partially Supports; still
+owed: autoplay? audio description / transcript? Aside from the same message: the **Edit Class
+popup is unreachable above 175 % zoom** ("we can't scroll the page when
+it is active") → R078 LV2 fail, finding **V-F25** (1.4.4 + 1.4.10, Major /
+Blocker for the popup — confirm the rating), `05` 1.4.4 → Partially
+Supports.
+
+### W47 — Calendar (S6, run R042)
+
+**Page:** top menu → Calendar (`/common/calendar.aspx`).
+**Eyedropper:** the event bar "Chapter 5 Sample Assignment" white on blue
+`#8EA9DB` [2.37:1]; the "Select All" / "Only" controls; the calendar grid
+lines and today-marker [UI component, 3:1].
+**At 400 % also:** does the month grid stay usable — can you reach every
+day and the event?
+**Feedback:** 2026-09-15 — "all cells reachable, no blurry text, event bar
+passes, no hover or focus" → LV2, LV9, LV4, LV6, LV7 pass (the reviewer's
+eyedropper overrides axe's 2.37:1 on the event bar). "grid lines fail all
+contrast" → LV5 fail (V-F27 extended). **R042 Result → Works with issues.**
+Also noted, for W64: "keyboard tabbing
+it appears the calendar itself isn't reachable" (R045 O4) and "table desc
+doesn't expose that this is a calendar, T will find the table" (R041 O3).
+
+### W48 — Sign in (S7, run R094) — signed-out window (port 9223) only
+
+**Page:** `https://login.theexpertta.com/Login.aspx` in the **signed-out**
+debug window. Never in the signed-in one.
+**Eyedropper:** "User Name:" label `#3A7C89` on `#EDEDED` [4.05:1]; the
+Log In button; the field borders.
+**Feedback:** 2026-09-15 — "nothing cut off at 400 at sign in window" → LV2
+pass; "username fails AAA and fails regular AA" → LV4 fail (V-F23); "No
+hover or focus" → LV6, LV7 pass. "login field borders ok and no blurry
+text" → LV5, LV9 pass. **R094 Result → Works with issues.**
+
+### W49 — View Assignment Solutions (S8, run R088)
+
+**Page:** assignment row → View Solutions.
+**Eyedropper:** red variable values `#FF6347` [2.94:1]; red MathJax values
+`#FF0000` [3.99:1].
+**At 400 % / LV9 especially:** the solution figures are images
+(`…png` files, 14 without alt) — is any of them a picture of an equation
+or of text that a student must read? Say which problem.
+**Feedback:** 2026-09-15 — "fine at 400, images blur at 400. both fail AAA
+and only large AA, no hover or focus behaviour" → LV2, LV7, LV6 pass; LV9
+fail (V-F24); LV4 fail (V-F23). "final passes" → LV5 pass. **R088 Result →
+Works with issues.**
+
+### W50 — Class Assignments Grade Sheet (S9, run R048)
+
+**Page:** Class Menu → View/Manage Class Grades.
+**Eyedropper:** the grid header row and cell borders; the export-format
+select and its button [image background]; "Points view" checkbox.
+**At 400 % also:** the pivot grid — a data table may scroll sideways; is
+the header still readable and are the filter controls reachable?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W51 — Manage Class Roster (S10, run R054)
+
+**Page:** Class Menu → View/Manage Class Roster.
+**Eyedropper:** grey "No data to display" `#808080` [3.94:1]; the class
+select, code filter and export controls [image background].
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W52 — Edit Class popup (S11, run R078)
+
+**Page:** Class Management → Class Menu → Edit Class → Go.
+**Eyedropper:** the popup's Save / Cancel buttons [image background —
+unmeasured]; the field borders; the field labels.
+**At 400 % also:** does the popup fit — can you reach Save and Cancel, and
+does the popup scroll or is it cut off by the window edge? (The probe
+measured the popup at 589 px wide.)
+**Feedback:** 2026-09-15 (partial, from W46) — LV2 fail: not reachable
+above 175 % zoom, the page cannot scroll while the modal is active →
+V-F25. Still open: LV4/LV5 (Save / Cancel, field borders, labels), LV6,
+LV7, LV9.
+**Update 2026-09-15:** remaining rows skipped — view removed from the sample (not student-facing).
+
+### W53 — Student Practice Area (S12, run R060)
+
+**Page:** paste `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` into the address bar (the top-menu "Practice" link opens the assignment's Practice Mode instead, which the demo does not enable — 2026-09-15).
+**Eyedropper:** "Library" heading `#EFBB75` [1.74:1]; "Books" `#3A7C89` on
+`#EDEDED` [4.05:1]; the difficulty checkboxes and their labels; the Books /
+Chapters selects [image background].
+**Feedback:** 2026-09-15 — "main contrast issue is the tutorial text fails
+AAA only fails regular AA" → LV4 fail (V-F23). The rest of the narration was
+keyboard and NVDA — recorded on R063 (MO1, MO4 fail) and R059 (NV2, NV3,
+NV6 fail) → finding **V-F28** (Blocker for this page — confirm). "nothing cut off at 400, focus ring is limited, but not due to zoom … no
+hover issue" → LV2, LV7, LV6 pass. "final passes" → LV5, LV9 pass.
+**R060 Result → Works with issues.**
+
+### W54 — Academic Integrity Preferences (R1, run R066)
+
+**Page:** Class Menu → Academic Integrity Preferences.
+**Eyedropper:** the selected profile "Instructor Default" white on grey
+`#A0A0A0` [2.61:1]; the template-options select; the grid's checkboxes.
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W55 — View Grades, spreadsheet view (R2, run R072)
+
+**Page:** Class Menu → View/Manage Class Grades → spreadsheet view.
+**Eyedropper:** the spreadsheet cell text and grid lines; the
+"Grade Sheet - Class" link (same colour as text — W41 decides its 1.4.1
+side; here measure it against the background).
+**At 400 % also:** the spreadsheet is a data table — sideways scrolling is
+allowed; frozen header/first column must not cover cells.
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### Part J — No-vision with NVDA, page by page (NV2 NV3 NV4 NV5 NV6 NV7 NV8 NV10 NV12)
+
+**Setup once:** NVDA on, Speech Viewer open (NVDA+N → Tools → Speech
+Viewer) so exact announcements can be pasted. `Ctrl+0` zoom reset. The
+page title (NV1) and language (NV9) are already recorded by measurement —
+skip them unless the title you hear is wrong.
+
+**Every page, the same nine things to tell me** (one line each is enough;
+"same as Class Management" is a valid answer when it is true):
+- **(NV2)** `H` then `Shift+H` — any headings? `D` — any landmarks?
+  `NVDA+F7` → Headings / Landmarks lists — anything in them?
+- **(NV3)** Tab through the controls; on each, what NVDA says — name, role,
+  state (e.g. "Go button", "Please Select combo box collapsed"). Name any
+  control that announces nothing, or a wrong role.
+- **(NV4)** `G` (next graphic) — what each graphic announces; any
+  "graphic" with no name, or a picture that carries information but says
+  nothing (figures, solution images).
+- **(NV5)** arrow down from the top: does the order make sense, or does
+  anything come out of sequence or in pieces?
+- **(NV6)** on each form field (`F` next form field): is the visible label
+  what NVDA reads on focus? Name the fields where it is not.
+- **(NV7)** do something that changes the page without reloading (Go,
+  filter, expand a row, save): is the change announced, and does focus
+  stay where you were?
+- **(NV8)** anything you could only identify by where it sits (two tables
+  with the same caption, a value with no label)?
+- **(NV10)** `NVDA+F7` → Links: any "click here"/"view"/"more" or two
+  identical link texts going to different places? Paste the list if short.
+- **(NV12)** if the page has a required or validated field: clear it (or
+  enter something invalid) and submit — is the error announced, does it
+  say which field and what is wrong? If the page has no validated input
+  at all, say "no validated input" → n/a.
+
+### W56 — Class Management, Accessibility Mode (S2, run R016) — three rows only
+
+**Page:** `default2.aspx` (button reads "Non-Accessibility Page").
+**Tell me:** **(NV4)** `G` — the logo and any other graphic. **(NV5)** arrow
+down from the top — the order across the skip links, the two grids, the
+news. **(NV12)** no validated input here? then n/a.
+**Feedback:** _(pending)_
+
+### W57 — View Grade Report (S4, run R029)
+
+**Page:** assignment row → "View Grade Report (shows your detailed work)".
+**Also:** axe found 9 images with no alt (the per-problem "signature"
+images) — do they announce anything under `G`? The red-means-late legend:
+is "late" available any other way in the table (NV8)?
+**Feedback:** _(pending)_
+
+### W58 — View Assignment Solutions (S8, run R087)
+
+**Page:** assignment row → View Solutions.
+**Also:** 14 solution images without alt — what does `G` say on each, and
+does any carry the solution itself (NV4)? MathJax in the solutions — read
+in browse mode or "table" (as on Take Assignment, R017 O7)?
+**Feedback:** _(pending)_
+
+### W59 — Class Assignments Grade Sheet (S9, run R047)
+
+**Page:** Class Menu → View/Manage Class Grades.
+**Also:** the code filter field, the "Points view" checkbox and the export
+select are unlabeled per axe — what do they announce on focus (NV6)? Does
+`T` reach the pivot grid, and do its column/row headers read with the cells
+(NV3/NV5)? Apply the filter — announced (NV7)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W60 — Manage Class Roster (S10, run R053)
+
+**Page:** Class Menu → View/Manage Class Roster.
+**Also:** class select, code filter, export select — labels on focus (NV6)?
+"No data to display" — is it read (NV5)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W61 — Assignment Editor (S5, run R035)
+
+**Page:** Class Menu → Edit Class Assignment.
+**Also:** axe found 59 unlabeled fields (Name, Grade Template, Description,
+Academic Integrity Template, Grade Weight, the time fields…) — take the
+first six: what does each announce on focus (NV6)? The toolbar buttons
+(Save Only, Extensions, Messages) — name and role (NV3)? Clear **Name** and
+Save — the error (NV12)? The library browser: can the "Accessibility(AA)
+Only" filter be found and its state heard (NV3)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W62 — Edit Class popup (S11, run R077)
+
+**Page:** Class Management → Class Menu → Edit Class → Go.
+**Also:** on opening — is the popup announced and is focus inside it
+(NV7)? Class Name, Description, Time Zone, Academic Year, Semester — labels
+on focus (NV6)? Clear Class Name and Save — the error (NV12)? The
+`clear.gif` image — silent (NV4)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W63 — Sign in (S7, run R093) — signed-out window (port 9223), NVDA on
+
+**Page:** `https://login.theexpertta.com/Login.aspx` in the **signed-out**
+window only.
+**Also:** the logo image (no alt per axe) and the unnamed link at the
+bottom right (NV4/NV10); User Name / Password labels on focus (NV6); a
+wrong password → is the error announced and does it say what to fix
+(NV12)?
+**Feedback:** _(pending)_
+
+### W64 — Calendar (S6, run R041)
+
+**Page:** top menu → Calendar.
+**Also:** the month grid — does `T` find it, do day cells read with the
+weekday/date (NV3/NV5)? The event "Chapter 5 Sample Assignment" — a link
+or plain text (NV3)? "Select All" / "Only" — announced with a name (NV3)?
+Changing month — announced (NV7)?
+**Feedback:** _(pending)_
+
+### W65 — Student Practice Area (S12, run R059)
+
+**Page:** paste `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` into the address bar (the top-menu "Practice" link opens the assignment's Practice Mode instead, which the demo does not enable — 2026-09-15).
+**Also:** Books / Chapters selects and the difficulty checkboxes — labels on
+focus (NV6, axe lists 12 unlabeled)? Choosing a book — do the chapters
+update with an announcement (NV7)?
+**Feedback:** 2026-09-15 (partial, from the W53 narration) — NV2 fail (no
+headings, uncaptioned tables), NV3 fail (expand images unnamed / not
+controls, checkboxes are spans), NV6 fail (no labels) → V-F28, V-F1, V-F5,
+V-F16. Still open: NV4 (`G`), NV5 (reading order), NV7 (choosing a book —
+announced?), NV8, NV10 (links list), NV12 (n/a if no validated input). Also
+re-check NV11 / NH1: the first practice problem says "watch the following
+brief video".
+
+### W66 — Academic Integrity Preferences (R1, run R065)
+
+**Page:** Class Menu → Academic Integrity Preferences.
+**Also:** the profile list ("Instructor Default"), the template-options
+select and the grid checkboxes — labels and states on focus (NV3/NV6,
+12 unlabeled per axe)? Changing an option — announced (NV7)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W67 — View Grades, spreadsheet view (R2, run R071)
+
+**Page:** Class Menu → View/Manage Class Grades → spreadsheet view.
+**Also:** does `T` reach the spreadsheet; do row/column headers read with
+each cell (NV3/NV5)? The "Grade Sheet - Class" link text — clear on its own
+(NV10)?
+**Feedback:** 2026-09-15 — skipped: view removed from the sample (not student-facing — reviewer's scope decision, 03 §1.1).
+
+### W68 — View Printable Assignment at 400 % and 100 % (S13, new view)
+
+**Page:** Class Management → assignment row → View Printable Assignment
+(`/Common/ViewAssignmentDetails.aspx`) — the plain HTML rendering of the
+nine problems.
+**Tell me:** the same five things as Part I (LV2 at 400 %, LV7 focus ring,
+LV9 — the same figure images as Take Assignment blur here too?, LV4/LV5
+eyedropper on anything coloured, LV6 hover/focus content). The assistant
+runs the axe sweep and the probe on it first.
+**Feedback:** 2026-09-15 — "nothing cut off, figures are still blurry, same
+contrast issues as before with the red values, no hover or focus issues" →
+LV2, LV6, LV7 pass; LV9 fail (V-F24); LV4 fail (V-F23). **Open: LV5** —
+the header links / any control at 3:1 ("same as the other pages" is enough).
+
+### W69 — View Printable Assignment with NVDA (S13, new view)
+
+**Page:** as W68, NVDA on.
+**Tell me:** the same nine things as Part J — in particular NV2 (does
+this page have headings per problem, like the Solutions page?), NV4 (the
+figures — alt or silent?), NV5 (reading order of statement, math, parts).
+**Why it matters:** if a screen-reader user can *read* every problem here,
+this page is the alternate route for T1's reading step; answering still
+needs Take Assignment.
+**Feedback:** _(pending)_
+
+### Close-out for session 3 (assistant)
+
+After each step: the run's rows and observations, Tool/Baseline set to the
+instrument used, the Result (or the outstanding row named), findings in
+`04` §B, `05` rollup, `03` enclosure if a new state appeared. Then
+`validate`, `coverage`, `review_db.py state --log`, and the dashboard §1
+should read no-vision 14/14 and low-vision 14/14.

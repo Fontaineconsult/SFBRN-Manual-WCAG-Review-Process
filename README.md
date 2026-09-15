@@ -128,6 +128,7 @@ Each review contains:
 | `01-intake.md` | Procurement and product information |
 | `02-vendor.md` | Vendor contacts and their ACR/VPAT |
 | `03-scope-and-sample.md` | WCAG-EM steps 1–3: product enclosure, conformance target, accessibility support baseline, exploration (common views, essential functionality as user stories, sample types, technologies), structured + random sample, complete processes |
+| — removing a view from the sample | append ` — removed YYYY-MM-DD: <reason>` to its name in `03` §3.1/§3.2 (never delete the row); the CLI, mirror and dashboard drop it from coverage and completion and keep its runs and findings on record |
 | `04-task-testing.md` | WCAG-EM step 4: testing clustered around tasks (user stories) — task verdicts (Pass / Pass with barriers / Fail) with findings that cite the WCAG criteria failed, plus a view sweep and random-sample comparison |
 | `05-results.md` | Per-criterion rollup of task findings for all 55 WCAG 2.2 A/AA criteria, in VPAT/ACR table structure with vendor-claim comparison |
 | `06-report.md` | **Independent verification report** (not a VPAT/ACR — see `ontology/reporting.md`): procurement decision (Approved / Needs TAAP / Denied) driven by task verdicts; RFP-comparable "At a glance" box; key findings by user impact with root causes; **vendor ACR audit** (coverage + reliability, both directions); contract-ready remediation exhibit; coverage/limitations honesty box; TAAP inputs when required. `05-results.md` remains the ACR-shaped technical appendix. |

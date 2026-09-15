@@ -235,6 +235,8 @@ look at, and what a fail looks like — so the reviewer can answer
 reviewer may also **delegate** a measured fail ("your call"); record the
 delegation in the finding's Observed cell and rate it on the measurement.
 
+**The probe measures the view as loaded.** Media, forms or timers inside a panel, tab or preview that opens on demand are invisible to it: on 2026-09-15 the reviewer found captioned YouTube embeds inside the Assignment Editor after the probe had written NH1–NH4 and NV11 as n/a "by absence" (R037, R035). A probe n/a on a media check is therefore *provisional on views with on-demand panels* — the reviewer's walk overrides it, and the assistant reopens the rows (n/a → blank, the observation marked superseded) the moment such content is reported. When probing a view with known sub-panels, open them first (`UI:` locator) or probe each state.
+
 **Wrong-view guard.** The probe refuses when the tab lands on a different
 path than requested (2026-09-11: `default2.aspx` silently redirected to
 `default.aspx` and the first attempt measured the standard page under the

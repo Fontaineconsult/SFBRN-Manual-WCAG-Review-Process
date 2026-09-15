@@ -30,7 +30,7 @@ result reasoning, narration, remarks prose, walkthrough files, screenshots).
 |---|---|---|---|
 | `01-intake.md` H1 | product name | `reviews.product` | text after "Review Intake — " |
 | `06-report.md` header table | `**Decision**` cell; `**Report status**` cell | `reviews.decision`, `reviews.report_status` | decision placeholder → `Pending` |
-| `03` §3.1 / §3.2 rows | `\| S# \| name \| locator \| represents \|`; `\| R# \| name \| locator \|` | `views` | row exists only if the name cell is non-empty; kind = structured / random |
+| `03` §3.1 / §3.2 rows | `\| S# \| name \| locator \| represents \|`; `\| R# \| name \| locator \|` | `views` | row exists only if the name cell is non-empty; kind = structured / random; `removed` = `YYYY-MM-DD: reason` when the name ends in ` — removed YYYY-MM-DD: reason` (the view stays on record but leaves the sample: C6, C7, the FPC counts, the matrix and the dashboard use `removed=''` only; integrity still recognises its runs) |
 | `04` §A `### Task T# — name — …` blocks | task id, name, `**Verdict**`, `**Baselines run**`, `**Date(s) tested**` cells | `tasks` | verdict placeholder → `Not run`; only the four fixed verdict terms count as decided |
 | `04` `#### Finding <ID>` blocks | every `\| **Label** \| value \|` row (kept whole as JSON); `Where`, `Observed`, `Affected users`, `Severity`, `Evidence` | `findings` (+ `fields_json`) | section = task if under `## A.`, else view; view = leading `S#`/`R#` of *Where*; task = `T#` prefix of the ID |
 | … `**WCAG criteria failed**` cell | every `d.d.d` token | `finding_criteria` | a finding "fails" exactly the criteria named here, nowhere else |
@@ -99,18 +99,40 @@ the review. Open every session with it; log again at the end.
 
 ## The dashboard page — `scripts/dashboard.py <review> [--open]`
 
-`reviews/<id>/<id>-dashboard.html` is `state` as a page: the definition of
-done, what moves the needle (pending walkthrough steps, `05` decisions
-waiting on a fail/partial check, tasks without a verdict, unanswered rows
-by modality, integrity issues), the 55-criterion grid coloured by `05`
-outcome (with a mark for "Not Evaluated but a check is answered"), POUR and
-508 FPC coverage, the vendor-claim comparison, the views × modalities grid
-with the **latest run of each cell** (blank-row counts in brackets), the
-findings table and the state-log history. Every run, step and stage file
-is a relative link, so opened from the review folder it is the reviewer's
-map of the review. Added 2026-09-14 at the reviewer's request ("we really
-need some sort of dashboard, that pulls from the database, that helps me
-stay oriented").
+`reviews/<id>/<id>-dashboard.html` is the reviewer's map of the review,
+built from the database. It answers three questions, in this order
+(redesigned 2026-09-15 at the reviewer's request — the first version "was
+very cluttered and didn't tell me what I need to know"):
+
+1. **508 FPC — did we test every view for each modality?** One row per
+   functional performance criterion (302.1 … 302.9, one row per modality):
+   views tested / views sampled as a bar, check rows answered / blank /
+   failing, and the **views still owed** by name (linked to the run when
+   one is logged without a Result, "not run" otherwise). A view counts as
+   tested for a modality when its latest run under that modality has a
+   Result (Works / Works with issues / Broken / N/A).
+2. **Views — what are we tracking, and is each one complete?** One row per
+   sampled view (03 §3.1): the page in words (linked to its locator), the
+   sweep run with its triage count (W1–W3 answered), one cell per modality
+   with the latest run's Result as a glyph (blank-row count on a run with
+   no Result), **done n/8** — seven modality cells with a Result plus a
+   triaged sweep — and the live findings recorded on the view.
+3. **WCAG 2.2 AA — what passes and what fails?** Headline counts (passing
+   = Supports; failing = Partially Supports or Does Not Support; not
+   applicable; undecided, split into *decision needed* — a failing check
+   row with no `05` outcome — *undecided with evidence*, and *untested*),
+   then per principle a table of the 55 criteria: outcome (with
+   "(provisional)" when the `05` remark says so), the findings rolled up
+   under it, the check evidence (answered / failing rows), and the
+   vendor's claim with worse / same / better.
+
+Then **Next** — pending walkthrough steps, `05` decisions waiting on a
+failing check, task walks without a verdict — and, folded under
+`<details>`, the definition of done, the findings table, the vendor
+delta, integrity, runs with blank rows and the state-log history. Every
+run, step and stage file is a relative link. The console `state` command
+keeps its own denser layout; the page is for orientation, `state` for
+the session log.
 
 Rules: it is **derived from the database exactly as the database is derived
 from the files** — `review_db.py sync` regenerates it (so `validate`,

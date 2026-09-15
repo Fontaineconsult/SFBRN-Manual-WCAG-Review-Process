@@ -52,6 +52,7 @@ Format:
 
 - O2 [measured] (state: view as loaded, 2026-09-11 view_probe): no <video>, media iframe or embed on the view
   - Classified: NV11 / WCAG 1.2.3, 1.2.5 / measured → n/a
+- O3 [new] (state: Calendar, September 2026, NVDA, 2026-09-15, reviewer, during W47): "table desc doesn't expose that this is a calendar, T will find the table" — the month grid is a plain table with no caption or accessible name saying it is the calendar; `T` reaches it, but nothing announces what it is. To classify under NV2/NV3 on the full NVDA pass (W64): what does NVDA say on entering the table, and do day cells read with their weekday header?
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): document.title = "Calendar" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk)
   - Classified: NV1 / WCAG 2.4.2 / measured → pass
 - O4 [measured] (state: view as loaded, 2026-09-11 view_probe): <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists)

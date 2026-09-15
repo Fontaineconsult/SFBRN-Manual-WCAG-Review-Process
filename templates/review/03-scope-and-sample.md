@@ -138,6 +138,13 @@ Must reflect **all** of: common views (2.1), essential functionality (2.2),
 sample types (2.3), technologies relied upon (2.4), and other relevant samples
 (2.5). One sample may represent several of these — record what it represents.
 
+**Removing a view from the sample later** (a scope decision by the reviewer,
+e.g. "instructor-only views are out"): append ` — removed YYYY-MM-DD: <reason>`
+to the view's name cell. Never delete the row — IDs are stable and the view's
+runs and findings stay on record. The CLI, the SQLite mirror, coverage,
+completion and the dashboard exclude removed views from the sample counts and
+list them separately; record the decision in §1.1 *Exclusions* as well.
+
 | ID | View / screen | Location / path | Represents (C/F/type/tech/A refs) |
 |----|---------------|-----------------|-----------------------------------|
 | S1 | | | |

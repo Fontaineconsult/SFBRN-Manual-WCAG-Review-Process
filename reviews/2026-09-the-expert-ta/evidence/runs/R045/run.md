@@ -11,7 +11,7 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — MO1, MO2, MO3, MO4, MO5, MO6, MO7, MO8, MO11 need the reviewer (keyboard, B2) |
+| **Result** | Not set — MO1 (the grid and the event bar take no focus — O4, confirm), MO2, MO3, MO4, MO5, MO6, MO7, MO8, MO11 need the reviewer (keyboard, B2) |
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -54,6 +54,7 @@ Format:
   - Classified: MO9 / WCAG 2.5.8 / measured → pass
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): no devicemotion/deviceorientation use in scripts (11 inline + 33 external scripts scanned, 1 unreadable)
   - Classified: MO10 / WCAG 2.5.4 / measured → n/a
+- O4 [new] (state: Calendar, September 2026, keyboard, 2026-09-15, reviewer, during W47): "keyboard tabbing it appears the calendar itself isn't reachable" — Tab moves through the class filter, prev / next / today, but no day cell and not the "Chapter 5 Sample Assignment" event bar takes focus. To confirm for MO1 (W64 keyboard part): does Tab ever land on the event bar or a day, and does Enter on the event do anything with the mouse (if the event is a link to the assignment, its keyboard unreachability is a 2.1.1 fail)?
 
 ## Notes
 

@@ -507,15 +507,31 @@ def vendor_claims(review):
     return claims
 
 
-def sample_views(review):
+REMOVED_RE = re.compile(r"—\s*removed\s+(\d{4}-\d{2}-\d{2})\s*(?::\s*(.*))?$", re.I)
+
+
+def sample_views(review, include_removed=False):
     """Return [(id, name)] for sampled views (S#/R# rows with a view name)
-    from 03-scope-and-sample.md."""
+    from 03-scope-and-sample.md. A row whose name ends in
+    " — removed YYYY-MM-DD: <reason>" has been taken out of the sample
+    (its ID, runs and findings stay on record) and is skipped unless
+    include_removed is set."""
     text = read(review / STAGES[2])
     views = []
     for m in re.finditer(r"(?m)^\|\s*([SR]\d+)\s*\|\s*([^|]*?)\s*\|", text):
-        if m.group(2):
+        if m.group(2) and (include_removed or not REMOVED_RE.search(m.group(2))):
             views.append((m.group(1), m.group(2)))
     return views
+
+
+def removed_views(review):
+    """[(id, name, date, reason)] for views taken out of the sample."""
+    out = []
+    for vid, name in sample_views(review, include_removed=True):
+        m = REMOVED_RE.search(name)
+        if m:
+            out.append((vid, name[:m.start()].rstrip(), m.group(1), (m.group(2) or "").strip()))
+    return out
 
 
 def frontmatter(text):
@@ -693,11 +709,14 @@ def cmd_gaps(args):
     is what a reviewer session actually works through.
     """
     review = resolve(args.review)
+    removed = {v.lower() for v, _, _, _ in removed_views(review)}
     rows = []
     for d in run_dirs(review):
         meta = run_meta(d)
         if args.view and meta["view"].lower() != args.view.lower():
             continue
+        if not args.view and meta["view"].lower() in removed:
+            continue  # out of the sample — ask for it explicitly with --view
         txt = read(d / "run.md")
         checks = re.findall(
             r"^\|\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*—\s*(.+?)\s*\|(.*?)\|",
@@ -818,7 +837,7 @@ def cmd_matrix(args):
     gaps = sum(1 for row in grid for c in row["cells"].values()
                if c["result"] == "Not run")
     data = {"review": review.name, "modalities": REQUIRED_MODALITIES,
-            "views": grid, "gaps": gaps,
+            "views": grid, "gaps": gaps, "removed": removed_views(review),
             "note": None if views else
             "No sampled views (S#/R# rows with names) defined in 03 §3.1/§3.2 yet."}
 
@@ -841,6 +860,9 @@ def cmd_matrix(args):
             print(f"{label:<{wv}}  {cells}")
         print(f"\n{d['gaps']} view×modality cell(s) not yet run "
               f"({len(d['views'])} views × {len(d['modalities'])} modalities).")
+        if d["removed"]:
+            print("Removed from the sample (kept on record): "
+                  + "; ".join(f"{v} {n} ({dt}: {r})" if r else f"{v} {n} ({dt})" for v, n, dt, r in d["removed"]))
 
     emit(data, args.json, text)
 

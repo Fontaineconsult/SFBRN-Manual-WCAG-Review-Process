@@ -115,3 +115,11 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R109 | 2026-09-11 15:57 | S3 | https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
 | R110 | 2026-09-11 15:57 | S8 | https://dei56mo.theexpertta.com/Common/ViewAssignmentSolutionsV2.aspx?z=1&vmid=1&eid=3373&aid=17547 | no-color | probe | — | — | assistant (view_probe) |
 | R111 | 2026-09-11 15:58 | S2 | UI: Class Management → "Accessibility Page" button (lands on /common/default2.aspx) | no-color | probe | — | — | assistant (view_probe) |
+| R112 | 2026-09-15 13:06 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | — | axe | — | — | — |
+| R113 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | no-vision | probe | — | — | assistant (view_probe) |
+| R114 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | low-vision | probe | — | — | assistant (view_probe) |
+| R115 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | no-hearing | probe | — | — | assistant (view_probe) |
+| R116 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | no-speech | probe | — | — | assistant (view_probe) |
+| R117 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | motor | probe | — | — | assistant (view_probe) |
+| R118 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | cognition | probe | — | — | assistant (view_probe) |
+| R119 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | no-color | probe | — | — | assistant (view_probe) |

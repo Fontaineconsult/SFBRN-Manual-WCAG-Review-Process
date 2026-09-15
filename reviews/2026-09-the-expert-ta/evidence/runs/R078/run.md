@@ -8,10 +8,10 @@
 | **Page URL / location** | https://dei56mo.theexpertta.com/Common/eClass.aspx?m=2&eid=3373 |
 | **Task / process** | — |
 | **Modality** | low-vision |
-| **Tool** | probe |
-| **Baseline** | — |
+| **Tool** | probe; zoom (reviewer, W46 aside) |
+| **Baseline** | B3 |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — LV2, LV4, LV5, LV6, LV7, LV9 need the reviewer (zoom, B3); measured fail on LV1 awaits confirmation |
+| **Result** | Not set — LV4, LV5, LV6, LV7, LV9 need the reviewer (W52); LV1 fail (V-F19), LV2 fail (V-F25) |
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -28,7 +28,7 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | LV1 — At 400% zoom content reflows to one column — no two-dimensional scrolling (except exempt content such as data tables, canvases, maps) | fail | O2 — at 320 CSS px scrollWidth = 589 (two-dimensional scrolling); non-exempt overflow: table right=589; tbody right=589; tr right=589; td right=589; table right=589; tbody right=589; tr right=589; td right=589; tr right=589; td right=589; table#ASPxRoundPanel2 right=589; tbody right=589 (measured) |
-| LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | | |
+| LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | fail | O5 — above 175 % zoom the popup's off-screen part cannot be scrolled to: the page will not scroll while the modal is active (reviewer) → V-F25 |
 | LV3 — The view tolerates text-spacing overrides without loss | pass | O3 — text-spacing override (line 1.5, letter 0.12 em, word 0.16 em, paragraph 2 em) applied: no newly clipped text container (measured; 0 container(s) were already clipped before the override) |
 | LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | | |
 | LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | |
@@ -54,6 +54,8 @@ Format:
   - Classified: LV3 / WCAG 1.4.12 / measured → pass
 - O4 [measured] (state: view as loaded, 2026-09-11 view_probe): no orientation media query and no screen.orientation.lock use (31 inline + 26 external scripts scanned) — content is not restricted to one orientation
   - Classified: LV8 / WCAG 1.3.4 / measured → pass
+- O5 [classified] (state: Class Management → Class Menu → Edit Class → Go, browser zoom above 175 %, 2026-09-15, reviewer, noted during W46): "Edit class modal is not reachable when zoomed passed 175, we can't scroll the page when it is active." — the popup is fixed at 589 px and the page behind it is scroll-locked while it is open, so at 200 % and beyond the part of the form (and its Save / Cancel) outside the viewport cannot be reached at all.
+  - Classified: LV2 / WCAG 1.4.10, 1.4.4 / Major (Blocker for the popup alone — assistant's rating, reviewer to confirm) → finding V-F25
 
 ## Notes
 
@@ -68,4 +70,4 @@ Conventions: ontology/testing-tools.md.)
 
 ## Findings raised from this run
 
-- (finding IDs recorded in 04-task-testing.md, or "none")
+- V-F25 (1.4.4, 1.4.10 — popup unreachable above 175 % zoom; recorded under S11 in 04 §B); V-F19 (1.4.10, recorded under S1)

@@ -34,16 +34,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-14 S1: the grids' expand controls are clickable images with no text alternative (V-F16). [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy.
 
 ### 1.2.1 Audio-only and Video-only (Prerecorded) (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Not Applicable (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-15 by the assistant; reviewer confirms] No audio-only or video-only prerecorded media in the sample: the probe found no media on 14 views as loaded, and the media the reviewer found (YouTube embeds in the Assignment Editor, R037 O6) are synchronized video with audio, which is 1.2.2/1.2.3/1.2.5.
 
 ### 1.2.2 Captions (Prerecorded) (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F26 (Major)
+- **Remarks:** The only prerecorded video in the sample — YouTube embeds in the expanding area under Library on the Assignment Editor — has captions, but they are YouTube auto-generated (reviewer, 2026-09-15; R037 O6, NH1 partial). Captions exist for every video seen, hence Partially rather than Does Not Support. Vendor-claim discrepancy.
 
 ### 1.2.3 Audio Description or Media Alternative (Prerecorded) (Level A)
 - **Outcome:** Not Evaluated
@@ -54,7 +54,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.3.1 Info and Relationships (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13
+- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13, V-F28
 - **Remarks:** 2026-09-14 S1 confirmed with NVDA (R015): no headings/landmarks, grids told apart by position, editors unlabelled — V-F1, V-F2, V-F7 now stand on both Class Management pages. [provisional — S1 and S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
@@ -76,15 +76,15 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 1.4.2 Audio Control (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Not Applicable (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-15 by the assistant] No audio plays automatically anywhere in the sample: the only media found (YouTube embeds under Library on the Assignment Editor, an instructor view now outside the sample) "do not autoplay" (reviewer, 2026-09-15; R037 O6), and the probe found no media on the student-facing views.
 
 ### 2.1.1 Keyboard (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F3 (Minor)
+- **Task findings:** T1-F3 (Minor), V-F28 (Blocker for the Student Practice Area — 2026-09-15; outcome to be re-rated by the reviewer: a student-facing page whose content is unreachable by keyboard argues for Does Not Support)
 - **Remarks:** Reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version, so the standard page's mouse-only row menu is a barrier, not a task stop — Partially Supports. In standard mode the assignment row's action menu — the only route to Take Assignment, View Grade Report and the other row actions — opens by mouse click only; nothing in the row is focusable and no key opens it (R015 O10). The Accessibility Mode page provides an operable Actions select + Go (R016 O13), so the functionality is reachable only after switching modes. Elsewhere the keyboard holds: on Take Assignment every widget exercised (symbol palette, keypad, drag-and-drop alternative form, free-body diagram) was operable without a mouse (R017 O20–O21, R018). Vendor-claim discrepancy.
 
 ### 2.1.2 No Keyboard Trap (Level A)
@@ -210,7 +210,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16
+- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F28
 - **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). Pending confirmation: unnamed answer radios (R004 O1), unnamed jump-point buttons (R001 O2), unlabeled DevExpress editors on the instructor pages. Vendor-claim discrepancy.
 
 ---
@@ -218,10 +218,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 ## Table 2: Success Criteria, Level AA
 
 ### 1.2.4 Captions (Live) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Not Applicable (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-15 by the assistant] No live audio or video in the product (NH2 n/a on every view; the discovered embeds are prerecorded).
 
 ### 1.2.5 Audio Description (Prerecorded) (Level AA)
 - **Outcome:** Not Evaluated
@@ -242,40 +242,40 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-14: the sign-in "User Name:" field carries no `autocomplete` token (measured, R098 O3); the reviewer confirms there is no app-specific autocomplete and that Chrome's password manager still fills the field, hence Minor. No other field in the sample collects the user's own data (the instructor pages hold class and assignment data). Vendor-claim discrepancy.
 
 ### 1.4.3 Contrast (Minimum) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F23 (Major), V-F24 (Major — text inside the Problem 1 and 6 figure images)
+- **Remarks:** Most body text and controls pass; the product's section-heading and caption colours (orange `#EFBB75` 1.74:1, `#E58F65` 2.48:1, `#DB715C` 3.21:1, teal `#48848C` 4.23:1), its grey 12 px notice text (`#808080` 3.94:1) and the coloured values students act on (deduction % `#FF9900` 2.14:1; red variable/MathJax values 2.94–3.99:1) fall below 4.5:1. Confirmed by eyedropper on Class Management 2026-09-15 (R019 O6); axe measured the same colours on 11 of 14 views; the remaining pages are confirmed one by one in walkthrough W43–W55. Vendor-claim discrepancy.
 
 ### 1.4.4 Resize Text (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F25 (Major)
+- **Remarks:** Text resizes to 400 % without loss on Class Management (both modes), Take Assignment, View Grade Report and the Assignment Editor (LV2 pass, reviewer 2026-09-15). The Class Menu popups do not: above 175 % zoom the Edit Class popup's lower part and its Save / Cancel are unreachable because the page is scroll-locked behind the modal (R078 O5). Vendor-claim discrepancy.
 
 ### 1.4.5 Images of Text (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F24 (Major)
+- **Remarks:** The problem figures on Take Assignment (and the same images on the solutions and printable views) are raster images containing mathematical text that blurs at 400 % zoom (R083 O6, reviewer 2026-09-15: "the blurry images do contain text, usually math"); the image form is not essential — the page renders its other mathematics as MathJax text. Confirmed again on View Grade Report, which repeats the figures (R030 O5). Class Management, both modes, has no images of text (R019, R024 LV9 pass). Vendor-claim discrepancy.
 
 ### 1.4.10 Reflow (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Does Not Support
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F19 (Major), V-F25 (Major — the Edit Class popup is unreachable above 175 % zoom)
+- **Remarks:** Product-wide: a fixed 1300 px container on every sampled page, so nothing reflows at 320 CSS px / 400 % zoom (LV1 measured fail on all 14 low-vision runs, 2026-09-11; reviewer confirmed at real 400 % zoom on Class Management and Take Assignment, 2026-09-15: "nothing is hidden or lost at 400%, but no reflow"). Content is not lost (LV2 pass on S1, S3), which is why the finding is Major rather than Blocker; the failure is the two-dimensional scrolling itself, which 1.4.10 forbids for non-exempt content. Vendor-claim discrepancy.
 
 ### 1.4.11 Non-text Contrast (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F27 (Minor)
+- **Remarks:** Controls pass 3:1 on Class Management (both modes), Take Assignment and the Assignment Editor (LV5 pass, reviewer eyedropper 2026-09-15). On View Grade Report the grade tables' cell borders and on the Calendar the month grid's lines fall below 3:1 (R030 O8, R042 O8). Vendor-claim discrepancy.
 
 ### 1.4.12 Text Spacing (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** The probe measured newly clipping containers under the override on four views (Class Management both modes: the assignment row's date cells lose their AM/PM and the "Weight" header a letter; Take Assignment: the assignment-code box empties; Calendar: a scrollbar covers half of each Saturday date) — photographed in `R019-textspacing-5.png`, `R083-textspacing-2.png`, `R042-textspacing-1.png`. The reviewer looked and ruled 2026-09-15: "no issues noted with text spacing" — not rated a loss of content or functionality. Ten views tolerate the override outright. Recorded as Supports on that ruling; the measurements stay in the runs (O3/O9 on R019, O3/O7 on R083, O3/O5 on R042, O3 on R024) should the ruling be revisited.
 
 ### 1.4.13 Content on Hover or Focus (Level AA)
 - **Outcome:** Not Evaluated
@@ -296,16 +296,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional — drafted 2026-09-14 by the assistant from the reviewer's 2026-09-10 narration; reviewer confirms at walkthrough W36] 2.4.6 requires that headings and labels *which exist* describe topic or purpose; it does not require headings. The sample has no programmatic headings at all (NV2 fail on R016, R017) — that is rolled up under 1.3.1 (V-F1, T1-F1) and 2.4.1. The visible section captions ("Classes", "Class Menu", "Class Assignments", "Class News"), the popup form labels (S11) and the assignment-editor labels are descriptive where present; the missing *association* of those labels is 1.3.1 / 3.3.2 / 4.1.2 (V-F5, V-F7, V-F13), not 2.4.6. Skip-control wording (V-F3) is rolled up under 2.4.4.
 
 ### 2.4.7 Focus Visible (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F28
+- **Remarks:** Focus is visible on every Tab stop of Take Assignment (R018, keyboard) and at 400 % zoom on Class Management, Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, 2026-09-15). On the Student Practice Area "tabbing focus is lost outside of the initial buttons and dropdowns" (R063 O4) — focus goes nowhere visible once the grid should take it. Vendor-claim discrepancy.
 
 ### 2.4.11 Focus Not Obscured (Minimum) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
+- **Outcome:** Supports (provisional)
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:**
+- **Remarks:** [provisional — drafted 2026-09-15 by the assistant; reviewer confirms] Nothing sticky or floating hides the focused element: at 400 % zoom the focus ring stayed visible and unobscured on Class Management (both modes), Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, reviewer). The MO4 fail on the Student Practice Area (R063 O4, V-F28) is focus being *absent* on unfocusable content — a 2.4.7 / 2.1.1 defect, not an obscured indicator.
 
 ### 2.5.7 Dragging Movements (Level AA)
 - **Outcome:** Not Evaluated

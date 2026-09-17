@@ -17,7 +17,8 @@ Checks (testing-tools.md §axe-core, in that order):
   3. port answers                      — http://127.0.0.1:9222/json/version
   4. the page tab is authenticated     — no tab on a sign-in host/path or titled "Sign in"/"Login"
   5. zero persistent chrome-extension:// targets — polled twice, 10 s apart, because
-     Chrome briefly lists two built-in component workers right after launch
+     Chrome's own component extensions (persistent on 153) are allowed;
+     a STORE extension running is a failure -- it falsifies measurement
 
 Exit 0 when every check passes, 1 otherwise. The script never signs in: a
 sign-in tab is reported as the reviewer's next action.
@@ -44,7 +45,24 @@ PROFILES = {
 }
 SIGNIN_URL = re.compile(r"(^|[./])(login|signin|sign-in|auth|sso|ims)([./:?]|$)", re.I)
 SIGNIN_TITLE = re.compile(r"\b(sign ?in|log ?in|login)\b", re.I)
-BUILTIN_EXT = {"admccjkmockfdflocgggjfgdacdodkdf", "fignfifoniblkonapihmkfakmlgkbkcf"}
+# Chrome ships component extensions (Gemini in Chrome, Google Network Speech,
+# Chrome PDF Viewer, Google Hangouts ...) that --disable-extensions cannot
+# switch off; on Chrome 153 their service workers are PERSISTENT targets, so a
+# "zero chrome-extension:// targets" rule can never pass (2026-09-17). They are
+# harmless: they inject no stylesheet and no DOM node into the page.
+# What IS dangerous is a STORE extension actually running -- Stylus falsifies
+# contrast, SkipTo Landmarks adds the skip link 2.4.1 is about. The two classes
+# are told apart by where the code lives: a store extension is unpacked under
+# <profile>/Default/Extensions/<id>, a Chrome-bundled one never is (it sits in
+# the Chrome install directory). That test needs no ID list and does not rot
+# when Chrome adds a component.
+def store_extension_ids(profile_dir: str) -> set:
+    """IDs unpacked in this profile -- i.e. installed from the store/policy."""
+    d = os.path.join(profile_dir, "Default", "Extensions")
+    try:
+        return {n for n in os.listdir(d) if os.path.isdir(os.path.join(d, n))}
+    except OSError:
+        return set()
 
 
 def ok(label: str, detail: str = "") -> None:
@@ -150,21 +168,27 @@ def check_port(port: int, do_launch: bool, url: str) -> bool:
     def ext_targets(ts):
         return [x for x in ts if x.get("url", "").startswith("chrome-extension://")]
 
+    installed = store_extension_ids(profile_dir)
     ext = ext_targets(t)
-    if ext:
-        # Chrome briefly lists two built-in component workers right after launch.
-        ids = {x["url"].split("/")[2] for x in ext}
-        if ids <= BUILTIN_EXT:
-            print("  ...   built-in component workers listed; polling again in 10 s")
-            time.sleep(10)
-            ext = ext_targets(targets())
-    if ext:
-        bad("persistent chrome-extension:// targets — launched without --disable-extensions; "
-            "relaunch, and treat anything measured in this window as suspect",
-            "; ".join(x["url"][:70] for x in ext))
+    live = {x["url"].split("/")[2] for x in ext}
+    running_store = sorted(live & installed)
+    if running_store:
+        bad("STORE extensions are running — they falsify measurement (Stylus: contrast; "
+            "SkipTo/Landmark Navigation: the skip link and landmarks 2.4.1 and 1.3.1 are about); "
+            "relaunch with --disable-extensions and discard anything measured in this window",
+            "; ".join(running_store))
         passed = False
+    elif ext:
+        ok(f"no store extension running ({len(live)} Chrome-bundled component(s) only)",
+           ", ".join(sorted(live)))
     else:
         ok("zero chrome-extension:// targets")
+    # The profile can still HOLD store extensions that the flag is suppressing.
+    # Silence would invite the next launch to drop the flag (2026-08-14: 22 of
+    # them synced in, including Stylus and SkipTo Landmarks).
+    if installed:
+        print(f"  ...   {len(installed)} store extension(s) unpacked in this profile but not "
+              f"running; they stay inert ONLY while --disable-extensions is used")
     return passed
 
 

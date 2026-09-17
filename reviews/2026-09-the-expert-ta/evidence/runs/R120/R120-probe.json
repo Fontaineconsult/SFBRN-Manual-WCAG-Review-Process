@@ -1,0 +1,59 @@
+{
+ "view": "S7",
+ "locator": "https://login.theexpertta.com/Login.aspx",
+ "probed_at": "2026-09-17",
+ "grayscale": {
+  "screenshot": "R120-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 6,
+   "colorOnly": [
+    {
+     "label": "(e-mail reset) → /ResetPassword.aspx",
+     "contrast": 1.7,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    },
+    {
+     "label": "contact us → https://theexpertta.com/contact-us/",
+     "contrast": 4.42,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    },
+    {
+     "label": "View detailed information →  https://theexpertta.com/system-requirements/",
+     "contrast": 4.42,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    },
+    {
+     "label": "here → http://theexpertta.com/support/instructor-support/",
+     "contrast": 4.42,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    },
+    {
+     "label": "here → http://theexpertta.com/support/support-faqs/",
+     "contrast": 4.42,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    },
+    {
+     "label": "here → http://theexpertta.com/support/student-support/",
+     "contrast": 4.42,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    }
+   ],
+   "failing": [
+    {
+     "label": "(e-mail reset) → /ResetPassword.aspx",
+     "contrast": 1.7,
+     "hover": "a:hover",
+     "focus": "focus: outline"
+    }
+   ],
+   "unreadableSheets": 0
+  }
+ }
+}

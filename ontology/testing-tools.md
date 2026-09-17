@@ -92,21 +92,42 @@ in this order:
 3. The target tab is **authenticated**, not the IMS sign-in page — check
    `http://localhost:9222/json` for a tab titled "Sign in" or a
    `auth.services.adobe.com` / `adobelogin.com` URL.
-4. **No extension is live in the profile:** `http://localhost:9222/json`
-   must list **zero** `chrome-extension://` targets. If it lists any, the
-   window was launched without `--disable-extensions` — relaunch before
-   scanning, and treat anything already measured in that window as
-   suspect. To date the extension set and its install times: the folder
-   mtimes under `…\sfbrn-a11y-chrome\Default\Extensions` say when each
-   arrived, which is how you tell contaminated runs from clean ones.
-   **Timing (learned 2026-09-11):** poll `/json` at least ~10 s after
-   launch. In the first few seconds Chrome 152 briefly lists two
-   `chrome-extension://…/service_worker.js` targets that are Chrome's own
-   built-in component extensions (IDs `admccjkmockfdflocgggjfgdacdodkdf`,
-   `fignfifoniblkonapihmkfakmlgkbkcf`; not present under
-   `Default\Extensions`); they spin down on their own and a second poll
-   shows zero. Only a *persistent* `chrome-extension://` target means the
-   flag was missing.
+4. **No _store_ extension is live in the profile.** The test is not "zero
+   `chrome-extension://` targets" — that rule was written in 2026-09-11
+   against Chrome 152, where the browser's own component workers spun down
+   after a few seconds. **On Chrome 153 they are persistent** (2026-09-17:
+   Gemini in Chrome `admccjkmockfdflocgggjfgdacdodkdf`, Google Network
+   Speech `fignfifoniblkonapihmkfakmlgkbkcf`, Google Hangouts
+   `nkeimhogjdpnpccoofpliimaahmaaome`, Chrome PDF Viewer
+   `mhjfbmdgcfjbbpaeojofohoefgiehjai`), so the old rule can never pass and
+   would block every measuring session. `--disable-extensions` cannot switch
+   them off, and they are harmless: measured on the product page, they inject
+   no stylesheet and no DOM node.
+
+   **Tell the two classes apart by where the code lives**, not by an ID list
+   that rots with each Chrome release:
+
+   | | store / policy extension | Chrome-bundled component |
+   |---|---|---|
+   | unpacked under `<profile>\Default\Extensions\<id>` | **yes** | no |
+   | `location` in `Secure Preferences` | 1 | 5 |
+   | code path | the profile | `…\Chrome\Application\<ver>esources\` |
+   | `--disable-extensions` stops it | yes | **no** |
+   | verdict | **FAIL — discard the window** | fine, name it and go on |
+
+   A store extension *running* is the failure: **Stylus** falsifies contrast,
+   **SkipTo Landmarks** and **Landmark Navigation** add the very skip link and
+   landmarks 2.4.1 and 1.3.1 are about, **HeadingsMap** reports headings the
+   AT cannot reach. Relaunch with `--disable-extensions` and treat anything
+   already measured in that window as suspect.
+
+   **The profile still _holds_ them.** On 2026-09-17 the review profile had
+   **21** store extensions unpacked — the 2026-08-14 sync residue, Stylus and
+   SkipTo Landmarks among them. They are inert *only* while the launch carries
+   `--disable-extensions`; pre-flight prints the count as a standing reminder,
+   because the danger is the next launch that drops the flag. Folder mtimes
+   under `…\sfbrn-a11y-chrome\Default\Extensions` say when each arrived,
+   which is how you tell contaminated runs from clean ones.
 
 `python scripts/preflight.py` runs 1–4 in one call (`--launch --url <product
 home>` starts the browser with the full flag set when the port is dead;

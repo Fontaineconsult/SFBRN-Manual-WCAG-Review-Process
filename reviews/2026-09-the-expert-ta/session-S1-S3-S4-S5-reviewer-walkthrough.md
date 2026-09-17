@@ -1433,6 +1433,40 @@ this page is the alternate route for T1's reading step; answering still
 needs Take Assignment.
 **Feedback:** _(pending)_
 
+## 2026-09-17 — Session 4 opening (assistant, no reviewer yet)
+
+**Done without you:** the last no-color cell the instrument could reach —
+the **sign-in page** (run R120, measured in the signed-out window on port
+9223, so your session was never touched). That completes the probe's share
+of no-color and motor: every page now has NC2 measured and MO9/MO10
+measured. Everything still blank in those two modalities needs your eyes
+(NC1, NC3) or your hands (MO1-MO8, MO11).
+
+**Before anything else:** the debug-profile Chrome on port 9222 is sitting
+on `login.theexpertta.com` — the shared session has expired again. **Sign in
+there** (the assistant never authenticates); until then no page behind the
+login can be measured or walked.
+
+### W70 — Is the password-reset link recognisable as a link? (sign-in page; feeds 1.4.1 with W41)
+
+**Page:** the Expert TA **sign-in page**,
+`https://login.theexpertta.com/Login.aspx` — the page you land on when
+signed out. No zoom, no screen reader, normal window.
+**Look at:** the sentence under the User Name / Password fields that offers
+a password reset — the "(e-mail reset)" link inside it.
+**What the instrument says:** that link is **1.7:1 against the text around
+it** — below the 3:1 the technique needs — and carries no underline, border
+or weight of its own until you hover it (underline) or focus it (outline).
+The other five colour-only links on the page measure at or above 3:1 and do
+pass.
+**Tell me:** with the mouse away from it, can you tell that "(e-mail reset)"
+is a link rather than ordinary text? "Confirmed" = you cannot; or name what
+marks it that I have not measured.
+**Why it matters:** this and W41 are the only open 1.4.1 evidence; both
+answered, `05` 1.4.1 can be decided and the review's last integrity flag
+clears. **KEY STEP**
+**Feedback:** _(pending)_
+
 ### Close-out for session 3 (assistant)
 
 After each step: the run's rows and observations, Tool/Baseline set to the

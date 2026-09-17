@@ -110,12 +110,17 @@ a false Major finding.
    never yours. The checks, for when you need to do one by hand — they rot
    silently between sessions (dead on 2026-08-06 and again on 2026-09-14
    having worked the session before):
-   - `python -c "import websocket"` — `axe_scan.py`'s dependency; the repo
-     has no manifest, so a machine change or Python upgrade loses it.
-     Fix: `python -m pip install websocket-client`.
+   - `python -c "import websocket"` — `axe_scan.py`'s dependency; a machine
+     change or Python upgrade loses it.
+     Fix: `python -m pip install -r requirements.txt` (added 2026-09-15;
+     `websocket-client` for the CDP clients, `python-docx` for the export).
    - `%LOCALAPPDATA%\sfbrn-a11y-chrome` exists **and** port 9222 answers
-     **and** the tab is authenticated **and** `/json` lists **zero
-     `chrome-extension://` targets** — see testing-tools.md §axe-core.
+     **and** the tab is authenticated **and** no **store** extension is
+     running — Chrome's own component workers are persistent on Chrome 153
+     and are fine; a `chrome-extension://` target whose ID is unpacked under
+     the profile's `Default\Extensions` is not (that profile still holds 21
+     of them, Stylus and SkipTo Landmarks included, inert only while
+     `--disable-extensions` is passed) — see testing-tools.md §axe-core.
      The profile can vanish; SSO usually re-authenticates it silently, so
      check rather than asking the reviewer to sign in. Launch it only
      with the full flag set in that doc: without `--disable-extensions

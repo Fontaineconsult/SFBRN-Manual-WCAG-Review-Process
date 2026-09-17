@@ -1467,6 +1467,32 @@ answered, `05` 1.4.1 can be decided and the review's last integrity flag
 clears. **KEY STEP**
 **Feedback:** _(pending)_
 
+### W71 — The silent 8th Tab stop on every page (confirms V-F29's severity)
+
+**Page:** **Class Management in standard mode** —
+`https://dei56mo.theexpertta.com/common/default.aspx`, the page you land on
+after signing in (the button top-right reads "Accessibility Page"). NVDA on,
+normal window, no zoom.
+**Do:** click once in the address bar, then press **Tab eight times** to walk
+into the page from the top. Stops 1–7 are: the hidden instruction text,
+theExpertTA.com, My Account, Log Out, Class Management, Instructor, Help.
+**Look at stop 8** — the focus ring lands on the Expert TA **logo** at the
+top-left.
+**What the instrument says:** that logo is a link that still takes Tab focus,
+but it sits inside `aria-hidden="true"`, so the screen reader should be given
+nothing at all there — not even the image's alt text, "The Expert TA".
+Measured 2026-09-17 with real key presses (R001 O11); it is on every
+signed-in page, and it is why your NVDA links list came back empty on this
+page (R015 O13).
+**Tell me:** (a) at stop 8, what does NVDA say — nothing, or something?
+(b) Severity: I have it at **Minor** — one silent stop, early in the order,
+and pressing Enter there leaves the app for the vendor's marketing site. Does
+that match how disruptive it feels, or is it worse than Minor?
+**Why it matters:** this is the last open item from the S1 and S3 sweep
+triage; your answer settles V-F29's rating. Everything else those two sweeps
+reported is now either a confirmed finding or dismissed with a reason.
+**Feedback:** _(pending)_
+
 ### Close-out for session 3 (assistant)
 
 After each step: the run's rows and observations, Tool/Baseline set to the

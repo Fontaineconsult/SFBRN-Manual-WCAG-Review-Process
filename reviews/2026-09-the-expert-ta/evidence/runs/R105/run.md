@@ -28,10 +28,12 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
-| NC2 — Links are distinguishable from surrounding text without color | pass | O2 — all 3 link(s) in running text carry a non-colour cue (underline/border/weight) — measured |
+| NC2 — Links are distinguishable from surrounding text without color | n/a | O3 — no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-17; replaces the earlier resting-state measurement) |
 | NC3 — Everything remains operable and understandable in grayscale | | |
 
 **view_probe 2026-09-11:** answered NC2=pass by measurement; facts in `R105-probe.json`.
+
+**view_probe 2026-09-17:** answered NC2=n/a by measurement; facts in `R105-probe.json`.
 
 ## Observations
 
@@ -44,6 +46,9 @@ Format:
 
 - O2 [measured] (state: view as loaded, 2026-09-11 view_probe): all 3 link(s) in running text carry a non-colour cue (underline/border/weight) — measured
   - Classified: NC2 / WCAG 1.4.1 / measured → pass
+
+- O3 [measured] (state: view as loaded, 2026-09-17 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-17; replaces the earlier resting-state measurement)
+  - Classified: NC2 / WCAG 1.4.1 / measured → n/a
 
 ## Notes
 

@@ -183,7 +183,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R015, 2026-09-14 — NV7/NV10 open); axe (R001); probe runs R019–R023 |
 | **Date tested** | 2026-09-14 |
-| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) |
+| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe); V-F29 (product-wide, recorded here) |
 
 #### Finding V-F19
 
@@ -228,6 +228,17 @@ differently.
 | **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
 | **Severity** | Minor |
 | **Evidence** | R015 O11; R022 O2 (the same glyphs measured at 9×10 px for 2.5.8); R059 O3 (S12, 2026-09-15: the sections grid's expand image — `alt="[Collapse]"`, onclick, no role, not focusable) |
+
+#### Finding V-F29
+
+| | |
+|---|---|
+| **Where** | Product-wide on every signed-in page — the header logo link (`<a href="http://theexpertta.com/">` wrapping `ETA_LogoForWeb_White.png`), measured on S1 Class Management (standard mode). It is the **8th Tab stop** from the top of the page. |
+| **Observed** | The logo link sits inside `aria-hidden="true"` but is still in the keyboard tab order. Measured 2026-09-17 with real dispatched Tab keys from the top of the document (R001 O11): stop 1 the hidden instruction div, 2 theExpertTA.com, 3 My Account, 4 Log Out, 5 Class Management, 6 Instructor, 7 Help, **8 the aria-hidden logo link**. A keyboard user lands on it and can activate it — it leaves the application for the vendor's marketing site. A screen-reader user is given nothing at that stop: because the whole subtree is `aria-hidden`, even the image's `alt="The Expert TA"` is suppressed. That is why the reviewer's NVDA links list came back empty on this page (R015 O13) — the only link in the header region is hidden from the AT while remaining focusable. axe flagged it as `aria-hidden-focus` on every view swept (R001 O3, PW-C). |
+| **Affected users** | Screen reader users (a silent stop that still navigates away from the app when activated); keyboard-only users (an unlabelled stop with no visible purpose) |
+| **WCAG criteria failed** | 4.1.2 (a focusable control with no exposed name or role) |
+| **Severity** | Minor (proposed 2026-09-17 — one stop, early in the order, and the destination is harmless; the reviewer confirms or overrules at W71) |
+| **Evidence** | R001 O3 (axe `aria-hidden-focus`), R001 O11 (tab-order measurement); R015 O13 (NVDA links list empty) |
 
 ### View S2 — Class Management, Accessibility Mode
 

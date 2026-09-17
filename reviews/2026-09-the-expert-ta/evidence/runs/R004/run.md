@@ -11,7 +11,9 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-17, triage closed. Every axe violation is now a confirmed finding (V-F1, V-F8, V-F9, V-F11, V-F14, V-F18, V-F23) or dismissed with a written reason, and every `incomplete` is answered by the run it was routed to. "Works with issues" describes the **sweep**, not the page — the page is Broken without vision (R017). The sweep penetrated for HTML structure (W3), but it is blind to the two things that decide this view: MathML content and the answer widgets' behaviour. Both were settled by the reviewer's NVDA walk, not by axe.
 
 ## Checks (axe sweep)
 
@@ -20,9 +22,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O9 recorded (Problem 9 state) plus O10–O13 from the three extra-state scans; reviewer to confirm/dismiss |
-| W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O14 (problem-navigator link contrast 4.35:1 on #F5F5F5, 24 nodes) → low-vision run, eyedropper; O15 (`detailed view` link-in-text-block) → no-color run; P1 state: `empty-table-header` ×5 on the force table → no-vision run (are the FBD table headers announced?) |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Cross-check with the JAWS walk of S3: axe sees 0 headings / 0 landmarks; MathML is present (MathMLMath nodes) — axe does not inspect MathML content, so the math read-out is JAWS-only |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O13, closed 2026-09-17 against the walks that have since happened: O1→V-F11, O2→V-F18, O4/O10→V-F23, O5→V-F8, O6→V-F1, O9→V-F9, O12→V-F14 (all confirmed by the reviewer on R017/R083); O3 dismissed (announced to nobody — R017 O8); O7, O8 dismissed as informational; O13 routed to the motor run (R018) |
+| W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | pass | All three routed and answered. O14 (navigator link contrast) → low-vision R083 O9, folded into **V-F23**; O15 (`detailed view` link-in-text-block) → no-color R109, **n/a** — the link is not inside running text (re-measured 2026-09-14 under the G183 rule); O11 (`empty-table-header` ×5 on the force table) → no-vision R017 O20, **dismissed: the headers are announced in use** and the reviewer calls the force-table read-back "quite robust" |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked 2026-09-10 against the **NVDA** walk (R017 — the reviewer's own AT; no JAWS walk of S3 exists): axe sees 0 headings / 0 landmarks and NVDA finds none either (R017 O1), so the structure output stands. Recorded blind spots, not counted as passes: axe does not inspect **MathML** content (the math read-out is AT-only — R017 O7, V-F9) and reports nothing about the **answer widgets' behaviour** (drag-and-drop placements V-F14, hint insertion V-F15 — all AT-only). Zero axe findings on those is not evidence |
 
 ## Observations
 
@@ -43,35 +45,35 @@ Product-wide items seen on every signed-in view (first recorded in R001; not rep
 - **PW-G** DevExpress check boxes / list boxes carry a hidden `input type=text readonly style="opacity:0"` state field (`_S` / `_KBS` ids) that axe flags under `label`. Whether it is focusable (and therefore a real unlabeled stop) is a keyboard-run question; propose treating it as one issue product-wide, not per field.
 
 - O1 [new] (state: Take Assignment, Problem 9 multiple choice active): axe `label` (critical) — all five `input type=radio name="choicegroup"` answer options have no label/title/ARIA name. Matches the exploration AX-tree probe (5 unnamed radios on P9, 6 on P8). The option text (MathJax + text) sits in adjacent cells.
-  - Proposed: W1 / WCAG 1.3.1 + 4.1.2 (A) / **Blocker for no-vision on multiple-choice parts** — a screen-reader user cannot tell which radio is which — confirm with JAWS on P8/P9 → finding
+  - Classified: W1 / WCAG 1.3.1, 4.1.2 / Major, **Blocker for parts whose options contain math** → **V-F11**, confirmed 2026-09-10 by the reviewer's NVDA walk (R017 O6/O9: the radios carry no name and an option is identified only by its table position, "row 4 table 1")
 - O2 [new] (state: as O1): axe `html-has-lang` (serious) — `<html>` has no `lang` (Class Management has `lang="en"`; this page and several others do not).
-  - Proposed: W1 / WCAG 3.1.1 (A) / Minor — product-wide inconsistency; confirm → one finding listing the affected views (S3, S7, S11)
+  - Classified: W1 / WCAG 3.1.1 / Minor → **V-F18**, recorded 2026-09-14 on the reviewer's delegation ("your call"); one finding lists all three affected views (S3, S7, S11) against the eleven that declare `en`
 - O3 [new] (state: as O1): axe `image-alt` (critical) — `img src="https://cdn.theexpertta.com/ai/cmt/sig.gif?tid=…"` 0×1 px tracking/signature images with no alt (2 on P9; up to 5 on P1). Invisible; decorative.
-  - Proposed: W1 / WCAG 1.1.1 (A) / Minor — confirm whether JAWS announces "graphic sig" inside the problem statement; if silent, dismiss as no user impact but still a technical failure
+  - dismissed 2026-09-17: **announced to nobody**. The condition the proposal set was met — R017 O8 reports that `G` (next graphic) finds **no** graphic anywhere on the view, so the 0×1 px `sig.gif` tracking images are silent to the screen reader. A technical 1.1.1 failure with no user impact; not raised. (The real 1.1.1 defect on this view is the opposite case — the informative problem figure that is also hidden, V-F24/R017 O8.)
 - O4 [new] (state: as O1): axe `color-contrast` (serious), opaque white background resolved: hint/feedback/submission deduction percentages "4%", "5%", "25" in `#FF9900` on white = **2.14:1** at 13 px.
-  - Proposed: W1 / WCAG 1.4.3 (AA) / Major (these numbers tell the student what a hint costs) — confirm by eyedropper → finding
+  - Classified: W1 / WCAG 1.4.3 / Major → **V-F23**, confirmed 2026-09-15 (R083 O9: the reviewer's low-vision pass carries the deduction percentages at 2.14:1 under V-F23)
 - O5 [new] (state: as O1): `aria-command-name` — 4 unnamed jump-point buttons on this view (top of page, problems, problem statement, current part) (PW-B).
-  - Proposed: fold into the PW-B finding after the JAWS run establishes what is announced on focus
+  - Classified: W1 / WCAG 4.1.2 → folded into **V-F8**, confirmed 2026-09-10 (R017 O2: the jump point announces its instruction text, not a control name)
 - O6 [new] (state: as O1): `region` — 17 content nodes outside landmarks incl. `#probSelectorsList` (the problem navigator) (PW-D).
-  - Proposed: fold into structure finding
+  - Classified: W1 / WCAG 1.3.1 supporting evidence → folded into **V-F1**, confirmed 2026-09-10 (R017 O1: no headings, and after activating a problem there is no structural route to it)
 - O7 [new] (state: as O1): no `select-name`/`button-name` violations — Submit / Hint / Feedback / I give up carry `title`s that axe accepts as names; problem-navigator links carry `aria-label="Problem N Click To Activate"`.
   - dismissed: informational (names exist; whether "Click To Activate" is a good name is a JAWS-run judgement)
 - O8 [new] (state: as O1): passes 31 / inapplicable 52 in `R004-axe.json`.
   - dismissed: informational
 - O9 [new] (state: as O1): the `#calc-announce` live region and `role=alert` container produce no axe output (no `aria-prohibited-attr`, no `aria-allowed-role`) — their behaviour is a JAWS question (4.1.3).
-  - Proposed: route to no-vision run on S3
+  - Classified: routed and answered → R017 O3/O4. `Ctrl+Shift+5` works; `Ctrl+Shift+2` reads raw MathJax markup for math answers → **V-F9**. The live region's behaviour was an AT question and axe was right to say nothing
 - O10 [new] (state: Problem 1 — free-body diagram + equation parts, `R004-axe-p1-fbd-equation.json`): `color-contrast` ×9 — randomized-variable values (`span.variable`, `#FF6347` "tomato" on white = **2.94:1**, on #F5F5F5 = 2.70:1) at 12 px bold; part identifiers "Part (b)/(c)/(d)" (`#3A7C89` on #F5F5F5, 4.35:1 — below 4.5:1); deduction percentages (2.14:1). Also `aria-command-name` ×7 (one jump point per part) and `image-alt` ×5 (sig.gif).
-  - Proposed: W1 / WCAG 1.4.3 (AA) / Major — the red variable values are the numbers a student must use in the calculation — confirm by eyedropper → finding (same colour token appears on S4 and S8)
+  - Classified: W1 / WCAG 1.4.3 / Major → **V-F23**, confirmed 2026-09-15 (R083 O9 carries the red variable values at 2.94:1 and the navigator numbers at 4.35:1 under V-F23; the same colour token on S4 and S8 is covered by the same finding)
 - O11 [new] (state: Problem 1): **incomplete** `empty-table-header` ×5 on the FBD force table (`#forceHeader` "Force Name", "Angle", "Adjust Angle", "Adjust Length", "Delete") — axe considers the header text possibly empty because of how the cells are built.
-  - Proposed: W2 → no-vision run on S3 P1: does JAWS read the column headers in the force table?
+  - dismissed 2026-09-17 → **R017 O20**: with NVDA and keyboard only, Add Force, setting angle and length **through the force table**, the `Ctrl+Shift+3` read-back and Submit all succeeded — the headers are announced in use. axe's `empty-table-header` was an artefact of how the cells are built
 - O12 [new] (state: Problem 3 — drag-and-drop ranking, `R004-axe-p3-dragdrop.json`): 8 rule violations, all product-wide (PW-A…D) plus `image-alt` ×2 (sig.gif) and `color-contrast` ×2 (deduction percentages). **axe reports nothing about the draggable cards themselves** — their four `img`s had empty alt in exploration (decorative per axe) although each card is the answer content (a labelled block diagram).
-  - Proposed: route to the no-vision run: what does JAWS announce for each draggable card, and does the Ctrl+Shift+3 "unmatched items" read-out substitute for image alt? (1.1.1 / 4.1.2)
+  - Classified: routed and answered → **V-F14** (R017 O19: placements are not announced; Minor, "not unusable" — reviewer). On the alt question: R017 O18 found the accessible alternative form, whose Item picker options **are** text descriptions of the cards, so the card content is available by another route and the empty alt on the visual cards is not raised separately
 - O13 [new] (state: Problem 4 — numeric parts with keypad, `R004-axe-p4-numeric-keypad.json`): 8 rule violations, product-wide plus `image-alt` ×3 (sig.gif) and `color-contrast` ×4. The ~45 keypad `<button>`s are **not** flagged (they have text or titles).
-  - Proposed: keypad tab-order question stays with the motor run (see 03 §2.6)
+  - Classified: routed → motor run **R018** (10 of 11 rows answered). R017 O20–O21 record every widget on this view — symbol palette, keypad, drag-and-drop alternative form, free-body diagram — as operable without a mouse
 - O14 [new] (state: all four states): **incomplete** `color-contrast` ×20–25 — mostly the nine problem-navigator links (`#3A7C89` on `#F5F5F5` = **4.35:1**, computed but flagged incomplete because of overlap) and MathJax glyphs (`nonBmp`, `shortTextContent`).
-  - Proposed: W2 → low-vision run: eyedropper the navigator links (likely a real 1.4.3 miss by a small margin) and one MathJax expression
+  - Classified: W2, answered → R083 O9: the navigator numbers (4.35:1) are carried under **V-F23**; the reviewer's own low-vision fail on this view is the text **inside the figure images** (LV4/LV9 → V-F24), which no automated contrast check can reach
 - O15 [new] (state: all states): **incomplete** `link-in-text-block` — the "detailed view" link in the submission-history line.
-  - Proposed: W2 → no-color run on S3
+  - Classified: W2, answered → no-color **R109**: NC2 **n/a**. Re-measured 2026-09-14 under the G183 rule — the "detailed view" link is not inside running text (its parent has no sentence around it), so 1.4.1 has nothing to judge here
 
 ## Notes
 
@@ -93,4 +95,6 @@ Contrast numbers quoted come with an opaque ancestor background resolved (reliab
 
 ## Findings raised from this run
 
-- none yet — every observation above awaits reviewer confirmation (W1)
+- No new finding is raised by this sweep. Every violation it reported is evidenced by a finding the reviewer confirmed on the walks: **V-F1** (O6), **V-F8** (O5), **V-F9** (O9), **V-F11** (O1), **V-F14** (O12), **V-F18** (O2), **V-F23** (O4, O10, O14).
+- Dismissed with reasons: O3 (`sig.gif` — silent to the AT, no user impact), O7 and O8 (informational), O11 (`empty-table-header` — headers announced in use, R017 O20).
+- Routed: O13 → R018 (motor), O15 → R109 (no-color, n/a).

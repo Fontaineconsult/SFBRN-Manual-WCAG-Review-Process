@@ -1,13 +1,15 @@
 {
  "view": "S12",
  "locator": "https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373",
- "probed_at": "2026-09-11",
+ "probed_at": "2026-09-17",
  "grayscale": {
   "screenshot": "R105-grayscale.png",
   "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
   "link_cues": {
-   "inText": 3,
-   "colorOnly": []
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 0
   }
  }
 }

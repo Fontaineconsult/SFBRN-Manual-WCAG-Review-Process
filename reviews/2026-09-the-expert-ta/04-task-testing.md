@@ -516,6 +516,60 @@ differently.
 | **Severity** | Blocker for this view's purpose (proposed 2026-09-21 — a student cannot read their own graded work here by any means. Reviewer to confirm the rating; it is what turns "navigable with effort" into a Broken result.) |
 | **Evidence** | R029 O8 (reviewer + measurement); R007 `R007-axe.json` (`image-alt`) |
 
+### View S6 — Calendar
+
+| | |
+|---|---|
+| **Baselines run** | B5 NVDA (R041, 2026-09-21 — reviewer, complete); axe (R008); probe runs R042–R046; zoom (R042, 2026-09-15 — reviewer); grayscale (R102, Broken) |
+| **Date tested** | 2026-09-15 (zoom), 2026-09-21 (NVDA, grayscale) |
+| **Findings** | V-F38; V-F39; V-F40; V-F41; V-F1 applies here (one heading only); V-F31 (the event bar without colour); V-F23, V-F19 |
+
+**Both sensory routes lose the same fact.** The no-color pass found the event bar failing "totally" (R102 O3) and the no-vision pass found the assignment's span and end date unannounced (R041 O9). A calendar's job is to say *when* something is due; on this view that is carried by the bar's colour and its visual extent, and by nothing else.
+
+#### Finding V-F38
+
+| | |
+|---|---|
+| **Where** | Calendar (S6) — the month grid and the assignment events inside it |
+| **Observed** | Reviewer with NVDA, 2026-09-21: **"there is no way to tab into the calendar, T enters calendar as its a table … calendar has to be naved as a table."** Measured: the event is a `div` with `tabIndex = -1`, no `href`, no `role`, and nothing else in the grid takes focus. It is announced as the assignment name plus **"clickable"** — a state, not a role — on an element that cannot be focused, so what a screen-reader user hears is an invitation the keyboard cannot accept. A screen-reader user reaches the content by table navigation; a **keyboard-only user without a screen reader has no route into the grid at all**, and no way to open an event. Third instance of the same pattern in this product, after the row action menu (T1-F3) and the grade-profile "view" control (V-F32): behaviour attached to an element that was never made focusable. |
+| **Affected users** | Keyboard-only users without a screen reader; switch and speech-input users |
+| **WCAG criteria failed** | 2.1.1 (functionality not operable from a keyboard); 4.1.2 (clickable announced without a role, on a non-focusable element) |
+| **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
+| **Evidence** | R041 O7, O8 (reviewer + measurement) |
+
+#### Finding V-F39
+
+| | |
+|---|---|
+| **Where** | Calendar (S6) — the assignment event: its start is a cell, its span and end date are the coloured bar |
+| **Observed** | Reviewer with NVDA, 2026-09-21: **"when we enter the cell where the assignment starts, we hear the assignment name 'clickable' but we dont hear that the assignment spans or ends on the 8th."** Measured: the event's text sits in the **single** day cell where it begins, while the bar that carries the range is a visual element spanning the others. So a screen-reader user learns that an assignment exists on the 1st and nothing about when it is due; a colour-blind user loses the bar too (V-F31, R102 O3 — "fails totally"). The due date is the reason the page exists, and it is the one fact conveyed by presentation alone. The event modal does hold the dates, but reaching it requires a mouse (V-F38) and it announces nothing when it opens (V-F40). |
+| **Affected users** | Screen reader users; users with colour vision deficiency; anyone on a monochrome or low-quality display |
+| **WCAG criteria failed** | 1.3.1 (information conveyed by presentation and not programmatically available) |
+| **Severity** | Major (proposed 2026-09-21 — reviewer to confirm; a case for Blocker exists, since due dates are the view's whole purpose) |
+| **Evidence** | R041 O7, O9 (reviewer + measurement); R102 O3 (the same fact lost without colour) |
+
+#### Finding V-F40
+
+| | |
+|---|---|
+| **Where** | Calendar (S6) — opening an event's modal, and changing the displayed month |
+| **Observed** | Reviewer with NVDA, 2026-09-21: **"if we click the assignment a modal opens, no annoncement on open … month change not announced."** Measured the same day, and the cause is structural rather than a timing artefact: the view carries **no `role="dialog"`, no `aria-modal`, and zero `aria-live`, `role=status` or `role=alert` regions anywhere**. There is no mechanism by which either change could be announced. A screen-reader user clicks an event and the page appears to do nothing; they change month and the grid silently becomes a different month under a reading position that did not move. |
+| **Affected users** | Screen reader users; users with attention or memory disabilities who rely on being told what changed |
+| **WCAG criteria failed** | 4.1.3 (status messages not programmatically determinable); 2.4.3 in combination, for the modal that takes no focus |
+| **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
+| **Evidence** | R041 O9, O10 (reviewer + measurement) |
+
+#### Finding V-F41
+
+| | |
+|---|---|
+| **Where** | Calendar (S6) — the event detail modal: its title field, and the start / due / end dates; also the two filter checkboxes on the page behind it |
+| **Observed** | Reviewer with NVDA, 2026-09-21: **"the modal looks like a form but is not, the form fielnds are not labled, there is a start due end date, but they are calendar selection widget and not actually just info on the assignment."** Two defects, and the second is the more interesting. **Unlabelled:** measured, the modal's `#modal-title` is an `input type="text"` that is neither read-only nor disabled, with no `label`, no `aria-label` and no `title`; the page's two filter checkboxes (`#classFilter-3373`, `#hlpCheckbox`) have no naming mechanism either. **Mis-typed:** the assignment's dates are presented as date-picker widgets although they are information the student cannot change. A screen-reader user is told they are sitting in an editable date control and must work out that there is nothing to edit — the role actively misdescribes the content. |
+| **Affected users** | Screen reader users; speech-input users (no names to speak); users with cognitive disabilities (controls that invite input they cannot make) |
+| **WCAG criteria failed** | 3.3.2 (no labels for fields); 4.1.2 (role does not match the content's nature); 1.3.1 |
+| **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
+| **Evidence** | R041 O6, O9, O10 (reviewer + measurement) |
+
 ### View S8 — View Assignment Solutions
 
 | | |

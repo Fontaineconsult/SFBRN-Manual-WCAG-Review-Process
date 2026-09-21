@@ -1532,7 +1532,24 @@ wrong password → is the error announced and does it say what to fix
 weekday/date (NV3/NV5)? The event "Chapter 5 Sample Assignment" — a link
 or plain text (NV3)? "Select All" / "Only" — announced with a name (NV3)?
 Changing month — announced (NV7)?
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — **R041 complete, Result Broken.** *"there is no way
+to tab into the calendar, T enters calendar as its a table … the assignment is
+not announced as spanning multiple days … we hear the assignment name
+'clickable' but we dont hear that the assignment spans or ends on the 8th … if
+we click the assignment a modal opens, no annoncement on open, the modal looks
+like a form but is not, the form fielnds are not labled, there is a start due
+end date, but they are calendar selection widget and not actually just info on
+the assignment … month change not announced."*
+Four findings: **V-F38** (no keyboard route into the grid; the event announces
+"clickable" but has `tabIndex -1`), **V-F39** (the span and end date are
+carried by the bar alone), **V-F40** (nothing announced — measured cause: no
+`role=dialog`, no `aria-modal`, **zero** live regions on the page), **V-F41**
+(unlabelled modal field, and read-only dates rendered as date pickers).
+**Both sensory routes lose the same fact:** you found the bar failing
+"totally" without colour, and the span unannounced without sight. A calendar
+exists to say *when* something is due, and that is the one thing this one
+conveys by presentation only. NV4, NV5, NV10 pass; NV12 n/a on your ruling
+that the modal is not really a form.
 
 ### W65 — Student Practice Area (S12, run R059)
 

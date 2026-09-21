@@ -54,7 +54,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.3.1 Info and Relationships (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13, V-F30 (Minor), V-F28, V-F37 (Minor)
+- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13, V-F30 (Minor), V-F28, V-F37 (Minor), V-F39 (Major), V-F41 (Major)
 - **Remarks:** 2026-09-14 S1 confirmed with NVDA (R015): no headings/landmarks, grids told apart by position, editors unlabelled — V-F1, V-F2, V-F7 now stand on both Class Management pages. [provisional — S1 and S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
@@ -85,7 +85,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.1.1 Keyboard (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F3 (Minor), V-F32 (Minor), V-F28 (Blocker for the Student Practice Area — 2026-09-15; outcome to be re-rated by the reviewer: a student-facing page whose content is unreachable by keyboard argues for Does Not Support)
+- **Task findings:** T1-F3 (Minor), V-F32 (Minor), V-F28 (Blocker for the Student Practice Area — 2026-09-15; outcome to be re-rated by the reviewer: a student-facing page whose content is unreachable by keyboard argues for Does Not Support), V-F38 (Major)
 - **Remarks:** Reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version, so the standard page's mouse-only row menu is a barrier, not a task stop — Partially Supports. In standard mode the assignment row's action menu — the only route to Take Assignment, View Grade Report and the other row actions — opens by mouse click only; nothing in the row is focusable and no key opens it (R015 O10). The Accessibility Mode page provides an operable Actions select + Go (R016 O13), so the functionality is reachable only after switching modes. 2026-09-21 adds a second unreachable control in the **same grid**: the "view" link opening the grade profile is an `<a>` with no `href`, absent from a full 41-stop tab cycle, yet listed and activatable in NVDA's links view (V-F32) — so the keyboard-only user without a screen reader is worse off than the screen-reader user, an inversion worth naming in the report. Elsewhere the keyboard holds: on Take Assignment every widget exercised (symbol palette, keypad, drag-and-drop alternative form, free-body diagram) was operable without a mouse (R017 O20–O21, R018). Vendor-claim discrepancy.
 
 ### 2.1.2 No Keyboard Trap (Level A)
@@ -133,7 +133,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.4.3 Focus Order (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F2, V-F8, V-F13, V-F15
+- **Task findings:** T1-F2, V-F8, V-F13, V-F15, V-F40 (Major)
 - **Remarks:** [provisional] 2026-09-10 NVDA on S3: activating a problem link does not move focus into the problem; the vendor's jump-point menu mounts links outside the natural focus path and is itself a hidden tab stop. Vendor-claim discrepancy.
 
 ### 2.4.4 Link Purpose (In Context) (Level A)
@@ -199,7 +199,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 3.3.2 Labels or Instructions (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F5, V-F13, V-F30 (Minor)
+- **Task findings:** V-F5, V-F13, V-F30 (Minor), V-F41 (Major)
 - **Remarks:** 2026-09-21: **NV6 now fails on every sampled view that has form fields** — S1, S2, S3, S12 and S14 (R015, R016, R017, R059, R121). The pattern is one mechanism: the application lays its forms out in tables and lets the surrounding table text stand in for a label, so the screen reader announces context rather than a name. Newest instance is the password-reset user-name field (V-F30), where the reviewer's ruling is that the table read-out does carry the meaning — "accessible, but not best practice" — which is why the criterion stays **Partially Supports** rather than dropping to Does Not Support: in each case a name of some sort reaches the user, just not the visible label. Earlier, [provisional] 2026-09-10 S11 popup forms: labels are unassociated table-cell text. Instructor pages show the same (axe R006 59 fields, unconfirmed — those views left the sample 2026-09-15).
 
 ### 3.3.7 Redundant Entry (Level A)
@@ -211,7 +211,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F30, V-F32, V-F33, V-F28
+- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F30, V-F32, V-F33, V-F28, V-F38, V-F41
 - **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). 2026-09-17, sweep triage closed on S1 and S3 (R001, R004): the unnamed answer radios are confirmed (V-F11, R017 O6/O9) and the unnamed jump-point buttons are confirmed (V-F8, R015 O9 / R017 O2) — both were the outstanding items here. **V-F29 was raised here on 2026-09-17 and withdrawn on 2026-09-21**: the header logo link is focusable inside `aria-hidden`, but the reviewer's NVDA announces it in full at that stop ("The ExperTa graphic visited link"), so name, role and state are exposed and 4.1.2 is not failed by it. It survives as an advisory only. Also 2026-09-21, the grade report: 22 help links whose entire text is `[?]` compute an empty name, so NVDA announces only "Visited Link" (V-F33). Added 2026-09-21: the grade-profile "view" control is an `<a>` with no `href` — NVDA lists it as a link and can activate it, the tab order never reaches it (V-F32), so the same element is a link to one user and nothing to another. Still open: unlabeled DevExpress editors on the instructor pages — those views were removed from the sample 2026-09-15, so they stay unconfirmed and are reported as instructor-facing. Vendor-claim discrepancy.
 
 ---
@@ -359,5 +359,5 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.3 Status Messages (Level AA)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F9, V-F14 (Minor), V-F15
+- **Task findings:** V-F9, V-F14 (Minor), V-F15, V-F40 (Major)
 - **Remarks:** [provisional] 2026-09-10 NVDA on S3: the instruction read-out (Ctrl+Shift+5) is announced correctly via the alert region; the answer read-out (Ctrl+Shift+2) injects raw MathJax markup for math-bearing options, so the status message is unusable; on the drag-and-drop alternative form, placements are not announced and the read-back runs items together. Submission-result dialogs are announced correctly (R017 O10, O14). Vendor-claim discrepancy.

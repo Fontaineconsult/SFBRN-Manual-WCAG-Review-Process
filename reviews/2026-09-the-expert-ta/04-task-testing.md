@@ -185,7 +185,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R015, 2026-09-14 — NV7/NV10 open); axe (R001); probe runs R019–R023 |
 | **Date tested** | 2026-09-14 |
-| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) (V-F29 withdrawn 2026-09-21 — advisory); V-F31 (product-wide, recorded here) |
+| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) (V-F29 withdrawn 2026-09-21 — advisory); V-F31 (product-wide, recorded here); V-F32 |
 
 #### Finding V-F19
 
@@ -241,6 +241,17 @@ differently.
 | **WCAG criteria failed** | none (withdrawn — NVDA announces name, role and state) |
 | **Severity** | — (advisory; overruled by the reviewer at W71, 2026-09-21) |
 | **Evidence** | R015 O14 (reviewer, NVDA 2026-09-21 — the announcement that withdrew it); R001 O3 (axe `aria-hidden-focus`), R001 O11 (tab-order measurement) |
+
+#### Finding V-F32
+
+| | |
+|---|---|
+| **Where** | Class Management, standard mode (S1) — the **"view"** control in the Class Assignments grid, in the cell reading "Instructor Default" (it opens the assignment's grade profile: `LaunchGradeProfile(17547, 'Instructor Default')`) |
+| **Observed** | Found by the reviewer with NVDA, 2026-09-21: *"I see a 'view' link that is in the Class Assignments Table that is out of the tab order but is reachable via NVDA links view."* Measured the same day and confirmed. The control is `<a class="actionMenu" onclick="LaunchGradeProfile(…)">view</a>` with **no `href`** — an anchor that is not a link, carrying its behaviour on a click handler. A full tab cycle was walked with real dispatched Tab keys: **41 stops, then the order wraps to the top, and this control is never focused.** The result is an unusual inversion — a **screen-reader user can reach and activate it** from NVDA's links list, while a **sighted keyboard-only user cannot reach it at all**, and neither can a speech-input user who says "click view". It also sits at x⁈1887, outside the product's 1300 px container, so a mouse user has to scroll horizontally to see it (V-F19). This is the second control in this one grid that the keyboard cannot reach; the row action menu (T1-F3) is the first. |
+| **Affected users** | Keyboard-only users without a screen reader; speech-input users; switch users — the people for whom the AT links-list route does not exist |
+| **Severity** | Minor (proposed 2026-09-21 — the target is an informational grade-profile popup, not a task step, and screen-reader users do have a route. Reviewer to confirm; it is Level A, so a case for Major exists if the grade profile is something a student needs.) |
+| **WCAG criteria failed** | 2.1.1 (functionality not operable from a keyboard interface); 4.1.2 (an `<a>` with no `href` is not exposed as a link consistently — NVDA lists it, the tab order does not) |
+| **Evidence** | R015 O17 (reviewer + tab-cycle measurement); R001 (the same `actionMenu` class as the row menu of T1-F3) |
 
 ### View S2 — Class Management, Accessibility Mode
 

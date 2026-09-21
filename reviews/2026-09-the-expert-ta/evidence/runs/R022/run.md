@@ -37,7 +37,7 @@ run's Result is set. Fails cite observation IDs.
 | MO8 — Pointer actions can be cancelled (up-event activation) | | |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O2 — 2 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): img.dxGridView_gvDetailCollapsedButton "" 9×10 px next to div#divActionMenu17547.actionMenu "⋮"; div#divActionMenu17547.actionMenu "⋮" 16×16 px next to img.dxGridView_gvDetailCollapsedButton "" Reviewer 2026-09-14: confirmed — "no other way found" on this page for the ⋮ menu / expand glyph → finding V-F21. |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (57 inline + 51 external scripts scanned, 1 unreadable) |
-| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |
+| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | fail | O4 — reviewer 2026-09-21: the first Tab stop **is** reachable and Enter **does** respond, but all it does is swap the instruction text for a **"no shortcuts"** message; no focus move, no menu, no skip. A mechanism that announces it has nothing to offer is not a bypass → supports V-F8 and 2.4.1 |
 
 **view_probe 2026-09-11:** answered MO9=fail, MO10=n/a by measurement; facts in `R022-probe.json`.
 
@@ -54,6 +54,9 @@ Format:
   - Classified: MO9 / WCAG 2.5.8 / measured → fail → reviewer 2026-09-14: confirmed → V-F21
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): no devicemotion/deviceorientation use in scripts (57 inline + 51 external scripts scanned, 1 unreadable)
   - Classified: MO10 / WCAG 2.5.4 / measured → n/a
+
+- O4 [clarified] (state: Class Management standard mode, first Tab stop — the visually hidden accessibility-instruction div — Enter pressed, reviewer 2026-09-21 — step W72): **"When pressing enter, the accessibility instructions change to a 'no shortcuts' text, no other actions."** The jump point is keyboard-operable, so it is not an inert control; what it is not is a bypass. On Take Assignment the same pattern mounts a shortcuts menu after Enter (R017, V-F8); on this page it answers that there are none, and focus does not move. This closes the question R015 O9 routed here on 2026-09-14 — the only routed item in the review that had never landed (found by the 2026-09-21 recording audit).
+  - Classified: MO11 / WCAG 2.4.1 / fail — folded into **V-F8**; no new finding
 
 ## Notes
 

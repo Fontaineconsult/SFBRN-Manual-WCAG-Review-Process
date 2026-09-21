@@ -426,13 +426,28 @@ announce; and whether "late" submissions are identified in words or only by
 red text (also NC1, W29).
 **Why it matters:** R007 — this is the page where the jump-point pattern is
 at its densest, and where lateness is conveyed by colour.
-**Feedback:** 2026-09-21 — **not answerable: the demo account holds no graded
-work.** Reviewer: "there are no grades to view in the test account." The page
-itself loads and has been swept and zoomed (R007, R029, R100), but with no
-score, no feedback and no late submission there is nothing for the jump
-points, the per-part tables or the red "late" convention to read. Recorded as
-a coverage limitation in `03` §1.1 and against task **T5**, not as a pass.
-Closing it needs a seeded graded assignment from the vendor or the campus.
+**Feedback:** **Reopened 2026-09-21 — the assistant got this wrong.** It was
+first closed as "not answerable, the account has no graded work", from your
+"there are no grades to view in the test account". You have since clarified
+that you meant the **gradebook**, not this page. Measuring the grade report
+found it fully populated — 1120 text elements, the formula
+`Student Grade = 100 - 100 - 9 = 0%`, 14 dated submissions, part-level late
+notices — so every part of this step has something to read. The coverage
+limitation has been withdrawn from `03` §1.1 and task **T5** is no longer
+marked blocked.
+
+**One of the five questions is already answered** (R100 O7): lateness is
+stated **in words** at part level — "Late submissions were made on this
+part…" — and by **red date-time alone** at individual-submission level, under
+the page's own legend "Red submission date times indicate late work". So the
+answer to "in words or only by red?" is *both, at different levels* → V-F31.
+
+**Still open, and this is the last no-vision step on a populated page:** with
+NVDA on — how you find your problem's score; what the **32 jump-point
+buttons** sound like when tabbing (help or noise); whether the per-part
+submission tables read as tables, headers announced with cells, now that they
+contain rows; and what the blue **[?]** links announce. → W57 covers the same
+page; do them together.
 
 ### W22 — Instructor side: class grade sheet (P5 step 4) (NV3, NV5)
 

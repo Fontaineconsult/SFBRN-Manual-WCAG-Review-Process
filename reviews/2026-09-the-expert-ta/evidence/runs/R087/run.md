@@ -8,7 +8,7 @@
 | **Page URL / location** | https://dei56mo.theexpertta.com/Common/ViewAssignmentSolutionsV2.aspx?z=1&vmid=1&eid=3373&aid=17547 |
 | **Task / process** | — |
 | **Modality** | no-vision |
-| **Tool** | probe |
+| **Tool** | probe; nvda (reviewer, W58) |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
 | **Result** | Not set — NV2, NV3, NV4, NV5, NV6, NV7, NV8, NV10 need the reviewer (jaws, B1) |
@@ -28,17 +28,17 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | pass | O3 — document.title = "View Assignment Solutions" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk) |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | pass | O5 — reviewer 2026-09-21: **"headings work"**. Measured: 10 headings, `h1` for the assignment and one `h2` per problem ("Problem 1 - 5.3.5(iFBD)" …). **The only view in the sample with a real heading outline** — the counter-example that shows the product can do it |
 | NV3 — Every control announces an accurate name, role, and value/state | | |
-| NV4 — Images announce appropriate alternatives; decorative images are silent | | |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | fail | O6 — "graphics have no meaningful alt text, just random characters are announced". Measured: 14 of 15 images carry **no `alt` attribute at all**, so NVDA falls back to the file name (`zbrvxxz3.j3f.png`) — the "random characters". **7 of them show why**: the markup is `src="/images/….png alt="` — an `alt=` swallowed into the `src` by a missing quote → V-F35 |
 | NV5 — Reading order matches the meaning of the visual order | | |
-| NV6 — Form fields announce labels and instructions; errors are announced and identified | | |
+| NV6 — Form fields announce labels and instructions; errors are announced and identified | n/a | O7 — measured 2026-09-21: no visible input, select or textarea on the view; it is a read-only solutions page |
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
 | NV8 — Nothing is conveyed only by visual position, shape, or size | | |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | O4 — <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists) |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
-| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | | (row added 2026-09-14 by sync-checks — not part of the original session; answer or mark n/a) |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | n/a | O7 — measured: no form fields, so no validated input to submit |
 **view_probe 2026-09-11:** answered NV11=n/a, NV1=pass, NV9=pass by measurement; facts in `R087-probe.json`.
 
 ## Observations
@@ -56,6 +56,13 @@ Format:
   - Classified: NV1 / WCAG 2.4.2 / measured → pass
 - O4 [measured] (state: view as loaded, 2026-09-11 view_probe): <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists)
   - Classified: NV9 / WCAG 3.1.1, 3.1.2 / measured → pass
+
+- O5 [clarified] (state: View Assignment Solutions, NVDA, reviewer 2026-09-21 — step W58): **"headings work"**, and **"math expressions on this page voice as expected"**. Measured alongside: 10 real headings (`h1` + one `h2` per problem) and 402 MathJax nodes. Both matter as counter-examples rather than defects. This is the **only** view in the sample with a heading outline, so V-F1's recommendation is not a request for something the vendor has never done — it is a request to do elsewhere what it already does here. And the math reading contrasts with Take Assignment: the MathJax itself is fine in browse mode (V-F10 was withdrawn on that basis); what fails there is the `Ctrl+Shift+2` answer read-back (V-F9), not the notation.
+  - Classified: NV2 / pass; math — no finding, recorded as the positive control for V-F9/V-F10
+- O6 [clarified + measured] (state: as O5): **"graphics have no meaningful alt text, just random characters are announced an 'unlabled graphic clickable'."** Measured: **15 images, 14 of them with no `alt` attribute whatsoever**, which is why the screen reader reads the file name — `zbrvxxz3.j3f.png`, `22tfvbot.c0p.png` — the "random characters". The cause is visible in the markup and is a **typo, not a policy**: 7 of the images are written `src="/images/zbrvxxz3.j3f.png alt="`, an `alt=` attribute swallowed into the `src` value by a missing quote. The author intended alternative text; the browser never sees an `alt` attribute at all. This confirms with the reviewer's AT what R014 flagged as "broken `alt=` markup" on 2026-09-10.
+  - Classified: NV4 / WCAG 1.1.1, 4.1.2 / Major → finding **V-F35**
+- O7 [measured] (state: as loaded, 2026-09-21): no visible input, select or textarea on the view.
+  - Classified: NV6 / n/a; NV12 / n/a
 
 ## Notes
 

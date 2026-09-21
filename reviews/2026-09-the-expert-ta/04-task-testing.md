@@ -516,6 +516,27 @@ differently.
 | **Severity** | Blocker for this view's purpose (proposed 2026-09-21 — a student cannot read their own graded work here by any means. Reviewer to confirm the rating; it is what turns "navigable with effort" into a Broken result.) |
 | **Evidence** | R029 O8 (reviewer + measurement); R007 `R007-axe.json` (`image-alt`) |
 
+### View S8 — View Assignment Solutions
+
+| | |
+|---|---|
+| **Baselines run** | B5 NVDA (R087, 2026-09-21 — reviewer; NV3, NV5, NV7, NV8, NV10 open); axe (R014); probe runs R088–R092; zoom (R088, 2026-09-15 — reviewer); grayscale (R110, Broken) |
+| **Date tested** | 2026-09-15 (zoom), 2026-09-21 (NVDA, grayscale) |
+| **Findings** | V-F35; V-F31 (colour-only numbers, recorded product-wide); V-F23 (contrast); V-F19 (no reflow) |
+
+**Note — the product's own counter-example.** This is the **only view in the sample with a real heading outline**: `h1` for the assignment and one `h2` per problem, confirmed working with NVDA by the reviewer 2026-09-21 ("headings work"). MathJax also voices as expected here. Both are recorded as positives, because they change what the report can ask for: V-F1 (no headings anywhere else) is not a request for something the vendor has never built — it is a request to do elsewhere what this page already does.
+
+#### Finding V-F35
+
+| | |
+|---|---|
+| **Where** | View Assignment Solutions (S8) — the worked-solution figures, 14 of the view's 15 images |
+| **Observed** | Reviewer with NVDA, 2026-09-21: *"graphics have no meaningful alt text, just random characters are announced."* Measured the same day: **14 of 15 images carry no `alt` attribute at all**, so the screen reader falls back to the file name and reads out `zbrvxxz3.j3f.png`, `22tfvbot.c0p.png` and the like — the "random characters". **The markup shows the cause, and it is a typo rather than an omission:** 7 of these images are written `src="/images/….png alt="`, with the `alt=` attribute swallowed into the `src` value by a missing quote. Someone set out to write alternative text and the browser never receives an `alt` attribute. That makes this the cheapest finding in the review to fix and among the more damaging to leave: the solutions page is where a student goes to learn what they got wrong, and the worked figures are the explanation. The rest of the page works — headings navigate, math voices correctly — so a screen-reader user reaches every problem and then finds the explanation missing. Confirms with AT what axe flagged as broken `alt=` markup on 2026-09-10 (R014). |
+| **Affected users** | Screen reader users (the worked solutions are the page's content); users of text-only or image-blocked browsing |
+| **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
+| **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
+| **Evidence** | R087 O6 (reviewer + markup measurement); R014 `R014-axe.json` |
+
 ### View S5 — Assignment Editor
 
 | | |

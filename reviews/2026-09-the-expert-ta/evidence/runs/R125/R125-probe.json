@@ -1,0 +1,106 @@
+{
+ "href": "https://login.theexpertta.com/ResetPassword.aspx",
+ "title": "Expert TA - Reset Password",
+ "lang": null,
+ "xmlLang": null,
+ "docs": [
+  "https://login.theexpertta.com/ResetPassword.aspx"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 2,
+  "external": 7,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 3,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 4,
+  "small": [
+   {
+    "el": "input#MainContent_txtUserToRequest.softCornerBorderLineTextControl",
+    "name": "",
+    "w": 355,
+    "h": 19,
+    "clash": null
+   },
+   {
+    "el": "input#MainContent_btnReq.buttonStyleV3",
+    "name": "Request Reset",
+    "w": 102,
+    "h": 19,
+    "clash": null
+   },
+   {
+    "el": "a",
+    "name": "",
+    "w": 226,
+    "h": 17,
+    "clash": null
+   },
+   {
+    "el": "span",
+    "name": "©",
+    "w": 8,
+    "h": 11,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-21",
+ "locator": "https://login.theexpertta.com/ResetPassword.aspx",
+ "view": "S14",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 1024,
+   "clientWidth": 320,
+   "overflowing": [
+    "div#container right=1024",
+    "table right=994",
+    "tbody right=994",
+    "tr right=994",
+    "td right=994",
+    "table right=994",
+    "tbody right=994",
+    "tr right=994",
+    "td right=994",
+    "tr right=994",
+    "td right=994",
+    "div right=979"
+   ],
+   "tableOnly": false
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

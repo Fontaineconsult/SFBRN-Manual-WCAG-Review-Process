@@ -155,6 +155,8 @@ barrier occurs)
 **Sequence notes:** (per-step observations; identify the step where each
 barrier occurs)
 
+**Blocked 2026-09-21 — no data in the demo.** The reviewer: "there are no grades to view in the test account." The student half of this task (read your grade report for an assignment) cannot be walked: the pages load and have been swept and zoomed (S4 View Grade Report — R007, R029, R100), but they contain no score, no feedback and no late state, so the jump-point density, the per-part submission tables and the red "late" convention that W21 asks about have nothing to read. The instructor half (class grade sheet) left the sample 2026-09-15 as instructor-facing. Verdict stays Not run and this is a **coverage limitation** in `03` §1.1, not a pass — closing it needs a seeded graded assignment.
+
 (no findings yet)
 
 ---
@@ -436,7 +438,7 @@ differently.
 
 | | |
 |---|---|
-| **Where** | Take Assignment (S3, `/Common/TakeTutorialAssignment…`), Sign in (S7, `login.theexpertta.com/Login.aspx`) and the Edit Class popup (S11, Class Management → Class Menu → Edit Class → Go) — the `<html>` element |
+| **Where** | Take Assignment (S3, `/Common/TakeTutorialAssignment…`), Sign in (S7, `login.theexpertta.com/Login.aspx`), the Edit Class popup (S11, Class Management → Class Menu → Edit Class → Go) and Password reset (S14, `login.theexpertta.com/ResetPassword.aspx` — added 2026-09-21) — the `<html>` element |
 | **Observed** | These three pages declare no `lang` attribute; the other eleven sampled views declare `lang="en"`. A screen reader whose synthesizer defaults to another language reads the assignment, the sign-in form and the popup with the wrong voice; with an English default nothing is audible (the reviewer heard no mispronunciation, R017 NV9). Measured by axe (R004 O2, `html-has-lang`) and the probe (R093, R077); confirmed as a finding by the reviewer's delegation 2026-09-14 ("your call"). |
 | **Affected users** | Screen reader users whose default synthesizer language is not English |
 | **WCAG criteria failed** | 3.1.1 |
@@ -539,6 +541,25 @@ differently.
 | **WCAG criteria failed** | 1.4.4, 1.4.10 |
 | **Severity** | Major (Blocker for the popup alone; confirmed by the reviewer 2026-09-15). **Kept in the report at the reviewer's ruling 2026-09-15 although the Edit Class popup (S11) left the sample as instructor-facing.** |
 | **Evidence** | R078 O5 (reviewer); R078 O2 (probe: popup width 589 px, `R078-probe.json`) |
+
+### View S14 — Password reset
+
+| | |
+|---|---|
+| **Baselines run** | B5 NVDA (R121, 2026-09-21 — reviewer, NV6/NV8 only); axe (R122); probe runs R123–R128 |
+| **Date tested** | 2026-09-21 |
+| **Findings** | V-F30; V-F18 applies here (no `lang`); V-F19 applies here (no reflow) |
+
+#### Finding V-F30
+
+| | |
+|---|---|
+| **Where** | Password reset (S14, `login.theexpertta.com/ResetPassword.aspx`, reached from Sign in → "Trouble Logging in?") — the user-name field |
+| **Observed** | The field has no label of its own. Tabbing into it, NVDA does not announce a label — it reads out the surrounding layout **table**, the same table-based construction used throughout the application. The reviewer: *"The form field for the user name in password reset isn't properly labeled, and like the rest of the app the whole reset form is structured in a table, tabbing into the form field and launch a voice notification describing the whole reset table, so it is accessible, but not best practice."* A screen-reader user can therefore work out what to type, from context rather than from a label, and the reviewer rules the page **usable**. axe reports the same defect independently on the same page (`label`, critical, one form element — R122). This is the account-recovery path: a student locked out of the product has no other route back in, which is why a merely-inferable field label matters more here than the Minor rating suggests. |
+| **Affected users** | Screen reader users (the purpose is inferred from a table read-out, not stated); users with cognitive disabilities (a verbose table announcement in place of a field name) |
+| **WCAG criteria failed** | 1.3.1 (label not programmatically associated); 3.3.2 (no label or instruction for a required input); 4.1.2 (no accessible name) |
+| **Severity** | Minor (the reviewer's ruling 2026-09-21: "accessible, but not best practice" — the table read-out carries the meaning, so this is a quality defect, not a barrier) |
+| **Evidence** | R121 O5 (reviewer, NVDA); R122 (`R122-axe.json`, `label` critical) |
 
 ## C. Sample comparison (WCAG-EM step 4.3 — random vs structured)
 

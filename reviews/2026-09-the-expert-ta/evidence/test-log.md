@@ -124,3 +124,11 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R118 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | cognition | probe | — | — | assistant (view_probe) |
 | R119 | 2026-09-15 13:07 | S13 | https://dei56mo.theexpertta.com/Common/ViewAssignmentDetails.aspx | no-color | probe | — | — | assistant (view_probe) |
 | R120 | 2026-09-17 12:30 | S7 | https://login.theexpertta.com/Login.aspx | no-color | probe | — | — | assistant (view_probe) |
+| R121 | 2026-09-21 13:29 | S14 | https://login.theexpertta.com/ResetPassword.aspx | no-vision | nvda | B5 | — | Daniel Fontaine (reviewer, NVDA); assistant records |
+| R122 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | — | axe | — | — | — |
+| R123 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | low-vision | probe | — | — | assistant (view_probe) |
+| R124 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | no-hearing | probe | — | — | assistant (view_probe) |
+| R125 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | no-speech | probe | — | — | assistant (view_probe) |
+| R126 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | motor | probe | — | — | assistant (view_probe) |
+| R127 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | cognition | probe | — | — | assistant (view_probe) |
+| R128 | 2026-09-21 13:30 | S14 | https://login.theexpertta.com/ResetPassword.aspx | no-color | probe | — | — | assistant (view_probe) |

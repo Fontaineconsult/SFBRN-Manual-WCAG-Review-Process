@@ -1,0 +1,15 @@
+{
+ "view": "S14",
+ "locator": "https://login.theexpertta.com/ResetPassword.aspx",
+ "probed_at": "2026-09-21",
+ "grayscale": {
+  "screenshot": "R128-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 0
+  }
+ }
+}

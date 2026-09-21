@@ -426,7 +426,13 @@ announce; and whether "late" submissions are identified in words or only by
 red text (also NC1, W29).
 **Why it matters:** R007 — this is the page where the jump-point pattern is
 at its densest, and where lateness is conveyed by colour.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — **not answerable: the demo account holds no graded
+work.** Reviewer: "there are no grades to view in the test account." The page
+itself loads and has been swept and zoomed (R007, R029, R100), but with no
+score, no feedback and no late submission there is nothing for the jump
+points, the per-part tables or the red "late" convention to read. Recorded as
+a coverage limitation in `03` §1.1 and against task **T5**, not as a pass.
+Closing it needs a seeded graded assignment from the vendor or the campus.
 
 ### W22 — Instructor side: class grade sheet (P5 step 4) (NV3, NV5)
 
@@ -1465,7 +1471,12 @@ marks it that I have not measured.
 **Why it matters:** this and W41 are the only open 1.4.1 evidence; both
 answered, `05` 1.4.1 can be decided and the review's last integrity flag
 clears. **KEY STEP**
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — partially: the reviewer followed the link through
+to the **reset page** and reported on the form there (the unlabelled user-name
+field → **V-F30**, and the page sampled as **S14**), which is worth more than
+the question asked. The question itself is still open, though: *can you tell
+`(e-mail reset)` is a link before you hover it?* One look at the sign-in page
+answers it, and 1.4.1 needs it. Still **pending** on that point.
 
 ### W71 — The silent 8th Tab stop on every page (confirms V-F29's severity)
 

@@ -54,7 +54,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.3.1 Info and Relationships (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13, V-F28
+- **Task findings:** T1-F1, T1-F2, V-F1, V-F2 (Minor), V-F5, V-F7, V-F9, V-F11, V-F13, V-F30 (Minor), V-F28
 - **Remarks:** 2026-09-14 S1 confirmed with NVDA (R015): no headings/landmarks, grids told apart by position, editors unlabelled — V-F1, V-F2, V-F7 now stand on both Class Management pages. [provisional — S1 and S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
@@ -169,7 +169,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:** V-F18 (Minor)
-- **Remarks:** 2026-09-14: three of the fourteen sampled views declare no `lang` — Take Assignment (S3), Sign in (S7), the Edit Class popup (S11); the other eleven declare `en` (probe runs R015 … R093). Confirmed on the reviewer's delegation ("your call"); Minor because an English default voice masks it. Vendor-claim discrepancy.
+- **Remarks:** 2026-09-21: **four** of the sampled views declare no `lang` — the password reset page (S14) joins them, measured the day it was sampled (R121 O6). Earlier, 2026-09-14: three of the fourteen sampled views declare no `lang` — Take Assignment (S3), Sign in (S7), the Edit Class popup (S11); the other eleven declare `en` (probe runs R015 … R093). Confirmed on the reviewer's delegation ("your call"); Minor because an English default voice masks it. Vendor-claim discrepancy.
 
 ### 3.2.1 On Focus (Level A)
 - **Outcome:** Not Evaluated
@@ -198,8 +198,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 3.3.2 Labels or Instructions (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F5, V-F13
-- **Remarks:** [provisional] 2026-09-10 S11 popup forms: labels are unassociated table-cell text. Instructor pages show the same (axe R006 59 fields, unconfirmed).
+- **Task findings:** V-F5, V-F13, V-F30 (Minor)
+- **Remarks:** 2026-09-21: **NV6 now fails on every sampled view that has form fields** — S1, S2, S3, S12 and S14 (R015, R016, R017, R059, R121). The pattern is one mechanism: the application lays its forms out in tables and lets the surrounding table text stand in for a label, so the screen reader announces context rather than a name. Newest instance is the password-reset user-name field (V-F30), where the reviewer's ruling is that the table read-out does carry the meaning — "accessible, but not best practice" — which is why the criterion stays **Partially Supports** rather than dropping to Does Not Support: in each case a name of some sort reaches the user, just not the visible label. Earlier, [provisional] 2026-09-10 S11 popup forms: labels are unassociated table-cell text. Instructor pages show the same (axe R006 59 fields, unconfirmed — those views left the sample 2026-09-15).
 
 ### 3.3.7 Redundant Entry (Level A)
 - **Outcome:** Not Evaluated
@@ -210,7 +210,7 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F29, V-F28
+- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F29, V-F30, V-F28
 - **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). 2026-09-17, sweep triage closed on S1 and S3 (R001, R004): the unnamed answer radios are confirmed (V-F11, R017 O6/O9) and the unnamed jump-point buttons are confirmed (V-F8, R015 O9 / R017 O2) — both were the outstanding items here. Added: the header logo link is focusable inside `aria-hidden`, a silent tab stop on every signed-in page (V-F29, measured R001 O11). Still open: unlabeled DevExpress editors on the instructor pages — those views were removed from the sample 2026-09-15, so they stay unconfirmed and are reported as instructor-facing. Vendor-claim discrepancy.
 
 ---

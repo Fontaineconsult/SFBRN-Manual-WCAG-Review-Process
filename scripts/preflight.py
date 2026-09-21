@@ -168,6 +168,32 @@ def check_port(port: int, do_launch: bool, url: str) -> bool:
     def ext_targets(ts):
         return [x for x in ts if x.get("url", "").startswith("chrome-extension://")]
 
+    # One-session products: a second tab on the same host invalidates the
+    # reviewer's session. Expert TA answers every request with
+    # WSInvalidAccess.aspx and names the cause itself ("You are using Expert TA
+    # in more than one tab"). 2026-09-21: cost a mid-walk session, and the
+    # reviewer read it as their paste failing. Cheap to detect, so detect it.
+    import collections
+    hosts = collections.Counter()
+    for pg in pages:
+        u = pg.get("url", "")
+        m = re.match(r"https?://([^/]+)/", u)
+        if m and not m.group(1).startswith("127.0.0.1"):
+            hosts[m.group(1)] += 1
+    dupes = {h: n for h, n in hosts.items() if n > 1}
+    if dupes:
+        bad("more than one tab on the same product host \u2014 one-session products "
+            "(Expert TA) invalidate the session and answer every request with an error page; "
+            "close the extras, keeping the tab the reviewer is working in",
+            "; ".join(f"{h} x{n}" for h, n in sorted(dupes.items())))
+        passed = False
+    else:
+        ok("one tab per product host")
+    if any("WSInvalidAccess" in pg.get("url", "") for pg in pages):
+        bad("a tab is on the product's session-invalid page (WSInvalidAccess) \u2014 the session is "
+            "already broken; close the extra tabs, then the reviewer reloads or signs in again")
+        passed = False
+
     installed = store_extension_ids(profile_dir)
     ext = ext_targets(t)
     live = {x["url"].split("/")[2] for x in ext}

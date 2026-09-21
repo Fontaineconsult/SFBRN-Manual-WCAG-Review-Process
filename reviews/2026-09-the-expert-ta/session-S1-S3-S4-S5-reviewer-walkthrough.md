@@ -1333,6 +1333,7 @@ LV7, LV9.
 ### W53 — Student Practice Area (S12, run R060)
 
 **Page:** paste `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` into the address bar (the top-menu "Practice" link opens the assignment's Practice Mode instead, which the demo does not enable — 2026-09-15).
+**If that address gives "Warning: An Error Occurred" — the link is not the problem (2026-09-21).** The product allows **one session in one tab**, and its error page says so itself: *"You are using Expert TA in more than one tab in your browser."* It appeared because the assistant was driving one tab over CDP while you worked in another. **Close the extra Expert TA tab, keep the one you are in, reload.** `preflight.py` now fails on a duplicate product tab so this is caught before a walk rather than during one.
 **Eyedropper:** "Library" heading `#EFBB75` [1.74:1]; "Books" `#3A7C89` on
 `#EDEDED` [4.05:1]; the difficulty checkboxes and their labels; the Books /
 Chapters selects [image background].

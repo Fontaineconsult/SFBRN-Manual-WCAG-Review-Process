@@ -111,7 +111,8 @@ in this order:
    |---|---|---|
    | unpacked under `<profile>\Default\Extensions\<id>` | **yes** | no |
    | `location` in `Secure Preferences` | 1 | 5 |
-   | code path | the profile | `…\Chrome\Application\<ver>esources\` |
+   | code path | the profile | `…\Chrome\Application\<ver>
+esources\` |
    | `--disable-extensions` stops it | yes | **no** |
    | verdict | **FAIL — discard the window** | fine, name it and go on |
 
@@ -469,6 +470,30 @@ the reviewer session; `--dry-run --facts-out FILE` shows what it would write.
   placeholder; bare "name" fields are candidates only.
 - **Wrong-view guard** — refuses if the landed path differs from the
   requested one; use a `UI: …` locator after reaching the view by hand.
+
+**One session, one tab — and the assistant shares the browser.** Expert TA
+allows a single session instance and enforces it by answering every request
+with `WSInvalidAccess.aspx`, whose own text names the cause: *"You are using
+Expert TA in more than one tab in your browser."* This is a **coordination**
+hazard, not a navigation one: the assistant drives a tab over CDP while the
+reviewer drives their own, and two tabs on the product host is all it takes.
+2026-09-21 it broke a session mid-walk, and the reviewer reasonably read it as
+their own paste failing — "I can't open it … this happens for all copy/paste
+into the browser". The URL was fine; the session was not.
+
+Rules that follow:
+
+- **Never leave a second tab on the product host.** `crawl_map.CDP` attaches
+  to an existing page tab and navigates *it* — keep it that way, and do not
+  open new ones with `tabs_create`.
+- **Check before driving** when the reviewer is also working: `/json` should
+  list exactly one tab per product host. `preflight.py` now fails on a
+  duplicate host and on any tab sitting on `WSInvalidAccess`.
+- **Recovering:** close the extra tabs keeping the one the reviewer is in,
+  then the reviewer reloads; if the session does not come back they sign in
+  again. The assistant never signs in.
+- A pasted deep link failing is **not** evidence that the link is wrong. Check
+  for this error page before concluding anything about a URL or a route.
 
 **Sign-in views need a second, signed-out profile.** Navigating the
 authenticated tab to `Login.aspx` ended the Expert TA session on 2026-09-11

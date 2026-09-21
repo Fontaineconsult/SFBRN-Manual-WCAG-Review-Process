@@ -11,7 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R102-grayscale.png` (achromatopsia emulation) or the OS filter |
+| **Result** | Broken |
+
+**Result reasoning.** 2026-09-21, reviewer's grayscale pass. Broken for this modality: the calendar conveys an assignment and its span entirely through the coloured event bar, and with colour removed the reviewer's verdict is that it "fails totally" — neither the assignment name nor the days it covers survives.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -27,9 +29,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | fail | O3 — the assignment's name and the bar that spans its days are carried by the event colour alone; reviewer: "the name of the assignment in the calendar, the bar that extends across days, fails totally" |
 | NC2 — Links are distinguishable from surrounding text without color | n/a | O4 — no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement) |
-| NC3 — Everything remains operable and understandable in grayscale | | |
+| NC3 — Everything remains operable and understandable in grayscale | fail | O3 — the event is not identifiable as an event with colour removed; "fails totally" (reviewer) |
 
 **view_probe 2026-09-11:** answered NC2=fail by measurement; facts in `R102-probe.json`.
 
@@ -54,6 +56,9 @@ Format:
 
 - O4 [measured] (state: view as loaded, 2026-09-14 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement)
   - Classified: NC2 / WCAG 1.4.1 / measured → n/a
+
+- O3 [clarified] (state: Calendar under a grayscale filter, reviewer, 2026-09-21 — step W32): *"in calendar, the name of the assignment in the calendar, the bar that extends across days, fails totally."* The event bar (white on `#8EA9DB`) is the only carrier of both the assignment's identity and the range of days it covers. With colour removed neither survives — the strongest of the day's grayscale failures.
+  - Classified: NC1, NC3 / WCAG 1.4.1 / Major → **V-F31**
 
 ## Notes
 

@@ -11,7 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R109-grayscale.png` (achromatopsia emulation) or the OS filter |
+| **Result** | Broken |
+
+**Result reasoning.** 2026-09-21, reviewer's grayscale pass. Broken for this modality: the randomised variable values are the numbers the student must put into the calculation, and with colour removed there is nothing that marks them as theirs ("random values fail"). The hint deduction percentages — what a hint costs — and the problem navigator fail with them. Only the status marks survive, because a symbol carries them.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -27,9 +29,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | fail | O5 — three colour-only carriers fail with colour removed: the randomised variable values a student must calculate with, the hint/feedback deduction percentages, and the problem navigator. The per-problem status marks **pass** — a symbol carries them, not colour (reviewer) |
 | NC2 — Links are distinguishable from surrounding text without color | n/a | O4 — no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement) |
-| NC3 — Everything remains operable and understandable in grayscale | | |
+| NC3 — Everything remains operable and understandable in grayscale | fail | O5 — the reviewer cannot tell which numbers in the statement are their randomised values, so the problem cannot be worked reliably in grayscale |
 
 **view_probe 2026-09-11:** answered NC2=fail by measurement; facts in `R109-probe.json`.
 
@@ -54,6 +56,9 @@ Format:
 
 - O4 [measured] (state: view as loaded, 2026-09-14 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement)
   - Classified: NC2 / WCAG 1.4.1 / measured → n/a
+
+- O5 [clarified] (state: Take Assignment, Problem 1, under a grayscale filter, reviewer, 2026-09-21 — step W32): *"the contrast of the orange-red numbers are very hard to see when at greyscale … hint fails, random values fail, navigator fail, status marks pass."* Three of the four colour carriers on this view fail: the **randomised variable values** (`#FF6347`) that the student must use in the calculation, the **hint/feedback deduction percentages** (`#FF9900`) that state what a hint costs, and the **problem navigator**. The **status marks pass** — they are carried by a symbol, so colour is not their only channel, which is the one place this view does it right.
+  - Classified: NC1, NC3 / WCAG 1.4.1 / Major → **V-F31**; the low-contrast half of the same elements stays under **V-F23** (1.4.3)
 
 ## Notes
 

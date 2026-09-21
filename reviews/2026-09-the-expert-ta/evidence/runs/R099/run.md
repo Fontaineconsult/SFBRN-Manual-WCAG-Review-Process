@@ -11,7 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R099-grayscale.png` (achromatopsia emulation) or the OS filter |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-21, reviewer's grayscale pass. The page still works — nothing on it is operated by colour — but the headings that label the two grids wash out, and V-F2 says position is the only thing left to tell them apart. Works with issues, not Broken.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -27,9 +29,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | partial | O4 — no colour-coded *status* on this page; what fails is the section headings "Class Assignments" and "Class News", which are the only visual label telling the two grids apart and wash out in grayscale (reviewer: "class assignment and class news fail") |
 | NC2 — Links are distinguishable from surrounding text without color | n/a | O3 — no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-17; replaces the earlier resting-state measurement) |
-| NC3 — Everything remains operable and understandable in grayscale | | |
+| NC3 — Everything remains operable and understandable in grayscale | fail | O4 — with colour gone the two grids lose their headings, and V-F2 already records that they are otherwise told apart only by position. Reviewer: "all contrast fails in greyscale" |
 
 **view_probe 2026-09-11:** answered NC2=pass by measurement; facts in `R099-probe.json`.
 
@@ -49,6 +51,9 @@ Format:
 
 - O3 [measured] (state: view as loaded, 2026-09-17 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-17; replaces the earlier resting-state measurement)
   - Classified: NC2 / WCAG 1.4.1 / measured → n/a
+
+- O4 [clarified] (state: Class Management standard mode under a grayscale filter, reviewer, 2026-09-21 — step W32): *"class assignment and class news fail"*, and generally *"all contrast fails in greyscale"*. The two section headings are the only visual label distinguishing the Class Assignments grid from the Class News grid, and they are not readable with colour removed. No status, error or required-field state on this page is carried by colour.
+  - Classified: NC1 / partial (no colour-coded status; the headings are a labelling failure) → **V-F31**; NC3 / WCAG 1.4.1, and the contrast half under **V-F23** (1.4.3) / fail
 
 ## Notes
 

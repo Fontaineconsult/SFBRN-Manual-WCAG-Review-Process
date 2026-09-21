@@ -70,10 +70,11 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional — drafted 2026-09-14 by the assistant from the reviewer's 2026-09-10 narration; reviewer confirms at walkthrough W36] No instruction in the sampled views refers to shape, colour, size, position or sound alone (the vendor's jump-point and chord instructions name keys and controls). The NV8 fails on R016 (grids told apart only by order) and R017 (a math option identified only as "row 4 table 1"; the inserted hint findable only by its position) are *consequences* of missing structure and status messages, already rolled up under 1.3.1 (V-F2, V-F11) and 4.1.3 / 2.4.3 (V-F15) — not instructions that rely on sensory characteristics.
 
 ### 1.4.1 Use of Color (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Does Not Support
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F31 (Major)
+- **Remarks:** Decided 2026-09-21 on the reviewer's grayscale pass (W32), which is the human confirmation the four measured NC2 fails had been waiting for. Colour is the only visual carrier in four separate places, and two of them are information the student must act on: on **Take Assignment** the randomised variable values — the numbers that go into the calculation — and the hint deduction percentages that say what help costs (R109 O5); on **View Assignment Solutions** the same orange-red number token inside the worked solutions (R110 O5); on the **Calendar** the event bar carrying an assignment's name and the days it spans, which "fails totally" (R102 O3); on **Class Management** the headings that label the two grids (R099 O4). The problem-navigator **status marks pass** — carried by a symbol — which is both the exception and the fix. Separately measured and still open for the reviewer's eye: NC2, links told from their surrounding text by colour only, failing on S4, S7, S8 and S13 (W41, W73) — those will add to this outcome, not change it. Vendor-claim discrepancy.
+
 
 ### 1.4.2 Audio Control (Level A)
 - **Outcome:** Not Applicable (provisional)

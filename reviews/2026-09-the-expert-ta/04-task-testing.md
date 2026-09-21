@@ -185,7 +185,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R015, 2026-09-14 — NV7/NV10 open); axe (R001); probe runs R019–R023 |
 | **Date tested** | 2026-09-14 |
-| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) (V-F29 withdrawn 2026-09-21 — advisory) |
+| **Findings** | T1-F3 (§A); V-F1, V-F2, V-F7 confirmed on this view (recorded under S2); V-F8 (jump point); V-F16; V-F19 (product-wide, confirmed here and on S3); V-F21 (also S3); V-F23 (text contrast; also S2, S3, S4, S5, S6, S7, S8, S10, S12, R1 per axe) (V-F29 withdrawn 2026-09-21 — advisory); V-F31 (product-wide, recorded here) |
 
 #### Finding V-F19
 
@@ -344,7 +344,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
 | **Date tested** | 2026-09-10 |
-| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F19 (recorded under S1), V-F21 (recorded under S1), V-F23 (recorded under S1), V-F24 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here) |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F19 (recorded under S1), V-F21 (recorded under S1), V-F23 (recorded under S1), V-F24 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here); V-F31 (recorded product-wide) |
 
 #### Finding V-F24
 
@@ -560,6 +560,17 @@ differently.
 | **WCAG criteria failed** | 1.3.1 (label not programmatically associated); 3.3.2 (no label or instruction for a required input); 4.1.2 (no accessible name) |
 | **Severity** | Minor (the reviewer's ruling 2026-09-21: "accessible, but not best practice" — the table read-out carries the meaning, so this is a quality defect, not a barrier) |
 | **Evidence** | R121 O5 (reviewer, NVDA); R122 (`R122-axe.json`, `label` critical) |
+
+#### Finding V-F31
+
+| | |
+|---|---|
+| **Where** | Product-wide, confirmed on four views in one grayscale pass 2026-09-21: **Take Assignment** (S3) — the randomised variable values (`#FF6347`) inside problem statements, and the hint/feedback deduction percentages (`#FF9900`); **View Assignment Solutions** (S8) — the same orange-red number token inside the worked solutions; **Calendar** (S6) — the event bar (white on `#8EA9DB`) carrying an assignment's name and the days it spans; **Class Management** (S1) — the "Class Assignments" and "Class News" headings that label the two grids. |
+| **Observed** | With a grayscale filter on, the reviewer walked the pages the sweeps had identified as colour-carrying: *"the contrast of the orange-red numbers are very hard to see when at greyscale … hint fails, random values fail, navigator fail, status marks pass … class assignment and class news fail … in calendar, the name of the assignment in the calendar, the bar that extends across days, fails totally … the orange-red colors use for numbers in the ViewAssignmentSolution fails."* In each case colour is the only visual channel carrying the distinction. The consequences are not cosmetic: the randomised values are **the numbers the student must put into the calculation**, so a student who cannot use colour cannot reliably tell which numbers in the statement are theirs; the deduction percentages state **what taking a hint costs**, so the price of help is unreadable; the Calendar loses both an assignment's identity and its span, which the reviewer rates as failing *totally*. The one place the product does it right is the problem-navigator **status marks, which pass** — they are carried by a symbol, so colour is not their only channel. That contrast is the finding's own remedy: the same symbol-plus-colour pattern applied to the other carriers would fix it. Separately, the low contrast of these same elements is already recorded under V-F23 (1.4.3); this finding is about colour being the only carrier, not about how dark it is. |
+| **Affected users** | Users with colour vision deficiency (about 8 % of men); users of grayscale or high-contrast modes, e-ink and monochrome print; anyone on a washed-out display |
+| **WCAG criteria failed** | 1.4.1 (colour as the only visual means of conveying information and distinguishing elements) |
+| **Severity** | Major (proposed 2026-09-21 from the reviewer's own "fails" / "fails totally" wording — a student can still read every number, so it is not a Blocker, but on Take Assignment they cannot tell which numbers are theirs without guessing from sentence structure. Reviewer to confirm the rating.) |
+| **Evidence** | R109 O5 (S3), R110 O5 (S8), R102 O3 (S6), R099 O4 (S1) — all reviewer, grayscale filter, 2026-09-21; element list and colour tokens from R004 O4/O10 and R001 O4 (axe) |
 
 ## C. Sample comparison (WCAG-EM step 4.3 — random vs structured)
 

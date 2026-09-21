@@ -660,7 +660,35 @@ other pages.
 **Why it matters:** 302.3 is one of three FPC still open, and 1.4.1 is the
 only criterion in the review with failed checks and no `05` decision. This
 step plus W41 and W73 finishes both.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — answered, and it decided 1.4.1. *"The contrast of
+the orange-red numbers are very hard to see when at greyscale … all contrast
+fails in greyscale … hint fails, random values fail, navigator fail, status
+marks pass … class assignment and class news fail … no grades to view … in
+calendar, the name of the assignment in the calendar, the bar that extends
+across days, fails totally … the orange-red colors use for numbers in the
+ViewAssignmentSolution fails."*
+
+Recorded: **Take Assignment** NC1/NC3 fail (R109 O5, Result **Broken** for
+this modality — the randomised values are the numbers that go into the
+calculation); **Calendar** fail, "totally" (R102 O3, Broken); **View
+Assignment Solutions** fail (R110 O5, Broken); **Class Management** NC1
+partial / NC3 fail (R099 O4, Works with issues — nothing is *operated* by
+colour, but the headings labelling the two grids wash out). The
+**status marks passing** is recorded as the exception and the fix: a symbol
+carries them, so colour is not their only channel. → finding **V-F31**
+(Major, proposed) and `05` **1.4.1 → Does Not Support**, which clears the
+review's last integrity flag of that kind. The contrast half of the same
+elements stays under V-F23 (1.4.3) — "hard to see" and "colour is the only
+carrier" are two different failures and both are recorded.
+
+**Still open on this step, and small:** five pages were not mentioned —
+Class Management **Accessibility Mode**, **Student Practice Area**,
+**Printable Assignment**, **Sign in**, **Password reset**. If "all contrast
+fails in greyscale" was meant to cover them too, say so and they close as
+NC3 fail; otherwise one line each ("nothing conveyed by colour, page still
+works") finishes 302.3. **View Grade Report** cannot be judged at all until
+the demo account has graded work — already logged as a coverage limitation,
+not a pass.
 
 ---
 

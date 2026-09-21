@@ -11,7 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R110-grayscale.png` (achromatopsia emulation) or the OS filter; measured fail on NC2 awaits confirmation |
+| **Result** | Broken |
+
+**Result reasoning.** 2026-09-21, reviewer's grayscale pass. Broken for this modality for the same reason as Take Assignment: the worked solutions mark their numbers with the orange-red token and nothing else, so with colour removed a student cannot tell the values out of the working.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -27,9 +29,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | fail | O5 — the same orange-red number token as Take Assignment carries the values in the worked solutions; reviewer: "the orange-red colors use for numbers in the ViewAssignmentSolution fails" |
 | NC2 — Links are distinguishable from surrounding text without color | fail | O4 — 2 of 2 link(s) in running text are told from the surrounding text by colour only — no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) does not hold — measured: Testing Course for CSU East Bay → GradeSheetClassAssignments.aspx?eid=3373 [1:1 vs text; hover cue: a:hover; focus: outline]; Chapter 5 Sample Assignment → GradeSheetClassAssignmentProblems.aspx?eid=3373&aid=17547 [1:1 vs text; hover cue: a:hover; focus: outline] (re-measured 2026-09-14; replaces the earlier resting-state measurement) |
-| NC3 — Everything remains operable and understandable in grayscale | | |
+| NC3 — Everything remains operable and understandable in grayscale | fail | O5 — the solution's numbers cannot be told from the surrounding working with colour removed |
 
 **view_probe 2026-09-11:** answered NC2=fail by measurement; facts in `R110-probe.json`.
 
@@ -54,6 +56,9 @@ Format:
 
 - O4 [measured] (state: view as loaded, 2026-09-14 view_probe): 2 of 2 link(s) in running text are told from the surrounding text by colour only — no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) does not hold — measured: Testing Course for CSU East Bay → GradeSheetClassAssignments.aspx?eid=3373 [1:1 vs text; hover cue: a:hover; focus: outline]; Chapter 5 Sample Assignment → GradeSheetClassAssignmentProblems.aspx?eid=3373&aid=17547 [1:1 vs text; hover cue: a:hover; focus: outline] (re-measured 2026-09-14; replaces the earlier resting-state measurement)
   - Classified: NC2 / WCAG 1.4.1 / measured → fail
+
+- O5 [clarified] (state: View Assignment Solutions under a grayscale filter, reviewer, 2026-09-21 — step W32): *"the orange-red colors use for numbers in the ViewAssignmentSolution fails."* The same `#FF6347` token as Take Assignment (R004 O10 recorded it appearing on S4 and S8 too) marks the numbers inside the worked solutions; with colour removed they are not distinguishable from the working around them.
+  - Classified: NC1, NC3 / WCAG 1.4.1 / Major → **V-F31**
 
 ## Notes
 

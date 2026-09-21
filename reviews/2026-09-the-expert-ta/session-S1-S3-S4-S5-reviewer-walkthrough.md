@@ -1621,6 +1621,11 @@ emptiness.
 **Tell me:** does any of them announce a purpose you could not act on — a bare
 "click here", "more", "link", or two that sound identical but go to different
 places? A plain "they all named themselves fine" closes the row.
+**One more while you are there (MO11, found stranded by the 2026-09-21
+audit):** on stop 1, the hidden instruction div — **press Enter**. R015 O9
+routed this question to the motor run R022 on 2026-09-14 and it was never
+picked up: does Enter on that jump point do anything, and if so what? It is
+the only routed item in the review that never landed.
 **Why it matters:** NV10 is the 2.4.4 evidence for this page, and it is
 currently resting on nothing. This is the process's own rule in action —
 confirm control names **on focus**, never from an AT's elements list.
@@ -1723,6 +1728,50 @@ grade formula, real submission dates. If what is missing is something narrower
 (a second attempt? instructor feedback text?), say which, and the limitation in
 `03` §1.1 and against **T5** can be narrowed to it instead of reading as
 "the page cannot be tested", which the measurement disproves.
+
+## 2026-09-21 — Recording audit: is no-vision really only 2 of 10?
+
+The reviewer asked whether the low no-vision count reflects work that was done
+but never written down. **It does not — the count is real** — but the audit
+found a different gap. Four passes over every run file of a live view:
+
+1. **Observations classified to a check whose row is blank in the same run:**
+   exactly one, `R015 NV10`, which is the row deliberately reopened on
+   2026-09-21 (W72). Nothing else is stranded.
+2. **Observations classified to a check that has no row in the run they sit
+   in** (narration filed under the wrong modality): four, all of them
+   *routing* notes, and three of the three routable ones landed — R004's
+   LV4/LV9/NC2 → R083 and R109; R017's MO1/MO2/MO5/MO7 → R018 (all answered,
+   MO11 partial); R121's LV1 → R123. **One did not:** R015 O9 routed
+   "MO11 on R022 to confirm what Enter does on the jump point" and R022's MO11
+   is still blank. It needs a keystroke from the reviewer, so it is pending,
+   not lost → folded into W72.
+3. **Findings whose evidence is a screen-reader claim:** all 19 cite a
+   no-vision run (R015, R016, R017, R059, R121) or a sweep/motor run. None
+   rests on a low-vision run, so no narration was filed against the wrong run
+   and then inherited by a finding.
+4. **Walkthrough feedback mentioning NVDA:** every instance is from
+   2026-09-10 on S2 and S3, and all of it is present in R016 (14 observations,
+   3 rows left) and R017 (24 observations, complete).
+
+**Conclusion:** no-vision is genuinely 2 of 10 resulted because only four
+views have ever had a screen reader on them — S1 and S3 fully, S2 three rows
+short (W56), S12 partially from the W53 narration (W65), plus S14's single row
+from 2026-09-21. **S4, S6, S7, S8 and S13 have never been walked with NVDA at
+all**; their runs hold the probe's three measured rows and nothing else.
+
+**The gap the audit did find:** six axe sweeps are still untriaged —
+**R003 (S7), R005 (S2), R007 (S4), R008 (S6), R011 (S12), R014 (S8)** — each
+with five to seven proposed classifications and both W1 and W3 blank. That is
+18 rows, and it is the same state R001 and R004 were in until 2026-09-17.
+
+**They are downstream of the walks, not independent of them.** W3 asks for the
+sweep's structure output to be cross-checked against a screen-reader walk, and
+four of these six views have no walk to check against; the view-specific
+violations need the same walk to confirm. R001 and R004 closed almost for free
+once R015 and R017 existed. So the efficient order is **NVDA walks first**
+(W56, W57 with W21, W58, W63, W64, W69) — each one closes its view's no-vision
+cell *and* unlocks its sweep triage.
 
 ### Close-out for session 3 (assistant)
 

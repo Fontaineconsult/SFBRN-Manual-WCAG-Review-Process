@@ -55,6 +55,9 @@ Format:
 - O4 [measured] (state: view as loaded, 2026-09-14 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured (re-measured 2026-09-14; replaces the earlier resting-state measurement)
   - Classified: NC2 / WCAG 1.4.1 / measured → n/a
 
+- O5 [new] (state: attempted 2026-09-21, colour-token scan): **not measured.** Navigating to `default2.aspx` landed on `default.aspx` — the redirect recorded in `03` §2.6 and guarded against since 2026-09-11 — so the scan would have measured the standard page under the Accessibility Mode label. Reaching this view means pressing the "Accessibility Page" button, and the mode is **stored on the account** (T1-F3), so the assistant did not switch it: that changes the reviewer's environment. The same-styles ruling is therefore **not** applied to this view; its NC1/NC3 rows stay blank until the reviewer is in that mode anyway.
+  - Classified: NC1, NC3 / not measured — the reviewer answers these the next time they are on the Accessibility Page → W74
+
 ## Notes
 
 (JAWS: Action / Announced / Expected-vs-actual triplets — copy exact speech

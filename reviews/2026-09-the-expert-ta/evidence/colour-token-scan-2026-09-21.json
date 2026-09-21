@@ -1,0 +1,260 @@
+{
+ "what": "Which of the colour tokens the reviewer failed on 2026-09-21 (W32) does each remaining view actually use?",
+ "why": "Reviewer's ruling: 'the styles are the same across the app, if the other views use the same colors lets assume they also fail.' That is a conditional; this scan establishes the antecedent per view by measurement instead of assuming it.",
+ "method": "CDP: enumerate every visible text-bearing element's computed color and every non-white background, match against the failed tokens.",
+ "failed_tokens": {
+  "rgb(255, 99, 71)": "#FF6347 randomised variable values (failed on S3, S8)",
+  "rgb(255, 153, 0)": "#FF9900 hint/feedback deduction percentages (failed on S3)",
+  "rgb(142, 169, 219)": "#8EA9DB calendar event bar (failed on S6)",
+  "rgb(239, 187, 117)": "#EFBB75 'Class Assignments' heading (failed on S1)",
+  "rgb(229, 143, 101)": "#E58F65 'Class News' heading (failed on S1)",
+  "rgb(72, 132, 140)": "#48848C teal captions (S1)",
+  "rgb(58, 124, 137)": "#3A7C89 teal links / part identifiers (S3, S7)"
+ },
+ "views": {
+  "S2": {
+   "error": "wrong view: https://dei56mo.theexpertta.com/common/default.aspx"
+  },
+  "S12": {
+   "hits": {
+    "rgb(58, 124, 137)": {
+     "where": "background",
+     "n": 6,
+     "eg": [
+      "Class Management| Instructor Grade Pre",
+      "Class Management"
+     ],
+     "token": "#3A7C89 teal links / part identifiers (S3, S7)"
+    },
+    "rgb(239, 187, 117)": {
+     "where": "text",
+     "n": 1,
+     "eg": [
+      "Library"
+     ],
+     "token": "#EFBB75 'Class Assignments' heading (S1)"
+    }
+   },
+   "others": [
+    [
+     "rgb(0, 0, 0)",
+     17,
+     [
+      "theExpertTA.com"
+     ]
+    ],
+    [
+     "rgb(255, 255, 255)",
+     5,
+     [
+      "Class Management"
+     ]
+    ],
+    [
+     "rgb(44, 115, 133)",
+     2,
+     [
+      "Take Tutorial Assignment"
+     ]
+    ],
+    [
+     "rgb(51, 102, 153)",
+     2,
+     [
+      "All content 2026 Expert TA, LLC"
+     ]
+    ]
+   ],
+   "total": 33,
+   "distinct": 6
+  },
+  "S13": {
+   "hits": {
+    "rgb(255, 99, 71)": {
+     "where": "text",
+     "n": 10,
+     "eg": [
+      "25",
+      "13",
+      "9.5"
+     ],
+     "token": "#FF6347 randomised variable values (S3, S8)"
+    },
+    "rgb(58, 124, 137)": {
+     "where": "background",
+     "n": 6,
+     "eg": [
+      "Class Management| Instructor Grade Pre",
+      "Class Management"
+     ],
+     "token": "#3A7C89 teal links / part identifiers (S3, S7)"
+    }
+   },
+   "others": [
+    [
+     "rgb(0, 0, 0)",
+     380,
+     [
+      "theExpertTA.com"
+     ]
+    ],
+    [
+     "rgb(255, 0, 0)",
+     8,
+     [
+      "11000"
+     ]
+    ],
+    [
+     "rgb(255, 255, 255)",
+     5,
+     [
+      "Class Management"
+     ]
+    ],
+    [
+     "rgb(51, 102, 153)",
+     2,
+     [
+      "All content 2026 Expert TA, LLC"
+     ]
+    ]
+   ],
+   "total": 408,
+   "distinct": 6
+  },
+  "S4": {
+   "hits": {
+    "rgb(255, 99, 71)": {
+     "where": "text",
+     "n": 10,
+     "eg": [
+      "25",
+      "13",
+      "9.5"
+     ],
+     "token": "#FF6347 randomised variable values (S3, S8)"
+    },
+    "rgb(58, 124, 137)": {
+     "where": "background",
+     "n": 6,
+     "eg": [
+      "Class Management| Instructor Grade Pre",
+      "Class Management"
+     ],
+     "token": "#3A7C89 teal links / part identifiers (S3, S7)"
+    }
+   },
+   "others": [
+    [
+     "rgb(0, 0, 0)",
+     852,
+     [
+      "theExpertTA.com"
+     ]
+    ],
+    [
+     "rgb(255, 165, 0)",
+     66,
+     [
+      "%"
+     ]
+    ],
+    [
+     "rgb(128, 0, 128)",
+     66,
+     [
+      "%"
+     ]
+    ],
+    [
+     "rgb(255, 0, 0)",
+     48,
+     [
+      "Late submissions were made on this par"
+     ]
+    ],
+    [
+     "rgb(0, 0, 255)",
+     44,
+     [
+      "[?]"
+     ]
+    ],
+    [
+     "rgb(128, 128, 128)",
+     22,
+     [
+      "All Date times are displayed in Pacifi"
+     ]
+    ]
+   ],
+   "total": 1120,
+   "distinct": 11
+  },
+  "S7": {
+   "hits": {
+    "rgb(58, 124, 137)": {
+     "where": "text",
+     "n": 9,
+     "eg": [
+      "Welcome to Expert TA!",
+      "Log In",
+      "User Name:"
+     ],
+     "token": "#3A7C89 teal links / part identifiers (S3, S7)"
+    }
+   },
+   "others": [
+    [
+     "rgb(80, 80, 80)",
+     5,
+     [
+      "Note:"
+     ]
+    ],
+    [
+     "rgb(0, 0, 0)",
+     2,
+     [
+      "Instructors can find overview videos o"
+     ]
+    ],
+    [
+     "rgb(51, 102, 153)",
+     2,
+     [
+      "All content 2026 Expert TA, LLC"
+     ]
+    ]
+   ],
+   "total": 18,
+   "distinct": 4
+  },
+  "S14": {
+   "hits": {
+    "rgb(58, 124, 137)": {
+     "where": "text",
+     "n": 3,
+     "eg": [
+      "Request Password Reset",
+      "User Name:",
+      "Note"
+     ],
+     "token": "#3A7C89 teal links / part identifiers (S3, S7)"
+    }
+   },
+   "others": [
+    [
+     "rgb(51, 102, 153)",
+     2,
+     [
+      "All content 2026 Expert TA, LLC"
+     ]
+    ]
+   ],
+   "total": 6,
+   "distinct": 3
+  }
+ }
+}

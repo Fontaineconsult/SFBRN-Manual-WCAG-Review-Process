@@ -681,14 +681,27 @@ review's last integrity flag of that kind. The contrast half of the same
 elements stays under V-F23 (1.4.3) — "hard to see" and "colour is the only
 carrier" are two different failures and both are recorded.
 
-**Still open on this step, and small:** five pages were not mentioned —
-Class Management **Accessibility Mode**, **Student Practice Area**,
-**Printable Assignment**, **Sign in**, **Password reset**. If "all contrast
-fails in greyscale" was meant to cover them too, say so and they close as
-NC3 fail; otherwise one line each ("nothing conveyed by colour, page still
-works") finishes 302.3. **View Grade Report** cannot be judged at all until
-the demo account has graded work — already logged as a coverage limitation,
-not a pass.
+**Closed 2026-09-21 by your same-styles ruling** — *"the styles are the same
+across the app, if the other views use the same colors lets assume they also
+fail."* Taken as the conditional it is: each remaining view was scanned for the
+tokens you failed, so the rule is applied where it holds and not where it does
+not (`evidence/colour-token-scan-2026-09-21.json`).
+- **Printable Assignment** → **fail**. `#FF6347` on 10 elements, and the
+  sample text is "25", "13", "9.5" — the randomised values themselves. Same
+  token, same job as Take Assignment. Run **Broken**. It matters twice here:
+  this page is the candidate alternate route for *reading* an assignment.
+- **Student Practice Area** → NC1 partial, NC3 fail. Only `#EFBB75`, on the
+  "Library" heading — the "Class Assignments" case again. **Works with issues**.
+- **Sign in** and **Password reset** → **NC1 pass**. Their only shared token is
+  teal on headings and field labels — "Log In", "User Name:" — words that
+  already say what they are. None of the tokens that carry *meaning* is on
+  either page. The ruling does not fail them, so they are not failed.
+- **Accessibility Mode** → **not measured.** `default2.aspx` redirects to
+  `default.aspx` (the trap from 2026-09-11), and reaching it means pressing
+  "Accessibility Page", which is **stored on your account** — not the
+  assistant's to change. One line from you when you are next in that mode.
+
+**And a correction on View Grade Report** — see **W74**.
 
 ---
 
@@ -1622,6 +1635,36 @@ measurement).
 **Why it matters:** with W41 this is the last 1.4.1 evidence; both answered,
 `05` 1.4.1 can be decided and the review's only integrity flag clears.
 **KEY STEP**
+**Feedback:** _(pending)_
+
+### W74 — View Grade Report: it is not empty, and two colours share one symbol (NC1, NC3 — decides the last 302.3 rows)
+
+**Page:** Class Management → assignment row → "View Grade Report (shows your
+detailed work)". Grayscale filter on.
+**Why you are being asked again:** you told me on the 21st there are no grades
+to view, and I recorded that as a coverage limitation. Measuring the page for
+the colour scan contradicts part of it: **the page renders 1120 text elements
+in 11 colours**, and the colour-coding W32 asked about is all there. So
+whatever is missing from the demo account, this page is not blank and its
+colour use *is* testable. I would rather re-ask than leave a limitation on the
+record that the measurement disputes.
+**Two specific things, both already located:**
+- **Orange and purple both sit on "%" — 66 elements each.** Two different
+  colours doing something to the same symbol, in equal numbers, looks like two
+  meanings told apart by colour alone. What are they? If nothing in the words
+  distinguishes them, that is a clean 1.4.1 failure and the strongest one on
+  the page.
+- **Red on 48 elements, and the sample text is a sentence** — *"Late
+  submissions were made on this part"*. If lateness is stated in words like
+  that, then it is **not** colour-only, and that part of NC1 **passes** — the
+  opposite of what the 2026-09-10 note assumed. Worth confirming, because it
+  is the one place the page may do better than predicted.
+**Also tell me:** what "no grades to view" meant, so the limitation in `03`
+§1.1 and against task T5 can be narrowed to what is actually missing (scores?
+feedback text? a second submission?) rather than reading as "the page is
+blank", which it is not.
+**Why it matters:** these are the last unanswered no-color rows besides
+Accessibility Mode; answering them finishes 302.3.
 **Feedback:** _(pending)_
 
 ### Close-out for session 3 (assistant)

@@ -27,9 +27,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | | |
+| NC1 — Nothing is conveyed by color alone (status, errors, required fields, chart series, selected states) | pass | O4 — measured: the only failing token on this view is **#3A7C89**, used on headings and field labels ("Welcome to Expert TA!", "Log In", "User Name:") — words that say what they are. Nothing here states a status, an error or a required field by colour |
 | NC2 — Links are distinguishable from surrounding text without color | fail | O2 — 1 of 6 link(s) in running text are told from the surrounding text by colour only — no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) does not hold — measured: (e-mail reset) → /ResetPassword.aspx [1.7:1 vs text; hover cue: a:hover; focus: outline]; 5 colour-only link(s) DO satisfy G183 |
-| NC3 — Everything remains operable and understandable in grayscale | | |
+| NC3 — Everything remains operable and understandable in grayscale | partial | O4 — the page stays operable and readable with colour removed; what does not survive is the "(e-mail reset)" link, which NC2 already records as a measured fail awaiting the reviewer's eye (W73) |
 
 **view_probe 2026-09-17:** answered NC2=fail by measurement; facts in `R120-probe.json`.
 
@@ -47,6 +47,9 @@ Format:
 
 - O3 [clarified] (state: sign-in page, reviewer on NVDA, 2026-09-21 — step W70): *"e-mail reset appears as a link to NVDA and is tabbable."* The control's **programmatic** presentation is sound — the role is exposed and it is reachable from the keyboard. This does **not** answer NC2 / 1.4.1, which asks about the **visual** presentation to a sighted user who cannot use colour to tell the link from the sentence around it; the measured fail (1.7:1 against the surrounding bold text, no underline until hover or focus) is untouched by it and still awaits the looking question → W73.
   - Classified: 4.1.2 and 2.1.1 / **pass** for this control (recorded here because the reviewer raised it on this view; no finding); NC2 unchanged — still a measured fail awaiting confirmation
+
+- O4 [measured] (state: sign-in page as loaded, 2026-09-21 — colour-token scan under the reviewer's same-styles ruling): the view uses one failing token, `#3A7C89`, on 9 elements — all of them headings or field labels. None of the tokens that carry *meaning* elsewhere in the app is present: no `#FF6347` randomised values, no `#FF9900` deduction percentages, no event bar. So the same-styles ruling does not make this page fail NC1: its colour is decoration over text that already says what it is. The live colour problem on this view is the one NC2 has measured — the reset link — and it is W73's question, not NC1's.
+  - Classified: NC1 / pass; NC3 / partial, resting on NC2
 
 ## Notes
 

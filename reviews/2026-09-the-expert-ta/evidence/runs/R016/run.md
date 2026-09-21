@@ -11,7 +11,9 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA 2026.2, baseline B5); assistant records |
-| **Result** | Not set — NV4, NV5, NV10 need the reviewer (jaws, B1); measured fail on NV2, NV3, NV6, NV8 awaits confirmation |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-21, every row now answered. This is the vendor's own accessible page and the route task T1 depends on: the assignment row's Actions select and Go button work with a screen reader (O13), which is why T1 is Pass with barriers rather than Fail. "Works with issues", not Broken — the task completes here, but with no headings or landmarks (V-F1), unlabelled editors (V-F7), skip controls whose text names no destination (V-F3) and an unnamed expand graphic (V-F16).
 
 ## Checks (no-vision)
 
@@ -23,15 +25,15 @@ run's Result is set. Fails cite observation IDs.
 | NV1 — Page/view title identifies its purpose | pass | O1 — title "Class Management Accessibility Mode" announced on load and on NVDA+T |
 | NV2 — Headings and landmarks exist, are hierarchical, and support navigation | fail | O2, O3 — no headings (H), no landmarks (D); section titles are focusable divs; both grids share one generic caption. Column header IS announced per cell ("row 3 Actions column 1") — headers are associated |
 | NV3 — Every control announces an accurate name, role, and value/state | fail | O4 (skip links: link role, wording), O5 (title divs), O10 (Actions select unnamed), O11 (top selects: identical instruction as name, visible captions not announced), O12 (jump point: unnamed, Enter only toggles "No Shortcuts"); O9 (Go/table nav with NVDA) unresolved |
-| NV4 — Images announce appropriate alternatives; decorative images are silent |  | not narrated (W6 skipped — logo image, ⊞ expand icons); ask at session end |
-| NV5 — Reading order matches the meaning of the visual order |  | not narrated (W6 skipped); ask at session end |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | fail | O15 — reviewer 2026-09-21: `G` finds **one** graphic on the page and it announces "collapsed graphic clickable" — the grid expand control, no name and no role. The site logo is not reachable by `G` at all (it is inside `aria-hidden`). Same defect as S1 → **V-F16** |
+| NV5 — Reading order matches the meaning of the visual order | pass | O15 — reviewer 2026-09-21: "arrow order makes sense" |
 | NV6 — Form fields announce labels and instructions; errors are announced and identified | fail | O7 (popup forms unlabeled), O11 (Classes / Class Menu selects: visible labels "Classes:" / "Class Menu:" not announced; both share one instruction text as their name) |
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | pass | O13 — Actions → Take Assignment → Go: page change announced ("Take Homework Assignment") |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | fail | O3 — the two grids are distinguishable only by position/order (identical captions) |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | pass | O16 — **revised 2026-09-21 on the reviewer's direct answer ("nv8 no")**. O3's own text supports it: `T` gives both grids the same generic caption, but tabbing in announces "Class Assignments" / "Class News" from the focusable title divs, so the tables *are* tellable apart without relying on position. **V-F2 is not withdrawn** — it stands on the generic table caption (1.3.1 identification), which is an NV2/NV3 defect, not a position-only one |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | lang="en"; no pronunciation issue reported |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | fail | O4 — the section skip controls are exposed as links whose text ("Tab for Assignments, Enter to skip…") does not state a destination; confirmed finding V-F3 (2.4.4). Filled 2026-09-11 from the reviewer's 2026-09-10 narration — no new judgment (row added by sync-checks). |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O14 — no <video>, media iframe or embed on the view |
-| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | | (row added 2026-09-14 by sync-checks — not part of the original session; answer or mark n/a) |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | n/a | O15 — reviewer 2026-09-21: "no fields" — the view has no validated input of its own (the Class Menu popup forms are S11, out of the sample) |
 **view_probe 2026-09-11:** answered NV11=n/a by measurement; facts in `R016-probe.json`.
 
 ## Observations
@@ -73,6 +75,11 @@ Format:
 
 - O14 [measured] (state: view as loaded, 2026-09-11 view_probe): no <video>, media iframe or embed on the view
   - Classified: NV11 / WCAG 1.2.3, 1.2.5 / measured → n/a
+
+- O15 [clarified] (state: Class Management Accessibility Mode, `default2.aspx`, NVDA, reviewer 2026-09-21 — step W56, the three rows left open on 2026-09-10): **"no headings no landmarks, 1 collapsed graphic clickable 'g', arrow order makes sense, f — form fields generally don't have labels, but they are contained in tables and the tables do custom voicing, nv7 is as expected, nv8 no, nv10 no all have names, no fields."** Answering the open rows: **NV4** — a single graphic, announced "collapsed graphic clickable", no name, no role (the same unnamed expand control as S1, V-F16; the logo is unreachable by `G` because it sits inside `aria-hidden`). **NV5** — reading order makes sense. **NV12** — no validated fields on this view.
+  - Classified: NV4 / WCAG 1.1.1, 4.1.2 / Minor → **V-F16** extended to S2; NV5 / pass; NV12 / n/a
+- O16 [clarified] (state: as O15): the same narration corroborates four rows answered on 2026-09-10 and revises one. Corroborated: **NV2** no headings or landmarks (fail, unchanged); **NV6** the form fields have no labels — and the reviewer names the mechanism, *"they are contained in tables and the tables do custom voicing"*, which is the same table-read-out-instead-of-a-label pattern found on the password reset page (V-F30); **NV7** as expected (pass, unchanged); **NV10** *"all have names"* — which does **not** overturn the recorded fail, because V-F3 is not about missing names but about skip-control link text that never states a destination ("Tab for Assignments, Enter to skip…"); the reviewer was answering the "bare click here / more" half of the row. Revised: **NV8** → pass (see the row).
+  - Classified: corroboration only, except NV8 revised
 
 ## Notes
 

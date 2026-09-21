@@ -1399,7 +1399,37 @@ skip them unless the title you hear is wrong.
 **Tell me:** **(NV4)** `G` — the logo and any other graphic. **(NV5)** arrow
 down from the top — the order across the skip links, the two grids, the
 news. **(NV12)** no validated input here? then n/a.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — answered, and **R016 is now complete (Result: Works
+with issues)**. *"no headings no landmarks, 1 collapsed graphic clickable 'g',
+arrow order makes sense, f — form fields generally don't have labels, but they
+are contained in tables and the tables do custom voicing, nv7 is as expected,
+nv8 no, nv10 no all have names, no fields."*
+- **NV4 fail** — one graphic, "collapsed graphic clickable", no name, no role
+  → **V-F16** now covers this page too. (The logo is not reachable by `G` at
+  all; it sits inside `aria-hidden`.)
+- **NV5 pass**, **NV12 n/a**.
+- **NV8 revised fail → pass** on your direct answer, and O3's own text backs
+  it: `T` gives both grids the same generic caption, but tabbing in announces
+  "Class Assignments" / "Class News" from the title divs, so they are not
+  told apart by position. **V-F2 stands** — it is about the generic caption
+  (1.3.1), which is an NV2/NV3 defect, not a position-only one.
+- **NV10** — "all have names" does not overturn the recorded fail: V-F3 is
+  not about missing names but about skip-control text that states no
+  destination ("Tab for Assignments, Enter to skip…"). You answered the
+  "bare click here / more" half; that half is clean.
+- **NV6** — your phrase *"contained in tables and the tables do custom
+  voicing"* names the mechanism, and it is the same one as the password reset
+  page (V-F30). Recorded as the product-wide pattern it is.
+
+**On "how are we missing this work" — it was not missing.** Nine of R016's
+twelve rows were recorded from your 2026-09-10 walk and have been in the file
+since. Three were open, and the file says why: **NV4 and NV5 read "not
+narrated (W6 skipped)"** — W6 is the read-the-page-top-to-bottom step, skipped
+on the day — and **NV12 did not exist as a row until 2026-09-14**, when
+sync-checks split it out of NV6. The assistant's task list named the three
+rows but not that history, which is what made it read as redoing finished
+work. Fixed in `ontology/testing-loop.md` so a resumed page always states what
+is already recorded and why the remainder is open.
 
 ### W57 — View Grade Report (S4, run R029)
 

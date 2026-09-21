@@ -134,6 +134,15 @@ skipped.
    asking for precisely what the check outcome needs; a why-it-matters line
    whenever the step confirms/refutes a pending finding or vendor claim
    (mark those **KEY STEP**); `**Feedback:** _(pending)_`.
+   **A resumed page states what is already recorded.** When a step returns to
+   a view that was partly walked before, the step — and any task list built
+   from it — says how many rows are already answered, and *why* the remainder
+   is open (a step skipped on the day, a row added later by `sync-checks`, a
+   question routed elsewhere). 2026-09-21: the reviewer was handed "Class
+   Management, Accessibility Mode — 3 rows" and read it as being asked to redo
+   a walk they had finished on 2026-09-10. Nine of the twelve rows *were*
+   recorded; the run file said so ("not narrated (W6 skipped)"), but the task
+   list did not carry it. Row counts without that history look like lost work.
    **Name the page in words, every time** (learned 2026-09-14: the reviewer
    answered "I don't know what S1 S2 S3 S4 means" to a confirmation list
    written in view codes). View IDs are the process's bookkeeping, not the

@@ -224,12 +224,12 @@ differently.
 
 | | |
 |---|---|
-| **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids |
+| **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids; **S2 Class Management Accessibility Mode** — the same control, and there it is the *only* graphic `G` reaches (added 2026-09-21); S12 Student Practice Area — the sections grid's expand image |
 | **Observed** | `G` (next graphic) stops on two controls announced as "collapsed graphic clickable": the DevExpress detail-expand glyphs (`img.dxGridView_gvDetailCollapsedButton`). They are clickable images with no role (not a button) and no name — a screen-reader user hears that something collapsed is clickable but not what it expands. The site logo, the only other graphic, has alt text. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
 | **Severity** | Minor |
-| **Evidence** | R015 O11; R022 O2 (the same glyphs measured at 9×10 px for 2.5.8); R059 O3 (S12, 2026-09-15: the sections grid's expand image — `alt="[Collapse]"`, onclick, no role, not focusable) |
+| **Evidence** | R015 O11; R016 O15 (S2, reviewer 2026-09-21); R022 O2 (the same glyphs measured at 9×10 px for 2.5.8); R059 O3 (S12, 2026-09-15: the sections grid's expand image — `alt="[Collapse]"`, onclick, no role, not focusable) |
 
 #### Finding V-F29
 

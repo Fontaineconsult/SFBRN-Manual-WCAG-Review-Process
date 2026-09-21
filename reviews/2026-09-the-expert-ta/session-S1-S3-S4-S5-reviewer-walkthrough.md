@@ -1665,7 +1665,49 @@ feedback text? a second submission?) rather than reading as "the page is
 blank", which it is not.
 **Why it matters:** these are the last unanswered no-color rows besides
 Accessibility Mode; answering them finishes 302.3.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — *"in GradeSheetGradeReport the colored text fails
+contrast in grey, except the dark blue, that passes; it should also be pointed
+out that the images used also fail contrast in some ways when in grey; assume
+the red and orange fail in all views."* Recorded: **NC1 fail, NC3 fail, Result
+Broken** (R100 O6–O8).
+
+The two open questions were settled by measurement rather than sent back to
+you a third time:
+- **Orange vs purple** — they are two different deductions. Orange is
+  *"Deduction for Final Submission"*, purple *"Deductions for Incorrect
+  Submissions, Hints and Feedback"*. Next to their labels the words carry
+  them; in the summary line `Student Grade = 100 - 100 - 9 = 0%` they do not —
+  the first number is orange, the second purple, and **nothing but hue says
+  which is which**. No title, no aria-label, no legend. That is the clearest
+  colour-only case in the review.
+- **Red** — both, and the split matters. Part-level lateness is a **sentence**
+  ("Late submissions were made on this part…"), so that much is not
+  colour-only and is recorded as a **pass**. But 14 individual submissions are
+  marked late by a red date-time only, under the product's own legend **"Red
+  submission date times indicate late work."** A legend that names a colour
+  does not satisfy 1.4.1 — someone who cannot see red still cannot tell which
+  dates it applies to.
+
+**Your "images also fail contrast in grey"** is recorded against **V-F24**: the
+figures do not only pixelate at zoom, they lose internal contrast with colour
+removed, so detail inside the diagram goes too. **"Assume red and orange fail
+in all views"** is applied — it confirms the two views already failed by
+measurement (Printable Assignment, Student Practice Area) and adds nothing new,
+because Sign in and Password reset carry no red or orange at all.
+
+**The report gains its own recommendation from this.** Two places on the
+product already do it right — the problem-navigator **status marks** (a
+symbol) and part-level lateness (a **sentence**) — and the dark blue [?] links
+are the one colour that survives grayscale. The fix is the product's own
+pattern applied to the rest, which is a much easier thing to ask a vendor for
+than "improve your colours".
+
+**Still not answered, and it only affects a limitation note:** what "no grades
+to view" meant. The page is plainly not blank — 1120 text elements, a real
+grade formula, real submission dates. If what is missing is something narrower
+(a second attempt? instructor feedback text?), say which, and the limitation in
+`03` §1.1 and against **T5** can be narrowed to it instead of reading as
+"the page cannot be tested", which the measurement disproves.
 
 ### Close-out for session 3 (assistant)
 

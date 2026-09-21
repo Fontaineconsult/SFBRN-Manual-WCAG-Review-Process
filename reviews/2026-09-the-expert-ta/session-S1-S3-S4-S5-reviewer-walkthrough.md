@@ -1460,7 +1460,24 @@ One line closes the row.
 **Also:** 14 solution images without alt — what does `G` say on each, and
 does any carry the solution itself (NV4)? MathJax in the solutions — read
 in browse mode or "table" (as on Take Assignment, R017 O7)?
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — **R087 complete, Result Works with issues.**
+*"headings work, graphics have no meaningful alt text, just random characters
+are announced an 'unlabled graphic clickable', math expressions on this page
+voice as expected"*, then *"generally yes, controls announce name and role,
+there is a sensible order, this page seems static, so no reloads, nothing only
+id by position."*
+**This is the best-built page in the sample for a screen reader** — NV2, NV3,
+NV5, NV8, NV10 all pass, NV6/NV7/NV12 n/a. The heading outline is real (h1 +
+one h2 per problem) and it is the only one in the product; recorded as a
+positive in `04` because it turns V-F1 from "please add headings" into "do
+what this page already does". The math voicing correctly is the positive
+control for V-F9 — the notation is fine, the answer read-back is what fails
+on Take Assignment.
+**One fail, and it is the content:** 14 of 15 figures have no `alt`, so NVDA
+reads the file name. 7 of them are written `src="….png alt="` — the
+alternative text was authored and lost to a missing quote → **V-F35**,
+the cheapest fix in the review. NV10 closed by measurement (10 links, all
+distinctly named, no duplicates) rather than costing you another pass.
 
 ### W59 — Class Assignments Grade Sheet (S9, run R047)
 

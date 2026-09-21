@@ -57,7 +57,7 @@ confirmations, error messages, and other feedback are all in scope.
 | **Baselines run** | B5 (NVDA) on S2 — R016; B5 on S1 — R015 (2026-09-14); B2, B3 pending |
 | **Date(s) tested** | 2026-09-10, 2026-09-14 |
 
-**Sequence notes:** **Verdict Pass with barriers (reviewer, 2026-09-14):** in standard mode — the page every student lands on — step 3 cannot be completed from the keyboard: the assignment row's action menu opens only by mouse click (T1-F3). The reviewer accepts the Accessibility Mode page as the vendor's alternate route: "not an ideal solution, but it does allow access. Not fail." So the task passes through branch P1-a (Accessibility Mode, S2 → S3) with the barriers T1-F1, T1-F2 and T1-F3's discoverability cost (the user must find the "Accessibility Page" button first; the mode is then stored on the account). 2026-09-14, NVDA, standard mode (S1, R015): title "Class Management"; no headings/landmarks (V-F1 confirmed); reading order fine but the grids are told apart by position (V-F2 confirmed); the Classes / Class Menu editors announce an instruction, not a label (V-F7 confirmed); the first Tab stop is the hidden instruction div; the grids' expand controls are unnamed clickable graphics (V-F16). Earlier: 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Step 4 (R017): problem links work with `K`/Enter but focus does not move into the activated problem and there are no headings to find it (T1-F2); the hidden problems jump point mounts a shortcuts menu only after Enter, and NVDA users must switch to browse mode to use it (V-F8). Step 5 pending.
+**Sequence notes:** **Reading step — no alternate route exists (2026-09-21).** View Printable Assignment (S13) was sampled on 2026-09-15 as a candidate conforming alternate for *reading* an assignment, since this task's reading step is Broken without vision. The NVDA walk closes it negatively: no headings at all, and 8 of 14 figures with no usable alternative, 2 of them CSS backgrounds that cannot carry alt text (V-F36, R113). So the alternate-version argument that rescued **step 3** (Accessibility Mode, T1-F3) has **no equivalent for step 4**, and T1-F2's barriers stand unmitigated. **Verdict Pass with barriers (reviewer, 2026-09-14):** in standard mode — the page every student lands on — step 3 cannot be completed from the keyboard: the assignment row's action menu opens only by mouse click (T1-F3). The reviewer accepts the Accessibility Mode page as the vendor's alternate route: "not an ideal solution, but it does allow access. Not fail." So the task passes through branch P1-a (Accessibility Mode, S2 → S3) with the barriers T1-F1, T1-F2 and T1-F3's discoverability cost (the user must find the "Accessibility Page" button first; the mode is then stored on the account). 2026-09-14, NVDA, standard mode (S1, R015): title "Class Management"; no headings/landmarks (V-F1 confirmed); reading order fine but the grids are told apart by position (V-F2 confirmed); the Classes / Class Menu editors announce an instruction, not a label (V-F7 confirmed); the first Tab stop is the hidden instruction div; the grids' expand controls are unnamed clickable graphics (V-F16). Earlier: 2026-09-10, NVDA, Accessibility Mode (S2): step 1 sign-in not walked (already signed in). Step 2 Class Management: title fine (R016 O1); no headings/landmarks, the skip links are inert, and the two grids share one generic caption — the reviewer reaches the assignments table by `T`/Tab and identifies it by the focusable title div (R016 O2–O5). Step 3 (Accessibility Mode): row Actions select → "Take Assignment" → Go; page change announced (R016 O13) — completable. The Classes / Class Menu selects at step 2 are not distinguishable by name (V-F7). Step 4 (R017): problem links work with `K`/Enter but focus does not move into the activated problem and there are no headings to find it (T1-F2); the hidden problems jump point mounts a shortcuts menu only after Enter, and NVDA users must switch to browse mode to use it (V-F8). Step 5 pending.
 
 #### Finding T1-F1
 
@@ -536,6 +536,38 @@ differently.
 | **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
 | **Evidence** | R087 O6 (reviewer + markup measurement); R014 `R014-axe.json` |
+
+### View S13 — View Printable Assignment
+
+| | |
+|---|---|
+| **Baselines run** | B5 NVDA (R113, 2026-09-21 — reviewer; NV3, NV7, NV8, NV10 open); axe (R112); probe runs R114–R118; zoom (R118, 2026-09-15 — reviewer); grayscale (R119, Broken) |
+| **Date tested** | 2026-09-15 (zoom), 2026-09-21 (NVDA, grayscale) |
+| **Findings** | V-F36; V-F37; V-F1 and V-F8 apply here (no headings, jump-point mechanism); V-F31 (colour-only randomised values); V-F24, V-F23, V-F19 |
+
+**Decision this view was sampled to settle — it is not a conforming alternate.** S13 was added on 2026-09-15 as a candidate alternate route for *reading* an assignment, because Take Assignment (S3) is Broken without vision (R017). The 2026-09-21 walk closes that question **negatively** on two independent grounds: the page has **no headings at all** (measured: 0), so there is no more structural route to a problem here than on Take Assignment; and **8 of its 14 figures carry no usable alternative**, two of them painted as CSS backgrounds that cannot carry alt text at all (V-F36). A student who cannot see therefore gains no reading route from this page, and **T1's barriers stand as recorded** — the alternate-version argument that rescued step 3 (Accessibility Mode, T1-F3) has no equivalent for the reading step.
+
+#### Finding V-F36
+
+| | |
+|---|---|
+| **Where** | View Printable Assignment (S13) — the problem figures: 6 with no `alt` attribute, 4 with empty `alt`, and 2 painted as CSS `background-image` on a `div` (`/images/x3j4awcq.tk5.png`, `/images/r3fze21y.3sa.png`) |
+| **Observed** | Reviewer with NVDA, 2026-09-21: *"only a few of the images have proper alt text, other 'images' don't seem to register as images at all and have no right click."* Measured the same day, the page does **three different things** with its 14 figures. **4 carry real descriptive alternatives** — "A red block with mass m rests on a frictionless…", "The image shows a car stuck in the mud…" — which is the important part of this finding: the vendor writes good alternative text when it writes any, so this is not a capability gap. **6 have no `alt` attribute** and **4 have empty `alt`**. The remaining **2 are not `<img>` elements at all**: they are `div`s painted with a CSS `background-image`, which is why the reviewer finds no graphic and no right-click — a CSS background never enters the accessibility tree, and **no alt attribute can be added to it** without changing the markup. That last pair is the only place in the review where the fix is structural rather than editorial. Diagrams in a physics problem are the problem: a student who cannot see them cannot attempt the question. |
+| **Affected users** | Screen reader users; users of text-only or image-blocked browsing |
+| **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
+| **Severity** | Major (proposed 2026-09-21 — and it is what denies this page the conforming-alternate role it was sampled to test. Reviewer to confirm.) |
+| **Evidence** | R113 O6 (reviewer + markup measurement); R112 `R112-axe.json` |
+
+#### Finding V-F37
+
+| | |
+|---|---|
+| **Where** | View Printable Assignment (S13) — the layout tables the problems are rendered in: 13 of 73 cells are empty |
+| **Observed** | Reviewer with NVDA, 2026-09-21: *"the page has not been optimized, many 'blank' voicings."* The reading order itself is sound — they confirm it — so the noise is inside an otherwise correct sequence. Measured: **13 of the view's 73 table cells are empty**, and **no control on the page is unnamed** (0 of 157 focusable stops lack an accessible name). The blank announcements therefore come from empty *layout* table cells being exposed and read as content, not from anonymous controls. The product lays its pages out in tables throughout (the same construction the reviewer described on the password reset page, V-F30), so spacer cells become things a screen reader stops on and voices as nothing. |
+| **Affected users** | Screen reader users — extra announcements with no content, between the parts of a problem |
+| **WCAG criteria failed** | 1.3.1 (layout tables exposed as content structure) |
+| **Severity** | Minor (proposed 2026-09-21 — noise rather than a barrier; the reviewer reads the page successfully through it. Reviewer to confirm.) |
+| **Evidence** | R113 O5, O7 (reviewer + measurement) |
 
 ### View S5 — Assignment Editor
 

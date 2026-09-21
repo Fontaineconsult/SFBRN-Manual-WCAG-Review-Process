@@ -578,7 +578,7 @@ stop with the focus ring hidden.
 **Why it matters:** both pages already scroll horizontally at 1280 px; axe
 cannot test 1.4.10.
 **Measured 2026-09-11 (view_probe, LV1):** at 320 CSS px every one of the 14 views scrolls horizontally — the page is a fixed 1300 px container (`div#container`; S1 scrollWidth 1343, S3 1300, S5 1373). Recorded as a measured fail on each view's low-vision run (R019, R024, R030, R036, R042, R048, R054, R060, R066, R072, R078, R083, R088, R094). **What remains for you:** confirm at real 400 % zoom that content or functionality is lost or overlaps (LV2) and that the focus indicator stays visible (LV7).
-**Feedback:** _(pending)_
+**Feedback:** **Superseded 2026-09-15 — do not run.** Session 3 walked zoom page by page (W42–W55) and answered LV2 and LV7 on every sampled view; the reflow fail became **V-F19** and the popup case **V-F25**. Nothing is left of this step. Kept for the record, closed as answered elsewhere.
 
 ### W30 — Contrast eyedropper (LV4, LV5)
 
@@ -596,7 +596,7 @@ Class Management "Classes"/"Class Menu" captions `#48848C` on white
 **Tell me:** Each measured ratio, or "matches". Note which of these are
 information a student must act on (deduction %, variable values) versus
 decoration.
-**Feedback:** _(pending)_
+**Feedback:** **Superseded 2026-09-15 — do not run.** Session 3's eyedropper pass (W42–W55) answered LV4 and LV5 across the sample; the axe numbers held and became **V-F23** (text contrast) and **V-F27** (table/grid lines). The two items this step left unmeasured are also closed: the ⋮ row-menu glyph measured **21:1** by pixel sampling 2026-09-17 (R001 O12, a pass), and the image-painted button captions stay recorded as unmeasured-by-design. Only **S13's LV5** is still open, and it is one line in W68.
 
 ### W31 — Text spacing and orientation (LV3, LV8)
 
@@ -606,7 +606,7 @@ resize to a portrait-shaped window.
 **Tell me:** Any clipped or overlapping text (MathJax, keypad buttons, the
 problem navigator), and whether portrait works.
 **Measured 2026-09-11 (view_probe, LV3/LV8):** the text-spacing override clips the date cells on Class Management (both modes), the Calendar and Take Assignment (measured fail: R019, R024, R042, R083); the other ten views tolerate it (pass). Orientation: no orientation media query or lock on any view (LV8 pass everywhere). **What remains for you:** a glance at the four clipping views with the override on, to confirm the clipped text is real content loss.
-**Feedback:** _(pending)_
+**Feedback:** **Superseded 2026-09-15 — do not run.** Session 3 photographed the clipping over CDP and you ruled **no content loss**, which set 1.4.12 to Supports. LV3 and LV8 are answered on every view. Nothing left here.
 
 ---
 
@@ -619,15 +619,47 @@ python scripts/review.py log-test the-expert-ta --view S4 --modality no-color --
 ```
 Windows Settings → Accessibility → Color filters → Grayscale.
 
-### W32 — Grayscale read of the assignment and the grade report (NC1, NC2, NC3)
+### W32 — The grayscale pass (NC1, NC3 — expanded 2026-09-21) — KEY STEP
 
-**Do:** In grayscale: on Take Assignment, can you still tell the randomized
-variable values (red) from the rest of the statement, the "detailed view"
-link from text, and the problem status symbols (☑ ☒ ☐) apart? On the grade
-report: is a late submission identifiable other than by red date text? Are
-the blue **[?]** links distinguishable?
-**Tell me:** Each yes/no, with what else (bold, symbol, wording) carries the
-meaning if colour does not.
+**This is the whole of 302.3 — Without Perception of Color, and it is the
+largest block of unanswered rows left in the review: NC1 and NC3 are blank on
+all ten pages.** NC2 (links) is already measured everywhere, so this step is
+the two rows a person has to judge, and one sitting closes the FPC.
+
+**Setup, once:** Windows Settings → Accessibility → Colour filters →
+**Grayscale**, on. No screen reader needed. Leave it on for W41 and W73 below,
+which are the same kind of question.
+
+**The two rows, in plain words:**
+- **NC1** — is anything told to you *only* by colour? A status, an error, a
+  required field, a "this one is late", a value you are meant to act on.
+- **NC3** — with colour gone, can you still work the page and understand it?
+
+**Where colour actually carries meaning** — measured, so you can go straight
+to these rather than hunting:
+
+| Page | Look at | The question |
+|---|---|---|
+| **Take Assignment** (`/Common/TakeTutorialAssignment…`, Problem 1) | the **red randomised variable values** (`#FF6347`, e.g. "25", "13") inside the problem statement | these are the numbers you must calculate with. In grey, can you still tell which numbers are yours? |
+| **Take Assignment**, hint/feedback area | the **orange deduction percentages** (`#FF9900` — "4%", "5%", "25") | these say what a hint costs. In grey, is the cost still identifiable as a warning? |
+| **Take Assignment**, problem navigator | the per-problem status marks | is status carried by a **symbol or wording**, or only by colour? |
+| **View Grade Report** (assignment row → View Grade Report) | the **red "late" date text**, and the blue **[?]** links | is "late" said anywhere in words, or only in red? Are the [?] links findable? |
+| **Calendar** (top menu → Calendar) | the event bar, white on `#8EA9DB` | does the bar still read as an event? |
+| **View Assignment Solutions** | the same red value token as Take Assignment | same question as row 1 |
+
+**The other four pages** — Class Management (both modes), Student Practice
+Area, Printable Assignment, Sign in, Password reset — carry no colour-coded
+status that the sweeps could find, so "nothing conveyed by colour here, page
+still works" is a complete answer for each. I have an achromatopsia capture of
+every page in `evidence/runs/*/R*-grayscale.png` if you would rather judge
+from those than switch the filter on.
+
+**Tell me:** for each row above, yes or no, and if colour is *not* the only
+carrier, what else carries it (bold, a symbol, wording). Then one line for the
+other pages.
+**Why it matters:** 302.3 is one of three FPC still open, and 1.4.1 is the
+only criterion in the review with failed checks and no `05` decision. This
+step plus W41 and W73 finishes both.
 **Feedback:** _(pending)_
 
 ---

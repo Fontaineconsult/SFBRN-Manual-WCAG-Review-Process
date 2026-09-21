@@ -481,7 +481,7 @@ differently.
 |---|---|
 | **Baselines run** | axe (R007); probe runs R029–R034, R100; zoom + eyedropper (R030, 2026-09-15 — reviewer) |
 | **Date tested** | 2026-09-11 (measured), 2026-09-15 (reviewer) |
-| **Findings** | V-F19, V-F23 (recorded under S1) and V-F24 (recorded under S3) confirmed here; V-F27; V-F31 (product-wide, sharpest here) |
+| **Findings** | V-F19, V-F23 (recorded under S1) and V-F24 (recorded under S3) confirmed here; V-F27; V-F31 (product-wide, sharpest here); V-F33; V-F34; V-F8 applies here (32 jump points) |
 
 #### Finding V-F27
 
@@ -493,6 +493,28 @@ differently.
 | **WCAG criteria failed** | 1.4.11 |
 | **Severity** | Minor (confirmed by the reviewer 2026-09-15) |
 | **Evidence** | R030 O8 (S4); R042 O8 (S6) |
+
+#### Finding V-F33
+
+| | |
+|---|---|
+| **Where** | View Grade Report (S4) — the **22 `[?]` help links**, one beside each deduction and hint row (all of them link to `blog.theexpertta.com/hints-and-feedback`) |
+| **Observed** | Reviewer with NVDA, 2026-09-21: *"[?] are all unlabled and announce only Visited Link."* Measured the same day and the cause is exact: every one of the 22 links has `[?]` as its **entire** text content, with no `title` and no `aria-label`. Screen readers do not speak bracket-question-bracket, so the computed accessible name is empty and NVDA is left announcing only the visited state. A user hears 22 anonymous links and cannot tell what help any of them offers — nor that all 22 lead to the same page, which is the one thing that would make ignoring them safe. This is the page's only route to an explanation of how hints and deductions affect a grade. |
+| **Affected users** | Screen reader users; speech-input users (there is no name to speak); users with cognitive disabilities (22 identical unexplained controls) |
+| **WCAG criteria failed** | 2.4.4 (link purpose not determinable from the text or its context); 4.1.2 (no accessible name) |
+| **Severity** | Major (proposed 2026-09-21 — the links are the documented explanation of the deduction scheme, and every one of them is anonymous. Reviewer to confirm.) |
+| **Evidence** | R029 O7 (reviewer + measurement); R007 `R007-axe.json` |
+
+#### Finding V-F34
+
+| | |
+|---|---|
+| **Where** | View Grade Report (S4) — the per-problem images inside the submission table cells (`/images/<hash>.png`, the rendering of the student's own submitted work) |
+| **Observed** | Reviewer with NVDA, 2026-09-21: *"Tables have headings, however the tables contain images in the cells which have no alt text and are therefore fully not accessible for purpose."* Measured: **20 images on the view, every one inside a table cell, 16 of them with no alt text at all.** The table structure is the part the product got right — the reviewer confirms headers are announced with cells — which makes the failure sharper, not milder: the screen reader navigates correctly to a cell and finds nothing in it. What is missing is not decoration. These images *are* the student's answer as submitted, so the page's entire purpose — "shows your detailed work" — is unavailable without sight, while the page reports itself as navigable. |
+| **Affected users** | Screen reader users (the content of their own submitted work); users of text-only or image-blocked browsing |
+| **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
+| **Severity** | Blocker for this view's purpose (proposed 2026-09-21 — a student cannot read their own graded work here by any means. Reviewer to confirm the rating; it is what turns "navigable with effort" into a Broken result.) |
+| **Evidence** | R029 O8 (reviewer + measurement); R007 `R007-axe.json` (`image-alt`) |
 
 ### View S5 — Assignment Editor
 

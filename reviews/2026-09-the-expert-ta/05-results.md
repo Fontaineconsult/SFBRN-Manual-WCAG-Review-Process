@@ -30,8 +30,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 1.1.1 Non-text Content (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** V-F12, V-F16 (Minor)
-- **Remarks:** 2026-09-14 S1: the grids' expand controls are clickable images with no text alternative (V-F16). [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy.
+- **Task findings:** V-F12, V-F16 (Minor), V-F34 (Blocker for the grade report's purpose)
+- **Remarks:** 2026-09-14 S1: the grids' expand controls are clickable images with no text alternative (V-F16). [provisional] 2026-09-10 NVDA on S3: the Problem 8 figure is hidden from AT (empty alt on an informative diagram; `G` finds no graphic). MathJax math is readable in browse mode (V-F10 withdrawn). Solutions-page figures with broken `alt=` markup (R014) still to be confirmed. Vendor-claim discrepancy. 2026-09-21, View Grade Report walked with NVDA: 20 images, all inside submission table cells, 16 with no alt — and they are the rendering of the student's own submitted work, so the page's stated purpose ("shows your detailed work") is unavailable without sight (V-F34).
 
 ### 1.2.1 Audio-only and Video-only (Prerecorded) (Level A)
 - **Outcome:** Not Applicable (provisional)
@@ -139,8 +139,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 2.4.4 Link Purpose (In Context) (Level A)
 - **Outcome:** Partially Supports
 - **Vendor claim:**
-- **Task findings:** V-F3 (Minor)
-- **Remarks:** 2026-09-11 rollup derived from V-F3 (S2 skip controls read as links whose text does not state their purpose; reviewer-confirmed 2026-09-10, R016 O4). Link purpose on S3 (NV10) and the remaining views still to be walked.
+- **Task findings:** V-F3 (Minor), V-F33 (Major)
+- **Remarks:** 2026-09-11 rollup derived from V-F3 (S2 skip controls read as links whose text does not state their purpose; reviewer-confirmed 2026-09-10, R016 O4). Link purpose on S3 (NV10) and the remaining views still to be walked. 2026-09-21: the grade report's 22 `[?]` help links have `[?]` as their entire text, no title and no aria-label, so the accessible name is empty and NVDA announces only "Visited Link" (V-F33).
 
 ### 2.5.1 Pointer Gestures (Level A)
 - **Outcome:** Not Evaluated
@@ -211,8 +211,8 @@ which sample items, with which tool/method — evidence lives with the findings)
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F30, V-F32, V-F28
-- **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). 2026-09-17, sweep triage closed on S1 and S3 (R001, R004): the unnamed answer radios are confirmed (V-F11, R017 O6/O9) and the unnamed jump-point buttons are confirmed (V-F8, R015 O9 / R017 O2) — both were the outstanding items here. **V-F29 was raised here on 2026-09-17 and withdrawn on 2026-09-21**: the header logo link is focusable inside `aria-hidden`, but the reviewer's NVDA announces it in full at that stop ("The ExperTa graphic visited link"), so name, role and state are exposed and 4.1.2 is not failed by it. It survives as an advisory only. Added 2026-09-21: the grade-profile "view" control is an `<a>` with no `href` — NVDA lists it as a link and can activate it, the tab order never reaches it (V-F32), so the same element is a link to one user and nothing to another. Still open: unlabeled DevExpress editors on the instructor pages — those views were removed from the sample 2026-09-15, so they stay unconfirmed and are reported as instructor-facing. Vendor-claim discrepancy.
+- **Task findings:** T1-F1, T1-F3, V-F3, V-F5, V-F6, V-F7, V-F8, V-F11, V-F13, V-F16, V-F30, V-F32, V-F33, V-F28
+- **Remarks:** [provisional] 2026-09-10 S2: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names. 2026-09-14 S1 (R015): the standard-mode row action menu has no control at all (T1-F3); the grids' expand glyphs are clickable images with no role or name (V-F16); the DevExpress editors confirmed unlabelled (V-F7). 2026-09-17, sweep triage closed on S1 and S3 (R001, R004): the unnamed answer radios are confirmed (V-F11, R017 O6/O9) and the unnamed jump-point buttons are confirmed (V-F8, R015 O9 / R017 O2) — both were the outstanding items here. **V-F29 was raised here on 2026-09-17 and withdrawn on 2026-09-21**: the header logo link is focusable inside `aria-hidden`, but the reviewer's NVDA announces it in full at that stop ("The ExperTa graphic visited link"), so name, role and state are exposed and 4.1.2 is not failed by it. It survives as an advisory only. Also 2026-09-21, the grade report: 22 help links whose entire text is `[?]` compute an empty name, so NVDA announces only "Visited Link" (V-F33). Added 2026-09-21: the grade-profile "view" control is an `<a>` with no `href` — NVDA lists it as a link and can activate it, the tab order never reaches it (V-F32), so the same element is a link to one user and nothing to another. Still open: unlabeled DevExpress editors on the instructor pages — those views were removed from the sample 2026-09-15, so they stay unconfirmed and are reported as instructor-facing. Vendor-claim discrepancy.
 
 ---
 

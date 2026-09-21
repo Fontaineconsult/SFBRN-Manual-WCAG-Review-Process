@@ -1437,7 +1437,22 @@ is already recorded and why the remainder is open.
 **Also:** axe found 9 images with no alt (the per-problem "signature"
 images) — do they announce anything under `G`? The red-means-late legend:
 is "late" available any other way in the table (NV8)?
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 — walked with W21; **R029 complete, Result Broken.**
+*"no buttons have labels, there are no headings or landmarks … without
+headings there is no way to jump between problems … more noise than help,
+but with concerted effort the page is probably navigable … [?] are all
+unlabled and announce only Visited Link … Tables have headings, however the
+tables contain images in the cells which have no alt text and are therefore
+fully not accessible for purpose."*
+NV2/NV3/NV4/NV8/NV10 fail, NV5 pass, NV7 partial, NV6 and NV12 **n/a by
+measurement** (the view has no form fields at all, so neither row needed your
+time). New: **V-F33** (22 `[?]` links, entire text is punctuation → empty
+name) and **V-F34** (20 images, all in table cells, 16 with no alt — the
+rendering of the student's own submitted work). Your split decided the
+Result: navigable with effort, but the substance is not there.
+**One row left partial — NV7:** when Enter opens the accessibility menu, does
+NVDA *announce* that it appeared, or do you only discover it by tabbing on?
+One line closes the row.
 
 ### W58 — View Assignment Solutions (S8, run R087)
 

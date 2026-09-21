@@ -13,7 +13,7 @@
 | **Tester** | Daniel Fontaine (reviewer, NVDA 2026.2); assistant records |
 | **Result** | Broken |
 
-**Result reasoning.** 2026-09-14, every row answered. Broken for this page on its own: the assignment row's action menu — the page's core function — is mouse-only (O10) and, once opened, is not announced (O12), so a screen-reader user cannot open an assignment here. The reviewer accepts the Accessibility Mode page as the alternate route (T1 verdict Pass with barriers, T1-F3 Minor); that ruling is about the task, not this view — the standard page itself does not work without vision.
+**Result reasoning.** 2026-09-14, every row answered at the time; **NV10 was reopened 2026-09-21** (O15 — the empty links-list dialog it rested on proves nothing) and does not bear on this verdict, which stands on O10 and O12. Broken for this page on its own: the assignment row's action menu — the page's core function — is mouse-only (O10) and, once opened, is not announced (O12), so a screen-reader user cannot open an assignment here. The reviewer accepts the Accessibility Mode page as the alternate route (T1 verdict Pass with barriers, T1-F3 Minor); that ruling is about the task, not this view — the standard page itself does not work without vision.
 
 ## Checks (no-vision)
 
@@ -31,7 +31,7 @@ run's Result is set. Fails cite observation IDs.
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | fail | O12 — opening the row's ⋮ menu (mouse, the only way — O10) is not announced; the items are announced only on mouse-over. Nothing tells a screen-reader user a menu appeared |
 | NV8 — Nothing is conveyed only by visual position, shape, or size | fail | O7 — the two grids' captions and column headers are not meaningful for Class Management vs Class News; the tables are told apart by position. V-F2 confirmed on S1 |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | O4 — <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists) |
-| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | n/a | O13 — NVDA's Links list (NVDA+F7 → Links) is empty on this page: nothing is exposed as a link (the menu, the row actions and the expand controls are non-link widgets; the logo link is aria-hidden). Nothing to judge for 2.4.4 here; the absence of link semantics is covered by T1-F3 / V-F16 |
+| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | **Reopened 2026-09-21** (was n/a on O13). O13 read an empty NVDA links-list dialog as "nothing is exposed as a link". That inference is unsafe: O14 shows the header logo announcing as a **link** on focus, and the tab-order measurement (R001 O11) finds six more `<a>` elements at stops 2–7 that are not `aria-hidden` at all. Whatever the dialog was showing, it was not the page's link inventory. The row needs the method the process already mandates — confirm on focus, not from an elements list → W72 |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
 | NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | n/a | the view has no validated input of its own; the Class Menu popup forms are S11 (R077) |
 **view_probe 2026-09-11:** answered NV11=n/a, NV1=pass, NV9=pass by measurement; facts in `R015-probe.json`.
@@ -70,7 +70,14 @@ Format:
 - O13 [clarified] (state: NVDA+F7 → Links): "links do not show up in link list" — the list is empty. The top menu, the row actions and the expand controls are not links; the logo link is `aria-hidden`.
   - Classified: NV10 / n/a (nothing exposed as a link to judge); the missing semantics are already T1-F3 / V-F16
 
+- O14 [clarified] (state: Class Management standard mode, NVDA, tabbing in from the address bar, 2026-09-21 — step W71): at the 8th Tab stop, the `aria-hidden="true"` header logo link, NVDA announces **"The ExperTa graphic visited link"**. Name (the image's alt), role (link) and state (visited) are all spoken. The assistant had predicted silence from the markup — `aria-hidden` should remove the subtree from the accessibility tree — and the screen reader contradicts it: in NVDA + Chrome the focused element is announced regardless. **The reviewer's AT wins** (CLAUDE.md instrument hierarchy). V-F29 is withdrawn on this observation; the markup defect survives as an advisory only.
+  - Classified: NV3 / **pass** for this control (name, role and state exposed) → **V-F29 withdrawn**; and it invalidates O13's reading of the links list → NV10 reopened
+- O15 [clarified] (state: as O14): O14 also settles what the empty links-list dialog of 2026-09-14 (O13) meant — **not** that the page has no links. The logo is a link and is announced as one on focus; six further `<a>` elements sit at Tab stops 2–7 (theExpertTA.com, My Account, Log Out, Class Management, Instructor, Help) and none of them is inside `aria-hidden` (R001 O11). The dialog was not showing the page's links, for a reason this run has not established. Nothing may be concluded from its emptiness.
+  - Classified: NV10 reopened; the earlier n/a is superseded, not merely amended
+
 ## Notes
+
+2026-09-21 — W71 answered. The reviewer's NVDA overturned a finding the assistant had raised from markup (V-F29, withdrawn) and, with it, the basis of this run's NV10 answer. Both corrections are recorded above rather than edited away: O13 stays on the record with O15 explaining why its inference does not hold.
 
 2026-09-14 — Reviewer narration (NVDA 2026.2, standard mode confirmed: the tab was on `default2.aspx` at the start and the reviewer switched with "Non-Accessibility Page"; answers on the table shape and the absent Go button confirm the page). Assistant asked before recording because the first narration matched Accessibility Mode features; reviewer clarified: the hidden instruction div still appears on this page, the table is different, there is no Go button, and the row is mouse-only. Open questions for NV7 and NV10 are in the rows.
 

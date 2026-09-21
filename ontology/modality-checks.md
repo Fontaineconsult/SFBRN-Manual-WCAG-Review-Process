@@ -235,6 +235,8 @@ look at, and what a fail looks like — so the reviewer can answer
 reviewer may also **delegate** a measured fail ("your call"); record the
 delegation in the finding's Observed cell and rate it on the measurement.
 
+**`aria-hidden` on a focusable element does not predict silence.** 2026-09-17 the assistant reasoned from markup that a focusable link inside `aria-hidden="true"` would be a silent tab stop, and raised a 4.1.2 finding (V-F29) on it. 2026-09-21 the reviewer put NVDA on that stop: "The ExperTa graphic visited link" — name, role and state all announced. NVDA + Chrome announce the focused element regardless, so the finding was withdrawn. Record such markup as an **advisory** (the behaviour is not guaranteed on other AT/browser pairs) and never as a failure until an AT has been pointed at it. The same run shows the flip side: that link is missing from NVDA's links-list dialog while being announced perfectly on focus — which is why names *and presence* are confirmed on focus, never from an elements list.
+
 **The probe measures the view as loaded.** Media, forms or timers inside a panel, tab or preview that opens on demand are invisible to it: on 2026-09-15 the reviewer found captioned YouTube embeds inside the Assignment Editor after the probe had written NH1–NH4 and NV11 as n/a "by absence" (R037, R035). A probe n/a on a media check is therefore *provisional on views with on-demand panels* — the reviewer's walk overrides it, and the assistant reopens the rows (n/a → blank, the observation marked superseded) the moment such content is reported. When probing a view with known sub-panels, open them first (`UI:` locator) or probe each state.
 
 **Wrong-view guard.** The probe refuses when the tab lands on a different

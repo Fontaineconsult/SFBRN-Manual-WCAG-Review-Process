@@ -53,7 +53,12 @@ because the assistant asked before recording:
 
 Also: confirm control names **on focus**, never from an AT's elements list —
 NVDA's list rendered labelled tabs as "Unlabeled" on S2 and nearly produced
-a false Major finding.
+a false Major finding. The rule covers **presence as well as names**: on
+2026-09-14 an empty NVDA links-list dialog was read as "this page exposes no
+links" and closed a 2.4.4 row as n/a; on 2026-09-21 the reviewer tabbed the
+same page and the logo announced as "The ExperTa graphic visited link", with
+six more real links at stops 2–7. An elements list is not an inventory —
+absence from it is not absence from the page.
 
 ## Session start (every session, before anything else)
 

@@ -40,7 +40,7 @@ Format:
 - O2 [new] (state: as O1): axe `aria-command-name` (serious) — `#top_of_page_jump_point` is a `div role="button" tabindex="0"` with no accessible name (the vendor's "focus box" jump point, also present on this page). Its instruction text is inside the element but hidden from the name computation.
   - Classified: W1 / WCAG 4.1.2 / folded into **V-F8**, confirmed 2026-09-14 (R015 O9: the jump point "reads exactly what is in the div" — its instruction text as content, no control name)
 - O3 [new] (state: as O1): axe `aria-hidden-focus` (serious) — the header logo link `a[href="http://theexpertta.com/"]` is `aria-hidden="true"` yet focusable; keyboard users tab to an element AT does not announce.
-  - Classified: W1 / WCAG 4.1.2 / Minor → **V-F29**, confirmed 2026-09-17. Both halves are now evidenced: it **is** in the keyboard tab order (O11 — stop 8, measured with real dispatched Tab keys) and it **is** hidden from the AT (the reviewer's NVDA links list was empty, R015 O13, because the whole subtree is `aria-hidden`). Severity is the reviewer's to confirm → W71
+  - Classified: W1 / **dismissed 2026-09-21** — no user-facing failure. V-F29 was raised from this observation on 2026-09-17 and withdrawn when the reviewer put NVDA on it at W71: the stop announces "The ExperTa graphic visited link" (R015 O14). `aria-hidden` did not suppress name, role or state in NVDA + Chrome. The markup defect is real and kept as an advisory; the inference drawn from it here was not.
 - O4 [new] (state: as O1): axe `color-contrast` (serious), ancestor background resolved to #FFFFFF so the numbers are reliable per testing-tools.md: "Classes" and "Class Menu" captions #48848C on white = **4.23:1** (16 px bold — not large text, needs 4.5:1); "Class Assignments" #EFBB75 on white = **1.74:1**; "Class News" #E58F65 on white = **2.48:1**; Class News body text #808080 on white = **3.94:1**.
   - Classified: W1 / WCAG 1.4.3 / Major → **V-F23**, confirmed by the reviewer's eyedropper 2026-09-15 (R019 O6: teal captions 4.23:1, orange "Class Assignments" 1.74:1, grey news text 3.94:1 — the axe numbers held)
 - O5 [new] (state: as O1): axe `landmark-one-main` + `region` (moderate, best-practice tags) — no `main`, no landmarks; all 28 content nodes outside any region. Consistent with the exploration probes on every view.
@@ -57,7 +57,7 @@ Format:
   - Classified: W2, measured 2026-09-17 → O12: **21:1**, pass on both readings (1.4.3 and 1.4.11). The reviewer's eyedropper pass had left it unmeasured (R019 O7)
 
 - O11 [measured] (state: Class Management standard mode, as loaded, 2026-09-17; real `Input.dispatchKeyEvent` Tab presses from the top of the document — never `.focus()`, which bypasses the app's own key handling): the header logo link **is** a real keyboard stop. Tab order: 1 the hidden instruction div, 2 theExpertTA.com, 3 My Account, 4 Log Out, 5 Class Management, 6 Instructor, 7 Help, **8 `<a href="http://theexpertta.com/">` wrapping `ETA_LogoForWeb_White.png` (alt "The Expert TA"), inside `aria-hidden="true"`**, then the page's own controls. A keyboard user lands on it; because the subtree is `aria-hidden` the AT is given nothing there — not even the img's alt. Confirms axe O3, and matches the reviewer's empty NVDA links list (R015 O13). Product-wide: the same header is on every signed-in view (PW-C).
-  - Classified: W1 / WCAG 4.1.2 / Minor → **V-F29**
+  - Classified: W1 / the tab-order half of the advisory — the stop is real; what the AT does with it is R015 O14
 - O12 [measured] (state: as O11, 2026-09-17; **pixel sampling**, not ancestor-walking): the assignment row's ⋮ action-menu glyph (`div.actionMenu#divActionMenu17547`, 16×16 px) renders as solid black dots — ink `rgb(0,0,0)` on a sampled background of `rgb(255,255,255)` = **21:1**. The method matters here: the element's computed background is `rgba(0,0,0,0)`, exactly the transparent case where walking ancestors invents a white background and a fictional 21:1, so the number is taken from the rendered pixels of a ×10 screenshot (`R001-glyph-contrast.png`), in which the dots are visibly black on white. The two grid expand glyphs measure the same. This answers the `nonBmp` incomplete that axe could not evaluate.
   - Classified: W2 / WCAG 1.4.3, 1.4.11 / **pass** — no finding
 
@@ -80,6 +80,6 @@ The same page in Accessibility Mode (S2) is a different DOM and needs its own sw
 
 ## Findings raised from this run
 
-- **V-F29** (new, 2026-09-17) — the `aria-hidden` header logo link is a keyboard stop with nothing announced (O3 + O11).
+- **V-F29** (raised 2026-09-17 from O3 + O11, **withdrawn 2026-09-21**) — the `aria-hidden` header logo link is a keyboard stop, but NVDA announces it in full there (R015 O14), so no criterion is failed. Advisory only.
 - Confirmed elsewhere and evidenced by this sweep: **V-F1** (O5, O6), **V-F7** (O1), **V-F8** (O2), **V-F23** (O4), **T1-F3** (O7).
 - Dismissed: O8 (informational). Measured pass: O12 (⋮ glyph 21:1).

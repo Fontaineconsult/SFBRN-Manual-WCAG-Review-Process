@@ -1471,12 +1471,18 @@ marks it that I have not measured.
 **Why it matters:** this and W41 are the only open 1.4.1 evidence; both
 answered, `05` 1.4.1 can be decided and the review's last integrity flag
 clears. **KEY STEP**
-**Feedback:** 2026-09-21 — partially: the reviewer followed the link through
-to the **reset page** and reported on the form there (the unlabelled user-name
-field → **V-F30**, and the page sampled as **S14**), which is worth more than
-the question asked. The question itself is still open, though: *can you tell
-`(e-mail reset)` is a link before you hover it?* One look at the sign-in page
-answers it, and 1.4.1 needs it. Still **pending** on that point.
+**Feedback:** 2026-09-21 — two parts. (1) The reviewer followed the link
+through to the **reset page** and reported the form there (unlabelled
+user-name field → **V-F30**; page sampled as **S14**). (2) On the link itself:
+*"e-mail reset appears as a link to NVDA and is tabbable."* That settles the
+**programmatic** side — role exposed, keyboard reachable, so 4.1.2 and 2.1.1
+are fine for this control → recorded on R120.
+**Still open, and it is a different question:** 1.4.1 asks about the
+**visual** presentation for someone who cannot use colour to tell text apart —
+a sighted user with colour blindness, no screen reader. Reframed as **W73**
+with the grayscale evidence attached, because the answer is no longer obvious
+in the instrument's favour: in the achromatopsia render the link *is* slightly
+lighter than the bold text it sits in. → W73.
 
 ### W71 — The silent 8th Tab stop on every page (confirms V-F29's severity)
 
@@ -1502,6 +1508,60 @@ that match how disruptive it feels, or is it worse than Minor?
 **Why it matters:** this is the last open item from the S1 and S3 sweep
 triage; your answer settles V-F29's rating. Everything else those two sweeps
 reported is now either a confirmed finding or dismissed with a reason.
+**Feedback:** 2026-09-21 — **"The ExperTa graphic visited link"**. Not silent:
+NVDA gives name, role and visited state. The prediction behind the finding was
+wrong — `aria-hidden` did not suppress the announcement in NVDA + Chrome — so
+**V-F29 is withdrawn** and kept only as an advisory (the markup is still a
+defect, with no demonstrated effect on this AT). Your answer also overturned
+this run's **NV10**: it had been marked n/a because the links-list dialog came
+back empty, and the logo you just heard announced as a *link* shows that
+dialog was not listing the page's links → reopened as W72. → R015 O14, O15.
+
+### W72 — Do the links on Class Management announce a clear purpose? (reopens NV10 on R015)
+
+**Page:** **Class Management in standard mode** —
+`https://dei56mo.theexpertta.com/common/default.aspx`, NVDA on.
+**Why this is being asked again:** on 2026-09-14 this row was closed as "not
+applicable" because NVDA's links-list dialog (NVDA+F7 → Links) came back
+**empty** — read at the time as "this page exposes no links". W71 disproved
+that: the logo you heard is announced as a *link*, and there are six more real
+links at Tab stops 2–7 (theExpertTA.com, My Account, Log Out, Class
+Management, Instructor, Help) that are not hidden from the AT at all. So the
+dialog was not showing the page's links, and nothing can be concluded from its
+emptiness.
+**Do:** Tab from the top through those first eight stops and listen to each.
+**Tell me:** does any of them announce a purpose you could not act on — a bare
+"click here", "more", "link", or two that sound identical but go to different
+places? A plain "they all named themselves fine" closes the row.
+**Why it matters:** NV10 is the 2.4.4 evidence for this page, and it is
+currently resting on nothing. This is the process's own rule in action —
+confirm control names **on focus**, never from an AT's elements list.
+**Feedback:** _(pending)_
+
+### W73 — Can you see that "(e-mail reset)" is a link, without colour? (decides 1.4.1 with W41)
+
+**Page:** the **sign-in page**, `https://login.theexpertta.com/Login.aspx`.
+Screen reader off for this one — it is a pure looking question.
+**Look at:** the line **"Trouble Logging in? (e-mail reset)"**, under the User
+Name box. "(e-mail reset)" is the link.
+**What the instrument says:** it is **1.7:1** against the bold text beside it
+— under the 3:1 that the accepted technique (G183) needs — and it gains no
+underline until you hover or focus it. But the grayscale capture
+(`evidence/runs/R120/R120-grayscale.png`, attached) is not clear-cut: with all
+colour removed, "(e-mail reset)" still reads as slightly **lighter** than
+"Trouble Logging in?" next to it. Note the contrast with the other links on
+the same page — "contact us", "here", "View detailed information" all sit in
+*normal-weight* sentences and are **bold**, so they carry a weight cue that
+survives colour blindness. "(e-mail reset)" does not: the text it sits in is
+bold too.
+**Tell me:** looking at that line — ideally with a grayscale filter on, or at
+the attached capture — would you know "(e-mail reset)" is clickable? Either
+"confirmed, it just looks like part of the sentence" (1.4.1 fail) or "no, the
+lightness is enough" (exception — and I will record your call over the
+measurement).
+**Why it matters:** with W41 this is the last 1.4.1 evidence; both answered,
+`05` 1.4.1 can be decided and the review's only integrity flag clears.
+**KEY STEP**
 **Feedback:** _(pending)_
 
 ### Close-out for session 3 (assistant)

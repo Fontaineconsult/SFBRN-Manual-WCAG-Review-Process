@@ -45,6 +45,9 @@ Format:
 - O2 [measured] (state: view as loaded, 2026-09-17 view_probe): 1 of 6 link(s) in running text are told from the surrounding text by colour only — no underline/border/weight at rest and the G183 fallback (≥ 3:1 against the text plus a non-colour cue on hover AND on focus) does not hold — measured: (e-mail reset) → /ResetPassword.aspx [1.7:1 vs text; hover cue: a:hover; focus: outline]; 5 colour-only link(s) DO satisfy G183
   - Classified: NC2 / WCAG 1.4.1 / measured → fail
 
+- O3 [clarified] (state: sign-in page, reviewer on NVDA, 2026-09-21 — step W70): *"e-mail reset appears as a link to NVDA and is tabbable."* The control's **programmatic** presentation is sound — the role is exposed and it is reachable from the keyboard. This does **not** answer NC2 / 1.4.1, which asks about the **visual** presentation to a sighted user who cannot use colour to tell the link from the sentence around it; the measured fail (1.7:1 against the surrounding bold text, no underline until hover or focus) is untouched by it and still awaits the looking question → W73.
+  - Classified: 4.1.2 and 2.1.1 / **pass** for this control (recorded here because the reviewer raised it on this view; no finding); NC2 unchanged — still a measured fail awaiting confirmation
+
 ## Notes
 
 (JAWS: Action / Announced / Expected-vs-actual triplets — copy exact speech

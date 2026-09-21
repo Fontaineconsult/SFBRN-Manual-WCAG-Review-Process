@@ -1773,6 +1773,69 @@ once R015 and R017 existed. So the efficient order is **NVDA walks first**
 (W56, W57 with W21, W58, W63, W64, W69) — each one closes its view's no-vision
 cell *and* unlocks its sweep triage.
 
+## 2026-09-21 — Session 5 plan: finish no-vision (302.1)
+
+**Why this order:** every sweep triage still open is downstream of a walk
+(audit above), so each page you do closes its own no-vision cell *and* unlocks
+its axe sweep. 62 rows are open; this clears them in nine sittings, smallest
+first so the early ones bank quickly.
+
+**The nine standing questions** (Part J preamble has the full wording — this
+is the short form). On each page, NVDA on:
+
+| | Ask |
+|---|---|
+| NV2 | `H` for headings, `D` for landmarks, NVDA+F7 — is there any structural route? |
+| NV3 | Tab each control — name, role, state. Name anything silent or wrongly typed. |
+| NV4 | `G` for graphics — what does each announce? Any picture carrying information that says nothing? |
+| NV5 | Arrow from the top — does the order make sense? |
+| NV6 | `F` for form fields — is the visible label what NVDA reads? |
+| NV7 | Change something without a reload — announced? Does focus stay put? |
+| NV8 | Anything you could only identify by where it sits? |
+| NV10 | NVDA+F7 → Links — bare "click here"/"more", or identical texts going to different places? **Confirm on focus too** — the list lies on this product (2026-09-21). |
+| NV12 | A required/validated field — clear it and submit. Is the error announced, and does it say which field and what is wrong? "No validated input" → n/a. |
+
+**A "nothing to report" is a complete answer for any row.** Say the row number
+and move on; I only need detail where something is wrong.
+
+**Order, with what each one costs and buys:**
+
+| # | Page | Rows | Step | Why here |
+|---|---|---|---|---|
+| 1 | **Class Management, Accessibility Mode** (`default2.aspx`, button reads "Non-Accessibility Page") | **3** — NV4, NV5, NV12 | W56 | Fifteen minutes' work sets R016's Result and closes the vendor's own accessible page. |
+| 2 | **Class Management, standard mode** (`common/default.aspx`) | **1** — NV10, plus the Enter question | W72 | One row. It is the review's only integrity flag and the only routed item that never landed. |
+| 3 | **View Grade Report** (assignment row → "View Grade Report") | **9** | W57 + W21 | The page you thought had no data. It is populated, and it is where T5's student half gets its verdict. |
+| 4 | **View Assignment Solutions** (assignment row → View Solutions) | **9** | W58 | 14 solution images with no alt, and MathJax — the two things axe cannot see. |
+| 5 | **View Printable Assignment** (assignment row → View Printable Assignment) | **9** | W69 | **The highest-stakes page left.** If a screen-reader user can read every problem here, this is T1's conforming alternate for reading. If not, that argument dies. |
+| 6 | **Calendar** (top menu → Calendar) | **9** | W64 | Already Broken for colour; does the event bar exist for a screen reader at all? |
+| 7 | **Student Practice Area** (paste `…/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373`) | **6** | W65 | Half done from your 2026-09-15 narration; V-F28 (Blocker) came from here. |
+| 8 | **Password reset** (`login.theexpertta.com/ResetPassword.aspx`) | **7** | W75 | Signed-out window, **port 9223**. You have already done NV6 here. |
+| 9 | **Sign in** (`login.theexpertta.com/Login.aspx`) | **9** | W63 | Same window as 8 — do them together. Includes a wrong-password attempt for NV12. |
+
+**Then, NVDA off and a grayscale filter on** — two looking questions that
+decide nothing else is left on 1.4.1: **W41** (the Grade Report and Solutions
+title-line links) and **W73** (the sign-in page's "(e-mail reset)").
+
+**After each page** I write the rows, set the Result, roll findings into `05`,
+and close that page's axe sweep. Say the page name when you start; skip or
+reorder freely.
+
+### W75 — Password reset with NVDA, the remaining seven rows
+
+**Page:** `https://login.theexpertta.com/ResetPassword.aspx`, reached from the
+sign-in page's "Trouble Logging in?" link — **signed-out window (port 9223)
+only**, never the tab you are signed in on.
+**Already answered here (2026-09-21):** NV6 — the user-name field has no
+label and tabbing in reads out the whole layout table, which you ruled
+"accessible, but not best practice" (V-F30). NV1, NV9 and NV11 are measured.
+**Still needed:** NV2, NV3, NV4, NV5, NV7, NV10, NV12 — the standing nine
+minus what is done. For **NV12**, submit the form with the field empty (or
+with an address that is not an account) and say whether the error is announced
+and whether it names the field and the problem.
+**Why it matters:** this is the only account-recovery path in the demo, so a
+student locked out of the product cannot reach any other view without it.
+**Feedback:** _(pending)_
+
 ### Close-out for session 3 (assistant)
 
 After each step: the run's rows and observations, Tool/Baseline set to the

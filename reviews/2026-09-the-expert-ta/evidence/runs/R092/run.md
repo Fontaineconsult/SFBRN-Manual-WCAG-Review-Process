@@ -29,15 +29,15 @@ run's Result is set. Fails cite observation IDs.
 |-------|---------|--------------|
 | CO1 — Navigation and component identification are consistent with the rest of the product | | |
 | CO2 — Help (if offered) appears in a consistent location | | |
-| CO3 — Labels and instructions make the required input clear | | |
-| CO4 — Errors suggest how to fix the problem | | |
-| CO5 — Previously entered information is not demanded again | | |
+| CO3 — Labels and instructions make the required input clear | n/a | Measured: the view carries **no input, select or textarea** at all, so there is no required input whose labelling could be unclear. It is a read-only page |
+| CO4 — Errors suggest how to fix the problem | n/a | The view has **no validated input**, so there is no error for which a correction could be suggested (NV12 n/a on this view, established on the no-vision walk). Where errors *do* occur — Take Assignment, Sign in, Password reset — the row is answered on those runs |
+| CO5 — Previously entered information is not demanded again | n/a | Measured: the view collects nothing — no input, select or textarea — so no previously entered information can be demanded again on it |
 | CO6 — Authentication does not require transcription or memorization (no cognitive-function test) | n/a | O2 — no password/authentication field on the view |
 | CO7 — Time limits are adjustable/extendable; moving content can be paused | | |
 | CO8 — Focus/input does not trigger unexpected context changes | | |
 | CO9 — Fields collecting the user's own information (name, email, address, phone, …) carry the matching `autocomplete` purpose so browsers and AT can fill them | n/a | O3 — no field collects the user's own information (name/email/phone/address/… not present) |
 | CO10 — Each view is reachable in more than one way (navigation plus search, site map, index, or related links) unless it is a step in a process | | |
-| CO11 — Submissions with legal, financial, or data-changing consequences are reversible, checked for input errors, or confirmable before commit | | |
+| CO11 — Submissions with legal, financial, or data-changing consequences are reversible, checked for input errors, or confirmable before commit | n/a | Measured: the view has no submission of any kind, so there is nothing with legal, financial or data-changing consequences to reverse, check or confirm |
 | CO12 — Nothing flashes more than three times per second (photosensitive-safety check; WCAG-only — no 508 FPC counterpart) | n/a | O4 — no CSS animation, animated image, marquee/blink, canvas, SVG animation or video on the view — nothing can flash |
 **view_probe 2026-09-11:** answered CO6=n/a, CO9=n/a, CO12=n/a by measurement; facts in `R092-probe.json`.
 

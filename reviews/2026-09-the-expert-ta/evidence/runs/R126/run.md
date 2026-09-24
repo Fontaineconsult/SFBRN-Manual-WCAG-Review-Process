@@ -8,10 +8,12 @@
 | **Page URL / location** | https://login.theexpertta.com/ResetPassword.aspx |
 | **Task / process** | — |
 | **Modality** | motor |
-| **Tool** | probe |
+| **Tool** | probe; keyboard (reviewer, 2026-09-24) |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — MO1, MO2, MO3, MO4, MO5, MO6, MO7, MO8, MO11 need the reviewer (keyboard, B2) |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-24, every row answered. One field and one button, both reachable, operable and showing a visible focus ring, in a sensible order. The only failure is the bypass mechanism shared with every other view (MO11) — which on a two-control page is the least consequential instance of it. The page's real defects are not motor ones: the unlabelled field (V-F30) and the silent submission (V-F44).
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -30,7 +32,7 @@ run's Result is set. Fails cite observation IDs.
 | MO1 — Every interactive element can be reached with the keyboard | pass | reviewer 2026-09-24, keyboard pass: **yes** — every interactive element on the view is reachable with the keyboard. One field and one button. The field's missing label (V-F30) does not affect reachability |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | pass | O— reviewer 2026-09-24: **"m02 all operable"**. This row asks whether every element that **is reached** can be activated, selected or dismissed, and it can. Controls the keyboard cannot reach at all (S1's row menu, the Calendar grid, the Practice Area's selects and checkboxes) are **MO1** failures and are recorded there; repeating them here would count one defect twice |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
-| MO4 — A visible focus indicator exists at all times | | |
+| MO4 — A visible focus indicator exists at all times | pass | reviewer 2026-09-24: **yes** — a visible focus indicator on the view's one field and one button |
 | MO5 — Focus order follows the meaning and operation order of the view | pass | O— reviewer 2026-09-24: **"m05, focus order follows meaning"**. Focus moves in an order that matches how the view reads and operates, on every view walked |
 | MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |

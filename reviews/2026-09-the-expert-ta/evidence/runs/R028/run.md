@@ -30,7 +30,7 @@ run's Result is set. Fails cite observation IDs.
 | CO1 — Navigation and component identification are consistent with the rest of the product | | |
 | CO2 — Help (if offered) appears in a consistent location | | |
 | CO3 — Labels and instructions make the required input clear | | |
-| CO4 — Errors suggest how to fix the problem | | |
+| CO4 — Errors suggest how to fix the problem | n/a | The view has **no validated input**, so there is no error for which a correction could be suggested (NV12 n/a on this view, established on the no-vision walk). Where errors *do* occur — Take Assignment, Sign in, Password reset — the row is answered on those runs |
 | CO5 — Previously entered information is not demanded again | | |
 | CO6 — Authentication does not require transcription or memorization (no cognitive-function test) | n/a | O2 — no password/authentication field on the view |
 | CO7 — Time limits are adjustable/extendable; moving content can be paused | | |

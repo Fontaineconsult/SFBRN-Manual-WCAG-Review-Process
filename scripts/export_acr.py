@@ -281,6 +281,7 @@ def plain(t, pages: dict) -> str:
     t = DATES.sub("", t)
     t = MARKER.sub(" ", t)
     t = ATTRIB_MID.sub(". ", t)
+    t = ORPHAN_FILE.sub("", t)
     t = ATTRIB_PAREN.sub("", t)
     t = ATTRIB_CLAUSE.sub("", t)
     t = ATTRIB.sub("", t)
@@ -298,6 +299,7 @@ def plain(t, pages: dict) -> str:
     t = restore(t, kept)
     t = PROGRESS.sub(lambda m: m.group(0).lower().replace("now ", "").replace("and now", "and")
                      .replace("also now", "also") or "", t)
+    t = DANGLING.sub("", t)
     t = depunct(t)
     # Removing a check code from the head of a sentence can orphan its verb
     # ("CO10 fails on all 10 views" -> "fails on all 10 views"). Start at the
@@ -456,6 +458,7 @@ def statements(sc: str, d: dict) -> str:
     merged = {}
     for f in d["by_sc"].get(sc, []):
         text = brief(plain(f["observed"], d["pages"]), 130)
+        text = DANGLING.sub("", text).strip()          # may surface after the split
         if text and text[:1].islower():
             text = text[0].upper() + text[1:]
         key = re.sub(r"[^a-z0-9 ]", "", text.lower())[:70]
@@ -471,9 +474,8 @@ def statements(sc: str, d: dict) -> str:
 
     RANK = {"Blocker": 0, "Major": 1, "Minor": 2}
     rows = sorted(merged.values(), key=lambda m: (RANK.get(m["sev"], 3), -len(m["pages"])))
-    extra = max(0, len(rows) - 5)
     items = []
-    for m in rows[:5]:
+    for m in rows:
         if len(m["pages"]) > 3:
             where = f"<b>{e(m['pages'][0])}</b> and {len(m['pages']) - 1} other pages"
         elif m["pages"]:
@@ -482,32 +484,41 @@ def statements(sc: str, d: dict) -> str:
             where = "<b>Product-wide</b>"
         items.append(f"<li><span class='where'>{where}</span> \u2014 {md(m['text'])}"
                      f"<span class='sev sev-{m['sev'].lower()}'>{e(m['sev'])}</span></li>")
-    if extra:
-        items.append(f"<li class='more'>{extra} further issue{'s' if extra != 1 else ''} on this criterion "
-                     f"{'are' if extra != 1 else 'is'} listed in \u201cIssues found\u201d below.</li>")
     return f"<ul class='stmts'>{''.join(items)}</ul>" if items else ""
 
 
 # Count markers and check-outcome shorthand the record uses inside prose.
+# Stripping a run ID out of an evidence reference leaves the tail of a filename
+# behind ("the markup ( -sections-table.html )").
+ORPHAN_FILE = re.compile(r"\s*\(?\s*-?[\w-]*\.(?:html?|json|png|txt|docx?)\s*\)?")
+# A statement that opens by pointing at something the report has not said
+# ("The markup explains it:", "This confirms that ...") is meaningless alone.
+DANGLING = re.compile(r"(?i)^[\s*_\"\u201c\u2018']*(?:this|that|it|the\s+\w+)\s+"
+                      r"(?:explains?|confirms?|shows?|means?|follows?)\s+(?:it|this|that)\b[^.:;]*[.:;]\s*")
+
 COUNTS = re.compile(r"\s*\(\s*(?:n/?a|pass|fail|partial)?\s*[\u00d7x]?\s*\d*\s*\)|\s*[\u00d7x]\s*\d+\b", re.I)
 
 
-def na_reason(note: str) -> str:
-    """One plain sentence saying why the criterion does not apply.
+def na_reason(note: str, absent: bool = True) -> str:
+    """One plain sentence, stating the fact and nothing else.
 
-    A Not Applicable needs no justification, only a statement (reviewer,
-    2026-09-24). The record's remark is mined for a self-contained first
-    clause; where it yields only a cross-reference ("As 1.2.3."), a dangling
-    pronoun ("... on any of them") or a check outcome ("n/a on all 10 views"),
-    the standard sentence is used instead. That asserts nothing beyond the
-    conformance level itself."""
-    STD = "Not present in the evaluated sample."
+    A criterion that passes or does not apply has nothing to argue, so the
+    report gives the finding and stops -- no method, no evidence count, no
+    narrative (reviewer, 2026-09-24). Clauses are tried in turn; anything that
+    is a cross-reference, a dangling pronoun, a check outcome or a remark
+    *about the report* rather than about the product is skipped."""
+    STD = ("Not present in the evaluated sample." if absent
+           else "No issues found in the evaluated sample.")
     t = COUNTS.sub("", note or "").strip()
+    first = sentences(t)
+    t = first[0] if first else t
     for clause in re.split(r"\s*[:;]\s+|\s+\u2014\s+", t):
         c = depunct(clause).rstrip(".,;: ")
         if (len(c) >= 18
                 and not re.match(r"(?i)^(as|see|same as)\b", c)
                 and not re.search(r"(?i)\b(any of them|this criterion|n/?a)\b", c)
+                # a remark about the report, not about the product
+                and not re.search(r"(?i)\b(criterion|criteria|check row|the product gets|worth|note that)\b", c)
                 and not re.match(r"(?i)^\s*\d", c)):
             return c[:1].upper() + c[1:] + "."
     return STD
@@ -542,8 +553,17 @@ def crit_rows(d: dict, level: str) -> str:
         outcome = outcome or "Not Evaluated"
         answered, failing = d["ev"].get(sc, (0, 0))
         note = brief(plain((remarks or "").strip(), d["pages"]), 170)
-        if outcome == "Not Applicable":
-            note = na_reason(note)
+        if outcome == "Supports":
+            # A pass is not argued. Mining the record for a sentence produced
+            # method ("Ten views walked with a keyboard"), fragments ("Passes
+            # on all 10 views") and, worse, text that read like a failure under
+            # a passing level. The level is the statement (reviewer,
+            # 2026-09-24: "don't justify it, don't tell us a story").
+            note = "No issues found in the evaluated sample."
+        elif outcome == "Not Applicable":
+            # Here a reason is short, factual and reliably extractable -- the
+            # record states an absence ("no video on any sampled view").
+            note = na_reason(note, True)
         if not note:
             note = ("No evaluation was carried out against this criterion."
                     if outcome == "Not Evaluated" else "")
@@ -563,7 +583,8 @@ def crit_rows(d: dict, level: str) -> str:
         sup = f" <a class='u' href='{e(url)}'>Understanding</a>" if url else ""
         newer = f" <span class='badge'>WCAG {e(ver)}</span>" if ver and ver != "2.0" else ""
         out.append(
-            f"<tr><th scope='row'><a class='sc' href='{e(url)}'>{e(sc)}</a> {e(name)}{newer}{sup}</th>"
+            f"<tr><th scope='row'><a class='sc' href='{e(url)}'>{e(sc)} {e(name)}</a> "
+            f"<span class='lvltag'>(Level {e(lv)})</span>{newer}{sup}</th>"
             f"<td class='lvl'><span class='pill {CLS.get(outcome,'unk')}'>{e(outcome)}</span></td>"
             f"<td class='rem'>{body}</td></tr>")
     return "\n".join(out)
@@ -653,6 +674,10 @@ def render(d: dict) -> str:
         counts[c[7] or "Not Evaluated"] = counts.get(c[7] or "Not Evaluated", 0) + 1
     tally = " · ".join(f"<b>{counts.get(k,0)}</b> {k}" for k in CONFORMANCE if counts.get(k))
 
+    m = re.match(r"(\d{4})-(\d{2})", d["rid"])
+    MONTHS = ("January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December")
+    report_date = f"{MONTHS[int(m.group(2)) - 1]} {m.group(1)}" if m else ""
     views_txt = "".join(
         f"<li><b>{e(page_name(v[1]))}</b>"
         + (f" <span class='pth'>{e(short_path(v[2]))}</span>" if short_path(v[2]) else "")
@@ -715,6 +740,7 @@ def render(d: dict) -> str:
  .sev-minor {{ background:var(--nabg); color:var(--na); }}
  .fnd, .ev {{ margin-top:.35rem; color:var(--mut); font-size:.85rem; }}
  .lbl {{ font-weight:700; color:var(--ink); }}
+ .lvltag {{ color:var(--mut); font-weight:400; font-size:.86em; }}
  .badge {{ font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
    padding:0 .3rem; color:var(--mut); }}
  a {{ color:inherit; }} a.sc {{ font-weight:700; text-decoration:none; }} a.sc:hover {{ text-decoration:underline; }}
@@ -726,56 +752,64 @@ def render(d: dict) -> str:
  @media print {{ .pill {{ border:1px solid currentColor; }} }}
 </style></head><body><div class="wrap">
 
-<h1>Accessibility Conformance Report</h1>
-<p class="sub">{e(prod)} — based on VPAT<sup>&reg;</sup> 2.5</p>
+<h1>{e(prod)} Accessibility Conformance Report</h1>
+<p class="sub">Based on VPAT<sup>&reg;</sup> Version 2.5Rev &mdash; WCAG Edition</p>
 
 <div class="note">
 <p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
-the supplier about its own product. This report was produced by the evaluating body named below from its own
-testing, and every conformance level in it is derived from logged test runs rather than from supplier statements.
-No claim made by the supplier is reproduced or relied on anywhere in this document.</p>
-<p>Generated from the review's database ({e(d['rid'])}.sqlite) by <code>scripts/export_acr.py</code>. No cell is
-authored by hand. {"<b>This report is INTERIM: testing is in progress and levels may change.</b>" if interim else ""}</p>
+the supplier about its own product. This report was produced by the evaluating body from its own testing, and
+every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
+relied on anywhere in this document.
+{"<b>This report is INTERIM: testing is in progress and levels may change.</b>" if interim else ""}</p>
 </div>
 
 <h2>Report information</h2>
 <dl class="meta">
-<dt>Product</dt><dd>{e(prod)}</dd>
+<dt>Name of product</dt><dd>{e(prod)}</dd>
+<dt>Report date</dt><dd>{e(report_date)}</dd>
 <dt>Report status</dt><dd>{e(d['report_status'])}</dd>
-<dt>Evaluation methods</dt><dd>Manual testing by a human reviewer driving the product with assistive technology
- (screen reader, keyboard-only operation, browser zoom, colour filters, contrast measurement), supported by
- automated scanning (axe-core) and programmatic measurement over the Chrome DevTools Protocol. Automated results
- were used to direct attention only; no conformance level rests on a tool's output alone.</dd>
-<dt>Pages evaluated</dt><dd>{len(d['views'])} pages:<ul class="pages">{views_txt}</ul></dd>
+<dt>Product description</dt><dd>Web-delivered software evaluated across {len(d['views'])} pages of the
+ student-facing interface.</dd>
+<dt>Contact information</dt><dd>The evaluating body named in the accompanying review record.</dd>
+<dt>Evaluation methods used</dt><dd>Manual testing by a human reviewer operating the product with assistive
+ technology &mdash; screen reader, keyboard-only operation, browser zoom, colour filters and contrast
+ measurement &mdash; supported by automated scanning (axe-core) and programmatic measurement over the Chrome
+ DevTools Protocol. Automated results were used to direct attention only; no conformance level rests on a
+ tool's output alone.</dd>
+<dt>Pages evaluated</dt><dd><ul class="pages">{views_txt}</ul></dd>
 <dt>Excluded from scope</dt><dd>{excluded}</dd>
-<dt>Test runs</dt><dd>{d['runs_resulted']} of {d['runs_total']} logged runs carry a recorded result</dd>
-<dt>Task walk-throughs</dt><dd><ul class="pages">{tasks_txt}</ul></dd>
-<dt>Findings</dt><dd>{len(d['findings'])} live ({e(sev_txt)})</dd>
-<dt>Criteria</dt><dd>{tally}</dd>
+<dt>Notes</dt><dd>Task walk-throughs completed:<ul class="pages">{tasks_txt}</ul></dd>
 </dl>
 
-<h2>Applicable standards</h2>
-<ul>
-<li>Web Content Accessibility Guidelines 2.2, Level A and Level AA (W3C Recommendation)</li>
-<li>Revised Section 508 standards — Chapter 3, Functional Performance Criteria</li>
-</ul>
+<h2>Applicable standards / guidelines</h2>
+<p class="sub">This report covers the degree of conformance for the following accessibility
+standard/guidelines.</p>
+<table><thead><tr><th scope="col">Standard / Guideline</th><th scope="col">Included in report</th></tr></thead>
+<tbody>
+<tr><th scope="row">Web Content Accessibility Guidelines 2.2</th>
+<td>Level A (Yes)<br>Level AA (Yes)<br>Level AAA (No)</td></tr>
+<tr><th scope="row">Revised Section 508 &mdash; Chapter 3, Functional Performance Criteria</th>
+<td>Yes &mdash; reported in addition to the WCAG edition's requirements</td></tr>
+</tbody></table>
 
 <h2>Terms</h2>
 <table><caption class="sub">Conformance levels used throughout this report.</caption>
 <thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
 <tbody>{terms}</tbody></table>
 
-<h2>Table 1: Success Criteria, Level A</h2>
+<h2>WCAG 2.2 Report</h2>
+<p class="sub">Tables 1 and 2 also document conformance with EN 301 549 and Revised Section 508 where those standards incorporate WCAG by reference.</p>
+<h3>Table 1: Success Criteria, Level A</h3>
 <table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{crit_rows(d, 'A')}</tbody></table>
 
-<h2>Table 2: Success Criteria, Level AA</h2>
+<h3>Table 2: Success Criteria, Level AA</h3>
 <table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{crit_rows(d, 'AA')}</tbody></table>
 
-<h2>Chapter 3: Functional Performance Criteria</h2>
+<h2>Revised Section 508 &mdash; Chapter 3: Functional Performance Criteria</h2>
 <p class="sub">Derived from the proportion of sampled views evaluated for each functional modality and the
 check rows recorded against them. A criterion whose views are not all evaluated is reported as Not Evaluated
 rather than inferred.</p>
@@ -783,27 +817,11 @@ rather than inferred.</p>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{chr(10).join(fpc_rows)}</tbody></table>
 
-<h2>Chapters 4, 5 and 6</h2>
-<table><thead><tr><th scope="col">Chapter</th><th scope="col">Conformance level</th>
-<th scope="col">Remarks and explanations</th></tr></thead>
-<tbody>
-<tr><th scope="row">Chapter 4: Hardware</th><td class="lvl"><span class="pill na">Not Applicable</span></td>
-<td class="rem">The product is web-delivered software with no hardware component.</td></tr>
-<tr><th scope="row">Chapter 5: Software</th><td class="lvl"><span class="pill na">Not Applicable</span></td>
-<td class="rem">The product is a web application evaluated against WCAG 2.2 in Tables 1 and 2 above;
-501.1 applies the WCAG results rather than a separate software evaluation.</td></tr>
-<tr><th scope="row">Chapter 6: Support Documentation and Services</th>
-<td class="lvl"><span class="pill unk">Not Evaluated</span></td>
-<td class="rem">Support documentation and services were not part of the evaluated sample.</td></tr>
-</tbody></table>
-
-<h2>Issues found</h2>
-<p class="sub">Every conformance level other than Supports or Not Applicable traces to one or more of these.
-Each was observed by a person testing the product, and is recorded against the page it was found on.</p>
-<table><thead><tr><th scope="col">#</th><th scope="col">Severity</th><th scope="col">Criteria</th>
-<th scope="col">Page</th><th scope="col">Issue</th></tr></thead><tbody>
-{chr(10).join(issue_row(i, f, d) for i, f in enumerate(d['findings'], 1))}
-</tbody></table>
+<h2>Legal disclaimer</h2>
+<p class="sub">This report is provided for informational purposes only. It records the findings of an
+independent evaluation of the product identified above, carried out on the pages and by the methods described,
+and it does not constitute a warranty of conformance. Conformance levels apply to the sample evaluated and to
+the product version tested.</p>
 
 <p class="sub">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
 service mark of the Information Technology Industry Council (ITI); this report follows the structure of

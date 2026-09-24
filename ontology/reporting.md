@@ -388,6 +388,41 @@ fact is not in an extracted field, it does not reach the report.
   because it names the page and the severity. Compared on content words so a
   paraphrase still counts.
 
+- **Shaped to VPAT® 2.5Rev, WCAG edition.** The reviewer supplied the ITI
+  template at `ontology/VPAT2.5Rev_WCAG_February2025.docx` on 2026-09-24; the
+  generator follows its Essential Requirements for Authors: report title in
+  the form "[Product] Accessibility Conformance Report", template version,
+  product name, report date, product description, contact information, notes,
+  evaluation methods, an applicable-standards table, the terms table, then
+  Table 1 (Level A) and Table 2 (Level AA) with the columns **Criteria /
+  Conformance Level / Remarks and Explanations**, then a legal disclaimer.
+  Criterion names carry their level, as the template does:
+  "1.1.1 Non-text Content (Level A)". The **report date is derived from the
+  review's own identifier** (month and year), so the document stays
+  deterministic.
+
+  Two deliberate departures, both stated in the document: the **508 Functional
+  Performance Criteria** are reported although the WCAG edition does not
+  include them (the reviewer wants them kept), and Chapters 4–6 are **not**
+  reported, being neither part of this edition nor evaluated.
+
+- **A passing criterion is not argued.** `Supports` prints one standard
+  sentence and nothing else. This was learned the hard way: mining the record
+  for a sentence produced method ("Ten views walked with a keyboard"),
+  fragments ("Passes on all 10 views") and, worst, text that read like a
+  failure sitting under a passing level ("The probe measured newly clipping
+  containers"). Every further rule traded one bad case for another. The level
+  *is* the statement (reviewer, 2026-09-24: "don't justify it, don't tell us a
+  story"). `Not Applicable` keeps a mined reason only because the record
+  states absences cleanly ("no video on any sampled view"), with a standard
+  fallback when it does not.
+
+- **Nothing may point at what the report does not contain.** A statement that
+  opens "The markup explains it:" or "This confirms that …" refers to
+  something the record said and the report does not; such openings are
+  stripped. The same applies to evidence filenames left behind when a run
+  identifier is removed.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

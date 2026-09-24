@@ -298,6 +298,33 @@ fact is not in an extracted field, it does not reach the report.
   **word** and not by colour alone, explicit background, dark mode guarded,
   no scripts and no network requests. An inaccessible accessibility report
   is not publishable.
+- **A functional performance criterion is never reported "Not Evaluated"
+  because a corner is missing.** Corrected 2026-09-24: the first version
+  demanded every sampled view carry a run Result *and* zero blank rows, so
+  302.1 printed "Not Evaluated" over **119 answered check rows and 46 failures**
+  because one view lacked a Result. That misrepresents the work and, worse,
+  understates the risk. The rule now: derive the level from the evidence that
+  exists, and **state the coverage limit in the same cell** -- how many pages
+  carry a completed result, how many rows are outstanding, and which pages are
+  still owed, by name. "Not Evaluated" is reserved for a modality where
+  nothing was tested at all.
+
+- **No internal identifiers in reader-facing text.** Finding IDs, run IDs,
+  observation numbers, walkthrough steps, check codes and view codes are the
+  review's bookkeeping; a counterparty cannot resolve them and should never
+  see them (reviewer, 2026-09-24: *"nobody reading this will know anything
+  about the internal jargon like F-12 or V-36, don't put those in"*). The
+  generator strips all of them and substitutes the **page name** wherever a
+  view code appeared. The issues table is numbered per report rather than by
+  finding ID.
+
+- **One statement per block, and every statement says where.** Each criterion
+  renders as a short lead plus one bullet per distinct finding, each opening
+  with the page in words and its short path (`/Common/Calendar.aspx`), so a
+  reader can go and look. Attribution clauses ("the reviewer found", "reviewer's
+  ruling") are dropped: the document is already attributed in its header, and
+  repeating it on every line puts narration between the reader and the fact.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

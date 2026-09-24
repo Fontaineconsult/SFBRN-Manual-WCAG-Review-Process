@@ -79,9 +79,10 @@ def md(s) -> str:
     t = e(s)
     t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t, flags=re.S)
     t = re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"(?<![\w*])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
     # A shortened cell can cut a pair in half; never show a reader a stray
     # marker just because the text was trimmed.
-    return t.replace("**", "").replace("`", "")
+    return t.replace("**", "").replace("*", "").replace("`", "")
 
 
 def severity(s) -> str:
@@ -101,6 +102,75 @@ def trim(s, n: int) -> str:
     cut = s[:n]
     sp = cut.rfind(" ")
     return (cut[:sp] if sp > n * 0.6 else cut).rstrip(" ,;:") + "\u2026"
+
+
+
+# Internal identifiers the record uses and a reader must never see: finding IDs
+# (V-F31, T1-F3), run IDs (R109), observation numbers (O5), walkthrough steps
+# (W32), check codes (NV6, LV1, NC2, MO9, CO12, W1) and view codes (S1, R2).
+JARGON = re.compile(
+    r"""(?x)
+      \b(?:V-F\d+|T\d+-F\d+)\b          # finding IDs
+    | \bR\d{3}\b                        # run IDs
+    | \bO\d{1,2}\b                       # observation numbers
+    | \bW\d{1,2}\b                       # walkthrough steps / sweep checks
+    | \b(?:NV|LV|NC|NH|NS|MO|CO)\d{1,2}\b  # check codes
+    """)
+VIEWCODE = re.compile(r"\b(S\d{1,2}|R[12])\b")
+
+
+def depunct(t: str) -> str:
+    """Tidy the holes left behind when identifiers are removed."""
+    t = re.sub(r"\(\s*[;,\u2014-]*\s*\)", "", t)          # "()" and "( , )"
+    t = re.sub(r"\[\s*\]", "", t)
+    t = re.sub(r"\s*,\s*(?=[,.;)])", "", t)
+    t = re.sub(r"\(\s*,", "(", t)
+    t = re.sub(r",\s*\)", ")", t)
+    t = re.sub(r"\s{2,}", " ", t)
+    t = re.sub(r"\s+([,.;:)])", r"\1", t)
+    t = re.sub(r"(?:\s*[;,]\s*)+\.", ".", t)
+    t = re.sub(r"\.\s*\.", ".", t)
+    return t.strip(" ,;\u2014-")
+
+
+# The record attributes each observation to the person who made it, which is
+# how a review file should read. In the report the whole document is already
+# attributed -- the header says it is an independent evaluation -- so repeating
+# "the reviewer found" on every line is noise between the reader and the fact.
+ATTRIB = re.compile(
+    r"""(?ix)^\s*(?:
+          (?:found\ |confirmed\ |established\ )?by\ the\ reviewer[^:.]{0,70}[:.]
+        | reviewer(?:'s|\u2019s)?(?:\ (?:call|ruling|judgement|judgment|verdict|narration|own\ words))?
+          [^:.]{0,70}[:.]
+        | the\ reviewer[^:.]{0,70}[:.]
+        )\s*""")
+
+
+def plain(t, pages: dict) -> str:
+    """Reader-facing text: identifiers out, view codes replaced by page names,
+    attribution clauses dropped."""
+    t = VIEWCODE.sub(lambda m: pages.get(m.group(1), {}).get("name", m.group(1)), t or "")
+    t = JARGON.sub("", t)
+    t = ATTRIB.sub("", t)
+    t = re.sub(r"^[\s\u2014-]*", "", t)
+    return depunct(t)
+
+
+def page_name(raw: str) -> str:
+    """The page in words, without the record's bookkeeping suffixes."""
+    n = re.split(r"\s+\u2014\s+proposed|\s+\u2014\s+removed", raw or "")[0]
+    n = re.sub(r'\s*\u2014\s*".*$', "", n)
+    return n.strip(" \u2014-") or raw
+
+
+def short_path(loc: str) -> str:
+    """A simple address a reader can recognise: /Common/Calendar.aspx."""
+    loc = (loc or "").strip().strip("`")
+    m = re.search(r"https?://[^/\s`)]+(/[^\s`)\]]*)", loc)
+    if m:
+        return re.sub(r"\?.*$", "", m.group(1)) or "/"
+    m = re.search(r"UI:\s*([^`\n]{0,60})", loc)
+    return m.group(1).strip() if m else ""
 
 
 def gather(con, review: pathlib.Path) -> dict:
@@ -161,8 +231,24 @@ def gather(con, review: pathlib.Path) -> dict:
                      JOIN runs r ON r.run_id=fr.run_id AND r.review_id=fr.review_id
                      WHERE f.review_id=? AND f.withdrawn=0 AND r.modality=?
                      ORDER BY f.finding_id""", rid, modality)]
+        answered = q("""SELECT COUNT(*) FROM runs r
+                        JOIN check_outcomes o ON o.run_id=r.run_id AND o.review_id=r.review_id
+                        JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                        WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                          AND COALESCE(o.outcome,'')<>''""", rid, modality)[0][0]
+        missing = [page_name(x[0]) for x in q("""SELECT v.name FROM views v
+                     WHERE v.review_id=? AND COALESCE(v.removed,'')=''
+                       AND v.view_id NOT IN (SELECT r.view_id FROM runs r
+                            WHERE r.review_id=v.review_id AND r.modality=?
+                              AND r.result IN ('Works','Works with issues','Broken','N/A'))
+                     ORDER BY CAST(SUBSTR(v.view_id,2) AS INT)""", rid, modality)]
+        broken_names = [page_name(x[0]) for x in q("""SELECT v.name FROM runs r
+                     JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                     WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                       AND r.result='Broken' ORDER BY CAST(SUBSTR(v.view_id,2) AS INT)""", rid, modality)]
         fpc.append(dict(code=code, name=name, modality=modality, done=done, views=views_live,
-                        blank=blank, fails=fails, broken=broken, findings=fnames))
+                        blank=blank, fails=fails, broken=broken, findings=fnames,
+                        answered=answered, missing=missing, broken_names=broken_names))
 
     findings = q("""SELECT finding_id, severity, where_text, observed,
                            (SELECT GROUP_CONCAT(sc, ', ') FROM finding_criteria fc
@@ -179,10 +265,47 @@ def gather(con, review: pathlib.Path) -> dict:
                          AND result IN ('Works','Works with issues','Broken','N/A')""", rid)[0][0]
     tasks = q("SELECT task_id, name, verdict FROM tasks WHERE review_id=? ORDER BY task_id", rid)
 
-    return dict(rid=rid, product=product, decision=decision, report_status=report_status,
+    pages = {v[0]: {"name": page_name(v[1]), "path": short_path(v[2])} for v in
+             q("SELECT view_id, name, locator FROM views WHERE review_id=?", rid)}
+
+    # which findings bear on each criterion, with the page each was found on
+    by_sc = {}
+    for sc, fid, where, observed, sev in q("""
+            SELECT fc.sc, f.finding_id, f.where_text, f.observed, f.severity
+            FROM finding_criteria fc
+            JOIN findings f ON f.finding_id = fc.finding_id AND f.review_id = fc.review_id
+            WHERE fc.review_id = ? AND f.withdrawn = 0
+            ORDER BY fc.sc, f.finding_id""", rid):
+        vids = VIEWCODE.findall(where or "")
+        by_sc.setdefault(sc, []).append(dict(fid=fid, where=where or "", observed=observed or "",
+                                             sev=severity(sev), views=vids))
+
+    return dict(rid=rid, pages=pages, by_sc=by_sc,
+                product=product, decision=decision, report_status=report_status,
                 source_sha=source_sha, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
                 views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
                 tasks=tasks)
+
+
+def statements(sc: str, d: dict) -> str:
+    """One bullet per distinct accessibility statement, each naming the page."""
+    items = []
+    for f in d["by_sc"].get(sc, []):
+        pgs = []
+        for v in dict.fromkeys(f["views"]):
+            p = d["pages"].get(v)
+            if p:
+                pgs.append(f"<b>{e(p['name'])}</b>" + (f" <span class='pth'>{e(p['path'])}</span>"
+                                                       if p["path"] else ""))
+        where = ", ".join(pgs) if pgs else "<b>Product-wide</b>"
+        text = plain(f["observed"], d["pages"])
+        text = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", text)
+        lead = " ".join(text[:2]).strip()
+        if len(lead) > 340:
+            lead = trim(lead, 340)
+        items.append(f"<li><span class='where'>{where}</span> \u2014 {md(lead)}"
+                     f"<span class='sev sev-{f['sev'].lower()}'>{e(f['sev'])}</span></li>")
+    return f"<ul class='stmts'>{''.join(items)}</ul>" if items else ""
 
 
 def crit_rows(d: dict, level: str) -> str:
@@ -192,25 +315,52 @@ def crit_rows(d: dict, level: str) -> str:
             continue
         outcome = outcome or "Not Evaluated"
         answered, failing = d["ev"].get(sc, (0, 0))
-        note = (remarks or "").strip()
+        note = plain((remarks or "").strip(), d["pages"])
         if not note:
             note = ("No evaluation was carried out against this criterion."
                     if outcome == "Not Evaluated" else "")
-        bits = []
-        if (tf or "").strip() and not (tf or "").strip().lower().startswith("(none"):
-            bits.append(f"<div class='fnd'><span class='lbl'>Findings:</span> {md(tf)}</div>")
+        body = f"<p class='lead'>{md(note)}</p>" if note else ""
+        body += statements(sc, d)
+        foot = []
         if answered:
-            bits.append(f"<div class='ev'><span class='lbl'>Evidence:</span> {answered} check row(s) answered "
-                        f"in logged runs, {failing} failing</div>")
+            foot.append(f"{answered} check{'s' if answered != 1 else ''} recorded against this criterion "
+                        f"in logged tests, {failing} failing")
         if (vendor or "").strip():
-            bits.append(f"<div class='ev'><span class='lbl'>Vendor's own claim:</span> {md(vendor)}</div>")
+            foot.append("supplier's own claim: " + plain(vendor, d["pages"]))
+        if foot:
+            body += f"<div class='ev'>{md('; '.join(foot))}</div>"
         sup = f" <a class='u' href='{e(url)}'>Understanding</a>" if url else ""
         newer = f" <span class='badge'>WCAG {e(ver)}</span>" if ver and ver != "2.0" else ""
         out.append(
             f"<tr><th scope='row'><a class='sc' href='{e(url)}'>{e(sc)}</a> {e(name)}{newer}{sup}</th>"
             f"<td class='lvl'><span class='pill {CLS.get(outcome,'unk')}'>{e(outcome)}</span></td>"
-            f"<td class='rem'>{md(note)}{''.join(bits)}</td></tr>")
+            f"<td class='rem'>{body}</td></tr>")
     return "\n".join(out)
+
+
+def issue_row(n: int, f, d: dict) -> str:
+    """One issue, numbered for reference within this report only.
+
+    The record's own identifiers (finding, run and observation IDs) are the
+    review's bookkeeping and mean nothing to a reader, so they do not appear;
+    the page is named instead, which is what a reader needs in order to go and
+    look (reviewer, 2026-09-24)."""
+    fid, sev_raw, where, observed, scs = f[0], f[1], f[2] or "", f[3] or "", f[4] or ""
+    pgs = []
+    for v in dict.fromkeys(VIEWCODE.findall(where)):
+        pg = d["pages"].get(v)
+        if pg:
+            pgs.append(f"<b>{e(pg['name'])}</b>"
+                       + (f"<br><span class='pth'>{e(pg['path'])}</span>" if pg["path"] else ""))
+    page = "<br>".join(pgs) if pgs else "<b>Product-wide</b>"
+    # the "where" text minus the page prefix the column now carries
+    what = plain(where, d["pages"])
+    what = re.sub(r"^[^\u2014-]{0,80}[\u2014-]\s*", "", what).strip() or plain(observed, d["pages"])
+    sev = severity(sev_raw)
+    return (f"<tr><th scope='row'>{n}</th>"
+            f"<td><span class='sev sev-{sev.lower()}'>{e(sev)}</span></td>"
+            f"<td class='pth'>{e(scs)}</td><td>{page}</td>"
+            f"<td class='rem'>{md(trim(what, 190))}</td></tr>")
 
 
 def render(d: dict) -> str:
@@ -219,26 +369,47 @@ def render(d: dict) -> str:
 
     fpc_rows = []
     for f in d["fpc"]:
-        complete = f["done"] >= f["views"] and f["blank"] == 0
-        if not complete:
+        # Derive the level from the evidence that exists, then state the coverage
+        # limit. Reporting "Not Evaluated" over a modality with a hundred answered
+        # rows because one view lacks a Result would misrepresent the work and
+        # understate the risk (corrected 2026-09-24 at the reviewer's request).
+        tested = f["done"] > 0 or (f["answered"] - f["blank"]) > 0
+        full = f["done"] >= f["views"] and f["blank"] == 0
+        if not tested:
             lvl, cls = "Not Evaluated", "unk"
-            note = (f"Evaluation incomplete: {f['done']} of {f['views']} sampled views have a recorded result"
-                    + (f", {f['blank']} check row(s) unanswered" if f["blank"] else "") + ".")
         elif f["broken"]:
             lvl, cls = "Does Not Support", "no"
-            note = (f"All {f['views']} sampled views evaluated. {f['broken']} view(s) could not be used by this "
-                    f"method; {f['fails']} check row(s) failed.")
         elif f["fails"]:
             lvl, cls = "Partially Supports", "part"
-            note = f"All {f['views']} sampled views evaluated; {f['fails']} check row(s) failed, none disabling."
         else:
             lvl, cls = "Supports", "ok"
-            note = f"All {f['views']} sampled views evaluated with no failing check rows."
-        if f["findings"]:
-            note += " Findings: " + ", ".join(f["findings"]) + "."
+
+        if not tested:
+            note = "This functional performance criterion was not evaluated."
+        elif f["broken"]:
+            note = (f"{f['broken']} of the {f['views']} pages evaluated could not be used by this method, and "
+                    f"{f['fails']} recorded check{'s' if f['fails'] != 1 else ''} failed.")
+        elif f["fails"]:
+            note = (f"Every page evaluated could be used by this method, but {f['fails']} recorded "
+                    f"check{'s' if f['fails'] != 1 else ''} failed.")
+        else:
+            note = "Every page evaluated could be used by this method with no failing checks."
+
+        if tested and not full:
+            missing = ", ".join(f"<b>{e(n)}</b>" for n in f["missing"][:4]) or ""
+            gap = (f" <b>Coverage limit:</b> {f['done']} of {f['views']} pages carry a completed result"
+                   + (f", and {f['blank']} check row{'s' if f['blank'] != 1 else ''} elsewhere "
+                      f"{'remain' if f['blank'] != 1 else 'remains'} unanswered" if f["blank"] else "")
+                   + (f". Still outstanding: {missing}." if missing else ".")
+                   + " The level above reflects the pages that were evaluated.")
+        else:
+            gap = f" All {f['views']} pages in scope were evaluated for this criterion."
+        pages_hit = ", ".join(f"<b>{e(n)}</b>" for n in f["broken_names"][:4])
+        where = f" Affected: {pages_hit}." if pages_hit else ""
         fpc_rows.append(f"<tr><th scope='row'>{e(f['code'])} {e(f['name'])}</th>"
                         f"<td class='lvl'><span class='pill {cls}'>{lvl}</span></td>"
-                        f"<td class='rem'>{e(note)}</td></tr>")
+                        f"<td class='rem'><p class='lead'>{note}{where}</p>"
+                        f"<div class='ev'>{gap}</div></td></tr>")
 
     sev = {}
     for fid, s, *_ in d["findings"]:
@@ -251,8 +422,15 @@ def render(d: dict) -> str:
         counts[c[7] or "Not Evaluated"] = counts.get(c[7] or "Not Evaluated", 0) + 1
     tally = " · ".join(f"<b>{counts.get(k,0)}</b> {k}" for k in CONFORMANCE if counts.get(k))
 
-    views_txt = "; ".join(f"{v[0]} {v[1].split(' — ')[0]}" for v in d["views"])
-    tasks_txt = "; ".join(f"{t[0]} {t[1].split(' — ')[0]} — <b>{e(t[2])}</b>" for t in d["tasks"])
+    views_txt = "".join(
+        f"<li><b>{e(page_name(v[1]))}</b>"
+        + (f" <span class='pth'>{e(short_path(v[2]))}</span>" if short_path(v[2]) else "")
+        + "</li>" for v in d["views"])
+    excluded = ("<ul class='pages'>" + "".join(
+        f"<li><b>{e(page_name(v[1]))}</b> \u2014 {e(v[2])}</li>" for v in d["removed"]) + "</ul>"
+        ) if d["removed"] else "none"
+    tasks_txt = "".join(f"<li>{e(t[1].split(' \u2014 ')[0])} \u2014 <b>{e(t[2])}</b></li>"
+                        for t in d["tasks"])
     terms = "\n".join(f"<tr><th scope='row'>{e(t)}</th><td>{e(x)}</td></tr>" for t, x in TERMS)
 
     return f"""<!doctype html>
@@ -291,6 +469,18 @@ def render(d: dict) -> str:
  .pill.no {{ background:var(--nobg); color:var(--no); }} .pill.na {{ background:var(--nabg); color:var(--na); }}
  .pill.unk {{ background:var(--unkbg); color:var(--unk); }}
  .rem {{ font-size:.9rem; }}
+ .lead {{ margin:.1rem 0 .4rem; }}
+ ul.stmts {{ margin:.3rem 0 .2rem; padding-left:1.1rem; }}
+ ul.stmts li {{ margin:0 0 .5rem; }}
+ .where {{ font-weight:600; }}
+ ul.pages {{ margin:.2rem 0 0; padding-left:1.1rem; }}
+ ul.pages li {{ margin:0 0 .2rem; }}
+ .pth {{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82em; color:var(--mut); }}
+ .sev {{ display:inline-block; margin-left:.4rem; font-size:.72rem; font-weight:700; padding:0 .35rem;
+   border-radius:4px; vertical-align:.08em; }}
+ .sev-blocker {{ background:var(--nobg); color:var(--no); }}
+ .sev-major {{ background:var(--partbg); color:var(--part); }}
+ .sev-minor {{ background:var(--nabg); color:var(--na); }}
  .fnd, .ev {{ margin-top:.35rem; color:var(--mut); font-size:.85rem; }}
  .lbl {{ font-weight:700; color:var(--ink); }}
  .badge {{ font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
@@ -325,10 +515,10 @@ authored by hand. {"<b>This report is INTERIM: testing is in progress and levels
  (screen reader, keyboard-only operation, browser zoom, colour filters, contrast measurement), supported by
  automated scanning (axe-core) and programmatic measurement over the Chrome DevTools Protocol. Automated results
  were used to direct attention only; no conformance level rests on a tool's output alone.</dd>
-<dt>Scope evaluated</dt><dd>{len(d['views'])} sampled views: {e(views_txt)}</dd>
-<dt>Excluded from scope</dt><dd>{e("; ".join(f"{v[0]} {v[1].split(' — ')[0]} ({v[2]})" for v in d['removed']) or "none")}</dd>
+<dt>Pages evaluated</dt><dd>{len(d['views'])} pages:<ul class="pages">{views_txt}</ul></dd>
+<dt>Excluded from scope</dt><dd>{excluded}</dd>
 <dt>Test runs</dt><dd>{d['runs_resulted']} of {d['runs_total']} logged runs carry a recorded result</dd>
-<dt>Task walk-throughs</dt><dd>{tasks_txt or "none recorded"}</dd>
+<dt>Task walk-throughs</dt><dd><ul class="pages">{tasks_txt}</ul></dd>
 <dt>Findings</dt><dd>{len(d['findings'])} live ({e(sev_txt)})</dd>
 <dt>Criteria</dt><dd>{tally}</dd>
 </dl>
@@ -376,14 +566,12 @@ rather than inferred.</p>
 <td class="rem">Support documentation and services were not part of the evaluated sample.</td></tr>
 </tbody></table>
 
-<h2>Findings supporting the levels above</h2>
+<h2>Issues found</h2>
 <p class="sub">Every conformance level other than Supports or Not Applicable traces to one or more of these.
-Each finding cites the logged runs it was observed in.</p>
-<table><thead><tr><th scope="col">ID</th><th scope="col">Severity</th><th scope="col">Criteria</th>
-<th scope="col">Where</th></tr></thead><tbody>
-{chr(10).join(f"<tr><th scope='row'>{e(f[0])}</th><td>{e(severity(f[1]))}</td>"
-              f"<td>{e(f[4] or '')}</td><td class='rem'>{md(trim(f[2], 180))}</td></tr>"
-              for f in d['findings'])}
+Each was observed by a person testing the product, and is recorded against the page it was found on.</p>
+<table><thead><tr><th scope="col">#</th><th scope="col">Severity</th><th scope="col">Criteria</th>
+<th scope="col">Page</th><th scope="col">Issue</th></tr></thead><tbody>
+{chr(10).join(issue_row(i, f, d) for i, f in enumerate(d['findings'], 1))}
 </tbody></table>
 
 <p class="sub">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered

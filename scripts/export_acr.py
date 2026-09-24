@@ -146,14 +146,55 @@ ATTRIB = re.compile(
         )\s*""")
 
 
+# Dates belong to the review's own record, not to a conformance statement: a
+# reader wants to know what is wrong and where, not when it was decided
+# (reviewer, 2026-09-24, asking for half the detail).
+DATES = re.compile(r"""(?ix)
+      \s*\(\s*20\d\d-\d\d-\d\d[^)]{0,40}\)     # "(2026-09-21)" / "(2026-09-15, reviewer)"
+    | \s*,?\s*(?:on|since|as\ of)\ 20\d\d-\d\d-\d\d
+    | \s*\b20\d\d-\d\d-\d\d\b
+    """)
+# Provenance openers that only existed to carry a date.
+PROV = re.compile(r"""(?ix)^\s*(?:
+      decided | revised | corrected | recorded | added | extended | confirmed
+    | tested | measured | established | reopened | withdrawn | clarified
+    )\b[^.:;,]{0,140}[.:;,]\s*""")
+# Bracketed status markers the stage files use while work is in flight.
+MARKER = re.compile(r"(?i)\s*\[(?:provisional|draft|pending|tbc)[^\]]{0,160}\]\s*")
+# Attribution can also appear mid-paragraph, after a sentence boundary.
+ATTRIB_MID = re.compile(
+    r"(?i)(?<=[.;])\s+(?:the\s+)?reviewer(?:'s|\u2019s)?[^:.]{0,40}:\s*")
+
+
+def brief(t: str, limit: int = 170) -> str:
+    """The first complete statement, and no more."""
+    t = (t or "").strip()
+    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", t)
+    out = parts[0] if parts else t
+    if len(out) < limit * 0.5 and len(parts) > 1:
+        out = (out + " " + parts[1]).strip()
+    return trim(out, limit)
+
+
 def plain(t, pages: dict) -> str:
     """Reader-facing text: identifiers out, view codes replaced by page names,
     attribution clauses dropped."""
     t = VIEWCODE.sub(lambda m: pages.get(m.group(1), {}).get("name", m.group(1)), t or "")
     t = JARGON.sub("", t)
+    t = DATES.sub("", t)
+    t = MARKER.sub(" ", t)
+    t = ATTRIB_MID.sub(". ", t)
     t = ATTRIB.sub("", t)
+    t = PROV.sub("", t)
     t = re.sub(r"^[\s\u2014-]*", "", t)
-    return depunct(t)
+    t = depunct(t)
+    # Removing a check code from the head of a sentence can orphan its verb
+    # ("CO10 fails on all 10 views" -> "fails on all 10 views"). Start at the
+    # next complete sentence rather than publish a fragment.
+    if t and t[0].islower():
+        parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", t, maxsplit=1)
+        t = parts[1].strip() if len(parts) > 1 else t[0].upper() + t[1:]
+    return t
 
 
 def page_name(raw: str) -> str:
@@ -171,6 +212,13 @@ def short_path(loc: str) -> str:
         return re.sub(r"\?.*$", "", m.group(1)) or "/"
     m = re.search(r"UI:\s*([^`\n]{0,60})", loc)
     return m.group(1).strip() if m else ""
+
+
+def reason(t: str) -> str:
+    """An exclusion reason without the record's date stamp or attribution."""
+    t = re.sub(r"^\s*20\d\d-\d\d-\d\d\s*:\s*", "", t or "")
+    t = re.sub(r"\s*\((?:reviewer|assistant)\)\s*$", "", t)
+    return t.strip().rstrip(".")
 
 
 def gather(con, review: pathlib.Path) -> dict:
@@ -288,23 +336,41 @@ def gather(con, review: pathlib.Path) -> dict:
 
 
 def statements(sc: str, d: dict) -> str:
-    """One bullet per distinct accessibility statement, each naming the page."""
-    items = []
+    """One bullet per distinct statement, each naming the page.
+
+    Findings that say the same thing on different pages are merged into a
+    single bullet with both pages, so a product-wide pattern reads once rather
+    than five times (reviewer, 2026-09-24: "combine issues where possible")."""
+    merged = {}
     for f in d["by_sc"].get(sc, []):
-        pgs = []
-        for v in dict.fromkeys(f["views"]):
-            p = d["pages"].get(v)
-            if p:
-                pgs.append(f"<b>{e(p['name'])}</b>" + (f" <span class='pth'>{e(p['path'])}</span>"
-                                                       if p["path"] else ""))
-        where = ", ".join(pgs) if pgs else "<b>Product-wide</b>"
-        text = plain(f["observed"], d["pages"])
-        text = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", text)
-        lead = " ".join(text[:2]).strip()
-        if len(lead) > 340:
-            lead = trim(lead, 340)
-        items.append(f"<li><span class='where'>{where}</span> \u2014 {md(lead)}"
-                     f"<span class='sev sev-{f['sev'].lower()}'>{e(f['sev'])}</span></li>")
+        text = brief(plain(f["observed"], d["pages"]), 130)
+        key = re.sub(r"[^a-z0-9 ]", "", text.lower())[:70]
+        pgs = [d["pages"][v]["name"] for v in dict.fromkeys(f["views"]) if v in d["pages"]]
+        if key in merged:
+            for n in pgs:
+                if n not in merged[key]["pages"]:
+                    merged[key]["pages"].append(n)
+            if f["sev"] == "Blocker":
+                merged[key]["sev"] = "Blocker"
+        else:
+            merged[key] = dict(text=text, pages=list(pgs), sev=f["sev"])
+
+    RANK = {"Blocker": 0, "Major": 1, "Minor": 2}
+    rows = sorted(merged.values(), key=lambda m: (RANK.get(m["sev"], 3), -len(m["pages"])))
+    extra = max(0, len(rows) - 5)
+    items = []
+    for m in rows[:5]:
+        if len(m["pages"]) > 3:
+            where = f"<b>{e(m['pages'][0])}</b> and {len(m['pages']) - 1} other pages"
+        elif m["pages"]:
+            where = ", ".join(f"<b>{e(n)}</b>" for n in m["pages"])
+        else:
+            where = "<b>Product-wide</b>"
+        items.append(f"<li><span class='where'>{where}</span> \u2014 {md(m['text'])}"
+                     f"<span class='sev sev-{m['sev'].lower()}'>{e(m['sev'])}</span></li>")
+    if extra:
+        items.append(f"<li class='more'>{extra} further issue{'s' if extra != 1 else ''} on this criterion "
+                     f"{'are' if extra != 1 else 'is'} listed in \u201cIssues found\u201d below.</li>")
     return f"<ul class='stmts'>{''.join(items)}</ul>" if items else ""
 
 
@@ -315,10 +381,12 @@ def crit_rows(d: dict, level: str) -> str:
             continue
         outcome = outcome or "Not Evaluated"
         answered, failing = d["ev"].get(sc, (0, 0))
-        note = plain((remarks or "").strip(), d["pages"])
+        note = brief(plain((remarks or "").strip(), d["pages"]), 170)
         if not note:
             note = ("No evaluation was carried out against this criterion."
                     if outcome == "Not Evaluated" else "")
+        # Where bullets carry the detail, the lead is a summary only; where
+        # there are none (a pass, or an n/a) it is the whole explanation.
         body = f"<p class='lead'>{md(note)}</p>" if note else ""
         body += statements(sc, d)
         foot = []
@@ -360,7 +428,7 @@ def issue_row(n: int, f, d: dict) -> str:
     return (f"<tr><th scope='row'>{n}</th>"
             f"<td><span class='sev sev-{sev.lower()}'>{e(sev)}</span></td>"
             f"<td class='pth'>{e(scs)}</td><td>{page}</td>"
-            f"<td class='rem'>{md(trim(what, 190))}</td></tr>")
+            f"<td class='rem'>{md(brief(what, 120))}</td></tr>")
 
 
 def render(d: dict) -> str:
@@ -427,7 +495,7 @@ def render(d: dict) -> str:
         + (f" <span class='pth'>{e(short_path(v[2]))}</span>" if short_path(v[2]) else "")
         + "</li>" for v in d["views"])
     excluded = ("<ul class='pages'>" + "".join(
-        f"<li><b>{e(page_name(v[1]))}</b> \u2014 {e(v[2])}</li>" for v in d["removed"]) + "</ul>"
+        f"<li><b>{e(page_name(v[1]))}</b> \u2014 {e(reason(v[2]))}</li>" for v in d["removed"]) + "</ul>"
         ) if d["removed"] else "none"
     tasks_txt = "".join(f"<li>{e(t[1].split(' \u2014 ')[0])} \u2014 <b>{e(t[2])}</b></li>"
                         for t in d["tasks"])
@@ -471,7 +539,8 @@ def render(d: dict) -> str:
  .rem {{ font-size:.9rem; }}
  .lead {{ margin:.1rem 0 .4rem; }}
  ul.stmts {{ margin:.3rem 0 .2rem; padding-left:1.1rem; }}
- ul.stmts li {{ margin:0 0 .5rem; }}
+ ul.stmts li {{ margin:0 0 .45rem; }}
+ ul.stmts li.more {{ list-style:none; margin-left:-1.1rem; color:var(--mut); font-size:.85rem; }}
  .where {{ font-weight:600; }}
  ul.pages {{ margin:.2rem 0 0; padding-left:1.1rem; }}
  ul.pages li {{ margin:0 0 .2rem; }}

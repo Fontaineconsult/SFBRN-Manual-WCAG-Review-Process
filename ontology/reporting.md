@@ -325,6 +325,27 @@ fact is not in an extracted field, it does not reach the report.
   ruling") are dropped: the document is already attributed in its header, and
   repeating it on every line puts narration between the reader and the fact.
 
+- **Half the words of the record, and none of its housekeeping.** The `05`
+  remarks are a working surface: they carry dates, provenance ("Decided … on
+  the grayscale pass"), status markers (`[provisional — reviewer confirms]`)
+  and attribution on every observation. A conformance report carries none of
+  it — the reader wants what is wrong and where. The generator therefore
+  strips dates, provenance openers, bracketed status markers and attribution
+  clauses, then takes **the first complete statement only** for a lead and for
+  each bullet. Measured on The Expert TA: 14,360 words → 7,016, a 52 % cut,
+  with no conformance level or page reference lost.
+
+- **Repeated statements are merged; long lists are capped.** Findings that say
+  the same thing on different pages become one bullet naming both; more than
+  three pages collapses to "X and N other pages". A criterion shows its **five
+  worst** statements (Blocker, then Major, then Minor) and a line pointing at
+  the issues table for the rest, which keeps every one.
+
+- **Never publish a fragment.** Removing an identifier from the head of a
+  sentence can orphan its verb ("CO10 fails on all 10 views" → "fails on all
+  10 views"). The generator detects a lead-in that now starts lower-case and
+  begins at the next complete sentence instead.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

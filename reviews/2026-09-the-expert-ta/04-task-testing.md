@@ -355,7 +355,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R017, in progress); axe (R004, four states) |
 | **Date tested** | 2026-09-10 |
-| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F19 (recorded under S1), V-F21 (recorded under S1), V-F23 (recorded under S1), V-F24 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here); V-F31 (recorded product-wide) |
+| **Findings** | V-F9, V-F11, V-F12, V-F13, V-F14, V-F15, V-F18, V-F19 (recorded under S1), V-F21 (recorded under S1), V-F23 (recorded under S1), V-F24 (V-F10 withdrawn — advisory; plus T1-F2 in §A; V-F8 applies here); V-F31 (recorded product-wide); V-F46 |
 
 #### Finding V-F24
 
@@ -485,6 +485,17 @@ differently.
 | **WCAG criteria failed** | 4.1.3 (status messages not programmatically determinable) |
 | **Severity** | Major (proposed 2026-09-24 — reviewer to confirm) |
 | **Evidence** | R059 O10 (reviewer's verbatim announcement + measurement) |
+
+#### Finding V-F46
+
+| | |
+|---|---|
+| **Where** | Take Assignment (S3) — the three controls in the answer area that change a student's score: **Submit**, **Feedback**, and **"I give up"** |
+| **Observed** | Reviewer 2026-09-24: **"Submit does not warn, 'I give up' does warn, 'Feedback' does not warn, each of these has an effect on the total points earned."** All three act on a single activation and all three cost marks. **Submit** consumes an attempt and, if the answer is wrong, applies the incorrect-submission deduction — the purple percentages the grade report itemises (R100 O6). **Feedback** applies its own deduction, the orange "4%"/"5%" the same page records as the price of help. Neither asks first. **"I give up"** — the most obviously final of the three, and the one a student is least likely to press by accident — is the only one that does warn. WCAG 3.3.4 covers submissions that modify user-controllable data or **submit user test responses**, which is precisely what these do. The finding is not that the product cannot ask: it demonstrably can, and does, in one place out of three. It asks in the wrong one. A student with a cognitive or motor disability who presses Submit or Feedback in error loses marks with no confirmation step and no way back. |
+| **Affected users** | Users with cognitive, learning or memory disabilities; users with tremor or imprecise pointing who activate a control unintentionally; anyone using a keyboard where these controls sit in the tab order |
+| **WCAG criteria failed** | 3.3.4 (no reversal, check or confirmation on submissions that affect graded test responses) |
+| **Severity** | Major (proposed 2026-09-24 — the loss is graded marks and it is irreversible. Reviewer to confirm.) |
+| **Evidence** | R086 O1 (reviewer); R100 O6 (the grade report itemising the deductions these controls apply) |
 
 ### View S4 — View Grade Report
 

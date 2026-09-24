@@ -101,16 +101,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** MO6 asks whether **single-character** shortcuts can be switched off or remapped. Every keyboard shortcut this product defines is a modifier chord — `Ctrl+Shift+1` through `Ctrl+Shift+5` on Take Assignment (the answer read-back, the force-totals read-back, the shortcuts menu) — and the review found no shortcut bound to a bare letter, number, punctuation or symbol key. The criterion governs single-character bindings only, so it does not apply. (Recorded because an earlier wrap-up note queried this `n/a`; the query was wrong and the original answer was right — checked against the shortcut inventory 2026-09-24.)
 
 ### 2.2.1 Timing Adjustable (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. Reviewer 2026-09-24: **"no timeouts have been encountered in this entire test"** — five sessions, ten views, including a full assignment walk. No session limit, no countdown, no auto-expiry was met. The criterion applies only where a time limit is set by the content; none is. (The assignment's begin/due/end **dates** are not time limits in the 2.2.1 sense — they are scheduling, measured in days, and do not expire a session in progress.)
 
 ### 2.2.2 Pause, Stop, Hide (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO12 measured n/a on all 10 views: no CSS animation, animated image, marquee, blink, canvas, SVG animation, video or auto-updating region anywhere in the sample. Nothing moves, blinks, scrolls or updates automatically, so there is nothing to pause, stop or hide.
 
 ### 2.3.1 Three Flashes or Below Threshold (Level A)
 - **Outcome:** Not Applicable
@@ -173,22 +173,22 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-21: **four** of the sampled views declare no `lang` — the password reset page (S14) joins them, measured the day it was sampled (R121 O6). Earlier, 2026-09-14: three of the fourteen sampled views declare no `lang` — Take Assignment (S3), Sign in (S7), the Edit Class popup (S11); the other eleven declare `en` (probe runs R015 … R093). Confirmed on the reviewer's delegation ("your call"); Minor because an English default voice masks it. Vendor-claim discrepancy.
 
 ### 3.2.1 On Focus (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO8 passes on all 10 views. Reviewer 2026-09-24: **"no"** — no change of context was triggered by focus anywhere in the review. Note the boundary: the Student Practice Area *does* re-render on selection, but that is a **silent** change rather than an unexpected one, and it is recorded as V-F42 under 4.1.3.
 
 ### 3.2.2 On Input (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO8 passes on all 10 views — changing a setting or entering data never navigated, submitted or opened anything unrequested. The one control that acts immediately on activation is Take Assignment's Submit, which is an explicit activation rather than an input change; its lack of confirmation is **3.3.4** (V-F46), not this.
 
 ### 3.2.6 Consistent Help (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO2 passes on all 10 views. Reviewer 2026-09-24: **"help is in the main nav"** — the Help link sits in the top menu, in the same position, on every view.
 
 ### 3.3.1 Error Identification (Level A)
 - **Outcome:** Partially Supports
@@ -203,10 +203,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-21: **NV6 now fails on every sampled view that has form fields** — S1, S2, S3, S12 and S14 (R015, R016, R017, R059, R121). The pattern is one mechanism: the application lays its forms out in tables and lets the surrounding table text stand in for a label, so the screen reader announces context rather than a name. Newest instance is the password-reset user-name field (V-F30), where the reviewer's ruling is that the table read-out does carry the meaning — "accessible, but not best practice" — which is why the criterion stays **Partially Supports** rather than dropping to Does Not Support: in each case a name of some sort reaches the user, just not the visible label. Earlier, [provisional] 2026-09-10 S11 popup forms: labels are unassociated table-cell text. Instructor pages show the same (axe R006 59 fields, unconfirmed — those views left the sample 2026-09-15).
 
 ### 3.3.7 Redundant Entry (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO5 passes. Reviewer 2026-09-24: **"this has not been encountered"** — nothing in the product asked again for information already given earlier in the same process. Answered n/a on the three views that collect nothing at all.
 
 ### 4.1.2 Name, Role, Value (Level A)
 - **Outcome:** Does Not Support
@@ -285,10 +285,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** Decided 2026-09-24 from evidence already on the runs. LV6 passes on 9 of 10 views — the reviewer's zoom pass found no hover or focus content that could not be dismissed, reached or persisted ("no hover or focus issues", W68). Not answered on the password reset page (S14), which has one field and one button and no hover content.
 
 ### 2.4.5 Multiple Ways (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Does Not Support
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none raised separately — the failure is structural, see remarks)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO10 fails on all 10 views. Reviewer 2026-09-24: **"there is no site map, the only way to reach the relevant content is through the Class Assignments Table"** — no search, no site map, no index, no A-Z. Every destination in the product has exactly one route. **The exception was considered and does not rescue it:** 2.4.5 exempts pages that are a step in a process, which covers Take Assignment itself, but not the Calendar, the grade report, the solutions, the printable assignment or the practice area — all of them destinations a student may want to reach directly, and each reachable only by walking the same table. This compounds 2.4.1 (Does Not Support): with no bypass mechanism *and* no second route, a user who finds the one path difficult has no alternative at either scale.
 
 ### 2.4.6 Headings and Labels (Level AA)
 - **Outcome:** Supports (provisional)
@@ -327,16 +327,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional — drafted 2026-09-14 by the assistant; reviewer confirms at walkthrough W36] No passage or phrase in a language other than English was found in any sampled view (NV9 on R016, R017: nothing mispronounced with an English synthesizer voice; probe language facts on all 14 views). Mathematical notation is not a language change. The page-level `lang` defect on three views is 3.1.1.
 
 ### 3.2.3 Consistent Navigation (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO1 passes on all 10 views. Reviewer 2026-09-24: **"main navigation remains consistent"** — the top menu occupies the same position in the same order on every page, which the tab-order measurements confirm (stops 2–7 identical across views).
 
 ### 3.2.4 Consistent Identification (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. CO1 passes on all 10 views — components with the same function are identified consistently across the product. **This cuts both ways and the report should say so:** the consistency extends to the defects. The same unnamed jump-point pattern, the same unlabelled DevExpress editors and the same table-based layout appear identically everywhere, which is why so many findings in this review are product-wide rather than local.
 
 ### 3.3.3 Error Suggestion (Level AA)
 - **Outcome:** Not Evaluated
@@ -345,10 +345,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 3.3.4 Error Prevention (Legal, Financial, Data) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Does Not Support
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** V-F46 (Major)
+- **Remarks:** Decided 2026-09-24 from the cognition pass. Reviewer 2026-09-24 on Take Assignment: **"Submit does not warn, 'I give up' does warn, 'Feedback' does not warn, each of these has an effect on the total points earned."** 3.3.4 covers submissions that **submit user test responses**, which these are. Two of the three score-changing controls act irreversibly on one activation with no confirmation; the third, which is the most obviously final, is the one that asks. The product can do this — it does it in one place out of three, and not in the two a student is likeliest to hit by accident (V-F46).
 
 ### 3.3.8 Accessible Authentication (Minimum) (Level AA)
 - **Outcome:** Supports

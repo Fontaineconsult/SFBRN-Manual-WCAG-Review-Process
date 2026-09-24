@@ -370,6 +370,24 @@ fact is not in an extracted field, it does not reach the report.
   quote or a bold marker still counts as ending — that boundary is easy to
   miss and was, at first.
 
+- **Standalone: no supplier claims anywhere.** The ACR reports what the
+  evaluation found and nothing else. Comparing the supplier's ACR against
+  verified results is a real and valuable job, but it is **`06`'s** job (see
+  "Not a VPAT/ACR" above) and mixing it in here muddles a conformance
+  statement with an audit. The header says so explicitly.
+
+- **Not Applicable is a statement, not an argument.** No justification, no
+  method, no cross-reference — "No audio-only or video-only prerecorded media
+  in the sample." and stop. The generator takes the first clause of the record
+  that stands on its own; where the record offers only a cross-reference ("As
+  1.2.3"), a dangling pronoun or a check outcome, it falls back to "Not present
+  in the evaluated sample", which asserts nothing beyond the level itself.
+
+- **Never say it twice.** Where a criterion's lead repeats what one of its
+  bullets says, the lead is dropped — the bullet is the better of the two
+  because it names the page and the severity. Compared on content words so a
+  paraphrase still counts.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

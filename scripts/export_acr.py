@@ -130,6 +130,10 @@ def depunct(t: str) -> str:
     t = re.sub(r"\s+([,.;:)])", r"\1", t)
     t = re.sub(r"(?:\s*[;,]\s*)+\.", ".", t)
     t = re.sub(r"\.\s*\.", ".", t)
+    t = re.sub(r"\(\s*[^)]{0,4}\s*\)", "", t)        # "( on )" left by a removed token
+    if t.count("(") > t.count(")"):                  # never leave one hanging open
+        t = t[:t.rfind("(")].rstrip(" ,;")
+    t = re.sub(r"\s{2,}", " ", t)
     t = t.strip(" ,;\u2014-")
     t = re.sub(r"^[\s.,;:\u2014-]+", "", t)
     return t
@@ -167,6 +171,9 @@ MARKER = re.compile(r"(?i)\s*\[(?:provisional|draft|pending|tbc)[^\]]{0,160}\]\s
 ATTRIB_MID = re.compile(
     r"(?i)(?<=[.;])\s+(?:the\s+)?reviewer(?:'s|\u2019s)?[^:.]{0,40}:\s*")
 # "the markup the reviewer saved explains it" -> "the markup explains it"
+# "(reviewer)", "(reviewer;, partial)", "(revised from the reviewer's first
+# impression)" -- the record's marginalia, meaningless to a reader.
+ATTRIB_PAREN = re.compile(r"(?i)\s*\([^)]{0,80}\breviewer\b[^)]{0,80}\)")
 ATTRIB_CLAUSE = re.compile(
     r"(?i)\s+the\s+reviewer(?:'s|\u2019s)?\s+"
     r"(?:saved|reported|noted|found|confirmed|observed|recorded|narrated|walked|ruled)\b")
@@ -274,9 +281,14 @@ def plain(t, pages: dict) -> str:
     t = DATES.sub("", t)
     t = MARKER.sub(" ", t)
     t = ATTRIB_MID.sub(". ", t)
+    t = ATTRIB_PAREN.sub("", t)
     t = ATTRIB_CLAUSE.sub("", t)
     t = ATTRIB.sub("", t)
-    t = PROV.sub("", t)
+    for _ in range(3):                      # provenance can be stacked
+        t2 = PROV.sub("", t)
+        if t2 == t:
+            break
+        t = t2
     t = re.sub(r"^[\s\u2014-]*", "", t)
     t, kept = unquote(t)
     t = impersonal(t)
@@ -476,6 +488,52 @@ def statements(sc: str, d: dict) -> str:
     return f"<ul class='stmts'>{''.join(items)}</ul>" if items else ""
 
 
+# Count markers and check-outcome shorthand the record uses inside prose.
+COUNTS = re.compile(r"\s*\(\s*(?:n/?a|pass|fail|partial)?\s*[\u00d7x]?\s*\d*\s*\)|\s*[\u00d7x]\s*\d+\b", re.I)
+
+
+def na_reason(note: str) -> str:
+    """One plain sentence saying why the criterion does not apply.
+
+    A Not Applicable needs no justification, only a statement (reviewer,
+    2026-09-24). The record's remark is mined for a self-contained first
+    clause; where it yields only a cross-reference ("As 1.2.3."), a dangling
+    pronoun ("... on any of them") or a check outcome ("n/a on all 10 views"),
+    the standard sentence is used instead. That asserts nothing beyond the
+    conformance level itself."""
+    STD = "Not present in the evaluated sample."
+    t = COUNTS.sub("", note or "").strip()
+    for clause in re.split(r"\s*[:;]\s+|\s+\u2014\s+", t):
+        c = depunct(clause).rstrip(".,;: ")
+        if (len(c) >= 18
+                and not re.match(r"(?i)^(as|see|same as)\b", c)
+                and not re.search(r"(?i)\b(any of them|this criterion|n/?a)\b", c)
+                and not re.match(r"(?i)^\s*\d", c)):
+            return c[:1].upper() + c[1:] + "."
+    return STD
+
+
+def echoes(lead: str, stmts_html: str) -> bool:
+    """True when the lead says what a bullet already says.
+
+    Compared on content words, so a paraphrase counts: the record often
+    summarises a finding in the criterion remark and then states it again in
+    the finding itself."""
+    def bag(x):
+        x = re.sub(r"<[^>]+>", " ", x).lower()
+        return {w for w in re.findall(r"[a-z]{4,}", x)
+                if w not in {"page", "pages", "this", "that", "with", "from", "have", "been",
+                             "which", "their", "there", "when", "only", "does", "also"}}
+    a = bag(lead)
+    if len(a) < 4:
+        return False
+    for li in re.findall(r"<li[^>]*>(.*?)</li>", stmts_html, re.S):
+        b = bag(li)
+        if b and len(a & b) / min(len(a), len(b)) >= 0.6:
+            return True
+    return False
+
+
 def crit_rows(d: dict, level: str) -> str:
     out = []
     for (sc, name, lv, pno, pr, ver, url, outcome, remarks, tf, vendor) in d["criteria"]:
@@ -484,17 +542,24 @@ def crit_rows(d: dict, level: str) -> str:
         outcome = outcome or "Not Evaluated"
         answered, failing = d["ev"].get(sc, (0, 0))
         note = brief(plain((remarks or "").strip(), d["pages"]), 170)
+        if outcome == "Not Applicable":
+            note = na_reason(note)
         if not note:
             note = ("No evaluation was carried out against this criterion."
                     if outcome == "Not Evaluated" else "")
         # Where bullets carry the detail, the lead is a summary only; where
         # there are none (a pass, or an n/a) it is the whole explanation.
+        stmts = statements(sc, d)
+        # A lead that repeats a bullet is noise: the bullet is better, because
+        # it names the page and the severity (reviewer, 2026-09-24).
+        if stmts and note and echoes(note, stmts):
+            note = ""
         body = f"<p class='lead'>{md(note)}</p>" if note else ""
-        body += statements(sc, d)
-        # No check counts: they describe how the review was run, not what a
-        # reader of a conformance report needs (reviewer, 2026-09-24).
-        if (vendor or "").strip():
-            body += f"<div class='ev'>Supplier's own claim: {md(plain(vendor, d['pages']))}</div>"
+        body += stmts
+        # Neither check counts nor the supplier's own claim: the first describes
+        # how the review was run, the second belongs to an audit of the
+        # supplier's paperwork. This document is a standalone conformance
+        # report about the product (reviewer, 2026-09-24).
         sup = f" <a class='u' href='{e(url)}'>Understanding</a>" if url else ""
         newer = f" <span class='badge'>WCAG {e(ver)}</span>" if ver and ver != "2.0" else ""
         out.append(
@@ -668,8 +733,7 @@ def render(d: dict) -> str:
 <p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
 the supplier about its own product. This report was produced by the evaluating body named below from its own
 testing, and every conformance level in it is derived from logged test runs rather than from supplier statements.
-Where the supplier's own claim is known it is shown alongside, for comparison, and it carries no weight in the
-level recorded.</p>
+No claim made by the supplier is reproduced or relied on anywhere in this document.</p>
 <p>Generated from the review's database ({e(d['rid'])}.sqlite) by <code>scripts/export_acr.py</code>. No cell is
 authored by hand. {"<b>This report is INTERIM: testing is in progress and levels may change.</b>" if interim else ""}</p>
 </div>

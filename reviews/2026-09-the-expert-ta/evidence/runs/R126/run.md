@@ -27,7 +27,7 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
+| MO1 — Every interactive element can be reached with the keyboard | pass | reviewer 2026-09-24, keyboard pass: **yes** — every interactive element on the view is reachable with the keyboard. One field and one button. The field's missing label (V-F30) does not affect reachability |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | | |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
 | MO4 — A visible focus indicator exists at all times | | |

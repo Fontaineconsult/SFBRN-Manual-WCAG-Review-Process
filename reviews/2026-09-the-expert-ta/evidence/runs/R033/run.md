@@ -27,7 +27,7 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
+| MO1 — Every interactive element can be reached with the keyboard | pass | reviewer 2026-09-24, keyboard pass: **yes** — every interactive element on the view is reachable with the keyboard. On the page with the product's densest jump-point pattern (32 buttons) and 22 `[?]` links, the controls are all Tab-reachable; that they are **unnamed** when reached is NV3/NV10 and V-F8/V-F33, not this row |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | | |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
 | MO4 — A visible focus indicator exists at all times | pass | O— focus indicator observed by the reviewer on this view during the zoom pass (LV7, which carries the same criteria 2.4.7/2.4.11): R029/R030 — "no hover or focus issues" (reviewer). Recorded here because the observation was about the ring itself, not about zoom |

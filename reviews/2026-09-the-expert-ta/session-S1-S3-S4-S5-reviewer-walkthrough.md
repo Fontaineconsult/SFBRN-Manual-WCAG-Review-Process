@@ -1642,7 +1642,26 @@ figures — alt or silent?), NV5 (reading order of statement, math, parts).
 **Why it matters:** if a screen-reader user can *read* every problem here,
 this page is the alternate route for T1's reading step; answering still
 needs Take Assignment.
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-21 and 2026-09-24 — *"no headings, uses the custom hidden
+accessibility menue, only a few of the images have proper alt text, other
+'images' don't seem to register as images at all and have no right click … the
+order is fine, but the page has not been optimized, many 'blank' voicings"*,
+then *"all the math announce as button clickable, clicking opens the mathjax
+menu, there are quite a few unlabled buttons that are used for navigation, like
+a heading, but they are unlabled so they are useless, no reload concerns,
+nothing only identifybable by position."*
+NV2/NV3/NV4 fail, NV5/NV8 pass, NV6/NV7/NV12 n/a. Findings **V-F36** (figures,
+two of them CSS backgrounds that cannot take alt), **V-F37** (13 empty layout
+cells), **V-F45** (all mathematics announces as an unnamed button; the MathJax
+menu opens instead of the expression being read).
+**The question this view was sampled to answer is closed, negatively.** It is
+not a conforming alternate for reading: no headings, 8 of 14 figures without a
+usable alternative, and now the mathematics unreadable as well. A
+screen-reader user gets neither the diagram, nor the maths, nor a way to move
+between problems — so **T1's reading barriers stand unmitigated**.
+**One row left: NV10.** Links — any announcing a purpose you could not act on?
+I can measure this one myself once the session on the debug window is back;
+no need to spend a pass on it.
 
 ## 2026-09-17 — Session 4 opening (assistant, no reviewer yet)
 

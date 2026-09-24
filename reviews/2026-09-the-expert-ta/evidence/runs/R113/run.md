@@ -29,12 +29,12 @@ run's Result is set. Fails cite observation IDs.
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | pass | O3 — document.title = "View Printable Assignment" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk) |
 | NV2 — Headings and landmarks exist, are hierarchical, and support navigation | fail | O5 — reviewer 2026-09-21: "no headings, uses the custom hidden accessibility menu". Measured: **0 headings, 0 `role=heading`**. The Solutions page's outline is not here, so there is no structural way to reach a problem → V-F1, V-F8 |
-| NV3 — Every control announces an accurate name, role, and value/state | | |
+| NV3 — Every control announces an accurate name, role, and value/state | fail | O12, O13 — two kinds of unnamed control. **All the mathematics announces as "button clickable"** and activating it opens the MathJax context menu rather than reading the expression (O12) → V-F45. And **"quite a few unlabled buttons that are used for navigation, like a heading, but they are unlabled so they are useless"** (O13) — the jump-point mechanism standing in for the headings this page does not have → V-F8 |
 | NV4 — Images announce appropriate alternatives; decorative images are silent | fail | O6 — "only a few of the images have proper alt text, other 'images' don't seem to register as images at all and have no right click". Measured: of 14 figures, **4 carry real descriptions**, 6 have no `alt`, 4 have empty `alt` — and **2 are CSS `background-image` on a `div`**, which is why they are not images to the AT at all → V-F36 |
 | NV5 — Reading order matches the meaning of the visual order | pass | O5, O7 — "the order is fine". Recorded with the reviewer's qualifier: "the page has not been optimized, many 'blank' voicings" — 13 empty layout-table cells are announced as blank while reading (O7 → V-F37). The sequence is right; the noise sits inside it |
 | NV6 — Form fields announce labels and instructions (the visible label is the accessible name, or the name says the same thing) | n/a | O7 — measured 2026-09-21: no visible input, select or textarea; the view is a read-only rendering of the problems |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | | |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | n/a | O13 — reviewer 2026-09-24: "no reload concerns". A static rendering; nothing updates without a navigation |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | pass | O13 — reviewer 2026-09-24: "nothing only identifybable by position" |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | O4 — <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists) |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
@@ -64,6 +64,11 @@ Format:
   - Classified: NV4 / WCAG 1.1.1 / Major → finding **V-F36**
 - O7 [measured] (state: as loaded, 2026-09-21): no visible input, select or textarea. The "blank voicings" the reviewer reports are located: **13 of the view's 73 table cells are empty**, and no interactive control on the page lacks a name (0 of 157 focusable stops are unnamed). So the blank announcements come from empty *layout* table cells being read as content, not from unnamed controls.
   - Classified: NV6 / n/a; NV12 / n/a; the empty cells → finding **V-F37**
+
+- O12 [clarified] (state: View Printable Assignment, NVDA, reviewer 2026-09-24 — step W69): **"all the math announce as button clickable, clicking opens the mathjax menu."** The expressions are exposed as unnamed **buttons**, not as mathematics: the screen reader reports a control where there is content, and activating it opens MathJax's own context menu instead of reading the expression. This page renders 148 MathJax nodes, so it is the bulk of every problem. **The comparison that matters is with View Assignment Solutions**, where the reviewer found on 2026-09-21 that "math expressions on this page voice as expected" (R087 O5) — the same library, in the same product, one click away, configured so that the mathematics reads. So this is a configuration fault, not a limitation of the notation or of the screen reader.
+  - Classified: NV3 / WCAG 1.1.1, 4.1.2 / Major → finding **V-F45**
+- O13 [clarified] (state: as O12): **"there are quite a few unlabled buttons that are used for navigation, like a heading, but they are unlabled so they are useless … no reload concerns, nothing only identifybable by position."** The unnamed navigation controls are the vendor's jump-point pattern (V-F8) doing duty for the headings this page does not have (O5), and the reviewer's verdict on them is **"useless"** — the substitute cannot be used because its parts have no names.
+  - Classified: NV3 / WCAG 4.1.2 → V-F8, with the reviewer's rating input; NV7 / n/a; NV8 / pass
 
 ## Notes
 

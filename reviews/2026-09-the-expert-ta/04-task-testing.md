@@ -608,7 +608,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R113, 2026-09-21 — reviewer; NV3, NV7, NV8, NV10 open); axe (R112); probe runs R114–R118; zoom (R118, 2026-09-15 — reviewer); grayscale (R119, Broken) |
 | **Date tested** | 2026-09-15 (zoom), 2026-09-21 (NVDA, grayscale) |
-| **Findings** | V-F36; V-F37; V-F1 and V-F8 apply here (no headings, jump-point mechanism); V-F31 (colour-only randomised values); V-F24, V-F23, V-F19 |
+| **Findings** | V-F36; V-F37; V-F1 and V-F8 apply here (no headings, jump-point mechanism); V-F31 (colour-only randomised values); V-F24, V-F23, V-F19; V-F45 |
 
 **Decision this view was sampled to settle — it is not a conforming alternate.** S13 was added on 2026-09-15 as a candidate alternate route for *reading* an assignment, because Take Assignment (S3) is Broken without vision (R017). The 2026-09-21 walk closes that question **negatively** on two independent grounds: the page has **no headings at all** (measured: 0), so there is no more structural route to a problem here than on Take Assignment; and **8 of its 14 figures carry no usable alternative**, two of them painted as CSS backgrounds that cannot carry alt text at all (V-F36). A student who cannot see therefore gains no reading route from this page, and **T1's barriers stand as recorded** — the alternate-version argument that rescued step 3 (Accessibility Mode, T1-F3) has no equivalent for the reading step.
 
@@ -655,6 +655,17 @@ differently.
 | **WCAG criteria failed** | 3.3.1 (error not identified to the user); 4.1.3 (status message not programmatically determinable) |
 | **Severity** | Major (proposed 2026-09-24 — a case for Blocker exists: this is account recovery, and the user cannot determine the outcome of the only action available. Reviewer to confirm.) |
 | **Evidence** | R121 O13 (reviewer); R093 O8 (the contrasting sign-in behaviour) |
+
+#### Finding V-F45
+
+| | |
+|---|---|
+| **Where** | View Printable Assignment (S13) — every mathematical expression on the page (148 MathJax nodes) |
+| **Observed** | Reviewer with NVDA, 2026-09-24: **"all the math announce as button clickable, clicking opens the mathjax menu."** The expressions are exposed as unnamed **buttons**. A screen-reader user is told there is a control where there is content, and activating it opens MathJax's own context menu rather than reading the expression. Since the mathematics *is* the problem on a physics assignment, this removes most of the page's substance. **The decisive comparison is with View Assignment Solutions**, where the same reviewer found three days earlier that "math expressions on this page voice as expected" (R087 O5). Same library, same product, one click apart — so this is a **configuration fault, not a limitation** of MathJax, of MathML or of the screen reader, and the fix is to match the sibling page's setup. It compounds the two failures already on this view: no headings to navigate by (V-F1) and 8 of 14 figures with no usable alternative (V-F36). Between them, a screen-reader user gets neither the diagram, nor the mathematics, nor a way to move between problems. |
+| **Affected users** | Screen reader users — the mathematical content of every problem |
+| **WCAG criteria failed** | 1.1.1 (content exposed without a text alternative); 4.1.2 (role reported as button, no accessible name) |
+| **Severity** | Major (proposed 2026-09-24 — a case for Blocker exists, since the mathematics is the assignment. Reviewer to confirm.) |
+| **Evidence** | R113 O12 (reviewer); R087 O5 (the same library reading correctly on the sibling view) |
 
 ### View S5 — Assignment Editor
 

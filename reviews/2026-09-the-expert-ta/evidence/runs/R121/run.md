@@ -11,7 +11,9 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA); assistant records |
-| **Result** | Not set — NV2, NV3, NV4, NV5, NV6, NV7, NV8, NV10, NV12 need the reviewer (jaws, B1); measured fail on NV9 awaits confirmation |
+| **Result** | Broken |
+
+**Result reasoning.** 2026-09-24, every row answered. The page has exactly one job — request a password reset — and performing it tells a screen-reader user nothing at all (V-F44): no error, no confirmation, no sign the button did anything. This is the only account-recovery path in the demo, so a student locked out cannot find out whether help is on the way. The field's missing label (V-F30) is survivable because the table read-out carries it, as the reviewer ruled; the silence on submission is not. Broken.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -28,17 +30,17 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | pass | O3 — document.title = "Expert TA - Reset Password" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk) |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | fail | O12 — from the markup the reviewer supplied: the page's only title is `<div class="lbTitleWithUnderlineFontSizeMedium">Request Password Reset</div>`, a styled `div` and not a heading; there is no `h1`–`h6` anywhere in it and no landmark. Matches the sign-in page measured live the same day (0 headings, 0 landmarks, R093 O5) → V-F1 |
 | NV3 — Every control announces an accurate name, role, and value/state | pass | O8 — reviewer 2026-09-24, from the markup they supplied: the submit control carries `value="Request Reset"`, so it names itself; there is no other control on the page. Their ruling: "they are both accessible, just not best practice, we can pass them" |
-| NV4 — Images announce appropriate alternatives; decorative images are silent | | |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | fail | O12 — reviewer 2026-09-24, on the logo: **"Unlabeled Graphic Visited Link"**. The page's only image, `<img src="/images/loginlogo.png">`, carries no `alt` and is not `aria-hidden` → V-F43 |
 | NV5 — Reading order matches the meaning of the visual order | pass | O8 — a single row of caption, field and button followed by the explanatory Note; the reviewer's ruling covers it |
 | NV6 — Form fields announce labels and instructions (the visible label is the accessible name, or the name says the same thing) | fail | O5 — the user-name field carries no proper label; what the reviewer hears on tabbing in is the whole reset **table** read out. Usable, not labelled — the reviewer's ruling is "accessible, but not best practice" → V-F30 (Minor). Confirmed by axe `label` (critical, 1 node, R122) |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | n/a | O12 — the view has no update that happens without a navigation: `#MainContent_btnReq` is a plain `type="submit"` and the page posts back. Same as the sign-in page (R093) |
 | NV8 — Nothing is conveyed only by visual position, shape, or size | pass | O8 — nothing on the page is identified by position alone |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | fail | O4 — <html> has no lang attribute (measured — 3.1.1) |
-| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | |
+| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | fail | O12 — the logo link announces as **"Unlabeled Graphic Visited Link"** (reviewer): a link whose accessible name is computed from nothing, so its purpose cannot be determined at all → V-F43 |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
-| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | | |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | fail | O13 — reviewer 2026-09-24, submitting Request Reset with the field empty: **"no announcement"**. Nothing is spoken — no error, no confirmation, no indication the button did anything → finding **V-F44** |
 
 **view_probe 2026-09-21:** answered NV11=n/a, NV1=pass, NV9=fail by measurement; facts in `R121-probe.json`.
 
@@ -73,6 +75,11 @@ Format:
   - Classified: NV4, NV10 / → finding **V-F43**, awaiting the reviewer at W76
 - O11 [measured, from the reviewer's markup] (state: as O8): both pages hold an **empty container waiting for a message** and neither is a live region — sign in has `<td align="center" colspan="2" style="color:Red;"></td>`, reset has `<span id="MainContent_lblOut"></span>`. There is no `aria-live`, `role=status` or `role=alert` on either, and sign in's required-field marker `<span title="User Name is required." style="visibility:hidden;">*</span>` is hidden from everything. So an error or a result message would appear as text with nothing to announce it — the same mechanism as V-F40 and V-F42. **NV12 is not answered by this**: it needs a submission to see what actually happens.
   - Classified: NV12 — still open; measured groundwork for it
+
+- O12 [clarified] (state: password reset page, NVDA, reviewer 2026-09-24 — step W76(a)): on the logo, NVDA says **"Unlabeled Graphic Visited Link"**. That confirms V-F43 from the AT side: the image has no `alt`, the link has no name of its own, and because it is **not** `aria-hidden` there is nothing to fall back on — the screen reader has only the graphic's existence and its visited state to report. Also recorded from the reviewer's markup: the page's only title is a styled `div`, not a heading, and the submit is a plain `type="submit"` with no asynchronous update.
+  - Classified: NV4, NV10 / WCAG 1.1.1, 2.4.4, 4.1.2 / Minor → **V-F43** confirmed; NV2 / WCAG 1.3.1 → V-F1; NV7 / n/a
+- O13 [clarified] (state: as O12, Request Reset pressed with the user-name field empty): **"no announcement."** Nothing is spoken at all — not an error, not a confirmation, not an acknowledgement that the button did anything. This is the page's only action, and it is the recovery path for a locked-out student, who therefore cannot tell whether a reset e-mail is coming. It contrasts directly with the sign-in page, where a wrong password *is* announced (R093 O8) — and the difference is mechanism, not intent: sign in reloads the whole page, so the screen reader reads the error as new page content, while this page's result lands in `<span id="MainContent_lblOut">`, which is **not a live region**, so nothing announces it.
+  - Classified: NV12 / WCAG 3.3.1, 4.1.3 / Major → finding **V-F44**
 
 ## Notes
 

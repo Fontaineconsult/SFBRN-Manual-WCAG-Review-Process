@@ -1985,7 +1985,24 @@ all**. Same form, same field, one click apart, two standards — so the reset
 page's omission is an oversight rather than a house style, and the fix is to
 copy its neighbour. Does that change your "not best practice" call, or does
 V-F30 stay **Minor**?
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-24 — (a) and (b) answered; (c) still open.
+**(a)** *"for the graphic 'Unlabeld Graphic Visited Link'"* — **V-F43
+confirmed** from the AT side: no name at all, only the graphic's existence and
+its visited state. Staying **Minor** unless you say otherwise.
+**(b)** *"no announcement"* — pressing Request Reset with the field empty
+speaks nothing: no error, no confirmation, no sign the button did anything.
+→ **V-F44** (Major proposed), and **R121 is now Broken**. The product's only
+account-recovery path gives a screen-reader user no way to tell whether help is
+coming. The contrast with sign in makes it diagnosable rather than mysterious:
+there a wrong password *is* heard, because that submission **reloads the
+page** and the screen reader reads the new content, while this result is
+written **in place** into a span that is not a live region. Where the product
+reloads, errors are heard by accident; where it updates in place, they are
+silent.
+**(c) still open, one word:** does V-F30 stay **Minor** now that you can see
+sign in labels the same field correctly one click away — `<label
+for="MainContent_UserName">` against the reset page's `<strong><font>`? Same
+form, same field, two standards.
 
 ### Close-out for session 3 (assistant)
 

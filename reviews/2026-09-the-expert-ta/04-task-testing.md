@@ -661,11 +661,11 @@ differently.
 | | |
 |---|---|
 | **Where** | Password reset (S14, `login.theexpertta.com/ResetPassword.aspx`) — pressing **Request Reset** |
-| **Observed** | Reviewer with NVDA, 2026-09-24, submitting with the user-name field empty: **"no announcement."** Nothing is spoken — no error, no confirmation, no acknowledgement that the button did anything. This is the page's only action and the product's only account-recovery path, so a student locked out of Expert TA presses the button and cannot tell whether a reset e-mail is coming, whether the field was wrong, or whether anything happened at all. The cause is the same one that runs through this review: the result lands in `<span id="MainContent_lblOut">`, which is **not a live region**, and the page carries none. The contrast with the sign-in page is what makes it diagnosable: a wrong password there **is** announced (R093 O8) — not because that page is wired for it either, but because submitting reloads the whole page and the screen reader reads the new content. Where the product reloads, errors are heard by accident; where it updates in place, they are silent. |
-| **Affected users** | Screen reader users, on the one page that exists to restore their access to the product |
-| **WCAG criteria failed** | 3.3.1 (error not identified to the user); 4.1.3 (status message not programmatically determinable) |
-| **Severity** | Major (proposed 2026-09-24 — a case for Blocker exists: this is account recovery, and the user cannot determine the outcome of the only action available. Reviewer to confirm.) |
-| **Evidence** | R121 O13 (reviewer); R093 O8 (the contrasting sign-in behaviour) |
+| **Observed** | **Withdrawn as a failure 2026-09-24, the same day it was raised.** It was built on the reviewer's "no announcement" when Request Reset was pressed with the field **empty**. Asked to check the row again they tested an **invalid e-mail address** and reported: **"retract S14, when entering a wrong email the error is announced."** So the page does report errors and the screen reader does hear them — by the same postback-and-reload mechanism as the sign-in page. The original observation stands as recorded; the inference drawn from it, that this account-recovery path leaves a screen-reader user with no way to know the outcome, was wrong and is retracted. Kept as an **advisory**: pressing the button with an empty field still appears to produce nothing, which is worth a vendor's attention but is not a criterion failure on the evidence. Original text: reviewer with NVDA, submitting with the user-name field empty: "no announcement." Nothing is spoken — no error, no confirmation, no acknowledgement that the button did anything. This is the page's only action and the product's only account-recovery path, so a student locked out of Expert TA presses the button and cannot tell whether a reset e-mail is coming, whether the field was wrong, or whether anything happened at all. The cause is the same one that runs through this review: the result lands in `<span id="MainContent_lblOut">`, which is **not a live region**, and the page carries none. The contrast with the sign-in page is what makes it diagnosable: a wrong password there **is** announced (R093 O8) — not because that page is wired for it either, but because submitting reloads the whole page and the screen reader reads the new content. Where the product reloads, errors are heard by accident; where it updates in place, they are silent. |
+| **Affected users** | — (advisory; no criterion failure demonstrated) |
+| **WCAG criteria failed** | none (withdrawn — errors are announced) |
+| **Severity** | — (advisory; withdrawn by the reviewer 2026-09-24) |
+| **Evidence** | R121 O14 (the retraction); R121 O13 (the original, empty-field observation) |
 
 #### Finding V-F45
 
@@ -743,7 +743,7 @@ differently.
 |---|---|
 | **Baselines run** | B5 NVDA (R121, 2026-09-21 — reviewer, NV6/NV8 only); axe (R122); probe runs R123–R128 |
 | **Date tested** | 2026-09-21 |
-| **Findings** | V-F30; V-F18 applies here (no `lang`); V-F19 applies here (no reflow); V-F43; V-F44 |
+| **Findings** | V-F30; V-F18 applies here (no `lang`); V-F19 applies here (no reflow); V-F43 (V-F44 withdrawn 2026-09-24 — advisory) |
 
 #### Finding V-F30
 

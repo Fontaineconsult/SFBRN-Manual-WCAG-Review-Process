@@ -11,9 +11,9 @@
 | **Tool** | nvda |
 | **Baseline** | B5 |
 | **Tester** | Daniel Fontaine (reviewer, NVDA); assistant records |
-| **Result** | Broken |
+| **Result** | Works with issues |
 
-**Result reasoning.** 2026-09-24, every row answered. The page has exactly one job — request a password reset — and performing it tells a screen-reader user nothing at all (V-F44): no error, no confirmation, no sign the button did anything. This is the only account-recovery path in the demo, so a student locked out cannot find out whether help is on the way. The field's missing label (V-F30) is survivable because the table read-out carries it, as the reviewer ruled; the silence on submission is not. Broken.
+**Result reasoning.** 2026-09-24, revised. The run was recorded Broken on the strength of V-F44 — that the page's only action announced nothing. The reviewer retracted that: with an invalid e-mail the error **is** announced. What remains is real but not disabling: the user-name field carries no programmatic label (V-F30, Minor, the reviewer's "accessible but not best practice"), the logo is an unnamed link (V-F43, Minor), and the page has no headings or landmarks (V-F1). A screen-reader user can complete a password reset here and be told when it goes wrong. Works with issues.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -40,7 +40,7 @@ run's Result is set. Fails cite observation IDs.
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | fail | O4 — <html> has no lang attribute (measured — 3.1.1) |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | fail | O12 — the logo link announces as **"Unlabeled Graphic Visited Link"** (reviewer): a link whose accessible name is computed from nothing, so its purpose cannot be determined at all → V-F43 |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
-| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | fail | O13 — reviewer 2026-09-24, submitting Request Reset with the field empty: **"no announcement"**. Nothing is spoken — no error, no confirmation, no indication the button did anything → finding **V-F44** |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | pass | **Corrected 2026-09-24 from fail.** O14 — the reviewer: **"retract S14, when entering a wrong email the error is announced."** The earlier "no announcement" (O13) was the **empty-field** case only; with an invalid address the page does report the error and the screen reader hears it. V-F44 is withdrawn on this |
 
 **view_probe 2026-09-21:** answered NV11=n/a, NV1=pass, NV9=fail by measurement; facts in `R121-probe.json`.
 
@@ -80,6 +80,9 @@ Format:
   - Classified: NV4, NV10 / WCAG 1.1.1, 2.4.4, 4.1.2 / Minor → **V-F43** confirmed; NV2 / WCAG 1.3.1 → V-F1; NV7 / n/a
 - O13 [clarified] (state: as O12, Request Reset pressed with the user-name field empty): **"no announcement."** Nothing is spoken at all — not an error, not a confirmation, not an acknowledgement that the button did anything. This is the page's only action, and it is the recovery path for a locked-out student, who therefore cannot tell whether a reset e-mail is coming. It contrasts directly with the sign-in page, where a wrong password *is* announced (R093 O8) — and the difference is mechanism, not intent: sign in reloads the whole page, so the screen reader reads the error as new page content, while this page's result lands in `<span id="MainContent_lblOut">`, which is **not a live region**, so nothing announces it.
   - Classified: NV12 / WCAG 3.3.1, 4.1.3 / Major → finding **V-F44**
+
+- O14 [clarified] (state: password reset, NVDA, an **invalid e-mail address** submitted, reviewer 2026-09-24): **"retract S14, when entering a wrong email the error is announced."** This corrects O13 and withdraws the finding built on it. O13 tested the **empty-field** case and heard nothing; that observation stands as recorded, but the inference drawn from it — that the page announces nothing at all — was wrong. With an address that is not an account, the page reports the error and it is announced, exactly as the sign-in page does and by the same mechanism (a postback that reloads the page). NV12 passes; **V-F44 is withdrawn**; the run's Result is no longer Broken.
+  - Classified: NV12 / WCAG 3.3.1 / **pass** → V-F44 withdrawn; the empty-field silence survives only as the advisory noted in that finding
 
 ## Notes
 

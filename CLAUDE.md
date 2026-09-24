@@ -160,6 +160,7 @@ if nobody said the word "test".
 | Results rollup / report | `05`/`06` template text | `05-results.md`, `06-report.md` |
 | Finish a review | `review.py validate` until clean | `06-report.md`, then `save-enclosure` |
 | Export the report for distribution | `scripts/export_report.py --help`, ontology/reporting.md §Distribution | `reviews/<id>/<id>-report.docx` — generated output; edit the .md and re-export, never the .docx |
+| Export an ACR (VPAT-shaped, for a counterparty who needs the grid) | ontology/reporting.md §Third output | `reviews/<id>/<id>-acr.html` — generated from the **database only**, never from notes or prose; fix `05` and regenerate |
 | Export the WCAG-EM report (org-neutral, for outside the CSU) | ontology/reporting.md §Second output, `templates/review/wcag-em-report.html` | `reviews/<id>/<id>-wcag-em-report.html` — generated from 01/03/05/06; never hand-edited, never carries decision/TAAP/procurement fields |
 | Verify a result, count, or cross-reference | `ontology/data-store.md` | nothing — `python scripts/review_db.py query "SQL"` / `check <review>`; the SQLite mirror is the place to verify, the files stay the record |
 | Change the process itself | the doc being changed | `ontology/` + `templates/` + `scripts/` + README together — never just deviate in-session |

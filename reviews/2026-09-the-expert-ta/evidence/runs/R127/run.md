@@ -8,10 +8,12 @@
 | **Page URL / location** | https://login.theexpertta.com/ResetPassword.aspx |
 | **Task / process** | — |
 | **Modality** | cognition |
-| **Tool** | probe |
+| **Tool** | probe; inspection (reviewer, 2026-09-24) |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — CO1, CO2, CO3, CO4, CO5, CO7, CO8, CO10, CO11 need the reviewer (inspection) |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-24, every row answered. The page is understandable and predictable to use: navigation and component identification are consistent with the rest of the product, help is where it always is, nothing changes context on focus or input, no time limit or moving content, and no information is demanded twice. The single failure is structural rather than local — the product offers **one route to every destination**, with no search, site map or index (CO10, 2.4.5), which is a property of the product and not of this page.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`

@@ -74,6 +74,8 @@ python scripts/export_report.py <review> [--out PATH]
 python scripts/export_report.py <review> --format wcag-em
                                                # (planned) render the org-neutral WCAG-EM report
                                                # (templates/review/wcag-em-report.html) from 01/03/05/06
+python scripts/export_acr.py <review> [--open]   # independently-verified ACR (VPAT® 2.5 shape) reviews/<id>/<id>-acr.html,
+                                               # generated ENTIRELY from the database — see ontology/reporting.md §Third output
 ```
 
 Testing runs as an interactive loop (`ontology/testing-loop.md`): `next`

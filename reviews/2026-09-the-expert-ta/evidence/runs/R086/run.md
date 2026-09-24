@@ -8,10 +8,12 @@
 | **Page URL / location** | https://dei56mo.theexpertta.com/Common/TakeTutorialAssignment.aspx?z=1&eid=3373&aid=17547 |
 | **Task / process** | — |
 | **Modality** | cognition |
-| **Tool** | probe |
+| **Tool** | probe; inspection (reviewer, 2026-09-24) |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — CO1, CO2, CO3, CO4, CO5, CO7, CO8, CO10, CO11 need the reviewer (inspection) |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-24, every row answered. The page is understandable and predictable to use: navigation and component identification are consistent with the rest of the product, help is where it always is, nothing changes context on focus or input, no time limit or moving content, and no information is demanded twice. Two failures. The product-wide single-route problem (CO10, 2.4.5), and one that belongs to this page: **Submit and Feedback each change the student's score on one activation without warning**, while "I give up" — the most obviously final of the three — is the one that asks (CO11, 3.3.4, V-F46). The page remains usable; what it lacks is a confirmation step where the cost is graded marks.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`

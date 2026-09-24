@@ -1,0 +1,431 @@
+r"""export_acr.py — an independently-verified ACR, rendered from the database.
+
+    python scripts/export_acr.py <review> [--open] [--out PATH]
+
+Writes reviews/<id>/<id>-acr.html: a VPAT(R) 2.5-shaped Accessibility
+Conformance Report built **entirely from reviews/<id>/<id>.sqlite**.
+
+Why this exists, given ontology/reporting.md says "Not a VPAT/ACR --
+deliberately" (2026-08-10)
+--------------------------------------------------------------------------
+That section rules out shaping the *review report* (`06`) like an ACR, and
+its reasons still hold: `06` carries a procurement decision, an audit of the
+vendor's own ACR, and contract-ready remediation asks, none of which fit an
+ACR's per-criterion grid. This script does not replace `06`. It is a third
+output alongside it and the WCAG-EM report, added 2026-09-24 at the
+reviewer's request, for the case `06` cannot serve: a counterparty who can
+only consume the standard grid -- a campus procurement office, an RFP
+response packet, a vendor being handed verified results in the format their
+own paperwork uses.
+
+The distinction the document itself must carry, and does, in its header:
+a vendor's ACR is a **self-attestation**; this one is an **independent
+evaluation**, every cell of it traceable to a logged run.
+
+Rules
+-----
+* **Database only.** Every value is read from the mirror. Nothing is written
+  from prose, memory or an assistant's summary. If a fact is not in an
+  extracted field it does not appear, which is the same contract the
+  dashboard and completion predicates run under (ontology/data-store.md).
+* **No invention in Remarks.** A criterion's remark is the `05` remark plus
+  its findings, verbatim from `criterion_outcomes`. The script adds only
+  structure, never judgement.
+* **Untested is said out loud.** Any criterion still `Not Evaluated`, and
+  any functional performance criterion whose views are not all resulted,
+  is reported as such rather than left to read as a pass.
+* Deterministic: no timestamps in the body, so a diff on the committed page
+  means the review changed. Never hand-edit it.
+"""
+from __future__ import annotations
+
+import argparse
+import html
+import pathlib
+import re
+import sys
+import webbrowser
+
+HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import review as rv  # noqa: E402
+import review_db as db  # noqa: E402
+
+CONFORMANCE = ("Supports", "Partially Supports", "Does Not Support", "Not Applicable", "Not Evaluated")
+CLS = {"Supports": "ok", "Partially Supports": "part", "Does Not Support": "no",
+       "Not Applicable": "na", "Not Evaluated": "unk"}
+
+TERMS = [
+    ("Supports", "The functionality of the product has at least one method that meets the criterion "
+                 "without known defects, or meets with equivalent facilitation."),
+    ("Partially Supports", "Some functionality of the product does not meet the criterion."),
+    ("Does Not Support", "The majority of product functionality does not meet the criterion."),
+    ("Not Applicable", "The criterion is not relevant to the product."),
+    ("Not Evaluated", "The product has not been evaluated against the criterion. This can be used only in "
+                      "WCAG 2.x Level AAA."),
+]
+
+
+def e(s) -> str:
+    return html.escape(str(s or ""), quote=True)
+
+
+def md(s) -> str:
+    """Escape, then honour the light Markdown the stage files write.
+
+    `05` remarks are authored as Markdown (that is the record's format), so a
+    report rendered straight from them would print literal ** and backticks at
+    a counterparty. Escaping happens first, so this can never inject markup."""
+    t = e(s)
+    t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t, flags=re.S)
+    t = re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
+    # A shortened cell can cut a pair in half; never show a reader a stray
+    # marker just because the text was trimmed.
+    return t.replace("**", "").replace("`", "")
+
+
+def severity(s) -> str:
+    """The bare rating word. The record keeps the reviewer's reasoning in the
+    same field ("Minor (proposed ...)", "**Minor - confirmed ...**"); a report
+    column wants the rating alone."""
+    t = re.sub(r"[*`]", "", s or "").strip()
+    m = re.match(r"(Blocker|Major|Minor)", t, re.I)
+    return m.group(1).capitalize() if m else (t.split(" (")[0][:24] or "Unrated")
+
+
+def trim(s, n: int) -> str:
+    """Shorten to a word boundary, with an ellipsis when something was cut."""
+    s = (s or "").strip()
+    if len(s) <= n:
+        return s
+    cut = s[:n]
+    sp = cut.rfind(" ")
+    return (cut[:sp] if sp > n * 0.6 else cut).rstrip(" ,;:") + "\u2026"
+
+
+def gather(con, review: pathlib.Path) -> dict:
+    """Everything the report prints, read from the mirror and nowhere else."""
+    q = lambda sql, *a: con.execute(sql, a).fetchall()
+    rid = review.name
+
+    row = q("SELECT product, decision, report_status, source_sha FROM reviews WHERE review_id=?", rid)
+    product, decision, report_status, source_sha = row[0] if row else ("", "", "", "")
+
+    criteria = q("""
+        SELECT w.sc, w.name, w.level, w.principle_no, w.principle, w.version_added, w.understanding_url,
+               co.outcome, co.remarks, co.task_findings, co.vendor_claim
+        FROM wcag_criteria w
+        LEFT JOIN criterion_outcomes co ON co.sc = w.sc AND co.review_id = ?
+        WHERE w.in_target = 1
+        ORDER BY w.sort_key""", rid)
+
+    # evidence counts per criterion: answered check rows and failing ones
+    ev = {}
+    for sc, answered, failing in q("""
+        SELECT cc.sc,
+               SUM(CASE WHEN o.outcome IN ('pass','fail','partial','n/a') THEN 1 ELSE 0 END),
+               SUM(CASE WHEN o.outcome IN ('fail','partial') THEN 1 ELSE 0 END)
+        FROM check_criteria cc
+        JOIN check_outcomes o ON o.check_id = cc.check_id AND o.review_id = ?
+        JOIN runs r ON r.run_id = o.run_id AND r.review_id = o.review_id
+        JOIN views v ON v.view_id = r.view_id AND v.review_id = r.review_id
+        WHERE COALESCE(v.removed,'') = ''
+        GROUP BY cc.sc""", rid):
+        ev[sc] = (answered or 0, failing or 0)
+
+    # functional performance criteria: views resulted vs sampled, per modality
+    views_live = q("SELECT COUNT(*) FROM views WHERE review_id=? AND COALESCE(removed,'')=''", rid)[0][0]
+    fpc = []
+    for code, name, modality in q("SELECT code, name, modality FROM fpc ORDER BY code"):
+        done = q("""SELECT COUNT(DISTINCT r.view_id) FROM runs r
+                    JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                    WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                      AND r.result IN ('Works','Works with issues','Broken','N/A')""", rid, modality)[0][0]
+        blank = q("""SELECT COUNT(*) FROM runs r
+                     JOIN check_outcomes o ON o.run_id=r.run_id AND o.review_id=r.review_id
+                     JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                     WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                       AND COALESCE(o.outcome,'')=''""", rid, modality)[0][0]
+        fails = q("""SELECT COUNT(*) FROM runs r
+                     JOIN check_outcomes o ON o.run_id=r.run_id AND o.review_id=r.review_id
+                     JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                     WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                       AND o.outcome IN ('fail','partial')""", rid, modality)[0][0]
+        broken = q("""SELECT COUNT(DISTINCT r.view_id) FROM runs r
+                      JOIN views v ON v.view_id=r.view_id AND v.review_id=r.review_id
+                      WHERE r.review_id=? AND r.modality=? AND COALESCE(v.removed,'')=''
+                        AND r.result='Broken'""", rid, modality)[0][0]
+        # findings whose evidence includes a run of this modality
+        fnames = [f[0] for f in q("""SELECT DISTINCT f.finding_id FROM findings f
+                     JOIN finding_runs fr ON fr.finding_id=f.finding_id AND fr.review_id=f.review_id
+                     JOIN runs r ON r.run_id=fr.run_id AND r.review_id=fr.review_id
+                     WHERE f.review_id=? AND f.withdrawn=0 AND r.modality=?
+                     ORDER BY f.finding_id""", rid, modality)]
+        fpc.append(dict(code=code, name=name, modality=modality, done=done, views=views_live,
+                        blank=blank, fails=fails, broken=broken, findings=fnames))
+
+    findings = q("""SELECT finding_id, severity, where_text, observed,
+                           (SELECT GROUP_CONCAT(sc, ', ') FROM finding_criteria fc
+                             WHERE fc.finding_id=f.finding_id AND fc.review_id=f.review_id) AS sc
+                    FROM findings f WHERE review_id=? AND withdrawn=0
+                    ORDER BY CASE severity WHEN 'Blocker' THEN 0 END, finding_id""", rid)
+
+    views = q("""SELECT view_id, name, locator FROM views
+                 WHERE review_id=? AND COALESCE(removed,'')='' ORDER BY CAST(SUBSTR(view_id,2) AS INT)""", rid)
+    removed = q("""SELECT view_id, name, removed FROM views
+                   WHERE review_id=? AND COALESCE(removed,'')<>'' ORDER BY view_id""", rid)
+    runs_total = q("SELECT COUNT(*) FROM runs WHERE review_id=?", rid)[0][0]
+    runs_resulted = q("""SELECT COUNT(*) FROM runs WHERE review_id=?
+                         AND result IN ('Works','Works with issues','Broken','N/A')""", rid)[0][0]
+    tasks = q("SELECT task_id, name, verdict FROM tasks WHERE review_id=? ORDER BY task_id", rid)
+
+    return dict(rid=rid, product=product, decision=decision, report_status=report_status,
+                source_sha=source_sha, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
+                views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
+                tasks=tasks)
+
+
+def crit_rows(d: dict, level: str) -> str:
+    out = []
+    for (sc, name, lv, pno, pr, ver, url, outcome, remarks, tf, vendor) in d["criteria"]:
+        if lv != level:
+            continue
+        outcome = outcome or "Not Evaluated"
+        answered, failing = d["ev"].get(sc, (0, 0))
+        note = (remarks or "").strip()
+        if not note:
+            note = ("No evaluation was carried out against this criterion."
+                    if outcome == "Not Evaluated" else "")
+        bits = []
+        if (tf or "").strip() and not (tf or "").strip().lower().startswith("(none"):
+            bits.append(f"<div class='fnd'><span class='lbl'>Findings:</span> {md(tf)}</div>")
+        if answered:
+            bits.append(f"<div class='ev'><span class='lbl'>Evidence:</span> {answered} check row(s) answered "
+                        f"in logged runs, {failing} failing</div>")
+        if (vendor or "").strip():
+            bits.append(f"<div class='ev'><span class='lbl'>Vendor's own claim:</span> {md(vendor)}</div>")
+        sup = f" <a class='u' href='{e(url)}'>Understanding</a>" if url else ""
+        newer = f" <span class='badge'>WCAG {e(ver)}</span>" if ver and ver != "2.0" else ""
+        out.append(
+            f"<tr><th scope='row'><a class='sc' href='{e(url)}'>{e(sc)}</a> {e(name)}{newer}{sup}</th>"
+            f"<td class='lvl'><span class='pill {CLS.get(outcome,'unk')}'>{e(outcome)}</span></td>"
+            f"<td class='rem'>{md(note)}{''.join(bits)}</td></tr>")
+    return "\n".join(out)
+
+
+def render(d: dict) -> str:
+    prod = d["product"] or d["rid"]
+    interim = "INTERIM" in (d["report_status"] or "").upper()
+
+    fpc_rows = []
+    for f in d["fpc"]:
+        complete = f["done"] >= f["views"] and f["blank"] == 0
+        if not complete:
+            lvl, cls = "Not Evaluated", "unk"
+            note = (f"Evaluation incomplete: {f['done']} of {f['views']} sampled views have a recorded result"
+                    + (f", {f['blank']} check row(s) unanswered" if f["blank"] else "") + ".")
+        elif f["broken"]:
+            lvl, cls = "Does Not Support", "no"
+            note = (f"All {f['views']} sampled views evaluated. {f['broken']} view(s) could not be used by this "
+                    f"method; {f['fails']} check row(s) failed.")
+        elif f["fails"]:
+            lvl, cls = "Partially Supports", "part"
+            note = f"All {f['views']} sampled views evaluated; {f['fails']} check row(s) failed, none disabling."
+        else:
+            lvl, cls = "Supports", "ok"
+            note = f"All {f['views']} sampled views evaluated with no failing check rows."
+        if f["findings"]:
+            note += " Findings: " + ", ".join(f["findings"]) + "."
+        fpc_rows.append(f"<tr><th scope='row'>{e(f['code'])} {e(f['name'])}</th>"
+                        f"<td class='lvl'><span class='pill {cls}'>{lvl}</span></td>"
+                        f"<td class='rem'>{e(note)}</td></tr>")
+
+    sev = {}
+    for fid, s, *_ in d["findings"]:
+        k = (s or "").split(" ")[0].strip("*") or "Unrated"
+        sev[k] = sev.get(k, 0) + 1
+    sev_txt = ", ".join(f"{v} {k}" for k, v in sorted(sev.items())) or "none"
+
+    counts = {}
+    for c in d["criteria"]:
+        counts[c[7] or "Not Evaluated"] = counts.get(c[7] or "Not Evaluated", 0) + 1
+    tally = " · ".join(f"<b>{counts.get(k,0)}</b> {k}" for k in CONFORMANCE if counts.get(k))
+
+    views_txt = "; ".join(f"{v[0]} {v[1].split(' — ')[0]}" for v in d["views"])
+    tasks_txt = "; ".join(f"{t[0]} {t[1].split(' — ')[0]} — <b>{e(t[2])}</b>" for t in d["tasks"])
+    terms = "\n".join(f"<tr><th scope='row'>{e(t)}</th><td>{e(x)}</td></tr>" for t, x in TERMS)
+
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility Conformance Report — {e(prod)}</title>
+<style>
+ :root {{ --ink:#14181d; --mut:#5a6472; --line:#d7dce3; --bg:#fff; --panel:#f6f8fa;
+   --ok:#1c6b3f; --okbg:#e6f4ec; --part:#8a5a00; --partbg:#fdf3e0; --no:#9a1f2e; --nobg:#fcebed;
+   --na:#4a5260; --nabg:#eef1f4; --unk:#5a3b8a; --unkbg:#f0ebf8; }}
+ @media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{
+   --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
+   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
+   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; }} }}
+ :root[data-theme="dark"] {{ --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
+   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
+   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; }}
+ * {{ box-sizing:border-box; }}
+ body {{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,
+   "Segoe UI",Roboto,Helvetica,Arial,sans-serif; }}
+ .wrap {{ max-width:60rem; margin:0 auto; padding:2rem 16px 5rem; }}
+ h1 {{ font-size:1.7rem; margin:0 0 .2rem; line-height:1.25; }}
+ h2 {{ font-size:1.25rem; margin:2.4rem 0 .6rem; padding-bottom:.3rem; border-bottom:2px solid var(--line); }}
+ h3 {{ font-size:1rem; margin:1.6rem 0 .4rem; }}
+ p, li {{ max-width:56rem; }}
+ .sub {{ color:var(--mut); margin:.1rem 0 1.2rem; }}
+ .note {{ background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--unk);
+   padding:.8rem 1rem; border-radius:6px; margin:1rem 0; }}
+ table {{ border-collapse:collapse; width:100%; margin:.6rem 0 1.4rem; font-size:.94rem; }}
+ th, td {{ border:1px solid var(--line); padding:.55rem .65rem; text-align:left; vertical-align:top; }}
+ thead th {{ background:var(--panel); font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }}
+ tbody th {{ font-weight:600; width:34%; }}
+ td.lvl {{ width:9.5rem; white-space:nowrap; }}
+ .pill {{ display:inline-block; padding:.12rem .5rem; border-radius:999px; font-size:.82rem; font-weight:700; }}
+ .pill.ok {{ background:var(--okbg); color:var(--ok); }} .pill.part {{ background:var(--partbg); color:var(--part); }}
+ .pill.no {{ background:var(--nobg); color:var(--no); }} .pill.na {{ background:var(--nabg); color:var(--na); }}
+ .pill.unk {{ background:var(--unkbg); color:var(--unk); }}
+ .rem {{ font-size:.9rem; }}
+ .fnd, .ev {{ margin-top:.35rem; color:var(--mut); font-size:.85rem; }}
+ .lbl {{ font-weight:700; color:var(--ink); }}
+ .badge {{ font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
+   padding:0 .3rem; color:var(--mut); }}
+ a {{ color:inherit; }} a.sc {{ font-weight:700; text-decoration:none; }} a.sc:hover {{ text-decoration:underline; }}
+ a.u {{ font-size:.75rem; color:var(--mut); }}
+ dl.meta {{ display:grid; grid-template-columns:13rem 1fr; gap:.35rem 1rem; margin:1rem 0; }}
+ dl.meta dt {{ font-weight:700; }} dl.meta dd {{ margin:0; }}
+ @media (max-width:640px) {{ dl.meta {{ grid-template-columns:1fr; gap:.1rem; }}
+   dl.meta dd {{ margin:0 0 .6rem; }} tbody th {{ width:auto; }} }}
+ @media print {{ .pill {{ border:1px solid currentColor; }} }}
+</style></head><body><div class="wrap">
+
+<h1>Accessibility Conformance Report</h1>
+<p class="sub">{e(prod)} — based on VPAT<sup>&reg;</sup> 2.5</p>
+
+<div class="note">
+<p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
+the supplier about its own product. This report was produced by the evaluating body named below from its own
+testing, and every conformance level in it is derived from logged test runs rather than from supplier statements.
+Where the supplier's own claim is known it is shown alongside, for comparison, and it carries no weight in the
+level recorded.</p>
+<p>Generated from the review's database ({e(d['rid'])}.sqlite) by <code>scripts/export_acr.py</code>. No cell is
+authored by hand. {"<b>This report is INTERIM: testing is in progress and levels may change.</b>" if interim else ""}</p>
+</div>
+
+<h2>Report information</h2>
+<dl class="meta">
+<dt>Product</dt><dd>{e(prod)}</dd>
+<dt>Report status</dt><dd>{e(d['report_status'])}</dd>
+<dt>Evaluation methods</dt><dd>Manual testing by a human reviewer driving the product with assistive technology
+ (screen reader, keyboard-only operation, browser zoom, colour filters, contrast measurement), supported by
+ automated scanning (axe-core) and programmatic measurement over the Chrome DevTools Protocol. Automated results
+ were used to direct attention only; no conformance level rests on a tool's output alone.</dd>
+<dt>Scope evaluated</dt><dd>{len(d['views'])} sampled views: {e(views_txt)}</dd>
+<dt>Excluded from scope</dt><dd>{e("; ".join(f"{v[0]} {v[1].split(' — ')[0]} ({v[2]})" for v in d['removed']) or "none")}</dd>
+<dt>Test runs</dt><dd>{d['runs_resulted']} of {d['runs_total']} logged runs carry a recorded result</dd>
+<dt>Task walk-throughs</dt><dd>{tasks_txt or "none recorded"}</dd>
+<dt>Findings</dt><dd>{len(d['findings'])} live ({e(sev_txt)})</dd>
+<dt>Criteria</dt><dd>{tally}</dd>
+</dl>
+
+<h2>Applicable standards</h2>
+<ul>
+<li>Web Content Accessibility Guidelines 2.2, Level A and Level AA (W3C Recommendation)</li>
+<li>Revised Section 508 standards — Chapter 3, Functional Performance Criteria</li>
+</ul>
+
+<h2>Terms</h2>
+<table><caption class="sub">Conformance levels used throughout this report.</caption>
+<thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
+<tbody>{terms}</tbody></table>
+
+<h2>Table 1: Success Criteria, Level A</h2>
+<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<th scope="col">Remarks and explanations</th></tr></thead>
+<tbody>{crit_rows(d, 'A')}</tbody></table>
+
+<h2>Table 2: Success Criteria, Level AA</h2>
+<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<th scope="col">Remarks and explanations</th></tr></thead>
+<tbody>{crit_rows(d, 'AA')}</tbody></table>
+
+<h2>Chapter 3: Functional Performance Criteria</h2>
+<p class="sub">Derived from the proportion of sampled views evaluated for each functional modality and the
+check rows recorded against them. A criterion whose views are not all evaluated is reported as Not Evaluated
+rather than inferred.</p>
+<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<th scope="col">Remarks and explanations</th></tr></thead>
+<tbody>{chr(10).join(fpc_rows)}</tbody></table>
+
+<h2>Chapters 4, 5 and 6</h2>
+<table><thead><tr><th scope="col">Chapter</th><th scope="col">Conformance level</th>
+<th scope="col">Remarks and explanations</th></tr></thead>
+<tbody>
+<tr><th scope="row">Chapter 4: Hardware</th><td class="lvl"><span class="pill na">Not Applicable</span></td>
+<td class="rem">The product is web-delivered software with no hardware component.</td></tr>
+<tr><th scope="row">Chapter 5: Software</th><td class="lvl"><span class="pill na">Not Applicable</span></td>
+<td class="rem">The product is a web application evaluated against WCAG 2.2 in Tables 1 and 2 above;
+501.1 applies the WCAG results rather than a separate software evaluation.</td></tr>
+<tr><th scope="row">Chapter 6: Support Documentation and Services</th>
+<td class="lvl"><span class="pill unk">Not Evaluated</span></td>
+<td class="rem">Support documentation and services were not part of the evaluated sample.</td></tr>
+</tbody></table>
+
+<h2>Findings supporting the levels above</h2>
+<p class="sub">Every conformance level other than Supports or Not Applicable traces to one or more of these.
+Each finding cites the logged runs it was observed in.</p>
+<table><thead><tr><th scope="col">ID</th><th scope="col">Severity</th><th scope="col">Criteria</th>
+<th scope="col">Where</th></tr></thead><tbody>
+{chr(10).join(f"<tr><th scope='row'>{e(f[0])}</th><td>{e(severity(f[1]))}</td>"
+              f"<td>{e(f[4] or '')}</td><td class='rem'>{md(trim(f[2], 180))}</td></tr>"
+              for f in d['findings'])}
+</tbody></table>
+
+<p class="sub">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
+service mark of the Information Technology Industry Council (ITI); this report follows the structure of
+VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
+
+</div></body></html>
+"""
+
+
+def out_path(review: pathlib.Path, override=None) -> pathlib.Path:
+    return pathlib.Path(override) if override else review / f"{review.name}-acr.html"
+
+
+def write(review: pathlib.Path, con=None, override=None) -> pathlib.Path:
+    own = con is None
+    con = con or db.connect(review)
+    try:
+        page = render(gather(con, review))
+    finally:
+        if own:
+            con.close()
+    path = out_path(review, override)
+    prev = path.read_text(encoding="utf-8") if path.is_file() else None
+    if prev != page:
+        path.write_text(page, encoding="utf-8")
+    return path
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap.add_argument("review", help="review directory name or unique substring")
+    ap.add_argument("--out", help="write somewhere other than reviews/<id>/<id>-acr.html")
+    ap.add_argument("--open", action="store_true", help="open the report in a browser")
+    a = ap.parse_args()
+    review = rv.resolve(a.review)
+    path = write(review, override=a.out)
+    print(f"ACR written: {path}")
+    if a.open:
+        webbrowser.open(path.resolve().as_uri())
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

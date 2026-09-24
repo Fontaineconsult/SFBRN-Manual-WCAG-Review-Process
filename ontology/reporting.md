@@ -231,3 +231,73 @@ in `04`/`05`; observations are prose, not pointers.
 - **Accessibility of the output**: the template's own markup (headings,
   `scope`d table headers, `aria-labelledby` tables, `lang`) is preserved;
   the generator adds no colour-only meaning and no scripts.
+
+
+## Third output: the independently-verified ACR (2026-09-24)
+
+`python scripts/export_acr.py <review> [--open]` writes
+`reviews/<id>/<id>-acr.html`, a VPAT® 2.5-shaped Accessibility Conformance
+Report.
+
+**This does not reverse "Not a VPAT/ACR — deliberately" above.** That
+section rules out shaping **`06`** like an ACR, and its three reasons still
+hold — `06` carries a procurement decision, an audit of the vendor's own
+ACR, and contract-ready remediation asks, none of which fit a per-criterion
+grid. The ACR is a **third output alongside** `06` and the WCAG-EM report,
+added at the reviewer's request for the case the other two cannot serve: a
+counterparty who can only consume the standard grid — a campus procurement
+office, an RFP response packet, or the vendor being handed verified results
+in the format their own paperwork uses.
+
+**What makes it legitimate rather than a self-attestation in disguise** is
+stated in the document's own header, not just here: a vendor's ACR is a
+**self-attestation**; this one is an **independent evaluation**, and every
+conformance level in it derives from logged runs. Where the vendor's own
+claim is known it is printed beside the verified level, for comparison, and
+carries no weight in it.
+
+### Derivation (from the database, never from prose)
+
+Unlike `06` and the WCAG-EM report, which are derived from the stage files,
+the ACR is generated **entirely from `reviews/<id>/<id>.sqlite`**. The
+reviewer's instruction on 2026-09-24 was explicit: *"generating a industry
+standard ACR from the data in the databse, never from your notes"*. So:
+
+| ACR section | Source, in the mirror |
+|---|---|
+| Report information | `reviews`, `views` (including `removed`), `runs`, `tasks`, `findings` |
+| Table 1 / Table 2 (Level A / AA) | `criterion_outcomes.outcome`, `.remarks`, `.task_findings`, `.vendor_claim`, joined to `wcag_criteria` for name, level and order |
+| Evidence line under each criterion | counts of answered and failing `check_outcomes` rows on live views, via `check_criteria` |
+| Chapter 3 (FPC) | `fpc` × `runs.result` × `check_outcomes`, per modality |
+| Findings table | `findings` (live only) with `finding_criteria`, `finding_runs` |
+
+**No cell is authored by hand**, and the script adds structure only — never
+judgement. A remark is the `05` remark verbatim. The corollary is that the
+ACR can only be as good as the extraction contract in `data-store.md`: if a
+fact is not in an extracted field, it does not reach the report.
+
+### Rules specific to the ACR
+
+- **Untested is said out loud.** A criterion still `Not Evaluated` is
+  printed as such; a functional performance criterion whose sampled views do
+  not all carry a run Result is reported **Not Evaluated**, never inferred
+  from the rows that happen to be answered. Silence must never read as a pass.
+- **Conformance vocabulary is the ACR's, not ours.** Supports / Partially
+  Supports / Does Not Support / Not Applicable / Not Evaluated — which is
+  why `05` uses the same terms and no mapping is needed (contrast the
+  WCAG-EM report, which needs §Outcome mapping).
+- **Markdown is rendered, not printed.** `05` is authored in Markdown; the
+  generator escapes first, then honours `**bold**` and `` `code` ``, and
+  strips any marker left stranded by a trimmed cell. A counterparty must
+  never see raw `**`.
+- **Severity is the bare word.** The record keeps the reviewer's reasoning
+  in the same field ("Minor (proposed …)"); the report's severity column
+  prints the rating alone.
+- **The report is itself accessible**, and is checked for it: `lang`,
+  `scope`d headers on every table, headings in order, status carried by a
+  **word** and not by colour alone, explicit background, dark mode guarded,
+  no scripts and no network requests. An inaccessible accessibility report
+  is not publishable.
+- **Deterministic**: no timestamps in the body, so a diff on the committed
+  page means the review changed. Never hand-edit it — change `05` (or the
+  runs behind it) and regenerate.

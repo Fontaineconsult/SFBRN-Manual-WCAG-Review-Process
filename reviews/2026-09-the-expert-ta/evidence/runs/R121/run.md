@@ -29,12 +29,12 @@ run's Result is set. Fails cite observation IDs.
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | pass | O3 — document.title = "Expert TA - Reset Password" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk) |
 | NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
-| NV3 — Every control announces an accurate name, role, and value/state | | |
+| NV3 — Every control announces an accurate name, role, and value/state | pass | O8 — reviewer 2026-09-24, from the markup they supplied: the submit control carries `value="Request Reset"`, so it names itself; there is no other control on the page. Their ruling: "they are both accessible, just not best practice, we can pass them" |
 | NV4 — Images announce appropriate alternatives; decorative images are silent | | |
-| NV5 — Reading order matches the meaning of the visual order | | |
+| NV5 — Reading order matches the meaning of the visual order | pass | O8 — a single row of caption, field and button followed by the explanatory Note; the reviewer's ruling covers it |
 | NV6 — Form fields announce labels and instructions (the visible label is the accessible name, or the name says the same thing) | fail | O5 — the user-name field carries no proper label; what the reviewer hears on tabbing in is the whole reset **table** read out. Usable, not labelled — the reviewer's ruling is "accessible, but not best practice" → V-F30 (Minor). Confirmed by axe `label` (critical, 1 node, R122) |
 | NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | partial | O5 — the field's purpose is carried by its position in the layout table rather than by a label; the reviewer could still work it out from the table read-out, so this is not a blocking case → V-F30 |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | pass | O8 — nothing on the page is identified by position alone |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | fail | O4 — <html> has no lang attribute (measured — 3.1.1) |
 | NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
@@ -64,6 +64,15 @@ Format:
   - Classified: NV9 / WCAG 3.1.1 / Minor → extends **V-F18** to S14
 - O7 [measured] (state: as O5, 2026-09-21 view_probe): the page does not reflow — content still needs 1024 px at the 320 px viewport, the same fixed-width container as every other page.
   - Classified: LV1 (recorded on the low-vision run R123) / WCAG 1.4.10 → extends **V-F19** to S14
+
+- O8 [clarified] (state: password reset and sign-in pages, reviewer 2026-09-24 — steps W75/W63): the reviewer supplied the **rendered markup of both pages** and ruled: **"they are both accessible, just not best practice, we can pass them."** Recorded as a pass on NV3, NV5 and NV8 for this view. The markup also settles the labelling question exactly, and the comparison is the useful part — see O9.
+  - Classified: NV3, NV5, NV8 / pass
+- O9 [measured, from the reviewer's markup] (state: as O8): **the two pages label the same field to two different standards.** Sign in writes `<label for="MainContent_UserName" id="MainContent_UserNameLabel"><strong>User&nbsp;Name:</strong></label>` — a correct, associated label. Password reset writes the identical caption as `<strong><font color="#3A7C89">User&nbsp;Name:</font></strong>` with **no `<label>` element at all**, sitting in the same `<td>` as `#MainContent_txtUserToRequest`, which carries no `aria-label`, `title` or `placeholder`. So the product already does this correctly one click away, on the page a user reaches this one *from*. That is what makes V-F30 an omission rather than a house style, and it is why the finding is worth keeping even under a "we can pass them" ruling — the fix is to copy the neighbouring page.
+  - Classified: NV6 — the reviewer's pass stands on usability; the omission recorded against **V-F30**, whose severity is now a question for the reviewer (→ W76)
+- O10 [measured, from the reviewer's markup] (state: as O8, on **both** pages): the Expert TA logo is `<a href="http://theexpertta.com/"><img src="/images/loginlogo.png" border="0" height="250px"></a>` — **an image with no `alt` attribute inside a link, and no `aria-hidden` on either**. Unlike the in-app header logo (V-F29, advisory) this one is not hidden from the AT, so it is a link whose accessible name is computed from nothing. This was not part of what the reviewer ruled on — they were answering the form question — so it is raised rather than passed → **V-F43**.
+  - Classified: NV4, NV10 / → finding **V-F43**, awaiting the reviewer at W76
+- O11 [measured, from the reviewer's markup] (state: as O8): both pages hold an **empty container waiting for a message** and neither is a live region — sign in has `<td align="center" colspan="2" style="color:Red;"></td>`, reset has `<span id="MainContent_lblOut"></span>`. There is no `aria-live`, `role=status` or `role=alert` on either, and sign in's required-field marker `<span title="User Name is required." style="visibility:hidden;">*</span>` is hidden from everything. So an error or a result message would appear as text with nothing to announce it — the same mechanism as V-F40 and V-F42. **NV12 is not answered by this**: it needs a submission to see what actually happens.
+  - Classified: NV12 — still open; measured groundwork for it
 
 ## Notes
 

@@ -634,6 +634,17 @@ differently.
 | **Severity** | Minor (proposed 2026-09-21 — noise rather than a barrier; the reviewer reads the page successfully through it. Reviewer to confirm.) |
 | **Evidence** | R113 O5, O7 (reviewer + measurement) |
 
+#### Finding V-F43
+
+| | |
+|---|---|
+| **Where** | Sign in (S7) and Password reset (S14) — the Expert TA logo at the right of both pages |
+| **Observed** | From the markup the reviewer supplied 2026-09-24, identical on both pages: `<a href="http://theexpertta.com/"><img src="/images/loginlogo.png" border="0" height="250px"></a>`. The image carries **no `alt` attribute**, the link carries no `aria-label` or `title`, and **neither is inside `aria-hidden`**. So the link's accessible name is computed from nothing at all: a screen-reader user meets a link in the tab order and in the links list with no indication of what it is or where it goes — it leaves the product for the vendor's marketing site. This differs from the in-app header logo (V-F29, withdrawn to advisory) precisely because that one *is* `aria-hidden` and NVDA announced it anyway; here there is no name to fall back on. It sits on the two pages a locked-out student must use, where there is least context to guess from. |
+| **Affected users** | Screen reader users; speech-input users (no name to speak) |
+| **WCAG criteria failed** | 2.4.4 (link purpose); 4.1.2 (no accessible name); 1.1.1 (image with no text alternative) |
+| **Severity** | Minor (proposed 2026-09-24 — the destination is harmless and the pages are short, but it is an unnamed link on the authentication path. Reviewer to confirm at W76.) |
+| **Evidence** | R121 O10 (reviewer-supplied markup, both pages) |
+
 ### View S5 — Assignment Editor
 
 | | |

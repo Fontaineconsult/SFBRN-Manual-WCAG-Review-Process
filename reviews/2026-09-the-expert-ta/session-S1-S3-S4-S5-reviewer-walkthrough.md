@@ -1937,6 +1937,40 @@ and whether it names the field and the problem.
 student locked out of the product cannot reach any other view without it.
 **Feedback:** _(pending)_
 
+### W76 — Three short answers to close the sign-in and reset pages
+
+You supplied both pages' markup and ruled *"they are both accessible, just not
+best practice, we can pass them."* NV3, NV5 and NV8 are recorded as passes on
+that. Three things the ruling did not reach, because they need an action or a
+decision rather than a reading:
+
+**(a) The logo link, on both pages.** `<a href="http://theexpertta.com/"><img
+src="/images/loginlogo.png" border="0" height="250px"></a>` — the image has
+**no `alt`**, the link has no `aria-label` or `title`, and neither is
+`aria-hidden`. So its accessible name is computed from nothing. Tab to it (or
+pull up the links list) on either page: does NVDA give you anything at all?
+This is **V-F43**, Minor proposed — confirm or overrule the rating.
+
+**(b) NV12 on both — the one thing that needs a submission.** On **reset**,
+press Request Reset with the field empty (or with an address that is not an
+account). On **sign in**, enter a wrong password. In each case: **is the error
+announced at all**, and does it say which field and what is wrong? I can see
+why this is in doubt: both pages hold an empty container waiting for the
+message — `<td style="color:Red;">` on sign in, `<span
+id="MainContent_lblOut">` on reset — and **neither is a live region**, so
+nothing is wired to announce it. Sign in's required marker
+(`title="User Name is required."`) is `visibility:hidden`, so it is hidden from
+everyone.
+
+**(c) V-F30's rating, now that the two pages can be compared.** Sign in labels
+its field properly: `<label for="MainContent_UserName">User Name:</label>`.
+Reset writes the same caption as `<strong><font>` with **no `<label>` at
+all**. Same form, same field, one click apart, two standards — so the reset
+page's omission is an oversight rather than a house style, and the fix is to
+copy its neighbour. Does that change your "not best practice" call, or does
+V-F30 stay **Minor**?
+**Feedback:** _(pending)_
+
 ### Close-out for session 3 (assistant)
 
 After each step: the run's rows and observations, Tool/Baseline set to the

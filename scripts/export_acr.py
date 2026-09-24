@@ -365,6 +365,21 @@ def gather(con, review: pathlib.Path) -> dict:
         GROUP BY cc.sc""", rid):
         ev[sc] = (answered or 0, failing or 0)
 
+    # what a passing criterion was verified by: the check's own wording, and
+    # the number of pages on which it passed
+    verified = {}
+    for sc, text, pages in q("""
+        SELECT cc.sc, c.text, COUNT(DISTINCT r.view_id)
+        FROM check_criteria cc
+        JOIN checks c ON c.check_id = cc.check_id
+        JOIN check_outcomes o ON o.check_id = cc.check_id AND o.review_id = ?
+        JOIN runs r ON r.run_id = o.run_id AND r.review_id = o.review_id
+        JOIN views v ON v.view_id = r.view_id AND v.review_id = r.review_id
+        WHERE COALESCE(v.removed,'') = '' AND o.outcome = 'pass'
+        GROUP BY cc.sc, c.check_id
+        ORDER BY COUNT(DISTINCT r.view_id) DESC""", rid):
+        verified.setdefault(sc, []).append((text, pages))
+
     # functional performance criteria: views resulted vs sampled, per modality
     views_live = q("SELECT COUNT(*) FROM views WHERE review_id=? AND COALESCE(removed,'')=''", rid)[0][0]
     fpc = []
@@ -442,7 +457,7 @@ def gather(con, review: pathlib.Path) -> dict:
         by_sc.setdefault(sc, []).append(dict(fid=fid, where=where or "", observed=observed or "",
                                              sev=severity(sev), views=vids))
 
-    return dict(rid=rid, pages=pages, by_sc=by_sc,
+    return dict(rid=rid, pages=pages, by_sc=by_sc, verified=verified,
                 product=product, decision=decision, report_status=report_status,
                 source_sha=source_sha, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
                 views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
@@ -497,6 +512,23 @@ DANGLING = re.compile(r"(?i)^[\s*_\"\u201c\u2018']*(?:this|that|it|the\s+\w+)\s+
                       r"(?:explains?|confirms?|shows?|means?|follows?)\s+(?:it|this|that)\b[^.:;]*[.:;]\s*")
 
 COUNTS = re.compile(r"\s*\(\s*(?:n/?a|pass|fail|partial)?\s*[\u00d7x]?\s*\d*\s*\)|\s*[\u00d7x]\s*\d+\b", re.I)
+
+
+def verified_note(checks, total: int) -> str:
+    """What a passing criterion was confirmed by, in one line.
+
+    Uses the check's own requirement wording from the database, so nothing is
+    authored here, with the number of pages it passed on."""
+    if not checks:
+        return "No issues found in the evaluated sample."
+    text, pages = checks[0]
+    text = re.sub(r"\s*\((?:\*\*)?n/a\b[^)]*\)", "", text or "").strip()
+    text = re.sub(r"\s*\([^)]*\)", "", text)          # drop asides, keep the sentence
+    text = re.split(r"\s*;\s*", text)[0].strip().rstrip(".")
+    text = text[:1].upper() + text[1:]
+    where = ("all pages tested" if pages >= total
+             else f"{pages} of the {total} pages tested")
+    return f"{text} \u2014 verified on {where}."
 
 
 def na_reason(note: str, absent: bool = True) -> str:
@@ -554,12 +586,11 @@ def crit_rows(d: dict, level: str) -> str:
         answered, failing = d["ev"].get(sc, (0, 0))
         note = brief(plain((remarks or "").strip(), d["pages"]), 170)
         if outcome == "Supports":
-            # A pass is not argued. Mining the record for a sentence produced
-            # method ("Ten views walked with a keyboard"), fragments ("Passes
-            # on all 10 views") and, worse, text that read like a failure under
-            # a passing level. The level is the statement (reviewer,
-            # 2026-09-24: "don't justify it, don't tell us a story").
-            note = "No issues found in the evaluated sample."
+            # Say what was verified, in the check's own words, and stop. Mining
+            # the *remark* for a sentence produced method, fragments and text
+            # that read like a failure under a passing level; the check is a
+            # requirement sentence already, so it needs no authoring.
+            note = verified_note(d["verified"].get(sc), len(d["views"]))
         elif outcome == "Not Applicable":
             # Here a reason is short, factual and reliably extractable -- the
             # record states an absence ("no video on any sampled view").

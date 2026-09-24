@@ -507,3 +507,12 @@ authenticates, so the reviewer had to sign in again). Probe such views with:
 
 The anonymous profile holds no session, so the product's one-session rule
 is not triggered.
+
+**The rule covers the reviewer's own sign-in *tests*, not just navigation.**
+2026-09-24: the reviewer answered NV12 on the sign-in page by entering a
+wrong password — the right test — in the **authenticated** window, and it
+ended the session there. They then reported the browser as "already logged
+in" while `/json` showed the tab on `Login.aspx` and a navigation to Class
+Management bouncing to `login.aspx?RUrl=…`. So when a step asks for a sign-in
+or password-reset action, say **in the step** which window to do it in; a
+reviewer reading "enter a wrong password" has no reason to think it matters.

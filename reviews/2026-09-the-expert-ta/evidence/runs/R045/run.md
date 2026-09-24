@@ -27,13 +27,13 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
+| MO1 — Every interactive element can be reached with the keyboard | fail | Reviewer 2026-09-24: **"there is no way to tab into the calendar"** — the month grid is reachable only by screen-reader table commands, and the event is a `div` with `tabIndex = -1`, so a keyboard user without a screen reader cannot reach or open any event (R041 O7, O8 → **V-F38**) |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | | |
-| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | | |
-| MO4 — A visible focus indicator exists at all times | | |
+| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
+| MO4 — A visible focus indicator exists at all times | pass | O— focus indicator observed by the reviewer on this view during the zoom pass (LV7, which carries the same criteria 2.4.7/2.4.11): R042 O7 — no focus issue on the reachable controls (reviewer). Recorded here because the observation was about the ring itself, not about zoom |
 | MO5 — Focus order follows the meaning and operation order of the view | | |
-| MO6 — Single-character shortcuts can be switched off or remapped | | |
-| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | |
+| MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
+| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |
 | MO8 — Pointer actions can be cancelled (up-event activation) | | |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O2 — 20 visible targets measured; 14 under 24×24 px, all spacing-exempt (no other target within a 24 px circle) or inline/user-agent-sized |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (11 inline + 33 external scripts scanned, 1 unreadable) |

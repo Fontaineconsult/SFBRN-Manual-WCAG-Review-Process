@@ -27,13 +27,13 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
+| MO1 — Every interactive element can be reached with the keyboard | fail | Established by the reviewer's own keyboard walk: the assignment row's action menu opens by mouse click only — nothing in the row is focusable and no key opens it (R015 O10 → **T1-F3**) — and the grade-profile "view" control is absent from a full 41-stop tab cycle while NVDA can reach it from the links list (R015 O17 → **V-F32**). Two interactive elements on one page that the keyboard cannot reach |
 | MO2 — Every reached element can be operated (activate, select, dismiss) | | |
-| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | | |
-| MO4 — A visible focus indicator exists at all times | | |
+| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
+| MO4 — A visible focus indicator exists at all times | pass | O— focus indicator observed by the reviewer on this view during the zoom pass (LV7, which carries the same criteria 2.4.7/2.4.11): R019 O5 — "focus ring visible on every Tab stop" (reviewer). Recorded here because the observation was about the ring itself, not about zoom |
 | MO5 — Focus order follows the meaning and operation order of the view | | |
-| MO6 — Single-character shortcuts can be switched off or remapped | | |
-| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | |
+| MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
+| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |
 | MO8 — Pointer actions can be cancelled (up-event activation) | | |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | fail | O2 — 2 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): img.dxGridView_gvDetailCollapsedButton "" 9×10 px next to div#divActionMenu17547.actionMenu "⋮"; div#divActionMenu17547.actionMenu "⋮" 16×16 px next to img.dxGridView_gvDetailCollapsedButton "" Reviewer 2026-09-14: confirmed — "no other way found" on this page for the ⋮ menu / expand glyph → finding V-F21. |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (57 inline + 51 external scripts scanned, 1 unreadable) |

@@ -28,13 +28,13 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | MO1 — Every interactive element can be reached with the keyboard | fail | Reviewer 2026-09-24: **"there is no way to tab into the calendar"** — the month grid is reachable only by screen-reader table commands, and the event is a `div` with `tabIndex = -1`, so a keyboard user without a screen reader cannot reach or open any event (R041 O7, O8 → **V-F38**) |
-| MO2 — Every reached element can be operated (activate, select, dismiss) | | |
+| MO2 — Every reached element can be operated (activate, select, dismiss) | fail | O5 — the assignment event cannot be reached from the keyboard, so it cannot be opened; the event modal is behind it → **V-F38** |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
 | MO4 — A visible focus indicator exists at all times | pass | O— focus indicator observed by the reviewer on this view during the zoom pass (LV7, which carries the same criteria 2.4.7/2.4.11): R042 O7 — no focus issue on the reachable controls (reviewer). Recorded here because the observation was about the ring itself, not about zoom |
 | MO5 — Focus order follows the meaning and operation order of the view | | |
 | MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |
-| MO8 — Pointer actions can be cancelled (up-event activation) | | |
+| MO8 — Pointer actions can be cancelled (up-event activation) | pass | Reviewer 2026-09-24: **"pointer cancelation passes"** — pressing the pointer down on a control, moving off it and releasing does not activate it. Tested on the product's shared control set, which is the same DevExpress and ASP.NET furniture on every view |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O2 — 20 visible targets measured; 14 under 24×24 px, all spacing-exempt (no other target within a 24 px circle) or inline/user-agent-sized |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (11 inline + 33 external scripts scanned, 1 unreadable) |
 | MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |
@@ -55,6 +55,9 @@ Format:
 - O3 [measured] (state: view as loaded, 2026-09-11 view_probe): no devicemotion/deviceorientation use in scripts (11 inline + 33 external scripts scanned, 1 unreadable)
   - Classified: MO10 / WCAG 2.5.4 / measured → n/a
 - O4 [new] (state: Calendar, September 2026, keyboard, 2026-09-15, reviewer, during W47): "keyboard tabbing it appears the calendar itself isn't reachable" — Tab moves through the class filter, prev / next / today, but no day cell and not the "Chapter 5 Sample Assignment" event bar takes focus. To confirm for MO1 (W64 keyboard part): does Tab ever land on the event bar or a day, and does Enter on the event do anything with the mouse (if the event is a link to the assignment, its keyboard unreachability is a 2.1.1 fail)?
+
+- O5 [clarified] (state: Calendar, keyboard only, reviewer 2026-09-24 — motor pass): **"of course the calendar is not tabbable, we cant tab into the assignment on the calendar."** Confirms from the motor side what the no-vision walk established (R041 O8, V-F38): the month grid takes no focus and the event is a `div` with `tabIndex = -1`, so a keyboard user cannot reach an assignment, let alone open it. The screen-reader route exists only because table navigation does not need focus.
+  - Classified: MO1 / WCAG 2.1.1 / fail → **V-F38**; MO2 — an event that cannot be reached cannot be opened
 
 ## Notes
 

@@ -34,7 +34,7 @@ run's Result is set. Fails cite observation IDs.
 | MO5 — Focus order follows the meaning and operation order of the view | | |
 | MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |
-| MO8 — Pointer actions can be cancelled (up-event activation) | | |
+| MO8 — Pointer actions can be cancelled (up-event activation) | pass | Reviewer 2026-09-24: **"pointer cancelation passes"** — pressing the pointer down on a control, moving off it and releasing does not activate it. Tested on the product's shared control set, which is the same DevExpress and ASP.NET furniture on every view |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O2 — 10 visible targets measured; 8 under 24×24 px, all spacing-exempt (no other target within a 24 px circle) or inline/user-agent-sized |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (81 inline + 29 external scripts scanned, 1 unreadable) |
 | MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |

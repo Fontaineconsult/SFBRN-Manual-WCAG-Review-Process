@@ -11,7 +11,9 @@
 | **Tool** | probe; keyboard (reviewer, W53) |
 | **Baseline** | B2 |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — MO2, MO3, MO5, MO6, MO7, MO8, MO11 need the reviewer; answered: MO1 fail, MO4 fail (V-F28), MO9 pass, MO10 n/a |
+| **Result** | Broken |
+
+**Result reasoning.** 2026-09-24, every row answered. Broken for this modality, and it is the clearest keyboard failure in the review: the sections expanders, the Books and Chapters selects and the per-problem checkboxes — **every interactive thing on the page** — take no focus (MO1, V-F28), and the focus indicator is absent where focus does land (MO4). A keyboard user cannot choose a book, a chapter or a problem.
 
 **When you set the Result, replace this cell with the bare term and
 nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
@@ -28,16 +30,16 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | MO1 — Every interactive element can be reached with the keyboard | fail | O4 — "can't tab into the check boxes"; the expand controls are unfocusable images; Tab covers only the initial buttons and dropdowns (reviewer; markup: checkboxes are spans) → V-F28 |
-| MO2 — Every reached element can be operated (activate, select, dismiss) | fail | O7 — the sections expanders, the Books and Chapters selects and the per-problem checkboxes cannot be reached from the keyboard at all (MO1), so none of them can be activated, selected or dismissed either → **V-F28** |
+| MO2 — Every reached element can be operated (activate, select, dismiss) | pass | O— reviewer 2026-09-24: **"m02 all operable"**. This row asks whether every element that **is reached** can be activated, selected or dismissed, and it can. Controls the keyboard cannot reach at all (S1's row menu, the Calendar grid, the Practice Area's selects and checkboxes) are **MO1** failures and are recorded there; repeating them here would count one defect twice |
 | MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | pass | Reviewer 2026-09-24, across the whole review: **"I have not encountered any keyboard traps through all reviews, those would stand out."** Ten views walked with keyboard and screen reader over five sessions, including every modal and the widget-heavy Take Assignment. Nothing held focus |
 | MO4 — A visible focus indicator exists at all times | fail | O4 — "tabbing focus is lost outside of the initial buttons and dropdowns" (reviewer) → V-F28 |
-| MO5 — Focus order follows the meaning and operation order of the view | | |
+| MO5 — Focus order follows the meaning and operation order of the view | pass | O— reviewer 2026-09-24: **"m05, focus order follows meaning"**. Focus moves in an order that matches how the view reads and operates, on every view walked |
 | MO6 — Single-character shortcuts can be switched off or remapped | n/a | Product-wide, established 2026-09-24: every shortcut this application defines is a **modifier chord** (`Ctrl+Shift+1`–`5` on Take Assignment). MO6 governs **single-character** bindings, and the review found none on any view |
 | MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | No dragging, multipoint or path-based gesture on this view — the sample's only such interaction is Problem 3's drag-and-drop ranking on Take Assignment (S3), which ships a non-dragging alternative form (R017 O18) |
 | MO8 — Pointer actions can be cancelled (up-event activation) | pass | Reviewer 2026-09-24: **"pointer cancelation passes"** — pressing the pointer down on a control, moving off it and releasing does not activate it. Tested on the product's shared control set, which is the same DevExpress and ASP.NET furniture on every view |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O2 — 14 visible targets measured; 14 under 24×24 px, all spacing-exempt (no other target within a 24 px circle) or inline/user-agent-sized |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (38 inline + 49 external scripts scanned, 1 unreadable) |
-| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |
+| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | fail | O— reviewer 2026-09-24: **"same issues with bypass mechanisms as seen before"**. The product's only bypass is the hidden jump-point mechanism, and it does not work as one: on Class Management, Enter swaps the instruction text for a **"no shortcuts"** message and moves nothing (R022 O4); on the Printable Assignment the jump controls are **"unlabled so they are useless"** (R113 O13). No headings or landmarks exist as an alternative route on any view but the Solutions page → V-F8, V-F1 |
 
 **view_probe 2026-09-11:** answered MO9=pass, MO10=n/a by measurement; facts in `R063-probe.json`.
 

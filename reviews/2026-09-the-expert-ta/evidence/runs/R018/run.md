@@ -11,7 +11,9 @@
 | **Tool** | keyboard |
 | **Baseline** | B2 |
 | **Tester** | Daniel Fontaine (reviewer, keyboard only, NVDA off); assistant records |
-| **Result** | Not set — MO8 need the reviewer (keyboard, B2); measured fail on MO9, MO11 awaits confirmation |
+| **Result** | Works with issues |
+
+**Result reasoning.** 2026-09-24, every row answered. The most interactive view in the sample is also the best for a keyboard: symbol palette, keypad, free-body-diagram tool and the drag-and-drop alternative form all operable without a mouse, focus never trapped, order sound, and the dragging interaction ships a non-drag alternative. Only the bypass mechanism falls short.
 
 ## Checks (motor)
 

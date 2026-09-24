@@ -119,10 +119,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** Decided 2026-09-24 from evidence already on the runs. CO12 n/a on all 10 sampled views (measured): no CSS animation, animated image, marquee, blink, canvas, SVG animation or video anywhere in the sample, so nothing can flash.
 
 ### 2.4.1 Bypass Blocks (Level A)
-- **Outcome:** Partially Supports
+- **Outcome:** Does Not Support
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:** V-F1 (Major)
-- **Remarks:**  2026-09-11 rollup correction (db integrity: V-F1 names 2.4.1; V-F3 does not): V-F1 fails 2.4.1 in combination with V-F3's skip controls. [provisional] 2026-09-10 NVDA on S2: the section skip links work (focus moves to the next section) and a top-of-page jump point exists, so a bypass mechanism is present in Accessibility Mode; the controls are links by role and confusingly worded (V-F3). Standard mode (S1) relies on the vendor's jump points alone — pending R015. Vendor claim not contradicted so far.
+- **Remarks:**  2026-09-11 rollup correction (db integrity: V-F1 names 2.4.1; V-F3 does not): V-F1 fails 2.4.1 in combination with V-F3's skip controls. [provisional] 2026-09-10 NVDA on S2: the section skip links work (focus moves to the next section) and a top-of-page jump point exists, so a bypass mechanism is present in Accessibility Mode; the controls are links by role and confusingly worded (V-F3). Standard mode (S1) relies on the vendor's jump points alone — pending R015. Vendor claim not contradicted so far. **Revised 2026-09-24 from Partially Supports, on the completed motor pass.** MO11 now fails on **9 of the 10 sampled views** and is only *partial* on the tenth. The product's sole bypass mechanism is the hidden jump-point pattern, and the reviewer's verdict on it is that it does not work as one: on Class Management, Enter swaps the instruction text for a **"no shortcuts"** message and moves nothing (R022 O4); on the Printable Assignment the jump controls are **"unlabled so they are useless"** (R113 O13); across the review, "same issues with bypass mechanisms as seen before". No alternative route exists either, because only the Solutions page has headings (V-F1) and no view in the sample has a landmark. A mechanism that exists but cannot be used is not a bypass.
 
 ### 2.4.2 Page Titled (Level A)
 - **Outcome:** Supports
@@ -149,10 +149,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** Decided 2026-09-24 from evidence already on the runs. MO7 passes on **Take Assignment**, which is the only view in the sample carrying multipoint or path-based interactions — the symbol palette, the keypad, the free-body-diagram tool and the drag-and-drop ranking. The reviewer operated every one of them without a mouse (R017 O20–O21, R018), and the drag-and-drop offers an explicit non-dragging alternative form (R017 O18). The other nine views have no gesture-operated content. Outcome rests on that one view because it is the only applicable one.
 
 ### 2.5.2 Pointer Cancellation (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from the reviewer's motor pass: **"pointer cancelation passes"** — pressing the pointer down on a control, moving off it and releasing does not activate it (MO8 pass on all 10 views). The product uses one shared control set — the same DevExpress and ASP.NET furniture on every page — so the behaviour is a property of that set rather than of any one view.
 
 ### 2.5.3 Label in Name (Level A)
 - **Outcome:** Partially Supports
@@ -303,10 +303,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** Focus is visible on every Tab stop of Take Assignment (R018, keyboard) and at 400 % zoom on Class Management, Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, 2026-09-15). On the Student Practice Area "tabbing focus is lost outside of the initial buttons and dropdowns" (R063 O4) — focus goes nowhere visible once the grid should take it. Vendor-claim discrepancy.
 
 ### 2.4.11 Focus Not Obscured (Minimum) (Level AA)
-- **Outcome:** Supports (provisional)
+- **Outcome:** Partially Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
 - **Task findings:**
-- **Remarks:** [provisional — drafted 2026-09-15 by the assistant; reviewer confirms] Nothing sticky or floating hides the focused element: at 400 % zoom the focus ring stayed visible and unobscured on Class Management (both modes), Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, reviewer). The MO4 fail on the Student Practice Area (R063 O4, V-F28) is focus being *absent* on unfocusable content — a 2.4.7 / 2.1.1 defect, not an obscured indicator.
+- **Remarks:** [provisional — drafted 2026-09-15 by the assistant; reviewer confirms] Nothing sticky or floating hides the focused element: at 400 % zoom the focus ring stayed visible and unobscured on Class Management (both modes), Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, reviewer). The MO4 fail on the Student Practice Area (R063 O4, V-F28) is focus being *absent* on unfocusable content — a 2.4.7 / 2.1.1 defect, not an obscured indicator. **Corrected 2026-09-24 from Supports.** MO4 fails on the Student Practice Area — the reviewer's zoom note recorded "focus ring is limited, but not due to zoom" (R060) and the motor pass confirms it — so the criterion cannot read Supports across the sample. It passes on the other nine views, where the reviewer observed a visible focus indicator on every Tab stop.
 
 ### 2.5.7 Dragging Movements (Level AA)
 - **Outcome:** Supports

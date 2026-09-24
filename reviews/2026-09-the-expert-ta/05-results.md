@@ -191,10 +191,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 3.3.1 Error Identification (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Partially Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found where errors were exercised)
+- **Remarks:** Reviewer's call 2026-09-24: **"error is announced on wrong password … this feels like a partially supports."** Where errors were actually exercised they are identified in text and heard: a wrong password on **Sign in** produces an announced error (R093 O8), and re-using an answer on **Take Assignment** opens a dialog reading "Incorrect Answer. You have previously used this answer. Please refer to your submission history." (R017 O11). Neither is a failure. **Partially Supports rather than Supports, because the mechanism is incidental and the sample is thin.** Incidental: neither page carries a single `aria-live`, `role=status` or `role=alert` region — the sign-in error is heard because submitting causes a **full page reload** and the screen reader reads the new page, so an inline validation would be silent, exactly as the Calendar's and the Practice Area's updates are (V-F40, V-F42). Sign in's own required-field marker (`title="User Name is required."`) is `visibility:hidden` and reaches nobody. Thin: those are the only two validated inputs in the whole student-facing sample — every other view answered NV12 **n/a** for want of a form (grade report, solutions, printable assignment, calendar, practice area, both Class Management pages). **Still untested:** the password reset page's own submission (empty field or an address that is not an account) — W76(b). Vendor-claim discrepancy.
 
 ### 3.3.2 Labels or Instructions (Level A)
 - **Outcome:** Partially Supports

@@ -1524,7 +1524,23 @@ window only.
 bottom right (NV4/NV10); User Name / Password labels on focus (NV6); a
 wrong password → is the error announced and does it say what to fix
 (NV12)?
-**Feedback:** _(pending)_
+**Feedback:** 2026-09-24 — **R093 complete, Result Works with issues.** *"error
+is announced on wrong password … this feels like a partially supports."*
+NV12 **pass**, NV6 **pass** (this page has a real `<label for>`), NV3/NV5/NV8
+pass on your markup ruling. NV2 **fail** (measured: 0 headings, 0 landmarks),
+NV4 and NV10 **fail** — the logo link has no accessible name at all
+(→ **V-F43**). `05` **3.3.1 → Partially Supports** on your call.
+**Why the mechanism is worth knowing:** the page has **zero live regions**,
+and its required-field marker is `visibility:hidden`. The error is heard
+because submitting causes a **full page reload** and the screen reader reads
+the new page — not because anything is wired to announce it. So an inline
+validation here would be silent, exactly as the Calendar and Practice Area
+updates are. That, plus only two validated inputs in the whole student-facing
+sample, is what makes Partially Supports the right call rather than Supports.
+**Still open:** W76(b) on the **reset** page — press Request Reset with the
+field empty and tell me whether anything is announced. Its message container
+is an empty `<span>` with no live region, so I expect silence, and one attempt
+settles it.
 
 ### W64 — Calendar (S6, run R041)
 

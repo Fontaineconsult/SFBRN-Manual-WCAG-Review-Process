@@ -224,7 +224,7 @@ differently.
 
 | | |
 |---|---|
-| **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids; **S2 Class Management Accessibility Mode** — the same control, and there it is the *only* graphic `G` reaches (added 2026-09-21); S12 Student Practice Area — the sections grid's expand image |
+| **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids; **S2 Class Management Accessibility Mode** — the same control, and there it is the *only* graphic `G` reaches (added 2026-09-21); S12 Student Practice Area — the sections grid's expand image, and (2026-09-24) the DevExpress interface sprites that `G` stops on, carrying `alt=""`, `alt="v"` or `alt="[Collapse]"` |
 | **Observed** | `G` (next graphic) stops on two controls announced as "collapsed graphic clickable": the DevExpress detail-expand glyphs (`img.dxGridView_gvDetailCollapsedButton`). They are clickable images with no role (not a button) and no name — a screen-reader user hears that something collapsed is clickable but not what it expands. The site logo, the only other graphic, has alt text. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
@@ -462,7 +462,7 @@ differently.
 |---|---|
 | **Baselines run** | axe (R011); probe runs R059–R064, R105; reviewer 2026-09-15 — NVDA (R059), keyboard (R063), eyedropper (R060) |
 | **Date tested** | 2026-09-11 (measured), 2026-09-15 (reviewer) |
-| **Findings** | V-F28; V-F1, V-F5, V-F16, V-F19, V-F23 confirmed here; V-F8 (inert Ctrl+Alt+1) |
+| **Findings** | V-F28; V-F1, V-F5, V-F16, V-F19, V-F23 confirmed here; V-F8 (inert Ctrl+Alt+1); V-F42 |
 
 #### Finding V-F28
 
@@ -474,6 +474,17 @@ differently.
 | **WCAG criteria failed** | 2.1.1, 2.4.7, 1.3.1, 4.1.2 |
 | **Severity** | Blocker for this page (assistant's rating — reviewer to confirm) |
 | **Evidence** | R063 O4 (keyboard); R059 O3 (NVDA); `R059-sections-table.html` (reviewer-saved markup); R011 `R011-axe.json` (12 unlabeled fields, no headings, no landmarks) |
+
+#### Finding V-F42
+
+| | |
+|---|---|
+| **Where** | Student Practice Area (S12) — every selection update (choosing a book, a chapter, a difficulty filter) |
+| **Observed** | Reviewer with NVDA, 2026-09-24. Choosing a book re-announces **the entire page** instead of the chapters that changed, and the announcement is byte-for-byte the same whichever selection is made: *"Student Practice Area document / form landmark / table / Class Management Instructor Help Library Take Tutorial Assignment Take Tutorial Assignment Clear Selection Clear Selection Sections row 1 column 1 / table / … row 2 column 2"* — the menu chain read twice, with nothing about the chapters list that actually updated. Their summary: **"that is what is announced on update, its always the same thing."** Measured: the view carries **zero `aria-live`, `role=status` or `role=alert` regions**, so the selection triggers a full re-render and the screen reader re-reads the container because nothing marks the result as a status message. This is the **mirror image of V-F40** on the Calendar, where changes are announced not at all: the same criterion failed from opposite directions, and both have the same fix — mark the region that changes and say what changed. |
+| **Affected users** | Screen reader users (a wall of unchanged text after every selection, and no way to hear the result); users with attention or cognitive disabilities |
+| **WCAG criteria failed** | 4.1.3 (status messages not programmatically determinable) |
+| **Severity** | Major (proposed 2026-09-24 — reviewer to confirm) |
+| **Evidence** | R059 O10 (reviewer's verbatim announcement + measurement) |
 
 ### View S4 — View Grade Report
 

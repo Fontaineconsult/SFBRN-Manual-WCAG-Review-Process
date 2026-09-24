@@ -1558,7 +1558,28 @@ that the modal is not really a form.
 **Also:** Books / Chapters selects and the difficulty checkboxes — labels on
 focus (NV6, axe lists 12 unlabeled)? Choosing a book — do the chapters
 update with an announcement (NV7)?
-**Feedback:** 2026-09-15 (partial, from the W53 narration) — NV2 fail (no
+**Feedback:** 2026-09-24 — **R059 complete, Result Broken.** *"pressing G puts
+us into the table in the grid … pressing it again enters the what appears to
+be the YouTube thumbs, but there is no information about what they are, just
+generic graphic … the order makes sense but their use of tables for layout
+makes moving through confusing since the tables are not well labled … that is
+what is announced on update, its always the same thing … nv8 no, nv10 no, no
+input validation."*
+NV4 fail, NV5 pass, NV7 fail, NV8 pass, NV10 pass, NV12 n/a. New: **V-F42**
+(every selection re-announces the whole page identically and never says what
+changed — the mirror image of the Calendar's V-F40; measured cause, zero live
+regions).
+**Your hedge was right and worth recording:** the graphics are **not** video
+thumbnails. Measured on the state you were in, all 26 images are DevExpress
+interface sprites (`DXR.axd`, `alt=""` / `"v"` / `"[Collapse]"`), and the page
+contains no iframe, video, audio or any occurrence of "youtube" in 111 KB of
+HTML. That you could not tell what they were **is** the defect (→ V-F16), but
+they are decoration, not media. The "watch the following brief video" you
+reported on 2026-09-15 therefore belongs to the practice problem behind "Take
+Tutorial Assignment", a page that is **not in the sample** — recorded in `03`
+§2.6 as a scope item, since captions there would need their own walk.
+
+Earlier: 2026-09-15 (partial, from the W53 narration) — NV2 fail (no
 headings, uncaptioned tables), NV3 fail (expand images unnamed / not
 controls, checkboxes are spans), NV6 fail (no labels) → V-F28, V-F1, V-F5,
 V-F16. Still open: NV4 (`G`), NV5 (reading order), NV7 (choosing a book —

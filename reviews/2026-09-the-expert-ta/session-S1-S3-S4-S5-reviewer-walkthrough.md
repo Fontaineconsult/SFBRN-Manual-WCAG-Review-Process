@@ -1999,10 +1999,10 @@ page** and the screen reader reads the new content, while this result is
 written **in place** into a span that is not a live region. Where the product
 reloads, errors are heard by accident; where it updates in place, they are
 silent.
-**(c) still open, one word:** does V-F30 stay **Minor** now that you can see
-sign in labels the same field correctly one click away — `<label
-for="MainContent_UserName">` against the reset page's `<strong><font>`? Same
-form, same field, two standards.
+**(c) answered 2026-09-24 — "W76 stays minor".** V-F30 and V-F43 are both
+**confirmed Minor** by the reviewer, with the sign-in comparison in front of
+them. The comparison stays in V-F30 anyway, because it makes the fix a
+one-liner: copy the neighbouring page. **W76 is closed.**
 
 ### Close-out for session 3 (assistant)
 

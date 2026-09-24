@@ -89,16 +89,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** Reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version, so the standard page's mouse-only row menu is a barrier, not a task stop — Partially Supports. In standard mode the assignment row's action menu — the only route to Take Assignment, View Grade Report and the other row actions — opens by mouse click only; nothing in the row is focusable and no key opens it (R015 O10). The Accessibility Mode page provides an operable Actions select + Go (R016 O13), so the functionality is reachable only after switching modes. 2026-09-21 adds a second unreachable control in the **same grid**: the "view" link opening the grade profile is an `<a>` with no `href`, absent from a full 41-stop tab cycle, yet listed and activatable in NVDA's links view (V-F32) — so the keyboard-only user without a screen reader is worse off than the screen-reader user, an inversion worth naming in the report. Elsewhere the keyboard holds: on Take Assignment every widget exercised (symbol palette, keypad, drag-and-drop alternative form, free-body diagram) was operable without a mouse (R017 O20–O21, R018). Vendor-claim discrepancy.
 
 ### 2.1.2 No Keyboard Trap (Level A)
-- **Outcome:** Not Evaluated
+- **Outcome:** Supports
 - **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
-- **Task findings:**
-- **Remarks:**  (V-F4 popup-escape finding withdrawn 2026-09-10 — no citation.) MO3 passed on S3 (R018); other views untested. 2026-09-10: an initial keyboard-trap report on the Class Menu popups was withdrawn — each popup has an exposed, working Cancel/Close button; only Esc is unsupported. Full check in the S11 motor run.
+- **Task findings:** (none — no failure found)
+- **Remarks:** Reviewer's judgement 2026-09-24: **"I have not encountered any keyboard traps through all reviews, those would stand out."** That rests on more evidence than a single check row — ten views walked with a keyboard and a screen reader across five sessions, including the widget-heavy Take Assignment (symbol palette, keypad, free-body-diagram tool, drag-and-drop alternative form), every modal on the Calendar and Class Management, and the sign-in and reset forms. MO3 is recorded pass on S3 (R018), the view where a trap was most likely. Nothing anywhere held focus.
 
 ### 2.1.4 Character Key Shortcuts (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** MO6 asks whether **single-character** shortcuts can be switched off or remapped. Every keyboard shortcut this product defines is a modifier chord — `Ctrl+Shift+1` through `Ctrl+Shift+5` on Take Assignment (the answer read-back, the force-totals read-back, the shortcuts menu) — and the review found no shortcut bound to a bare letter, number, punctuation or symbol key. The criterion governs single-character bindings only, so it does not apply. (Recorded because an earlier wrap-up note queried this `n/a`; the query was wrong and the original answer was right — checked against the shortcut inventory 2026-09-24.)
 
 ### 2.2.1 Timing Adjustable (Level A)
 - **Outcome:** Not Evaluated
@@ -351,10 +351,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 3.3.8 Accessible Authentication (Minimum) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Checked as part of the sign-in walk, at the reviewer's prompt 2026-09-24. Signing in requires a username and a password — a cognitive-function test — but the criterion is satisfied where a mechanism exists to assist, and one does: the reviewer confirms **"works fine with chrome password manager"** (R098 O3, O5). Paste and autofill are not blocked, there is no CAPTCHA, puzzle, transcription step or second factor, and account recovery is an e-mailed reset link rather than a memory task. **Note the boundary:** the same field's missing `autocomplete` token is a real defect, but it belongs to **1.3.5** (V-F17, Minor) — it degrades the browser's help rather than removing it, which is why 3.3.8 is met and 1.3.5 is not.
 
 ### 4.1.3 Status Messages (Level AA)
 - **Outcome:** Partially Supports

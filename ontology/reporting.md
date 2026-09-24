@@ -346,6 +346,30 @@ fact is not in an extracted field, it does not reach the report.
   10 views"). The generator detects a lead-in that now starts lower-case and
   begins at the next complete sentence instead.
 
+- **The report states facts; it does not quote the reviewer.** The record
+  attributes and quotes because that is how a review file should read. A
+  conformance report should not: "I have not encountered any keyboard traps"
+  becomes *No keyboard traps encountered*. Quotation is kept for text the
+  **product** shows — a button caption, a field label, an announcement —
+  which is short and capitalised; the reviewer's own words are stated plainly.
+  The distinction matters: the button called "I give up" must survive a pass
+  that removes first person.
+
+- **No check counts.** "30 checks recorded, 5 failing" describes how the review
+  was run, not what the product does, and it belongs to the dashboard.
+
+- **No evidence-accumulation narration.** The record grows top to bottom, so it
+  says things like "now stand on both Class Management pages". A report is a
+  statement of the product's state, read in any order; that phrasing is
+  stripped.
+
+- **Statements are whole sentences.** Length is controlled by taking **one
+  sentence**, never by cutting one short: a clause-boundary trim produced
+  fragments ("Tab reaches nothing in the row, and Enter."), and an ellipsis
+  reads as if something was withheld. A sentence that ends inside a closing
+  quote or a bold marker still counts as ending — that boundary is easy to
+  miss and was, at first.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

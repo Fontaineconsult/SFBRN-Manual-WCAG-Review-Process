@@ -130,7 +130,9 @@ def depunct(t: str) -> str:
     t = re.sub(r"\s+([,.;:)])", r"\1", t)
     t = re.sub(r"(?:\s*[;,]\s*)+\.", ".", t)
     t = re.sub(r"\.\s*\.", ".", t)
-    return t.strip(" ,;\u2014-")
+    t = t.strip(" ,;\u2014-")
+    t = re.sub(r"^[\s.,;:\u2014-]+", "", t)
+    return t
 
 
 # The record attributes each observation to the person who made it, which is
@@ -164,16 +166,104 @@ MARKER = re.compile(r"(?i)\s*\[(?:provisional|draft|pending|tbc)[^\]]{0,160}\]\s
 # Attribution can also appear mid-paragraph, after a sentence boundary.
 ATTRIB_MID = re.compile(
     r"(?i)(?<=[.;])\s+(?:the\s+)?reviewer(?:'s|\u2019s)?[^:.]{0,40}:\s*")
+# "the markup the reviewer saved explains it" -> "the markup explains it"
+ATTRIB_CLAUSE = re.compile(
+    r"(?i)\s+the\s+reviewer(?:'s|\u2019s)?\s+"
+    r"(?:saved|reported|noted|found|confirmed|observed|recorded|narrated|walked|ruled)\b")
+
+
+# A sentence can end inside a closing quote or bracket ("... earned." All three),
+# so consume those before the space or the boundary is missed.
+SENT = re.compile(r"(?<=[.!?])[\"\u201d\u2019')\]]*\s+")
+
+
+def sentences(t: str):
+    """Split into sentences, dropping fragments orphaned by an identifier that
+    was stripped from the head ("MO3 is recorded pass ..." -> "is recorded ...")."""
+    parts = [x.strip() for x in SENT.split(t or "") if x.strip()]
+    keep = [x for x in parts if x[:1].isupper() or not x[:1].isalpha()]
+    return keep or parts
 
 
 def brief(t: str, limit: int = 170) -> str:
-    """The first complete statement, and no more."""
+    """The first complete statement, whole.
+
+    Length is controlled by taking **one sentence**, never by cutting one
+    short: a clause-boundary trim produced fragments like "Tab reaches nothing
+    in the row, and Enter." and an ellipsis reads as if something was withheld
+    (reviewer, 2026-09-24). A long source sentence is published long."""
     t = (t or "").strip()
-    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", t)
-    out = parts[0] if parts else t
-    if len(out) < limit * 0.5 and len(parts) > 1:
-        out = (out + " " + parts[1]).strip()
-    return trim(out, limit)
+    parts = sentences(t)
+    out = (parts[0] if parts else t).strip()
+    out = out.rstrip(" ,;:\u2014-")
+    if out and out[-1] not in ".!?\u201d)":
+        out += "."
+    return out
+
+
+# Quotation is right for text the PRODUCT shows ("Problem N Click To Activate")
+# and wrong for the reviewer's own words, which a conformance report should
+# state as fact. Product strings here are short and start capitalised or with a
+# symbol; reviewer speech runs longer or opens lower-case.
+def is_product_string(q: str) -> bool:
+    """Text the product itself shows, which stays quoted: a button caption, a
+    field label, an announcement. Short, and capitalised or punctuation-led."""
+    q = q.strip()
+    return len(q) <= 45 and bool(q) and (q[:1].isupper() or not q[:1].isalpha())
+
+
+def unquote(t: str):
+    """Drop the reviewer's quotation marks, keep the product's.
+
+    Returns the text with product strings replaced by placeholders, plus the
+    list to restore afterwards, so the first-person and ellipsis passes cannot
+    rewrite a button called "I give up"."""
+    kept = []
+
+    def sub(m):
+        q = m.group(1)
+        if is_product_string(q):
+            kept.append(m.group(0))
+            return f"\x00{len(kept) - 1}\x00"
+        return q
+    t = re.sub(r"\u201c([^\u201d]{2,400})\u201d", sub, t)
+    t = re.sub(r'"([^"]{2,400})"', sub, t)
+    return t, kept
+
+
+def restore(t: str, kept) -> str:
+    return re.sub(r"\x00(\d+)\x00", lambda m: kept[int(m.group(1))], t)
+
+
+# First person belongs to a test narrative, not to a statement about a product.
+def _ing(v: str) -> str:
+    v = v.lower()
+    return v[:-1] + "ing" if v.endswith("e") and not v.endswith("ee") else v + "ing"
+
+
+PERSON = [
+    (r"(?i)\bI have (?:not|never) (?:encountered|found|seen|observed)\s+(?:any\s+)?(.+?)"
+     r"(?:\s*[,.]?\s*(?:through|across|in)\b[^.]*)?(?=[.]|$)",
+     lambda m: "No " + m.group(1).strip(" .,") + " encountered"),
+    (r"(?i)\bno (.+?) (?:have|has) been encountered\b[^.]*",
+     lambda m: "No " + m.group(1).strip(" .,") + " encountered"),
+    (r"(?i)^[\s*_“\"']*I (?:see|saw|found|noticed)\s+(.+)$",
+     lambda m: m.group(1)[:1].upper() + m.group(1)[1:]),
+    (r"(?i)\b(?:if|when)\s+we\s+(\w+)\b", lambda m: "on " + _ing(m.group(1))),
+    (r"(?i)\bwe\s+(?:can'?t|cannot|could\s+not)\s+", "cannot "),
+    (r"(?i)\bwe\s+(?:hear|heard|see|saw|find|found|get|got)\s+", ""),
+]
+
+
+def impersonal(t: str) -> str:
+    for pat, fn in PERSON:
+        t = re.sub(pat, fn, t)
+    return re.sub(r"(?i)\b(?:my|our)\b\s*", "", t)
+
+
+# Record-keeping progression: a report is a statement of the product's state,
+# not a log of how the evidence accumulated.
+PROGRESS = re.compile(r"(?i)\b(?:now (?:stands?|reads?|covers?)|and now\b|also now\b)")
 
 
 def plain(t, pages: dict) -> str:
@@ -184,16 +274,26 @@ def plain(t, pages: dict) -> str:
     t = DATES.sub("", t)
     t = MARKER.sub(" ", t)
     t = ATTRIB_MID.sub(". ", t)
+    t = ATTRIB_CLAUSE.sub("", t)
     t = ATTRIB.sub("", t)
     t = PROV.sub("", t)
     t = re.sub(r"^[\s\u2014-]*", "", t)
+    t, kept = unquote(t)
+    t = impersonal(t)
+    # The record elides with "..." when narration was pasted; in a report that
+    # reads as if the statement was cut short (reviewer, 2026-09-24).
+    t = re.sub(r"\s*\u2026\s*", ". ", t)
+    t = restore(t, kept)
+    t = PROGRESS.sub(lambda m: m.group(0).lower().replace("now ", "").replace("and now", "and")
+                     .replace("also now", "also") or "", t)
     t = depunct(t)
     # Removing a check code from the head of a sentence can orphan its verb
     # ("CO10 fails on all 10 views" -> "fails on all 10 views"). Start at the
     # next complete sentence rather than publish a fragment.
+    t = re.sub(r"^[*_\"“‘']+", "", t)
     if t and t[0].islower():
-        parts = re.split(r"(?<=[.!?])\s+(?=[A-Z\u201c\u2018])", t, maxsplit=1)
-        t = parts[1].strip() if len(parts) > 1 else t[0].upper() + t[1:]
+        parts = sentences(t)
+        t = parts[0] if parts and parts[0][:1].isupper() else (t[0].upper() + t[1:])
     return t
 
 
@@ -344,6 +444,8 @@ def statements(sc: str, d: dict) -> str:
     merged = {}
     for f in d["by_sc"].get(sc, []):
         text = brief(plain(f["observed"], d["pages"]), 130)
+        if text and text[:1].islower():
+            text = text[0].upper() + text[1:]
         key = re.sub(r"[^a-z0-9 ]", "", text.lower())[:70]
         pgs = [d["pages"][v]["name"] for v in dict.fromkeys(f["views"]) if v in d["pages"]]
         if key in merged:
@@ -389,14 +491,10 @@ def crit_rows(d: dict, level: str) -> str:
         # there are none (a pass, or an n/a) it is the whole explanation.
         body = f"<p class='lead'>{md(note)}</p>" if note else ""
         body += statements(sc, d)
-        foot = []
-        if answered:
-            foot.append(f"{answered} check{'s' if answered != 1 else ''} recorded against this criterion "
-                        f"in logged tests, {failing} failing")
+        # No check counts: they describe how the review was run, not what a
+        # reader of a conformance report needs (reviewer, 2026-09-24).
         if (vendor or "").strip():
-            foot.append("supplier's own claim: " + plain(vendor, d["pages"]))
-        if foot:
-            body += f"<div class='ev'>{md('; '.join(foot))}</div>"
+            body += f"<div class='ev'>Supplier's own claim: {md(plain(vendor, d['pages']))}</div>"
         sup = f" <a class='u' href='{e(url)}'>Understanding</a>" if url else ""
         newer = f" <span class='badge'>WCAG {e(ver)}</span>" if ver and ver != "2.0" else ""
         out.append(

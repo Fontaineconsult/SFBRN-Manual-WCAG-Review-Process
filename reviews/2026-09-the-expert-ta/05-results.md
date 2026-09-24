@@ -46,10 +46,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** The only prerecorded video in the sample — YouTube embeds in the expanding area under Library on the Assignment Editor — has captions, but they are YouTube auto-generated (reviewer, 2026-09-15; R037 O6, NH1 partial). Captions exist for every video seen, hence Partially rather than Does Not Support. Vendor-claim discrepancy.
 
 ### 1.2.3 Audio Description or Media Alternative (Prerecorded) (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. Measured on all 10 sampled views 2026-09-11 and re-confirmed as each was walked: no `<video>`, `<audio>`, media iframe or embed on any of them (NV11 n/a ×10). **Scope limit, stated rather than hidden:** the practice problem reached through "Take Tutorial Assignment" reportedly carries a video (`03` §2.6) and is **not in the sample**, and the Assignment Editor's Library holds YouTube embeds but is instructor-facing and was removed from the sample on 2026-09-15. This outcome therefore covers the student-facing sample as drawn.
 
 ### 1.3.1 Info and Relationships (Level A)
 - **Outcome:** Does Not Support
@@ -58,10 +58,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-14 S1 confirmed with NVDA (R015): no headings/landmarks, grids told apart by position, editors unlabelled — V-F1, V-F2, V-F7 now stand on both Class Management pages. [provisional — S1 and S2 confirmed; other views pending confirmation of axe results] 2026-09-10 NVDA on S2: no programmatic headings (visual titles are focusable divs); DevExpress grids carry identical generic captions (headers are associated per cell); popup form labels unassociated. axe reports the same pattern on all 14 sampled views (R001–R014, unconfirmed). Vendor-claim discrepancy.
 
 ### 1.3.2 Meaningful Sequence (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. NV5 passes on all 10 sampled views — every one walked with NVDA or ruled by the reviewer. Reading order matches the visual order throughout, including on the pages that fail badly in other respects (the Calendar grid reads cell by cell, the Printable Assignment reads problem by problem). Where the reviewer qualified it — "their use of tables for layout makes moving through confusing" on the Practice Area — the defect recorded is the missing table semantics (V-F2, V-F5), not the sequence.
 
 ### 1.3.3 Sensory Characteristics (Level A)
 - **Outcome:** Supports (provisional)
@@ -113,10 +113,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**
 
 ### 2.3.1 Three Flashes or Below Threshold (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. CO12 n/a on all 10 sampled views (measured): no CSS animation, animated image, marquee, blink, canvas, SVG animation or video anywhere in the sample, so nothing can flash.
 
 ### 2.4.1 Bypass Blocks (Level A)
 - **Outcome:** Partially Supports
@@ -125,10 +125,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:**  2026-09-11 rollup correction (db integrity: V-F1 names 2.4.1; V-F3 does not): V-F1 fails 2.4.1 in combination with V-F3's skip controls. [provisional] 2026-09-10 NVDA on S2: the section skip links work (focus moves to the next section) and a top-of-page jump point exists, so a bypass mechanism is present in Accessibility Mode; the controls are links by role and confusingly worded (V-F3). Standard mode (S1) relies on the vendor's jump points alone — pending R015. Vendor claim not contradicted so far.
 
 ### 2.4.2 Page Titled (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. NV1 passes on all 10 sampled views: every page has a non-empty, specific `<title>`, confirmed on the walk where a screen reader was used ("Class Management", "Class Management Accessibility Mode", "Take Homework Assignment", "Expert TA - Reset Password"). The one criterion the product gets right everywhere.
 
 ### 2.4.3 Focus Order (Level A)
 - **Outcome:** Partially Supports
@@ -143,10 +143,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** 2026-09-11 rollup derived from V-F3 (S2 skip controls read as links whose text does not state their purpose; reviewer-confirmed 2026-09-10, R016 O4). Link purpose on S3 (NV10) and the remaining views still to be walked. 2026-09-21: the grade report's 22 `[?]` help links have `[?]` as their entire text, no title and no aria-label, so the accessible name is empty and NVDA announces only "Visited Link" (V-F33).
 
 ### 2.5.1 Pointer Gestures (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. MO7 passes on **Take Assignment**, which is the only view in the sample carrying multipoint or path-based interactions — the symbol palette, the keypad, the free-body-diagram tool and the drag-and-drop ranking. The reviewer operated every one of them without a mouse (R017 O20–O21, R018), and the drag-and-drop offers an explicit non-dragging alternative form (R017 O18). The other nine views have no gesture-operated content. Outcome rests on that one view because it is the only applicable one.
 
 ### 2.5.2 Pointer Cancellation (Level A)
 - **Outcome:** Not Evaluated
@@ -161,10 +161,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional] 2026-09-10 NVDA on S2: the Classes and Class Menu selects' accessible names are an instruction sentence; the visible labels "Classes:" / "Class Menu:" are not part of the name. Vendor-claim discrepancy.
 
 ### 2.5.4 Motion Actuation (Level A)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. MO10 n/a on all 10 sampled views (measured): no `devicemotion` or `deviceorientation` use in any readable script, so no functionality is operated by motion.
 
 ### 3.1.1 Language of Page (Level A)
 - **Outcome:** Partially Supports
@@ -225,16 +225,16 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional — drafted 2026-09-15 by the assistant] No live audio or video in the product (NH2 n/a on every view; the discovered embeds are prerecorded).
 
 ### 1.2.5 Audio Description (Prerecorded) (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Not Applicable
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. As 1.2.3 — no prerecorded video anywhere in the student-facing sample (NV11 n/a on all 10 views). The same scope limit applies: the unsampled practice problem and the instructor-facing Library.
 
 ### 1.3.4 Orientation (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. LV8 passes on all 10 sampled views: no orientation media query and no `screen.orientation.lock` anywhere (measured 2026-09-11). Content is not restricted to a single display orientation.
 
 ### 1.3.5 Identify Input Purpose (Level AA)
 - **Outcome:** Partially Supports
@@ -279,10 +279,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** The probe measured newly clipping containers under the override on four views (Class Management both modes: the assignment row's date cells lose their AM/PM and the "Weight" header a letter; Take Assignment: the assignment-code box empties; Calendar: a scrollbar covers half of each Saturday date) — photographed in `R019-textspacing-5.png`, `R083-textspacing-2.png`, `R042-textspacing-1.png`. The reviewer looked and ruled 2026-09-15: "no issues noted with text spacing" — not rated a loss of content or functionality. Ten views tolerate the override outright. Recorded as Supports on that ruling; the measurements stay in the runs (O3/O9 on R019, O3/O7 on R083, O3/O5 on R042, O3 on R024) should the ruling be revisited.
 
 ### 1.4.13 Content on Hover or Focus (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. LV6 passes on 9 of 10 views — the reviewer's zoom pass found no hover or focus content that could not be dismissed, reached or persisted ("no hover or focus issues", W68). Not answered on the password reset page (S14), which has one field and one button and no hover content.
 
 ### 2.4.5 Multiple Ways (Level AA)
 - **Outcome:** Not Evaluated
@@ -309,10 +309,10 @@ which sample items, with which tool/method — evidence lives with the findings)
 - **Remarks:** [provisional — drafted 2026-09-15 by the assistant; reviewer confirms] Nothing sticky or floating hides the focused element: at 400 % zoom the focus ring stayed visible and unobscured on Class Management (both modes), Take Assignment, View Grade Report, the Calendar and Sign in (LV7 pass, reviewer). The MO4 fail on the Student Practice Area (R063 O4, V-F28) is focus being *absent* on unfocusable content — a 2.4.7 / 2.1.1 defect, not an obscured indicator.
 
 ### 2.5.7 Dragging Movements (Level AA)
-- **Outcome:** Not Evaluated
-- **Vendor claim:**
-- **Task findings:**
-- **Remarks:**
+- **Outcome:** Supports
+- **Vendor claim:** Supports (2026-05-05 VPAT as reported by CSUEB — every answered criterion is Supports/N-A; file not yet imported)
+- **Task findings:** (none — no failure found)
+- **Remarks:** Decided 2026-09-24 from evidence already on the runs. As 2.5.1. The sample's only dragging movement is Problem 3's drag-and-drop ranking on Take Assignment, and it ships a single-pointer alternative: an accessible form with combo boxes whose options are text descriptions of the cards (R017 O18). The reviewer completed the part without dragging. **Note:** the alternative's *placements are not announced* — that is V-F14 under 4.1.3, not a 2.5.7 failure.
 
 ### 2.5.8 Target Size (Minimum) (Level AA)
 - **Outcome:** Partially Supports

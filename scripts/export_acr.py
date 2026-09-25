@@ -39,6 +39,9 @@ Rules
 """
 from __future__ import annotations
 
+import base64
+import json
+import os
 import argparse
 import html
 import pathlib
@@ -656,7 +659,159 @@ def issue_row(n: int, f, d: dict) -> str:
             f"<td class='rem'>{md(brief(what, 120))}</td></tr>")
 
 
-def render(d: dict) -> str:
+
+# --- branding ---------------------------------------------------------------
+# The report goes out under an organisation's name, so the page carries a
+# header slot. It is filled from `branding.json` at the repo root (so a
+# regeneration never loses it) and overridden by --logo / --org. With nothing
+# configured the slot renders as an HTML comment only: no empty box, no
+# placeholder text that could survive into a distributed document.
+BRANDING_FILE = "branding.json"
+LOGO_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+              ".gif": "image/gif", ".svg": "image/svg+xml", ".webp": "image/webp"}
+
+
+def branding(root: pathlib.Path, logo=None, org=None, unit=None) -> dict:
+    """Merge branding.json with any command-line overrides."""
+    cfg = {}
+    f = root / BRANDING_FILE
+    if f.is_file():
+        try:
+            cfg = json.loads(f.read_text(encoding="utf-8"))
+        except ValueError:
+            cfg = {}
+    if logo:
+        cfg["logo"] = logo
+    if org:
+        cfg["org"] = org
+    if unit:
+        cfg["unit"] = unit
+    return cfg
+
+
+def brand_header(cfg: dict, root: pathlib.Path) -> str:
+    """The header slot. The logo is embedded, not linked.
+
+    A `src` pointing at a file on disk survives the browser and nothing else:
+    the report is mailed as one file and opened in Word, and both lose a
+    relative path. Base64 keeps the document self-contained."""
+    bits = []
+    path = cfg.get("logo")
+    if path:
+        f = (root / path) if not os.path.isabs(path) else pathlib.Path(path)
+        if f.is_file():
+            mime = LOGO_TYPES.get(f.suffix.lower(), "image/png")
+            data = base64.b64encode(f.read_bytes()).decode("ascii")
+            # the logo is decorative when the name is also written out
+            alt = "" if cfg.get("org") else cfg.get("alt", "")
+            bits.append(f'<img src="data:{mime};base64,{data}" alt="{e(alt)}">')
+        else:
+            bits.append(f"<!-- branding: logo not found at {e(str(f))} -->")
+    if cfg.get("org"):
+        unit = f'<span class="unit">{e(cfg["unit"])}</span>' if cfg.get("unit") else ""
+        bits.append(f'<span class="org">{e(cfg["org"])}{unit}</span>')
+    if not bits:
+        return ('<!-- BRANDING SLOT: add branding.json at the repo root with {"org": "...", '
+                '"unit": "...", "logo": "path/to/logo.png"}, or pass --org / --logo. -->')
+    return f'<header class="brand">{"".join(bits)}</header>'
+
+
+# --- stylesheet -------------------------------------------------------------
+# Written for two renderers. On screen it is a web page; pasted or opened in
+# Word it becomes a document, and Word's HTML importer understands almost no
+# modern CSS. So:
+#
+#   * every colour that carries meaning is a literal hex, never a var() --
+#     Word drops var() silently and the conformance pills would lose their
+#     colour while keeping their shape.
+#   * no flexbox and no grid. The report-information block is a table, which
+#     Word imports as a table; a `dl` becomes indented paragraphs.
+#   * `<colgroup>` sets column widths. Word honours those; it ignores
+#     `nth-child` and mostly ignores percentage widths set in CSS.
+#   * `thead { display: table-header-group }` repeats the header on every
+#     printed page; `page-break-inside: avoid` keeps a criterion's row whole.
+#   * no border-radius, no box-shadow -- dropped by Word, and dropping them
+#     also tightens the page.
+#
+# Dark mode stays, guarded so a light theme can be forced; Word never sees it.
+CSS = """
+ :root { --ink:#14181d; --mut:#5a6472; --line:#d7dce3; --bg:#fff; --panel:#f5f7f9; }
+ @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+   --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22; } }
+ :root[data-theme="dark"] { --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22; }
+ * { box-sizing:border-box; }
+ body { margin:0; background:var(--bg); color:var(--ink);
+   font:14.5px/1.42 "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif; }
+ .wrap { max-width:62rem; margin:0 auto; padding:1rem 14px 2.5rem; }
+
+ /* branding slot -- empty unless branding.json or --logo/--org supplies one */
+ .brand { border-bottom:2px solid var(--line); padding:0 0 .5rem; margin:0 0 1rem; }
+ .brand img { max-height:52px; width:auto; vertical-align:middle; }
+ .brand .org { display:inline-block; vertical-align:middle; margin-left:.7rem;
+   font-size:1rem; font-weight:700; letter-spacing:.01em; }
+ .brand .unit { display:block; font-weight:400; font-size:.82rem; color:var(--mut); letter-spacing:0; }
+
+ h1 { font-size:1.45rem; margin:0 0 .15rem; line-height:1.2; }
+ h2 { font-size:1.1rem; margin:1.5rem 0 .4rem; padding-bottom:.2rem; border-bottom:2px solid var(--line);
+   page-break-after:avoid; }
+ h3 { font-size:.95rem; margin:1rem 0 .3rem; page-break-after:avoid; }
+ p, li { max-width:58rem; }
+ p { margin:.4rem 0; }
+ .sub { color:var(--mut); margin:.15rem 0 .7rem; font-size:.92rem; }
+ .note { background:var(--panel); border:1px solid var(--line); border-left:3px solid #5a3b8a;
+   padding:.5rem .7rem; margin:.7rem 0; font-size:.92rem; }
+ .note p { margin:0; }
+
+ table { border-collapse:collapse; width:100%; margin:.4rem 0 1rem; font-size:.88rem; }
+ th, td { border:1px solid var(--line); padding:.34rem .45rem; text-align:left; vertical-align:top; }
+ thead { display:table-header-group; }
+ thead th { background:var(--panel); font-size:.76rem; text-transform:uppercase; letter-spacing:.03em; }
+ tbody tr { page-break-inside:avoid; }
+ tbody th { font-weight:600; }
+ table.meta tbody th { width:12rem; background:var(--panel); }
+ td.lvl { white-space:nowrap; }
+
+ /* literal hex, not var(): Word keeps these and the level stays legible */
+ .pill { display:inline-block; padding:.05rem .4rem; font-size:.8rem; font-weight:700;
+   border:1px solid currentColor; }
+ .pill.ok   { background:#e6f4ec; color:#14562f; }
+ .pill.part { background:#fdf3e0; color:#7a4e00; }
+ .pill.no   { background:#fcebed; color:#8b1926; }
+ .pill.na   { background:#eef1f4; color:#3f4652; }
+ .pill.unk  { background:#f0ebf8; color:#4c3079; }
+ .sev { display:inline-block; margin-left:.35rem; font-size:.7rem; font-weight:700; padding:0 .3rem;
+   vertical-align:.08em; border:1px solid currentColor; }
+ .sev-blocker { background:#fcebed; color:#8b1926; }
+ .sev-major   { background:#fdf3e0; color:#7a4e00; }
+ .sev-minor   { background:#eef1f4; color:#3f4652; }
+
+ .rem { font-size:.88rem; }
+ .lead { margin:.05rem 0 .25rem; }
+ ul.stmts { margin:.2rem 0 .1rem; padding-left:1rem; }
+ ul.stmts li { margin:0 0 .3rem; }
+ ul.stmts li.more { list-style:none; margin-left:-1rem; color:var(--mut); font-size:.83rem; }
+ .where { font-weight:600; }
+ ul.pages { margin:.1rem 0 0; padding-left:1rem; }
+ ul.pages li { margin:0 0 .1rem; }
+ .pth { font-family:Consolas,ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8em; color:var(--mut); }
+ .fnd, .ev { margin-top:.25rem; color:var(--mut); font-size:.83rem; }
+ .lbl { font-weight:700; color:var(--ink); }
+ .cause { color:var(--mut); font-style:italic; }
+ .lvltag { color:var(--mut); font-weight:400; font-size:.86em; }
+ .badge { font-size:.7rem; background:var(--panel); border:1px solid var(--line); padding:0 .25rem;
+   color:var(--mut); }
+ a { color:inherit; } a.sc { font-weight:700; text-decoration:none; }
+ a.sc:hover { text-decoration:underline; }
+ a.u { font-size:.74rem; color:var(--mut); }
+ .colophon { color:var(--mut); font-size:.8rem; margin-top:1.4rem; padding-top:.5rem;
+   border-top:1px solid var(--line); }
+
+ @media (max-width:640px) { table.meta tbody th { width:auto; } }
+ @page { margin:0.6in; }
+ @media print { body { font-size:9.5pt; } .wrap { padding:0; max-width:none; }
+   h1 { font-size:15pt; } h2 { font-size:12pt; } h3 { font-size:10.5pt; } table { font-size:8.5pt; } }
+"""
+def render(d: dict, brand="") -> str:
     prod = d["product"] or d["rid"]
     interim = "INTERIM" in (d["report_status"] or "").upper()
 
@@ -728,72 +883,15 @@ def render(d: dict) -> str:
         ) if d["removed"] else "none"
     tasks_txt = "".join(f"<li>{e(t[1].split(' \u2014 ')[0])} \u2014 <b>{e(t[2])}</b></li>"
                         for t in d["tasks"])
+    roadmap_scope_txt = roadmap_scope(d)
     terms = "\n".join(f"<tr><th scope='row'>{e(t)}</th><td>{e(x)}</td></tr>" for t, x in TERMS)
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Accessibility Conformance Report — {e(prod)}</title>
-<style>
- :root {{ --ink:#14181d; --mut:#5a6472; --line:#d7dce3; --bg:#fff; --panel:#f6f8fa;
-   --ok:#1c6b3f; --okbg:#e6f4ec; --part:#8a5a00; --partbg:#fdf3e0; --no:#9a1f2e; --nobg:#fcebed;
-   --na:#4a5260; --nabg:#eef1f4; --unk:#5a3b8a; --unkbg:#f0ebf8; }}
- @media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{
-   --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
-   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
-   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; }} }}
- :root[data-theme="dark"] {{ --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
-   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
-   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; }}
- * {{ box-sizing:border-box; }}
- body {{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,
-   "Segoe UI",Roboto,Helvetica,Arial,sans-serif; }}
- .wrap {{ max-width:60rem; margin:0 auto; padding:2rem 16px 5rem; }}
- h1 {{ font-size:1.7rem; margin:0 0 .2rem; line-height:1.25; }}
- h2 {{ font-size:1.25rem; margin:2.4rem 0 .6rem; padding-bottom:.3rem; border-bottom:2px solid var(--line); }}
- h3 {{ font-size:1rem; margin:1.6rem 0 .4rem; }}
- p, li {{ max-width:56rem; }}
- .sub {{ color:var(--mut); margin:.1rem 0 1.2rem; }}
- .note {{ background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--unk);
-   padding:.8rem 1rem; border-radius:6px; margin:1rem 0; }}
- table {{ border-collapse:collapse; width:100%; margin:.6rem 0 1.4rem; font-size:.94rem; }}
- th, td {{ border:1px solid var(--line); padding:.55rem .65rem; text-align:left; vertical-align:top; }}
- thead th {{ background:var(--panel); font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }}
- tbody th {{ font-weight:600; width:34%; }}
- td.lvl {{ width:9.5rem; white-space:nowrap; }}
- .pill {{ display:inline-block; padding:.12rem .5rem; border-radius:999px; font-size:.82rem; font-weight:700; }}
- .pill.ok {{ background:var(--okbg); color:var(--ok); }} .pill.part {{ background:var(--partbg); color:var(--part); }}
- .pill.no {{ background:var(--nobg); color:var(--no); }} .pill.na {{ background:var(--nabg); color:var(--na); }}
- .pill.unk {{ background:var(--unkbg); color:var(--unk); }}
- .rem {{ font-size:.9rem; }}
- .lead {{ margin:.1rem 0 .4rem; }}
- ul.stmts {{ margin:.3rem 0 .2rem; padding-left:1.1rem; }}
- ul.stmts li {{ margin:0 0 .45rem; }}
- ul.stmts li.more {{ list-style:none; margin-left:-1.1rem; color:var(--mut); font-size:.85rem; }}
- .where {{ font-weight:600; }}
- ul.pages {{ margin:.2rem 0 0; padding-left:1.1rem; }}
- ul.pages li {{ margin:0 0 .2rem; }}
- .pth {{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82em; color:var(--mut); }}
- .sev {{ display:inline-block; margin-left:.4rem; font-size:.72rem; font-weight:700; padding:0 .35rem;
-   border-radius:4px; vertical-align:.08em; }}
- .sev-blocker {{ background:var(--nobg); color:var(--no); }}
- .sev-major {{ background:var(--partbg); color:var(--part); }}
- .sev-minor {{ background:var(--nabg); color:var(--na); }}
- .fnd, .ev {{ margin-top:.35rem; color:var(--mut); font-size:.85rem; }}
- .lbl {{ font-weight:700; color:var(--ink); }}
- .cause {{ color:var(--mut); font-style:italic; }}
- .lvltag {{ color:var(--mut); font-weight:400; font-size:.86em; }}
- .badge {{ font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
-   padding:0 .3rem; color:var(--mut); }}
- a {{ color:inherit; }} a.sc {{ font-weight:700; text-decoration:none; }} a.sc:hover {{ text-decoration:underline; }}
- a.u {{ font-size:.75rem; color:var(--mut); }}
- dl.meta {{ display:grid; grid-template-columns:13rem 1fr; gap:.35rem 1rem; margin:1rem 0; }}
- dl.meta dt {{ font-weight:700; }} dl.meta dd {{ margin:0; }}
- @media (max-width:640px) {{ dl.meta {{ grid-template-columns:1fr; gap:.1rem; }}
-   dl.meta dd {{ margin:0 0 .6rem; }} tbody th {{ width:auto; }} }}
- @media print {{ .pill {{ border:1px solid currentColor; }} }}
-</style></head><body><div class="wrap">
-
+<style>{CSS}</style></head><body><div class="wrap">
+{brand}
 <h1>{e(prod)} Accessibility Conformance Report</h1>
 <p class="sub">Based on VPAT<sup>&reg;</sup> Version 2.5Rev &mdash; WCAG Edition</p>
 
@@ -806,27 +904,27 @@ relied on anywhere in this document.
 </div>
 
 <h2>Report information</h2>
-<dl class="meta">
-<dt>Name of product</dt><dd>{e(prod)}</dd>
-<dt>Report date</dt><dd>{e(report_date)}</dd>
-<dt>Report status</dt><dd>{e(d['report_status'])}</dd>
-<dt>Product description</dt><dd>Web-delivered software evaluated across {len(d['views'])} pages of the
- student-facing interface.</dd>
-<dt>Contact information</dt><dd>The evaluating body named in the accompanying review record.</dd>
-<dt>Evaluation methods used</dt><dd>Manual testing by a human reviewer operating the product with assistive
+<table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
+<tr><th scope='row'>Name of product</th><td>{e(prod)}</td></tr>
+<tr><th scope='row'>Report date</th><td>{e(report_date)}</td></tr>
+<tr><th scope='row'>Report status</th><td>{e(d['report_status'])}</td></tr>
+<tr><th scope='row'>Product description</th><td>Web-delivered software evaluated across {len(d['views'])} pages of the
+ student-facing interface.</td></tr>
+<tr><th scope='row'>Contact information</th><td>The evaluating body named in the accompanying review record.</td></tr>
+<tr><th scope='row'>Evaluation methods used</th><td>Manual testing by a human reviewer operating the product with assistive
  technology &mdash; screen reader, keyboard-only operation, browser zoom, colour filters and contrast
  measurement &mdash; supported by automated scanning (axe-core) and programmatic measurement over the Chrome
  DevTools Protocol. Automated results were used to direct attention only; no conformance level rests on a
- tool's output alone.</dd>
-<dt>Pages evaluated</dt><dd><ul class="pages">{views_txt}</ul></dd>
-<dt>Excluded from scope</dt><dd>{excluded}</dd>
-<dt>Notes</dt><dd>Task walk-throughs completed:<ul class="pages">{tasks_txt}</ul></dd>
-</dl>
+ tool's output alone.</td></tr>
+<tr><th scope='row'>Pages evaluated</th><td><ul class="pages">{views_txt}</ul></td></tr>
+<tr><th scope='row'>Excluded from scope</th><td>{excluded}</td></tr>
+<tr><th scope='row'>Notes</th><td>Task walk-throughs completed:<ul class="pages">{tasks_txt}</ul></td></tr>
+</tbody></table>
 
 <h2>Applicable standards / guidelines</h2>
 <p class="sub">This report covers the degree of conformance for the following accessibility
 standard/guidelines.</p>
-<table><thead><tr><th scope="col">Standard / Guideline</th><th scope="col">Included in report</th></tr></thead>
+<table><colgroup><col style='width:30%'><col style='width:70%'></colgroup><thead><tr><th scope="col">Standard / Guideline</th><th scope="col">Included in report</th></tr></thead>
 <tbody>
 <tr><th scope="row">Web Content Accessibility Guidelines 2.2</th>
 <td>Level A (Yes)<br>Level AA (Yes)<br>Level AAA (No)</td></tr>
@@ -835,19 +933,19 @@ standard/guidelines.</p>
 </tbody></table>
 
 <h2>Terms</h2>
-<table><caption class="sub">Conformance levels used throughout this report.</caption>
+<table><colgroup><col style='width:30%'><col style='width:70%'></colgroup><caption class="sub">Conformance levels used throughout this report.</caption>
 <thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
 <tbody>{terms}</tbody></table>
 
 <h2>WCAG 2.2 Report</h2>
 <p class="sub">Tables 1 and 2 also document conformance with EN 301 549 and Revised Section 508 where those standards incorporate WCAG by reference.</p>
 <h3>Table 1: Success Criteria, Level A</h3>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{crit_rows(d, 'A')}</tbody></table>
 
 <h3>Table 2: Success Criteria, Level AA</h3>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{crit_rows(d, 'AA')}</tbody></table>
 
@@ -855,25 +953,21 @@ standard/guidelines.</p>
 <p class="sub">Derived from the proportion of sampled views evaluated for each functional modality and the
 check rows recorded against them. A criterion whose views are not all evaluated is reported as Not Evaluated
 rather than inferred.</p>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{chr(10).join(fpc_rows)}</tbody></table>
 
-<h2>Priorities for remediation</h2>
-<p class="sub">A summary of what remains outstanding, ordered by conformance level and by how far each
-criterion is from being met. It is offered so that the position is clear and shared, and it is kept short
-deliberately: only criteria the product <b>does not support</b> at either level, together with Level A criteria
-it supports only <b>in part</b>. Everything else, including partial support at Level AA, is in the tables
-above. Nothing here changes a conformance level.</p>
+<h2>Vendor Roadmap</h2>
+<p class="sub">The California State University requires that the information and communication technology it
+acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
+failure to meet it <i>may</i> jeopardize future acquisitions. <b>The following fixes should be implemented to
+meet the WCAG 2.1 AA standard.</b></p>
+<p class="sub">The list is deliberately short: only criteria the product <b>does not support</b> at either
+level, together with Level A criteria it supports only <b>in part</b>. Everything else, including partial
+support at Level AA, is in the tables above. {roadmap_scope_txt}</p>
 {roadmap_section(d)}
 
-<h2>Legal disclaimer</h2>
-<p class="sub">This report is provided for informational purposes only. It records the findings of an
-independent evaluation of the product identified above, carried out on the pages and by the methods described,
-and it does not constitute a warranty of conformance. Conformance levels apply to the sample evaluated and to
-the product version tested.</p>
-
-<p class="sub">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
+<p class="colophon">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
 service mark of the Information Technology Industry Council (ITI); this report follows the structure of
 VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 
@@ -896,6 +990,28 @@ ROADMAP_TIERS = [
      "Level AA criteria the product does not meet. Level AA is the conformance target for the sector; these "
      "remain outstanding once the Level A work is done."),
 ]
+
+
+def roadmap_scope(d: dict) -> str:
+    """Whether the listed criteria are all within the standard the CSU requires.
+
+    The report is evaluated against WCAG 2.2; the procurement requirement is
+    2.1 AA. Usually those coincide, because a product failing at this level
+    fails on criteria that have been in the standard since 2.0 -- but a review
+    that turns up a 2.2 addition must not be made to say that fixing the list
+    delivers 2.1 AA. So the sentence is computed, not written."""
+    listed = {c[0] for c in d["criteria"]
+              if c[7] == "Does Not Support" or (c[7] == "Partially Supports" and c[2] == "A")}
+    new = sorted(listed & {c[0] for c in d["criteria"] if (c[5] or "") == "2.2"},
+                 key=lambda sc: [int(x) for x in sc.split(".")])
+    if not new:
+        return ("Every criterion listed is a Level A or AA requirement of WCAG 2.1, so this list is the work "
+                "required to reach the standard.")
+    names = ", ".join(e(sc) for sc in new)
+    plural = len(new) > 1
+    return (f"All but {names} are Level A or AA requirements of WCAG 2.1; "
+            f"{'those are' if plural else 'that one is'} new in WCAG 2.2 and "
+            f"{'sit' if plural else 'sits'} above the procurement requirement.")
 
 
 def roadmap_section(d: dict) -> str:
@@ -934,7 +1050,9 @@ def roadmap_section(d: dict) -> str:
         if rows:
             out.append(
                 f"<h3>{e(name)}</h3><p class='sub'>{md(blurb)}</p>"
-                f"<table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th>"
+                f"<table><colgroup><col style='width:26%'><col style='width:9%'>"
+                f"<col style='width:8%'><col style='width:57%'></colgroup>"
+                f"<thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th>"
                 f"<th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead>"
                 f"<tbody>{''.join(rows)}</tbody></table>")
     return "".join(out)
@@ -944,11 +1062,13 @@ def out_path(review: pathlib.Path, override=None) -> pathlib.Path:
     return pathlib.Path(override) if override else review / f"{review.name}-acr.html"
 
 
-def write(review: pathlib.Path, con=None, override=None) -> pathlib.Path:
+def write(review: pathlib.Path, con=None, override=None, brand_cfg=None) -> pathlib.Path:
     own = con is None
     con = con or db.connect(review)
+    root = pathlib.Path(__file__).resolve().parent.parent
+    cfg = branding(root) if brand_cfg is None else brand_cfg
     try:
-        page = render(gather(con, review))
+        page = render(gather(con, review), brand_header(cfg, root))
     finally:
         if own:
             con.close()
@@ -964,9 +1084,14 @@ def main() -> int:
     ap.add_argument("review", help="review directory name or unique substring")
     ap.add_argument("--out", help="write somewhere other than reviews/<id>/<id>-acr.html")
     ap.add_argument("--open", action="store_true", help="open the report in a browser")
+    ap.add_argument("--org", help="organisation name for the branding header")
+    ap.add_argument("--unit", help="second line under the organisation name")
+    ap.add_argument("--logo", help="image file to embed in the branding header")
     a = ap.parse_args()
     review = rv.resolve(a.review)
-    path = write(review, override=a.out)
+    root = pathlib.Path(__file__).resolve().parent.parent
+    path = write(review, override=a.out,
+                 brand_cfg=branding(root, logo=a.logo, org=a.org, unit=a.unit))
     print(f"ACR written: {path}")
     if a.open:
         webbrowser.open(path.resolve().as_uri())

@@ -3,65 +3,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Accessibility Conformance Report — The Expert TA</title>
 <style>
- :root { --ink:#14181d; --mut:#5a6472; --line:#d7dce3; --bg:#fff; --panel:#f6f8fa;
-   --ok:#1c6b3f; --okbg:#e6f4ec; --part:#8a5a00; --partbg:#fdf3e0; --no:#9a1f2e; --nobg:#fcebed;
-   --na:#4a5260; --nabg:#eef1f4; --unk:#5a3b8a; --unkbg:#f0ebf8; }
+ :root { --ink:#14181d; --mut:#5a6472; --line:#d7dce3; --bg:#fff; --panel:#f5f7f9; }
  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-   --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
-   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
-   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; } }
- :root[data-theme="dark"] { --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22;
-   --okbg:#10291c; --ok:#6fd39b; --partbg:#2a2110; --part:#e8b45c; --nobg:#2c1418; --no:#f08b98;
-   --nabg:#1b2028; --na:#a8b2c0; --unkbg:#1e1a2c; --unk:#b79ce8; }
+   --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22; } }
+ :root[data-theme="dark"] { --ink:#e7ebf0; --mut:#9aa6b6; --line:#2b323c; --bg:#11151a; --panel:#161b22; }
  * { box-sizing:border-box; }
- body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,
-   "Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
- .wrap { max-width:60rem; margin:0 auto; padding:2rem 16px 5rem; }
- h1 { font-size:1.7rem; margin:0 0 .2rem; line-height:1.25; }
- h2 { font-size:1.25rem; margin:2.4rem 0 .6rem; padding-bottom:.3rem; border-bottom:2px solid var(--line); }
- h3 { font-size:1rem; margin:1.6rem 0 .4rem; }
- p, li { max-width:56rem; }
- .sub { color:var(--mut); margin:.1rem 0 1.2rem; }
- .note { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--unk);
-   padding:.8rem 1rem; border-radius:6px; margin:1rem 0; }
- table { border-collapse:collapse; width:100%; margin:.6rem 0 1.4rem; font-size:.94rem; }
- th, td { border:1px solid var(--line); padding:.55rem .65rem; text-align:left; vertical-align:top; }
- thead th { background:var(--panel); font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }
- tbody th { font-weight:600; width:34%; }
- td.lvl { width:9.5rem; white-space:nowrap; }
- .pill { display:inline-block; padding:.12rem .5rem; border-radius:999px; font-size:.82rem; font-weight:700; }
- .pill.ok { background:var(--okbg); color:var(--ok); } .pill.part { background:var(--partbg); color:var(--part); }
- .pill.no { background:var(--nobg); color:var(--no); } .pill.na { background:var(--nabg); color:var(--na); }
- .pill.unk { background:var(--unkbg); color:var(--unk); }
- .rem { font-size:.9rem; }
- .lead { margin:.1rem 0 .4rem; }
- ul.stmts { margin:.3rem 0 .2rem; padding-left:1.1rem; }
- ul.stmts li { margin:0 0 .45rem; }
- ul.stmts li.more { list-style:none; margin-left:-1.1rem; color:var(--mut); font-size:.85rem; }
+ body { margin:0; background:var(--bg); color:var(--ink);
+   font:14.5px/1.42 "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif; }
+ .wrap { max-width:62rem; margin:0 auto; padding:1rem 14px 2.5rem; }
+
+ /* branding slot -- empty unless branding.json or --logo/--org supplies one */
+ .brand { border-bottom:2px solid var(--line); padding:0 0 .5rem; margin:0 0 1rem; }
+ .brand img { max-height:52px; width:auto; vertical-align:middle; }
+ .brand .org { display:inline-block; vertical-align:middle; margin-left:.7rem;
+   font-size:1rem; font-weight:700; letter-spacing:.01em; }
+ .brand .unit { display:block; font-weight:400; font-size:.82rem; color:var(--mut); letter-spacing:0; }
+
+ h1 { font-size:1.45rem; margin:0 0 .15rem; line-height:1.2; }
+ h2 { font-size:1.1rem; margin:1.5rem 0 .4rem; padding-bottom:.2rem; border-bottom:2px solid var(--line);
+   page-break-after:avoid; }
+ h3 { font-size:.95rem; margin:1rem 0 .3rem; page-break-after:avoid; }
+ p, li { max-width:58rem; }
+ p { margin:.4rem 0; }
+ .sub { color:var(--mut); margin:.15rem 0 .7rem; font-size:.92rem; }
+ .note { background:var(--panel); border:1px solid var(--line); border-left:3px solid #5a3b8a;
+   padding:.5rem .7rem; margin:.7rem 0; font-size:.92rem; }
+ .note p { margin:0; }
+
+ table { border-collapse:collapse; width:100%; margin:.4rem 0 1rem; font-size:.88rem; }
+ th, td { border:1px solid var(--line); padding:.34rem .45rem; text-align:left; vertical-align:top; }
+ thead { display:table-header-group; }
+ thead th { background:var(--panel); font-size:.76rem; text-transform:uppercase; letter-spacing:.03em; }
+ tbody tr { page-break-inside:avoid; }
+ tbody th { font-weight:600; }
+ table.meta tbody th { width:12rem; background:var(--panel); }
+ td.lvl { white-space:nowrap; }
+
+ /* literal hex, not var(): Word keeps these and the level stays legible */
+ .pill { display:inline-block; padding:.05rem .4rem; font-size:.8rem; font-weight:700;
+   border:1px solid currentColor; }
+ .pill.ok   { background:#e6f4ec; color:#14562f; }
+ .pill.part { background:#fdf3e0; color:#7a4e00; }
+ .pill.no   { background:#fcebed; color:#8b1926; }
+ .pill.na   { background:#eef1f4; color:#3f4652; }
+ .pill.unk  { background:#f0ebf8; color:#4c3079; }
+ .sev { display:inline-block; margin-left:.35rem; font-size:.7rem; font-weight:700; padding:0 .3rem;
+   vertical-align:.08em; border:1px solid currentColor; }
+ .sev-blocker { background:#fcebed; color:#8b1926; }
+ .sev-major   { background:#fdf3e0; color:#7a4e00; }
+ .sev-minor   { background:#eef1f4; color:#3f4652; }
+
+ .rem { font-size:.88rem; }
+ .lead { margin:.05rem 0 .25rem; }
+ ul.stmts { margin:.2rem 0 .1rem; padding-left:1rem; }
+ ul.stmts li { margin:0 0 .3rem; }
+ ul.stmts li.more { list-style:none; margin-left:-1rem; color:var(--mut); font-size:.83rem; }
  .where { font-weight:600; }
- ul.pages { margin:.2rem 0 0; padding-left:1.1rem; }
- ul.pages li { margin:0 0 .2rem; }
- .pth { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82em; color:var(--mut); }
- .sev { display:inline-block; margin-left:.4rem; font-size:.72rem; font-weight:700; padding:0 .35rem;
-   border-radius:4px; vertical-align:.08em; }
- .sev-blocker { background:var(--nobg); color:var(--no); }
- .sev-major { background:var(--partbg); color:var(--part); }
- .sev-minor { background:var(--nabg); color:var(--na); }
- .fnd, .ev { margin-top:.35rem; color:var(--mut); font-size:.85rem; }
+ ul.pages { margin:.1rem 0 0; padding-left:1rem; }
+ ul.pages li { margin:0 0 .1rem; }
+ .pth { font-family:Consolas,ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8em; color:var(--mut); }
+ .fnd, .ev { margin-top:.25rem; color:var(--mut); font-size:.83rem; }
  .lbl { font-weight:700; color:var(--ink); }
  .cause { color:var(--mut); font-style:italic; }
  .lvltag { color:var(--mut); font-weight:400; font-size:.86em; }
- .badge { font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
-   padding:0 .3rem; color:var(--mut); }
- a { color:inherit; } a.sc { font-weight:700; text-decoration:none; } a.sc:hover { text-decoration:underline; }
- a.u { font-size:.75rem; color:var(--mut); }
- dl.meta { display:grid; grid-template-columns:13rem 1fr; gap:.35rem 1rem; margin:1rem 0; }
- dl.meta dt { font-weight:700; } dl.meta dd { margin:0; }
- @media (max-width:640px) { dl.meta { grid-template-columns:1fr; gap:.1rem; }
-   dl.meta dd { margin:0 0 .6rem; } tbody th { width:auto; } }
- @media print { .pill { border:1px solid currentColor; } }
-</style></head><body><div class="wrap">
+ .badge { font-size:.7rem; background:var(--panel); border:1px solid var(--line); padding:0 .25rem;
+   color:var(--mut); }
+ a { color:inherit; } a.sc { font-weight:700; text-decoration:none; }
+ a.sc:hover { text-decoration:underline; }
+ a.u { font-size:.74rem; color:var(--mut); }
+ .colophon { color:var(--mut); font-size:.8rem; margin-top:1.4rem; padding-top:.5rem;
+   border-top:1px solid var(--line); }
 
+ @media (max-width:640px) { table.meta tbody th { width:auto; } }
+ @page { margin:0.6in; }
+ @media print { body { font-size:9.5pt; } .wrap { padding:0; max-width:none; }
+   h1 { font-size:15pt; } h2 { font-size:12pt; } h3 { font-size:10.5pt; } table { font-size:8.5pt; } }
+</style></head><body><div class="wrap">
+<!-- BRANDING SLOT: add branding.json at the repo root with {"org": "...", "unit": "...", "logo": "path/to/logo.png"}, or pass --org / --logo. -->
 <h1>The Expert TA Accessibility Conformance Report</h1>
 <p class="sub">Based on VPAT<sup>&reg;</sup> Version 2.5Rev &mdash; WCAG Edition</p>
 
@@ -74,27 +92,27 @@ relied on anywhere in this document.
 </div>
 
 <h2>Report information</h2>
-<dl class="meta">
-<dt>Name of product</dt><dd>The Expert TA</dd>
-<dt>Report date</dt><dd>September 2026</dd>
-<dt>Report status</dt><dd>INTERIM (testing in progress) / FINAL</dd>
-<dt>Product description</dt><dd>Web-delivered software evaluated across 10 pages of the
- student-facing interface.</dd>
-<dt>Contact information</dt><dd>The evaluating body named in the accompanying review record.</dd>
-<dt>Evaluation methods used</dt><dd>Manual testing by a human reviewer operating the product with assistive
+<table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
+<tr><th scope='row'>Name of product</th><td>The Expert TA</td></tr>
+<tr><th scope='row'>Report date</th><td>September 2026</td></tr>
+<tr><th scope='row'>Report status</th><td>INTERIM (testing in progress) / FINAL</td></tr>
+<tr><th scope='row'>Product description</th><td>Web-delivered software evaluated across 10 pages of the
+ student-facing interface.</td></tr>
+<tr><th scope='row'>Contact information</th><td>The evaluating body named in the accompanying review record.</td></tr>
+<tr><th scope='row'>Evaluation methods used</th><td>Manual testing by a human reviewer operating the product with assistive
  technology &mdash; screen reader, keyboard-only operation, browser zoom, colour filters and contrast
  measurement &mdash; supported by automated scanning (axe-core) and programmatic measurement over the Chrome
  DevTools Protocol. Automated results were used to direct attention only; no conformance level rests on a
- tool's output alone.</dd>
-<dt>Pages evaluated</dt><dd><ul class="pages"><li><b>Class Management (standard mode)</b> <span class='pth'>/common/default.aspx</span></li><li><b>Class Management — Accessibility Mode</b> <span class='pth'>/common/default2.aspx</span></li><li><b>Take Assignment</b> <span class='pth'>/Common/TakeTutorialAssignment.aspx</span></li><li><b>View Grade Report</b> <span class='pth'>/Common/GradeSheetGradeReport.aspx</span></li><li><b>Calendar</b> <span class='pth'>/common/calendar.aspx</span></li><li><b>Sign in</b> <span class='pth'>/Login.aspx</span></li><li><b>View Assignment Solutions</b> <span class='pth'>/Common/ViewAssignmentSolutionsV2.aspx</span></li><li><b>Student Practice Area</b> <span class='pth'>/Tutorial/ClassTutorialSelection.aspx</span></li><li><b>View Printable Assignment</b> <span class='pth'>/Common/ViewAssignmentDetails.aspx</span></li><li><b>Password reset</b> <span class='pth'>/ResetPassword.aspx</span></li></ul></dd>
-<dt>Excluded from scope</dt><dd><ul class='pages'><li><b>Academic Integrity Preferences</b> — not student-facing</li><li><b>View Grades (Spreadsheet)</b> — not student-facing</li><li><b>Manage Class Roster</b> — not student-facing</li><li><b>Edit Class popup</b> — not student-facing</li><li><b>Assignment Editor (edit)</b> — not student-facing</li><li><b>Class Assignments Grade Sheet</b> — not student-facing</li></ul></dd>
-<dt>Notes</dt><dd>Task walk-throughs completed:<ul class="pages"><li>Open an assignment and read a problem — <b>Pass with barriers</b></li><li>Answer and submit a problem — <b>Fail</b></li><li>Complete an assignment under time limits and accommodations — <b>Not run</b></li><li>Author an assignment from the library (instructor) — <b>Not run</b></li><li>Check grades and feedback — <b>Not run</b></li></ul></dd>
-</dl>
+ tool's output alone.</td></tr>
+<tr><th scope='row'>Pages evaluated</th><td><ul class="pages"><li><b>Class Management (standard mode)</b> <span class='pth'>/common/default.aspx</span></li><li><b>Class Management — Accessibility Mode</b> <span class='pth'>/common/default2.aspx</span></li><li><b>Take Assignment</b> <span class='pth'>/Common/TakeTutorialAssignment.aspx</span></li><li><b>View Grade Report</b> <span class='pth'>/Common/GradeSheetGradeReport.aspx</span></li><li><b>Calendar</b> <span class='pth'>/common/calendar.aspx</span></li><li><b>Sign in</b> <span class='pth'>/Login.aspx</span></li><li><b>View Assignment Solutions</b> <span class='pth'>/Common/ViewAssignmentSolutionsV2.aspx</span></li><li><b>Student Practice Area</b> <span class='pth'>/Tutorial/ClassTutorialSelection.aspx</span></li><li><b>View Printable Assignment</b> <span class='pth'>/Common/ViewAssignmentDetails.aspx</span></li><li><b>Password reset</b> <span class='pth'>/ResetPassword.aspx</span></li></ul></td></tr>
+<tr><th scope='row'>Excluded from scope</th><td><ul class='pages'><li><b>Academic Integrity Preferences</b> — not student-facing</li><li><b>View Grades (Spreadsheet)</b> — not student-facing</li><li><b>Manage Class Roster</b> — not student-facing</li><li><b>Edit Class popup</b> — not student-facing</li><li><b>Assignment Editor (edit)</b> — not student-facing</li><li><b>Class Assignments Grade Sheet</b> — not student-facing</li></ul></td></tr>
+<tr><th scope='row'>Notes</th><td>Task walk-throughs completed:<ul class="pages"><li>Open an assignment and read a problem — <b>Pass with barriers</b></li><li>Answer and submit a problem — <b>Fail</b></li><li>Complete an assignment under time limits and accommodations — <b>Not run</b></li><li>Author an assignment from the library (instructor) — <b>Not run</b></li><li>Check grades and feedback — <b>Not run</b></li></ul></td></tr>
+</tbody></table>
 
 <h2>Applicable standards / guidelines</h2>
 <p class="sub">This report covers the degree of conformance for the following accessibility
 standard/guidelines.</p>
-<table><thead><tr><th scope="col">Standard / Guideline</th><th scope="col">Included in report</th></tr></thead>
+<table><colgroup><col style='width:30%'><col style='width:70%'></colgroup><thead><tr><th scope="col">Standard / Guideline</th><th scope="col">Included in report</th></tr></thead>
 <tbody>
 <tr><th scope="row">Web Content Accessibility Guidelines 2.2</th>
 <td>Level A (Yes)<br>Level AA (Yes)<br>Level AAA (No)</td></tr>
@@ -103,7 +121,7 @@ standard/guidelines.</p>
 </tbody></table>
 
 <h2>Terms</h2>
-<table><caption class="sub">Conformance levels used throughout this report.</caption>
+<table><colgroup><col style='width:30%'><col style='width:70%'></colgroup><caption class="sub">Conformance levels used throughout this report.</caption>
 <thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
 <tbody><tr><th scope='row'>Supports</th><td>The functionality of the product has at least one method that meets the criterion without known defects, or meets with equivalent facilitation.</td></tr>
 <tr><th scope='row'>Partially Supports</th><td>Some functionality of the product does not meet the criterion.</td></tr>
@@ -114,7 +132,7 @@ standard/guidelines.</p>
 <h2>WCAG 2.2 Report</h2>
 <p class="sub">Tables 1 and 2 also document conformance with EN 301 549 and Revised Section 508 where those standards incorporate WCAG by reference.</p>
 <h3>Table 1: Success Criteria, Level A</h3>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody><tr><th scope='row'><a class='sc' href='https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html'>1.1.1 Non-text Content</a> <span class='lvltag'>(Level A)</span> <a class='u' href='https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html'>Understanding</a></th><td class='lvl'><span class='pill part'>Partially Supports</span></td><td class='rem'><ul class='stmts'><li><span class='where'><b>View Grade Report</b></span> — The student&#x27;s submitted work is shown as images with no text alternative, so a screen-reader user cannot read their own graded answers.<span class='sev sev-blocker'>Blocker</span></li><li><span class='where'><b>Take Assignment</b></span> — The diagram in a problem is hidden from assistive technology, so a screen-reader user cannot see the figure the question depends on.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>View Assignment Solutions</b></span> — The worked solution figures have no alternative text because the attribute is malformed in the markup, so a screen-reader user reaches every problem and finds the explanation missing.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>View Printable Assignment</b></span> — Most problem figures on the printable assignment carry no alternative text and two are background images that cannot carry any, so a screen-reader user cannot read the diagrams.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>View Printable Assignment</b></span> — Every mathematical expression on the printable assignment is exposed as an unnamed button, so a screen-reader user gets a control instead of the mathematics.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Class Management (standard mode)</b>, <b>Class Management — Accessibility Mode</b>, <b>Student Practice Area</b></span> — The grid expand controls are images with no name or role, so a screen-reader user hears only that something clickable exists, not what it opens.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Sign in</b>, <b>Password reset</b></span> — The logo link on the sign-in and password reset pages has no accessible name, so a screen-reader user meets a link that says nothing about where it leads.<span class='sev sev-minor'>Minor</span></li></ul></td></tr>
 <tr><th scope='row'><a class='sc' href='https://www.w3.org/WAI/WCAG22/Understanding/audio-only-and-video-only-prerecorded.html'>1.2.1 Audio-only and Video-only (Prerecorded)</a> <span class='lvltag'>(Level A)</span> <a class='u' href='https://www.w3.org/WAI/WCAG22/Understanding/audio-only-and-video-only-prerecorded.html'>Understanding</a></th><td class='lvl'><span class='pill na'>Not Applicable</span></td><td class='rem'><p class='lead'>No audio-only or video-only prerecorded media in the sample.</p></td></tr>
@@ -149,7 +167,7 @@ standard/guidelines.</p>
 <tr><th scope='row'><a class='sc' href='https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html'>4.1.2 Name, Role, Value</a> <span class='lvltag'>(Level A)</span> <a class='u' href='https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html'>Understanding</a></th><td class='lvl'><span class='pill no'>Does Not Support</span></td><td class='rem'><p class='lead'>Class Management — Accessibility Mode: skip controls exposed as links though they act as buttons; per-row Actions select without a name; popup inputs without names.</p><ul class='stmts'><li><span class='where'><b>Student Practice Area</b></span> — Nothing in the Student Practice Area takes keyboard focus and the page has no headings, so a keyboard or screen-reader user cannot choose a book, a chapter or a problem.<span class='sev sev-blocker'>Blocker</span></li><li><span class='where'><b>Class Management — Accessibility Mode</b>, <b>Class Management (standard mode)</b></span> — The jump-point shortcuts have no accessible name and appear outside the normal focus path, so a screen-reader user cannot tell what they do or reach them predictably.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Class Management — Accessibility Mode</b></span> — The assignments table and its controls carry no headings or landmarks, so a screen-reader user must tab through the whole page to find an assignment.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Take Assignment</b></span> — Multiple-choice answer options have no accessible name, so a screen-reader user cannot tell which option they are selecting; where options contain mathematics the answer is unreadable.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Take Assignment</b></span> — The formula and number entry area is a plain container rather than a form field, so a screen-reader user is not told it is an input or what it expects.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>View Grade Report</b></span> — The grade report&#x27;s help links contain only punctuation, so a screen-reader user hears 22 anonymous links and cannot tell what help any of them offers.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Calendar</b></span> — The calendar grid takes no keyboard focus, so a keyboard user cannot reach an assignment or open its details.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Calendar</b></span> — The event detail fields are unlabelled, and read-only dates are presented as editable date pickers, so a screen-reader user is invited to change information they cannot change.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>View Printable Assignment</b></span> — Every mathematical expression on the printable assignment is exposed as an unnamed button, so a screen-reader user gets a control instead of the mathematics.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Edit Class popup</b></span> — The popup form fields are not associated with their captions, so a screen-reader user is not told what each field expects.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Class Management — Accessibility Mode</b></span> — The class selection controls announce an instruction instead of their label, so a screen-reader user learns what a control is for only after moving past it.<span class='sev sev-major'>Major</span></li><li><span class='where'><b>Class Management (standard mode)</b>, <b>Class Management — Accessibility Mode</b>, <b>Student Practice Area</b></span> — The grid expand controls are images with no name or role, so a screen-reader user hears only that something clickable exists, not what it opens.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Sign in</b>, <b>Password reset</b></span> — The logo link on the sign-in and password reset pages has no accessible name, so a screen-reader user meets a link that says nothing about where it leads.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Class Management (standard mode)</b></span> — On the standard Class Management page the assignment row&#x27;s action menu opens only by mouse, so a keyboard user must switch to the Accessibility Page to start an assignment.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Class Management — Accessibility Mode</b></span> — The skip links are announced as links whose text names no destination, so a screen-reader user cannot tell where they lead.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Password reset</b></span> — The password reset field has no label of its own, so a screen-reader user must infer what to type from the surrounding table.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Class Management (standard mode)</b></span> — The grade-profile link is absent from the tab order but present to a screen reader, so a keyboard user without assistive technology cannot reach it at all.<span class='sev sev-minor'>Minor</span></li><li><span class='where'><b>Class Management — Accessibility Mode</b></span> — The per-row action control has no accessible name, so a screen-reader user cannot tell what the control does before using it.<span class='sev sev-minor'>Minor</span></li></ul></td></tr></tbody></table>
 
 <h3>Table 2: Success Criteria, Level AA</h3>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody><tr><th scope='row'><a class='sc' href='https://www.w3.org/WAI/WCAG22/Understanding/captions-live.html'>1.2.4 Captions (Live)</a> <span class='lvltag'>(Level AA)</span> <a class='u' href='https://www.w3.org/WAI/WCAG22/Understanding/captions-live.html'>Understanding</a></th><td class='lvl'><span class='pill na'>Not Applicable</span></td><td class='rem'><p class='lead'>No live audio or video in the product.</p></td></tr>
 <tr><th scope='row'><a class='sc' href='https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html'>1.2.5 Audio Description (Prerecorded)</a> <span class='lvltag'>(Level AA)</span> <a class='u' href='https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html'>Understanding</a></th><td class='lvl'><span class='pill na'>Not Applicable</span></td><td class='rem'><p class='lead'>Not present in the evaluated sample.</p></td></tr>
@@ -180,7 +198,7 @@ standard/guidelines.</p>
 <p class="sub">Derived from the proportion of sampled views evaluated for each functional modality and the
 check rows recorded against them. A criterion whose views are not all evaluated is reported as Not Evaluated
 rather than inferred.</p>
-<table><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
+<table><colgroup><col style='width:26%'><col style='width:14%'><col style='width:60%'></colgroup><thead><tr><th scope="col">Criterion</th><th scope="col">Conformance level</th>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody><tr><th scope='row'>302.1 Without Vision</th><td class='lvl'><span class='pill no'>Does Not Support</span></td><td class='rem'><p class='lead'>5 of the 10 pages evaluated could not be used by this method, and 46 recorded checks failed. Affected: <b>Class Management (standard mode)</b>, <b>Take Assignment</b>, <b>View Grade Report</b>, <b>Calendar</b>.</p><div class='ev'> <b>Coverage limit:</b> 9 of 10 pages carry a completed result, and 1 check row elsewhere remains unanswered. Still outstanding: <b>View Printable Assignment</b>. The level above reflects the pages that were evaluated.</div></td></tr>
 <tr><th scope='row'>302.2 With Limited Vision</th><td class='lvl'><span class='pill part'>Partially Supports</span></td><td class='rem'><p class='lead'>Every page evaluated could be used by this method, but 24 recorded checks failed.</p><div class='ev'> <b>Coverage limit:</b> 8 of 10 pages carry a completed result, and 7 check rows elsewhere remain unanswered. Still outstanding: <b>View Printable Assignment</b>, <b>Password reset</b>. The level above reflects the pages that were evaluated.</div></td></tr>
@@ -192,21 +210,17 @@ rather than inferred.</p>
 <tr><th scope='row'>302.8 With Limited Reach and Strength</th><td class='lvl'><span class='pill no'>Does Not Support</span></td><td class='rem'><p class='lead'>3 of the 10 pages evaluated could not be used by this method, and 16 recorded checks failed. Affected: <b>Class Management (standard mode)</b>, <b>Calendar</b>, <b>Student Practice Area</b>.</p><div class='ev'> All 10 pages in scope were evaluated for this criterion.</div></td></tr>
 <tr><th scope='row'>302.9 With Limited Language, Cognitive, and Learning Abilities</th><td class='lvl'><span class='pill part'>Partially Supports</span></td><td class='rem'><p class='lead'>Every page evaluated could be used by this method, but 12 recorded checks failed.</p><div class='ev'> All 10 pages in scope were evaluated for this criterion.</div></td></tr></tbody></table>
 
-<h2>Priorities for remediation</h2>
-<p class="sub">A summary of what remains outstanding, ordered by conformance level and by how far each
-criterion is from being met. It is offered so that the position is clear and shared, and it is kept short
-deliberately: only criteria the product <b>does not support</b> at either level, together with Level A criteria
-it supports only <b>in part</b>. Everything else, including partial support at Level AA, is in the tables
-above. Nothing here changes a conformance level.</p>
-<h3>Needs Immediate Attention</h3><p class='sub'>Level A criteria the product does not meet. Level A is the floor of the standard, and these are the failures that most often stop a person completing a task rather than merely slowing them down.</p><table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.3.1 Info and Relationships</th><td class='lvl'>Level A</td><td class='lvl'>14</td><td class='rem'>Publish a real heading outline and a <code>main</code> landmark on every page — the solutions page already does, with a heading per problem. Give each data grid a caption that names it and real column headers. Associate every field with its visible caption. Replace the nested layout tables with CSS layout so spacer cells stop being announced as content, and expose an assignment&#x27;s due date and duration as text, not only as a coloured bar.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>1.4.1 Use of Color</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Add a second, non-colour cue wherever colour carries meaning: a symbol, an underline or a weight change for randomised values, hint and deduction costs, calendar events and late submission dates. The problem-navigator status marks already pair a symbol with their colour and are the pattern to copy.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>2.4.1 Bypass Blocks</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Provide a bypass that works: headings and landmarks on every page, and a skip link that actually moves focus to the main content. The hidden jump-point mechanism does not substitute — it answers &quot;no shortcuts&quot; on the page a student lands on, and its controls have no names.<div class='ev'>Class Management — Accessibility Mode, Class Management (standard mode)</div></td></tr><tr><th scope='row'>4.1.2 Name, Role, Value</th><td class='lvl'>Level A</td><td class='lvl'>18</td><td class='rem'>Rebuild the elements that carry behaviour as the controls they pretend to be. Row action menus, expand toggles, problem checkboxes, calendar events, jump points and the grade-profile control are <code>div</code>, <code>span</code>, <code>img</code> and <code>a</code> elements with click handlers, no role, no name and no tab position. Native buttons, links and inputs give them all three at once, which is why this single change clears more failures than any other in this report.<div class='ev'>Product-wide</div></td></tr></tbody></table><h3>Should be Prioritized</h3><p class='sub'>Level A criteria the product meets only in part. The functionality exists and works in places, so the remaining work is narrower than above, but it is still at the floor of the standard.</p><table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.1.1 Non-text Content</th><td class='lvl'>Level A</td><td class='lvl'>7</td><td class='rem'>Give every informative image an <code>alt</code> attribute describing what it conveys, and mark decorative images <code>alt=&quot;&quot;</code>. Three causes need separate fixes: alternative text on the solutions figures was swallowed into the <code>src</code> by a missing quote; two printable figures are CSS backgrounds and must become <code>&lt;img&gt;</code> before they can carry text; the mathematics is exposed as unnamed buttons. Four printable figures already carry good descriptions.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>1.2.2 Captions (Prerecorded)</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Review and correct the automatically generated captions on the library videos before publishing them, or supply a prepared caption track. Automatic captions are a starting point, not a caption.<div class='ev'>Assignment Editor (edit)</div></td></tr><tr><th scope='row'>2.1.1 Keyboard</th><td class='lvl'>Level A</td><td class='lvl'>4</td><td class='rem'>Make every interactive element reachable and operable from the keyboard: the assignment row&#x27;s action menu, the grade-profile control, the calendar grid and its events, and the practice area&#x27;s selects, checkboxes and expanders. Rebuilding them as native controls resolves this criterion and 4.1.2 together. The Accessibility Mode page shows the working pattern for the row actions — fold it into the standard page rather than maintaining two.<div class='ev'>Class Management (standard mode), Student Practice Area, Calendar</div></td></tr><tr><th scope='row'>2.4.3 Focus Order</th><td class='lvl'>Level A</td><td class='lvl'>5</td><td class='rem'>Move focus deliberately at every change: into a problem when it is activated, into a dialog when it opens and back to the control that opened it when it closes, and to a hint when one is inserted. Keep the jump-point controls in the natural tab sequence or remove them.<div class='ev'>Take Assignment, Calendar, Class Management — Accessibility Mode, Class Management (standard mode)</div></td></tr><tr><th scope='row'>2.4.4 Link Purpose (In Context)</th><td class='lvl'>Level A</td><td class='lvl'>3</td><td class='rem'>Give every link text that names where it goes. Replace the punctuation-only help links with words, give the logo link an accessible name, and reword the skip controls so they say what they skip to rather than which key to press.<div class='ev'>Class Management — Accessibility Mode, View Grade Report, Sign in, Password reset</div></td></tr><tr><th scope='row'>2.5.3 Label in Name</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Make each control&#x27;s accessible name begin with its visible caption. Move the instruction sentence on the class selection controls into a description and use &quot;Classes&quot; and &quot;Class Menu&quot; as the names, so that speech input can address them by what the user sees.<div class='ev'>Class Management — Accessibility Mode</div></td></tr><tr><th scope='row'>3.1.1 Language of Page</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Add a <code>lang</code> attribute to the <code>html</code> element of the four pages that lack one.<div class='ev'>Take Assignment, Sign in, Edit Class popup, Password reset</div></td></tr><tr><th scope='row'>3.3.1 Error Identification</th><td class='lvl'>Level A</td><td class='lvl'>—</td><td class='rem'>Mark the element that reports an error as a live region so it is announced without depending on a full page reload, and expose the required-field indicator to assistive technology rather than hiding it visually.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>3.3.2 Labels or Instructions</th><td class='lvl'>Level A</td><td class='lvl'>4</td><td class='rem'>Associate every field with its visible caption using <code>label for</code> or <code>aria-labelledby</code>. The sign-in page already does this correctly one click from the password reset page, which does not — copy it. Give the answer entry area a real form control, and label the event detail fields.<div class='ev'>Take Assignment, Password reset, Calendar, Edit Class popup</div></td></tr></tbody></table><h3>For Full Compliance</h3><p class='sub'>Level AA criteria the product does not meet. Level AA is the conformance target for the sector; these remain outstanding once the Level A work is done.</p><table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.4.10 Reflow</th><td class='lvl'>Level AA</td><td class='lvl'>2</td><td class='rem'>Replace the fixed 1300-pixel container with a layout that reflows to 320 CSS pixels without horizontal scrolling, and let the page behind a modal scroll so its fields and buttons stay reachable above 175 per cent zoom.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>2.4.5 Multiple Ways</th><td class='lvl'>Level AA</td><td class='lvl'>—</td><td class='rem'>Provide a second route to each page — a search, a site map or an index — so that the grade report, the solutions, the calendar and the practice area can be reached without walking the assignments table.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>3.3.4 Error Prevention (Legal, Financial, Data)</th><td class='lvl'>Level AA</td><td class='lvl'>1</td><td class='rem'>Confirm before any action that changes a student&#x27;s score. Submit and Feedback act irreversibly on a single activation; &quot;I give up&quot; already asks first and shows the pattern to apply to the other two.<div class='ev'>Take Assignment</div></td></tr></tbody></table>
+<h2>Vendor Roadmap</h2>
+<p class="sub">The California State University requires that the information and communication technology it
+acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
+failure to meet it <i>may</i> jeopardize future acquisitions. <b>The following fixes should be implemented to
+meet the WCAG 2.1 AA standard.</b></p>
+<p class="sub">The list is deliberately short: only criteria the product <b>does not support</b> at either
+level, together with Level A criteria it supports only <b>in part</b>. Everything else, including partial
+support at Level AA, is in the tables above. Every criterion listed is a Level A or AA requirement of WCAG 2.1, so this list is the work required to reach the standard.</p>
+<h3>Needs Immediate Attention</h3><p class='sub'>Level A criteria the product does not meet. Level A is the floor of the standard, and these are the failures that most often stop a person completing a task rather than merely slowing them down.</p><table><colgroup><col style='width:26%'><col style='width:9%'><col style='width:8%'><col style='width:57%'></colgroup><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.3.1 Info and Relationships</th><td class='lvl'>Level A</td><td class='lvl'>14</td><td class='rem'>Publish a real heading outline and a <code>main</code> landmark on every page — the solutions page already does, with a heading per problem. Give each data grid a caption that names it and real column headers. Associate every field with its visible caption. Replace the nested layout tables with CSS layout so spacer cells stop being announced as content, and expose an assignment&#x27;s due date and duration as text, not only as a coloured bar.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>1.4.1 Use of Color</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Add a second, non-colour cue wherever colour carries meaning: a symbol, an underline or a weight change for randomised values, hint and deduction costs, calendar events and late submission dates. The problem-navigator status marks already pair a symbol with their colour and are the pattern to copy.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>2.4.1 Bypass Blocks</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Provide a bypass that works: headings and landmarks on every page, and a skip link that actually moves focus to the main content. The hidden jump-point mechanism does not substitute — it answers &quot;no shortcuts&quot; on the page a student lands on, and its controls have no names.<div class='ev'>Class Management — Accessibility Mode, Class Management (standard mode)</div></td></tr><tr><th scope='row'>4.1.2 Name, Role, Value</th><td class='lvl'>Level A</td><td class='lvl'>18</td><td class='rem'>Rebuild the elements that carry behaviour as the controls they pretend to be. Row action menus, expand toggles, problem checkboxes, calendar events, jump points and the grade-profile control are <code>div</code>, <code>span</code>, <code>img</code> and <code>a</code> elements with click handlers, no role, no name and no tab position. Native buttons, links and inputs give them all three at once, which is why this single change clears more failures than any other in this report.<div class='ev'>Product-wide</div></td></tr></tbody></table><h3>Should be Prioritized</h3><p class='sub'>Level A criteria the product meets only in part. The functionality exists and works in places, so the remaining work is narrower than above, but it is still at the floor of the standard.</p><table><colgroup><col style='width:26%'><col style='width:9%'><col style='width:8%'><col style='width:57%'></colgroup><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.1.1 Non-text Content</th><td class='lvl'>Level A</td><td class='lvl'>7</td><td class='rem'>Give every informative image an <code>alt</code> attribute describing what it conveys, and mark decorative images <code>alt=&quot;&quot;</code>. Three causes need separate fixes: alternative text on the solutions figures was swallowed into the <code>src</code> by a missing quote; two printable figures are CSS backgrounds and must become <code>&lt;img&gt;</code> before they can carry text; the mathematics is exposed as unnamed buttons. Four printable figures already carry good descriptions.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>1.2.2 Captions (Prerecorded)</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Review and correct the automatically generated captions on the library videos before publishing them, or supply a prepared caption track. Automatic captions are a starting point, not a caption.<div class='ev'>Assignment Editor (edit)</div></td></tr><tr><th scope='row'>2.1.1 Keyboard</th><td class='lvl'>Level A</td><td class='lvl'>4</td><td class='rem'>Make every interactive element reachable and operable from the keyboard: the assignment row&#x27;s action menu, the grade-profile control, the calendar grid and its events, and the practice area&#x27;s selects, checkboxes and expanders. Rebuilding them as native controls resolves this criterion and 4.1.2 together. The Accessibility Mode page shows the working pattern for the row actions — fold it into the standard page rather than maintaining two.<div class='ev'>Class Management (standard mode), Student Practice Area, Calendar</div></td></tr><tr><th scope='row'>2.4.3 Focus Order</th><td class='lvl'>Level A</td><td class='lvl'>5</td><td class='rem'>Move focus deliberately at every change: into a problem when it is activated, into a dialog when it opens and back to the control that opened it when it closes, and to a hint when one is inserted. Keep the jump-point controls in the natural tab sequence or remove them.<div class='ev'>Take Assignment, Calendar, Class Management — Accessibility Mode, Class Management (standard mode)</div></td></tr><tr><th scope='row'>2.4.4 Link Purpose (In Context)</th><td class='lvl'>Level A</td><td class='lvl'>3</td><td class='rem'>Give every link text that names where it goes. Replace the punctuation-only help links with words, give the logo link an accessible name, and reword the skip controls so they say what they skip to rather than which key to press.<div class='ev'>Class Management — Accessibility Mode, View Grade Report, Sign in, Password reset</div></td></tr><tr><th scope='row'>2.5.3 Label in Name</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Make each control&#x27;s accessible name begin with its visible caption. Move the instruction sentence on the class selection controls into a description and use &quot;Classes&quot; and &quot;Class Menu&quot; as the names, so that speech input can address them by what the user sees.<div class='ev'>Class Management — Accessibility Mode</div></td></tr><tr><th scope='row'>3.1.1 Language of Page</th><td class='lvl'>Level A</td><td class='lvl'>1</td><td class='rem'>Add a <code>lang</code> attribute to the <code>html</code> element of the four pages that lack one.<div class='ev'>Take Assignment, Sign in, Edit Class popup, Password reset</div></td></tr><tr><th scope='row'>3.3.1 Error Identification</th><td class='lvl'>Level A</td><td class='lvl'>—</td><td class='rem'>Mark the element that reports an error as a live region so it is announced without depending on a full page reload, and expose the required-field indicator to assistive technology rather than hiding it visually.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>3.3.2 Labels or Instructions</th><td class='lvl'>Level A</td><td class='lvl'>4</td><td class='rem'>Associate every field with its visible caption using <code>label for</code> or <code>aria-labelledby</code>. The sign-in page already does this correctly one click from the password reset page, which does not — copy it. Give the answer entry area a real form control, and label the event detail fields.<div class='ev'>Take Assignment, Password reset, Calendar, Edit Class popup</div></td></tr></tbody></table><h3>For Full Compliance</h3><p class='sub'>Level AA criteria the product does not meet. Level AA is the conformance target for the sector; these remain outstanding once the Level A work is done.</p><table><colgroup><col style='width:26%'><col style='width:9%'><col style='width:8%'><col style='width:57%'></colgroup><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th><th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead><tbody><tr><th scope='row'>1.4.10 Reflow</th><td class='lvl'>Level AA</td><td class='lvl'>2</td><td class='rem'>Replace the fixed 1300-pixel container with a layout that reflows to 320 CSS pixels without horizontal scrolling, and let the page behind a modal scroll so its fields and buttons stay reachable above 175 per cent zoom.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>2.4.5 Multiple Ways</th><td class='lvl'>Level AA</td><td class='lvl'>—</td><td class='rem'>Provide a second route to each page — a search, a site map or an index — so that the grade report, the solutions, the calendar and the practice area can be reached without walking the assignments table.<div class='ev'>Product-wide</div></td></tr><tr><th scope='row'>3.3.4 Error Prevention (Legal, Financial, Data)</th><td class='lvl'>Level AA</td><td class='lvl'>1</td><td class='rem'>Confirm before any action that changes a student&#x27;s score. Submit and Feedback act irreversibly on a single activation; &quot;I give up&quot; already asks first and shows the pattern to apply to the other two.<div class='ev'>Take Assignment</div></td></tr></tbody></table>
 
-<h2>Legal disclaimer</h2>
-<p class="sub">This report is provided for informational purposes only. It records the findings of an
-independent evaluation of the product identified above, carried out on the pages and by the methods described,
-and it does not constitute a warranty of conformance. Conformance levels apply to the sample evaluated and to
-the product version tested.</p>
-
-<p class="sub">Source database hash 9914e0c2e389a863. VPAT<sup>&reg;</sup> is a registered
+<p class="colophon">Source database hash 9914e0c2e389a863. VPAT<sup>&reg;</sup> is a registered
 service mark of the Information Technology Industry Council (ITI); this report follows the structure of
 VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 

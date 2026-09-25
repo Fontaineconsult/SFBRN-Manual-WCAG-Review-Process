@@ -423,7 +423,8 @@ fact is not in an extracted field, it does not reach the report.
   stripped. The same applies to evidence filenames left behind when a run
   identifier is removed.
 
-- **Priorities for remediation (added 2026-09-24).** The procurement gate has
+- **Vendor Roadmap (added 2026-09-24; named Priorities for remediation for
+  half a day).** The procurement gate has
   two faces: what the **vendor** is expected to fix, and what the
   **department** does meanwhile. The ACR carries the first; the TAAP
   (`ontology/TAAP Version 3_2 051225.docx`) carries the second. At this stage
@@ -438,6 +439,20 @@ fact is not in an extracted field, it does not reach the report.
   | Needs Immediate Attention | Level A, Does Not Support |
   | Should be Prioritized | Level A, Partially Supports |
   | For Full Compliance | Level AA, Does Not Support |
+
+  **The section states the requirement, not just the gap.** The CSU requires
+  that ICT it acquires conform to **WCAG 2.1 Level AA**, and the roadmap says
+  so, together with the fact that continued failure *may* jeopardize future
+  acquisitions — "may", because the decision is the reviewer's and the
+  procurement officer's, and this document does not make it.
+
+  The report is evaluated against WCAG **2.2**; the requirement quoted is
+  **2.1**. Those normally coincide — a product failing at this level fails on
+  criteria that have been in the standard since 2.0 — but the closing sentence
+  is **computed, not written** (`roadmap_scope()`): it states that every listed
+  criterion is a 2.1 A/AA requirement only when that is true of this review,
+  and names the 2.2 additions otherwise. A review that turns up a 2.2-only
+  failure must not be made to say that clearing the list delivers 2.1 AA.
 
   Level A is the higher priority throughout: it is the floor of the standard.
   **Partial support at Level AA is deliberately excluded** — listing
@@ -538,6 +553,39 @@ fact is not in an extracted field, it does not reach the report.
   Priorities uses the criterion-level `Remediation` instead — an early version
   put the worst finding's sentence there and three different criteria ended up
   quoting the same one.
+
+- **Branding header.** The report goes out under an organisation's name, so
+  the page opens with a header slot: logo, organisation, and an optional
+  second line. It is filled from **`branding.json` at the repo root** (copy
+  `branding.example.json`), so a regeneration never loses it, and overridden
+  per-run by `--org` / `--unit` / `--logo`. With nothing configured the slot
+  renders as an HTML comment and nothing else — no empty box and no
+  placeholder text that could survive into a distributed document.
+
+  The logo is **embedded as a data URI, not linked**. The report is mailed as
+  one file and opened in Word; both lose a relative `src`. When the
+  organisation name is also written out the image is marked decorative,
+  otherwise it carries the name as its `alt`.
+
+- **No legal disclaimer.** Removed 2026-09-24. It said the report was
+  informational and not a warranty, which undercut the one thing the document
+  is for. What remains is the colophon: the source-database hash, and the ITI
+  service-mark attribution that VPAT's Essential Requirements oblige any
+  report using the format to carry.
+
+- **Styled for two renderers.** On screen it is a web page; opened or pasted
+  into Word it becomes a document, and Word's HTML importer understands almost
+  no modern CSS. So the stylesheet (lifted into the `CSS` constant, where it
+  can be commented) obeys four rules: every colour that carries meaning is a
+  literal hex, never a `var()` — Word drops `var()` silently and the
+  conformance pills would keep their shape and lose their colour; no flexbox
+  and no grid, so Report information is a table rather than a `dl`; column
+  widths come from `<colgroup>`, which Word honours and CSS selectors it does
+  not; and `thead { display: table-header-group }` plus
+  `page-break-inside: avoid` keep headers repeating and rows whole across
+  pages. `@page` sets the print margin. Spacing throughout is tight on
+  purpose — this is a document to be read in a procurement file, not a
+  landing page.
 
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the

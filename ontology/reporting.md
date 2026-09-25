@@ -166,6 +166,38 @@ Nothing in the table is authored. The statements are the findings' own
 person cannot do because of it — which is exactly what this table needs, and
 the reason the field exists.
 
+### The summary above the table
+
+Five sentences, generated, sitting between the one-line preamble and the
+table. They exist so an instructor deciding whether to set work in the
+product, or an analyst deciding whether an alternative is even possible, can
+make the call without working through forty statements.
+
+That call needs four things and no more, so there is one sentence for each:
+
+1. **How many groups are shut out**, and which are not — the groups with no
+   barrier are named, because "nobody is affected" is as useful a fact as the
+   opposite.
+2. **How bad the worst group has it** — pages it cannot use at all, and how
+   many of its barriers stop a task rather than slow it.
+3. **Who else loses pages**, since the pages out of reach differ by group.
+4. **What happens to a whole task**, from the task verdicts, which is the
+   level a TAAP alternative is written at.
+
+A fifth is conditional: when the barriers reach 60 % or more of the sample,
+it says an alternative has to cover whole tasks rather than stand in for a
+page — the single most consequential thing the table implies and the easiest
+to miss. And the task sentence carries a tail naming the tasks **not yet
+walked**, because a floor presented as a total is the one error here that
+would actually mislead a decision.
+
+**Nothing in it is authored.** Every number comes from the same rows the
+table is built from, so the summary cannot drift from the table beneath it and
+cannot claim more than the runs support. This is the opposite call from
+`Plain summary` and `Remediation`, which are authored because no rule could
+generate them; here the facts *are* counts, and a sentence that counts them is
+better than a sentence that characterises them.
+
 ### Who a barrier affects is a question the criterion answers
 
 The first cut grouped a finding by the **modality of the run that produced

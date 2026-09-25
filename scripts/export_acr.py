@@ -906,7 +906,8 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
     body_name = re.sub(r"(?i)^the\s+", "", body)
     kind = "Internal Report" if internal else "Accessibility Conformance Report"
     lead = INTERNAL_NOTE if internal else EXTERNAL_NOTE.format(body=e(body))
-    front = f"<h2>User Functional Limitations</h2>{INTERNAL_INTRO}{barriers_section(d)}" if internal else ""
+    front = (f"<h2>User Functional Limitations</h2>{INTERNAL_INTRO}"
+             f"{limitations_summary(d)}{barriers_section(d)}") if internal else ""
     back = "" if internal else (f"<h2>Vendor Roadmap</h2>{ROADMAP_INTRO}"
                                 f"{roadmap_section(d)}")
 
@@ -1124,6 +1125,120 @@ def barrier_item(d: dict, it: dict) -> str:
            if it["sev"] in ("Blocker", "Major") else "")
     return (f"<li>{md(it['plain'])}{tag}"
             + (f"<div class='ev'>{e(where)}</div>" if where else "") + "</li>")
+
+
+NUMBERS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
+
+
+def num(n: int) -> str:
+    """Small counts read as words; page counts stay as digits, to be scannable."""
+    return NUMBERS[n] if 0 <= n < len(NUMBERS) else str(n)
+
+
+def task_title(t) -> str:
+    """A task's name, quoted, without the process reference the record carries."""
+    return "\u201c" + e(t[1].split(" \u2014 ")[0].strip()) + "\u201d"
+
+
+def group_reach(d: dict, mods) -> set:
+    """In-sample pages named by a group's listed barriers."""
+    live = {v[0] for v in d["views"]}
+    blocking, major, _ = group_barriers(d, mods)
+    return {v for i in blocking + major for v in i["views"] if v in live}
+
+
+def and_list(items) -> str:
+    items = list(items)
+    if len(items) <= 1:
+        return "".join(items)
+    return ", ".join(items[:-1]) + (" and " if len(items) == 2 else ", and ") + items[-1]
+
+
+def limitations_summary(d: dict) -> str:
+    """Five sentences, each computed, none authored.
+
+    Written for someone who will read this instead of the table: an instructor
+    deciding whether to set work in this product, or an analyst deciding
+    whether an alternative is even possible. That call needs four things and
+    no more -- how many groups are shut out, how badly the worst one is, what
+    happens to a whole task, and how far across the product it goes. A fifth
+    sentence says what is not yet known, because a floor presented as a total
+    is the one error here that would actually mislead.
+
+    Nothing is authored, so it cannot drift from the table below it, and it
+    cannot claim more than the runs support."""
+    # the form's labels are headings, not sentence material
+    SHORT = {"Blindness": "blind users",
+             "Low Vision": "low-vision users",
+             "Deafness &middot; Hard of Hearing": "deaf and hard-of-hearing users",
+             "Speech Disabilities": "speech-input users",
+             "Limited Manual Dexterity &middot; Limited Reach and Strength": "keyboard-only users",
+             "Cognitive Disability": "users with cognitive disabilities",
+             "Photosensitivity": "users with photosensitivity"}
+    outcomes = {c[0]: c[7] for c in d["criteria"]}
+    n_views = len(d["views"]) or 1
+
+    stats = []
+    for name, mods, _codes in TAAP_GROUPS:
+        if not mods:                       # photosensitivity: 2.3.1 decides it
+            if outcomes.get("2.3.1") in ("Not Evaluated", None):
+                continue
+            stats.append(dict(name=SHORT[name], listed=0, blockers=0, minor=0,
+                              unusable=0, reach=set()))
+            continue
+        blocking, major, minor = group_barriers(d, mods)
+        stats.append(dict(name=SHORT.get(name, name), blockers=len(blocking),
+                          listed=len(blocking) + len(major), minor=minor,
+                          unusable=len(unusable_pages(d, mods)),
+                          reach=group_reach(d, mods)))
+
+    hit = [g for g in stats if g["listed"] or g["minor"]]
+    clean = [g["name"] for g in stats if not (g["listed"] or g["minor"])]
+    if not hit:
+        return "<p class='lead'>No barriers were found for any user group in the pages evaluated.</p>"
+    hit.sort(key=lambda g: (-g["blockers"], -g["unusable"], -g["listed"]))
+    worst = hit[0]
+    others = sorted((g for g in hit[1:] if g["unusable"]), key=lambda g: -g["unusable"])
+    reach = len({v for g in stats for v in g["reach"]})
+
+    out = [f"Of the {num(len(stats))} user groups this evaluation covers, {num(len(hit))} meet "
+           f"barriers in this product"
+           + (f"; no barrier was found for {and_list(clean)}." if clean else ".")]
+
+    if worst["blockers"]:
+        out.append(f"{worst['name'].capitalize()} are affected most: {worst['unusable']} of the "
+                   f"{n_views} pages evaluated could not be used at all, and {worst['blockers']} of "
+                   f"the {worst['listed']} barriers listed for them stop a task outright rather than "
+                   f"slow it down.")
+    else:
+        out.append(f"{worst['name'].capitalize()} are affected most, with {worst['listed']} barriers "
+                   f"across {len(worst['reach'])} of the {n_views} pages evaluated.")
+
+    if others:
+        # the verb rides on the first clause only: "low-vision users cannot use
+        # 5 and keyboard-only users 3" reads; repeating it does not
+        parts = [f"{g['name']} cannot use {g['unusable']}" if i == 0 else f"{g['name']} {g['unusable']}"
+                 for i, g in enumerate(others)]
+        out.append(f"Of the same {n_views} pages, " + and_list(parts) + ".")
+
+    failed = [task_title(t) for t in d["tasks"] if (t[2] or "").startswith("Fail")]
+    barred = [task_title(t) for t in d["tasks"] if (t[2] or "").startswith("Pass with barriers")]
+    unrun = [t for t in d["tasks"] if (t[2] or "").startswith("Not run")]
+    if failed or barred:
+        bits = []
+        if failed:
+            bits.append(f"{and_list(failed)} could not be completed at all")
+        if barred:
+            bits.append(f"{and_list(barred)} completed only with barriers")
+        tail = (f"; {num(len(unrun))} further task{'s' if len(unrun) != 1 else ''} "
+                f"{'have' if len(unrun) != 1 else 'has'} not been walked yet, so this is a floor "
+                f"rather than a full count." if unrun else ".")
+        out.append("Of the tasks walked from end to end, " + and_list(bits) + tail)
+
+    if reach >= n_views * 0.6:
+        out.append(f"The barriers reach {reach} of the {n_views} pages evaluated, so an alternative "
+                   f"has to cover whole tasks rather than stand in for a single page.")
+    return "<p class='lead'>" + " ".join(out) + "</p>"
 
 
 def barriers_section(d: dict) -> str:

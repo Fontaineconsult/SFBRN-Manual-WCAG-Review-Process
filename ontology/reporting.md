@@ -423,32 +423,37 @@ fact is not in an extracted field, it does not reach the report.
   stripped. The same applies to evidence filenames left behind when a run
   identifier is removed.
 
-- **Vendor roadmap (added 2026-09-24).** The CSU procurement gate has two
-  faces: what the **vendor** must commit to fix, and what the **department**
-  must do meanwhile. The ACR carries the first; the TAAP
-  (`ontology/TAAP Version 3_2 051225.docx`) carries the second. So the ACR ends
-  with the work it implies, grouped by what each change costs rather than by
-  criterion, so a remediation timeline can be negotiated against it:
+- **Priorities for remediation (added 2026-09-24).** The procurement gate has
+  two faces: what the **vendor** is expected to fix, and what the
+  **department** does meanwhile. The ACR carries the first; the TAAP
+  (`ontology/TAAP Version 3_2 051225.docx`) carries the second. At this stage
+  of the gate the purpose is narrow — show that the position is known and
+  monitored — so the section makes no demands and sets no dates.
 
-  | Stage | Meaning | Procurement use |
-  |---|---|---|
-  | 1 Corrections | values and attributes; no change to how anything is built | fix before purchase, or in a maintenance release |
-  | 2 Component rework | specific widgets rebuilt as real controls | a contractual date |
-  | 3 Platform modernisation | the page architecture itself | a roadmap commitment with milestones |
+  **Categories are derived, not authored**, from conformance level and
+  outcome, so they carry over to any review unchanged:
 
-  **Each finding is counted once.** Themes are assigned by how specifically
-  they describe a fix, not by where they appear: a finding citing both 1.3.1
-  and 4.1.2 is a control problem, so the control theme claims it and the
-  structure theme takes the remainder. That is what makes the counts addable,
-  and the generator warns on stderr if any finding matches no theme.
+  | Category | Rule |
+  |---|---|
+  | Needs Immediate Attention | Level A, Does Not Support |
+  | Should be Prioritized | Level A, Partially Supports |
+  | For Full Compliance | Level AA, Does Not Support |
 
-  Stage 3 themes usually show **"underlying cause"** rather than a count: the
-  layout tables and the custom accessibility layer do not add issues of their
-  own, they are why issues counted above have to be fixed page by page.
+  Level A is the higher priority throughout: it is the floor of the standard.
+  **Partial support at Level AA is deliberately excluded** — listing
+  everything makes the section unusable, and it is already in the tables above.
 
-  **This is the one editorial section in the ACR and it says so.** The counts
-  are read from the database; the grouping is an engineering judgement, stated
-  as such in the document, and it changes no conformance level.
+  An earlier version grouped findings into hand-written engineering themes
+  ("make every control a control", "retire layout tables"). It was dropped:
+  the themes were bound to one product so the section would not generalise,
+  and grouping by what a fix costs reads as a set of demands.
+
+  **The section carries no prose.** Criterion, level, issue count, pages —
+  and nothing else. Every attempt to reduce a `05` remark to a summary line
+  mechanically produced a fragment ("Fails on all 10 views.") or a dangling
+  reference ("The pattern is one mechanism:"), because the remarks are working
+  notes. The statements live in the tables above, where they are already
+  cleaned; repeating a worse version here helps nobody.
 
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the

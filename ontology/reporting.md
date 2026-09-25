@@ -128,21 +128,24 @@ do what, starting today.** Keeping both in one template is what stops them
 drifting apart — the criterion tables and the 508 section are the same bytes
 in both.
 
-The two differ in three places: the standing note, the title's subject line,
-and one section. The external report ends with the **Vendor Roadmap**; the
-internal one opens, before the criterion tables, with **What a user will not
-be able to do**, and carries no roadmap at all — what the vendor owes is not
-what the department has to plan around.
+They differ in three places: the standing note, the title's subject line, and
+one section. The external report ends with the **Vendor Roadmap**; the
+internal one opens, before the criterion tables, with **User Functional
+Limitations**, and carries no roadmap — what the vendor owes is not what the
+department has to plan around.
 
-### It is shaped to be lifted into a TAAP
+### The section is a table and one sentence
 
-`ontology/TAAP Version 3_2 051225.docx` asks for two things this section
-supplies. Its **Known Accessibility Barriers** box wants the barriers "that
-affect core functionality"; its **Affected User Groups** box is a checklist.
-So every `<h3>` in the section *is* one of those boxes, in the form's own
-words, and each opens by saying whether to tick it.
+> This product's interface presents usability barriers for people with
+> disabilities. Use the table below to plan equally effective alternatives.
 
-| TAAP group | From | 508 |
+That is the whole preamble. A first version explained the TAAP process to
+readers who administer TAAPs, group by group, with a note on core
+functionality drawn from the task verdicts; the reviewer cut all of it. What
+remains is a two-column table, one row per user group, whose cell holds the
+pages that group cannot use at all, the statements, and a count of the rest.
+
+| Row | From | 508 |
 |---|---|---|
 | Blindness | no-vision | 302.1 |
 | Low Vision | low-vision + no-color | 302.2, 302.3 |
@@ -152,17 +155,16 @@ words, and each opens by saying whether to tick it.
 | Cognitive Disability | cognition | 302.9 |
 | Photosensitivity | 2.3.1's outcome | — |
 
-Two pairs share a modality, because the evaluation does not separate them and
-splitting them would invent a distinction the evidence cannot carry — the
-section says so rather than implying two independent results. **Colour has no
-box on the form**, so colour barriers are reported under Low Vision and the
-text says that too; a reader who ticks Low Vision on the strength of a colour
-barrier should know that is what they are doing.
+The rows are the groups a **Temporary Alternative Access Plan** asks about, in
+that form's own words, so a row reads straight across into one. Two pairs
+share a modality because the evaluation does not separate them, and **colour
+has no group of its own on that form**, so colour barriers sit under Low
+Vision.
 
-The section opens with **core functionality**, taken from the task verdicts,
-because that is the phrase the form uses: which end-to-end tasks cannot be
-completed, which complete only with barriers, and which have not been walked
-yet — the last so a reader knows the list may grow.
+Nothing in the table is authored. The statements are the findings' own
+`Plain summary` sentences, which are written to say what is wrong *and* what a
+person cannot do because of it — which is exactly what this table needs, and
+the reason the field exists.
 
 ### Who a barrier affects is a question the criterion answers
 
@@ -182,13 +184,9 @@ the tie.
 Doing this **per criterion rather than per finding** is what matters: a
 finding citing both 2.1.1 and 4.1.2, walked with a screen reader, keeps its
 motor half and appears under Limited Manual Dexterity as well as Blindness.
-Narrowing the whole finding by its run had silently dropped it.
-
-**A barrier therefore appears under every group its criteria affect**, and the
-section says so, along with the other thing a reader needs to know: the
-sentences are the findings' own `Plain summary` text and name the user the
-barrier was first observed with. A focus-order barrier reads "a screen-reader
-user" and also stops a keyboard user, which is why it is printed under both.
+Narrowing the whole finding by its run had silently dropped it. A barrier
+therefore appears under **every** group its criteria affect, and the same
+statement can occur in more than one row.
 
 ### What it leaves out
 

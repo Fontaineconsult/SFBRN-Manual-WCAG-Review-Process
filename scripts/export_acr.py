@@ -718,13 +718,12 @@ relied on anywhere in this document.</p>
 </div>"""
 
 INTERNAL_NOTE = """<div class="note">
-<p><b>Internal document. Not for distribution to the supplier or the public.</b> This is the campus-facing counterpart of the accessibility conformance report for the same product, produced from the same evaluation and the same evidence. The conformance report states what the supplier has to fix; this one states what the people who will use the product cannot do while it stays unfixed, which is what a Temporary Alternative Access Plan is written against.</p>
+<p><b>Internal document. Not for distribution to the supplier or the public.</b> Produced from the same
+evaluation, and the same evidence, as the accessibility conformance report for this product.</p>
 </div>"""
 
-INTERNAL_INTRO = """<p class="sub">Written to be lifted into a TAAP. Each heading below is a box in the form's <b>Affected User Groups</b> checklist, and the statements under it are the <b>known accessibility barriers that affect core functionality</b> the box above it asks for. Nothing here is new evidence: every statement is a finding recorded in the criterion tables that follow, and the pages named are pages this evaluation walked.</p>
-<p class="sub">A barrier is listed under <b>every</b> group its success criterion affects, so the same statement can appear more than once. The sentences are the evaluation's own, and name the user the barrier was first observed with — a focus-order barrier reads "a screen-reader user" and also stops a keyboard user, which is why it appears under both.</p>
-<p class="sub">Barriers of lower severity are summarised as a count rather than listed. They are real and they are in the tables below, but a plan written against every one of them is a plan nobody finishes; the ones printed here are those that stop or seriously impede a task.</p>"""
-
+INTERNAL_INTRO = """<p class="sub">This product's interface presents usability barriers for people with
+disabilities. Use the table below to plan equally effective alternatives.</p>"""
 
 ROADMAP_INTRO = """<p class="sub">The California State University requires that the information and communication technology it
 acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
@@ -907,7 +906,7 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
     body_name = re.sub(r"(?i)^the\s+", "", body)
     kind = "Internal Report" if internal else "Accessibility Conformance Report"
     lead = INTERNAL_NOTE if internal else EXTERNAL_NOTE.format(body=e(body))
-    front = f"<h2>What a user will not be able to do</h2>{INTERNAL_INTRO}{barriers_section(d)}" if internal else ""
+    front = f"<h2>User Functional Limitations</h2>{INTERNAL_INTRO}{barriers_section(d)}" if internal else ""
     back = "" if internal else (f"<h2>Vendor Roadmap</h2>{ROADMAP_INTRO}"
                                 f"{roadmap_section(d)}")
 
@@ -1064,42 +1063,27 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 
 
 
-# --- the internal variant: what a user will not be able to do ---------------
+# --- the internal variant: user functional limitations ----------------------
 # The external report is addressed to the vendor and says what to fix. The
 # internal one is addressed to the procurement team and the department that
-# will own the product, and it answers a different question: who on our campus
+# will own the product, and answers a different question: who on our campus
 # cannot do what, starting today.
 #
-# It is shaped to be lifted into a TAAP. Every heading below is a box in the
-# TAAP's `Affected User Groups` checklist, and the statements under it are the
-# "known accessibility barriers that affect core functionality" the form asks
-# for in the box above it. Nothing is authored here -- the statements are the
-# findings' own `Plain summary` sentences, which are written to say what is
-# wrong AND what a person cannot do because of it, which is exactly what this
-# section needs.
-#
-# Two of the TAAP's groups take one modality each; two pair up, because the
-# evaluation does not separate them and pretending otherwise would invent a
-# distinction the evidence cannot carry. Colour has no box of its own on the
-# form, so it is reported under Low Vision and said so.
+# The groups are the ones a Temporary Alternative Access Plan asks about, in
+# its own words, so a row can be read straight across into one. Two pairs
+# share a modality because the evaluation does not separate them, and colour
+# has no group of its own on that form, so colour barriers sit under Low
+# Vision. Nothing here is authored: the statements are the findings' own
+# `Plain summary` sentences, which are written to say what is wrong AND what a
+# person cannot do because of it -- which is what this table needs.
 TAAP_GROUPS = [
-    ("Blindness", ("no-vision",), ("302.1",),
-     "People who cannot see the screen and operate it with a screen reader."),
-    ("Low Vision", ("low-vision", "no-color"), ("302.2", "302.3"),
-     "People who enlarge, re-colour or re-space the screen. Colour vision deficiency has no box of "
-     "its own on the TAAP checklist, so colour barriers are reported here."),
-    ("Deafness &middot; Hard of Hearing", ("no-hearing",), ("302.4", "302.5"),
-     "Both boxes take the same evidence: audio content and whether an equivalent exists."),
-    ("Speech Disabilities", ("no-speech",), ("302.6",),
-     "People who cannot operate a control that requires speech."),
-    ("Limited Manual Dexterity &middot; Limited Reach and Strength", ("motor",), ("302.7", "302.8"),
-     "Both boxes take the same evidence: keyboard-only operation, target size, and whether anything "
-     "needs a steady or repeated pointer action."),
-    ("Cognitive Disability", ("cognition",), ("302.9",),
-     "People who rely on consistent navigation, plain instructions, recoverable errors and no time "
-     "pressure."),
-    ("Photosensitivity", (), (),
-     "Decided by 2.3.1 Three Flashes or Below Threshold."),
+    ("Blindness", ("no-vision",), ("302.1",)),
+    ("Low Vision", ("low-vision", "no-color"), ("302.2", "302.3")),
+    ("Deafness &middot; Hard of Hearing", ("no-hearing",), ("302.4", "302.5")),
+    ("Speech Disabilities", ("no-speech",), ("302.6",)),
+    ("Limited Manual Dexterity &middot; Limited Reach and Strength", ("motor",), ("302.7", "302.8")),
+    ("Cognitive Disability", ("cognition",), ("302.9",)),
+    ("Photosensitivity", (), ()),
 ]
 
 
@@ -1142,63 +1126,37 @@ def barrier_item(d: dict, it: dict) -> str:
             + (f"<div class='ev'>{e(where)}</div>" if where else "") + "</li>")
 
 
-def core_functionality(d: dict) -> str:
-    """The TAAP asks about core functionality. The task verdicts are that answer."""
-    failed = [t for t in d["tasks"] if (t[2] or "").startswith("Fail")]
-    barred = [t for t in d["tasks"] if (t[2] or "").startswith("Pass with barriers")]
-    unrun = [t for t in d["tasks"] if (t[2] or "").startswith("Not run")]
-    bits = []
-    if failed:
-        bits.append("<b>Cannot be completed:</b> " + "; ".join(
-            e(t[1].split(" \u2014 ")[0]) for t in failed) + ".")
-    if barred:
-        bits.append("<b>Completed only with barriers:</b> " + "; ".join(
-            e(t[1].split(" \u2014 ")[0]) for t in barred) + ".")
-    if unrun:
-        bits.append("<b>Not yet walked:</b> " + "; ".join(
-            e(t[1].split(" \u2014 ")[0]) for t in unrun)
-            + " \u2014 barriers in these may be additional to everything below.")
-    return ("<div class='note'><p><b>Core functionality.</b> The TAAP asks which barriers affect core "
-            "functionality. These are the end-to-end tasks this evaluation walked, and how they ended.</p>"
-            "<p>" + " ".join(bits) + "</p></div>") if bits else ""
-
-
 def barriers_section(d: dict) -> str:
-    out = [core_functionality(d)]
-    na = {c[0]: c[7] for c in d["criteria"]}
-    for name, mods, codes, blurb in TAAP_GROUPS:
+    """One row per user group. The cell is what that group cannot do."""
+    outcomes = {c[0]: c[7] for c in d["criteria"]}
+    rows = []
+    for name, mods, _codes in TAAP_GROUPS:
         blocking, major, minor = group_barriers(d, mods)
-        pages = unusable_pages(d, mods)
-        if not mods:                                  # photosensitivity
-            outcome = na.get("2.3.1", "Not Evaluated")
-            verdict = ("<b>No barrier found.</b> Nothing in the evaluated pages flashes; "
-                       "2.3.1 is recorded Not Applicable. Leave this box unticked."
-                       if outcome == "Not Applicable" else
-                       f"2.3.1 is recorded <b>{e(outcome)}</b> \u2014 see the criterion table below.")
-        elif blocking or major or minor:
-            verdict = ("<b>Barriers found \u2014 tick this box.</b>"
-                       + (f" {len(blocking)} of them "
-                          f"{'stops' if len(blocking) == 1 else 'stop'} the task outright."
-                          if blocking else ""))
+        cell = []
+        if not mods:                                   # photosensitivity
+            cell.append("<p class='lead'>No barriers found."
+                        if outcomes.get("2.3.1") == "Not Applicable"
+                        else f"<p class='lead'>2.3.1 is recorded "
+                             f"<b>{e(outcomes.get('2.3.1', 'Not Evaluated'))}</b>.")
+            cell.append("</p>")
+        elif not (blocking or major or minor):
+            cell.append("<p class='lead'>No barriers found in the evaluated sample.</p>")
         else:
-            verdict = ("<b>No barrier found in the evaluated sample.</b> "
-                       "Leave this box unticked unless the department knows otherwise.")
-        body = [f"<h3>{name}</h3>", f"<p class='lead'>{verdict}</p>",
-                f"<p class='sub'>{blurb}"
-                + (f" Reported under {', '.join(e(c) for c in codes)} in the Section 508 table below."
-                   if codes else "") + "</p>"]
-        if pages:
-            body.append("<p><b>Could not be used at all:</b> "
-                        + ", ".join(f"<b>{e(n)}</b>" for n in pages) + ".</p>")
-        if blocking or major:
-            body.append("<ul class='stmts'>"
-                        + "".join(barrier_item(d, i) for i in blocking + major) + "</ul>")
-        if minor:
-            body.append(f"<p class='sub'>{minor} further barrier{'s' if minor != 1 else ''} of lower "
-                        f"severity {'are' if minor != 1 else 'is'} recorded in the criterion tables "
-                        f"below.</p>")
-        out.append("".join(body))
-    return "".join(out)
+            pages = unusable_pages(d, mods)
+            if pages:
+                cell.append("<p class='lead'><b>Cannot use at all:</b> "
+                            + ", ".join(e(n) for n in pages) + ".</p>")
+            if blocking or major:
+                cell.append("<ul class='stmts'>"
+                            + "".join(barrier_item(d, i) for i in blocking + major) + "</ul>")
+            if minor:
+                cell.append(f"<p class='sub'>{minor} further barrier"
+                            f"{'s' if minor != 1 else ''} of lower severity, in the tables below.</p>")
+        rows.append(f"<tr><th scope='row'>{name}</th><td>{''.join(cell)}</td></tr>")
+    return ("<table><colgroup><col style='width:22%'><col style='width:78%'></colgroup>"
+            "<thead><tr><th scope='col'>User group</th>"
+            "<th scope='col'>What the user cannot do</th></tr></thead>"
+            f"<tbody>{''.join(rows)}</tbody></table>")
 
 
 # --- Vendor roadmap ---------------------------------------------------------

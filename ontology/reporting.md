@@ -571,20 +571,26 @@ fact is not in an extracted field, it does not reach the report.
   A conformance report nobody can ask a question about is worth less than one
   that names a person.
 
-- **Interim, and what closes it.** `06`'s Report-status line is a template
-  choice — `INTERIM (testing in progress) / FINAL` — until the reviewer
-  resolves it; printed raw it showed the reader both at once, so the report
-  prints the one that applies. An interim report also states **what would make
-  it final**, or a reader cannot tell a provisional level from a settled one.
+- **No status, no decision, no TAAP.** The ACR carries neither the
+  interim/final state nor the procurement decision. Both are procurement-gate
+  states rather than properties of the product: they live in `06` and, where
+  the department needs one, in the TAAP, and both of those are internal. On a
+  document going to the vendor and the public, "this report is interim"
+  invites a reader to discount every level in it while telling them nothing
+  they can act on, and a decision field invites them to argue with a call that
+  was never theirs to see.
 
-  The gate is the definition of done (`review_db.py completion`, C1–C12):
-  every criterion decided and evidenced, every task cluster given a verdict,
-  every run resulted, every check row answered, every view swept, every FPC
-  exercised, every finding evidenced, the `04` §D coverage boxes checked and
-  the integrity queries clean — C1–C11, all mechanical. **C12 is the
-  reviewer's own act**: record the procurement decision in `06` (Approved /
-  Needs TAAP / Denied) and set the report status to FINAL. The assistant never
-  takes C12.
+  What replaces it is already in the document and is better targeted: each
+  Functional Performance Criterion states its own coverage page by page, and a
+  criterion whose views are not all evaluated is reported as **Not Evaluated**
+  rather than inferred. The limits are disclosed exactly where they bite.
+
+  The gate itself still exists and is still the definition of done
+  (`review_db.py completion`, C1–C12): C1–C11 mechanical, and **C12 the
+  reviewer's own act** — record the decision in `06` (Approved / Needs TAAP /
+  Denied) and set the report status. The assistant never takes C12. It simply
+  no longer shows up here.
+
 
 - **The report's name.** The document is
   **San Francisco Bay Region Network Manual Product Accessibility Evaluation**

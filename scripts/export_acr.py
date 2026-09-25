@@ -841,21 +841,6 @@ def render(d: dict, brand="", cfg=None) -> str:
     # cell does not ("Daniel Fontaine, SFBRN ...")
     body = cfg.get("body") or "the evaluating body"
     body_name = re.sub(r"(?i)^the\s+", "", body)
-    interim = "INTERIM" in (d["report_status"] or "").upper()
-    # 06 carries the template's unresolved choice ("INTERIM (…) / FINAL") until the
-    # reviewer picks one. Printed raw it showed the reader both at once.
-    status_txt = "Interim — testing in progress" if interim else "Final"
-    # An interim report must say what would make it final, or a reader cannot
-    # tell a provisional level from a settled one. The gate is the definition
-    # of done (`review_db.py completion`): every criterion decided and
-    # evidenced, every task cluster given a verdict, every run resulted, every
-    # check row answered, the coverage boxes checked and the integrity queries
-    # clean -- and then the reviewer's own act, recording the procurement
-    # decision and setting the report status to FINAL.
-    interim_note = ("<b>This report is INTERIM: testing is in progress and conformance levels may change.</b> "
-                    "It becomes final when every criterion in scope has been decided from a completed test run, "
-                    "the task walk-throughs have verdicts, and the reviewer of record signs off; "
-                    "the levels below reflect the evidence recorded to date.") if interim else ""
 
     fpc_rows = []
     for f in d["fpc"]:
@@ -943,14 +928,13 @@ the supplier about its own product. This report was produced by {e(body)} during
 requisition, to determine whether the product meets the CSU's accessibility requirements for acquisition.
 Every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
 relied on anywhere in this document.
-{interim_note}</p>
+</p>
 </div>
 
 <h2>Report information</h2>
 <table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
 <tr><th scope='row'>Name of product</th><td>{e(prod)}</td></tr>
 <tr><th scope='row'>Report date</th><td>{e(report_date)}</td></tr>
-<tr><th scope='row'>Report status</th><td>{status_txt}</td></tr>
 <tr><th scope='row'>Product description</th><td>Web-delivered software evaluated across {len(d['views'])} pages of the
  student-facing interface.</td></tr>
 <tr><th scope='row'>Evaluated by</th><td>{e(d['evaluator'] or 'Not recorded')}{(', ' + e(body_name)) if body != 'the evaluating body' else ''}</td></tr>

@@ -8,11 +8,11 @@ date, tool, and baseline. Findings in `04-task-testing.md` cite run IDs.
 
 Neither tool is sufficient alone: automated checkers detect only the
 machine-testable subset of WCAG failures, and screen reader testing only
-covers what the tester drives. The two-tool strategy is: **WAVE sweeps every
-sampled view** for machine-detectable issues; **JAWS walks every task
-sequence** the way an actual screen reader user would. (See
-`selecting-evaluation-tools.md` and the tools catalog in
-`tools/wai-evaluation-tools.md`.)
+covers what the tester drives. The two-tool strategy is: **axe-core sweeps every
+sampled view** for machine-detectable issues, assistant-run over CDP; **the
+reviewer's screen reader walks every task sequence** the way an actual user
+would. WAVE is secondary and reviewer-run, and is blind on shadow-DOM apps
+(see §WAVE below).
 
 ## JAWS — manual assistive technology testing
 

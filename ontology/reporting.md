@@ -793,7 +793,7 @@ fact is not in an extracted field, it does not reach the report.
   The gate itself still exists and is still the definition of done
   (`review_db.py completion`, C1–C12): C1–C11 mechanical, and **C12 the
   reviewer's own act** — record the decision in `06` (Approved / Approved with TAAP /
-  Denied) and set the report status. The assistant never takes C12. It simply
+  Do Not Purchase) and set the report status. The assistant never takes C12. It simply
   no longer shows up here.
 
 

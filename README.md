@@ -9,7 +9,7 @@ testing outputs, and produces a report with one of three decisions:
 - **Approved** — the product may enter the campus ecosystem
 - **Approved with TAAP** — procurable only with a Technology Accessibility
   Accommodation Plan and a vendor remediation roadmap
-- **Denied** — the product may not enter the campus ecosystem
+- **Do Not Purchase** — the product must not be acquired
 
 - **Conformance target:** WCAG 2.2 Level AA
 - **Methodology:** [WCAG-EM 2.0](ontology/wcag-em.md) (scope → explore → sample → audit → report)
@@ -81,9 +81,6 @@ python scripts/review_db.py criteria [--level AA] [--principle 2]
 python scripts/export_report.py <review> [--out PATH]
                                                # render 06-report.md as a styled .docx (real heading
                                                # styles + tables; needs `pip install python-docx`)
-python scripts/export_report.py <review> --format wcag-em
-                                               # (planned) render the org-neutral WCAG-EM report
-                                               # (templates/review/wcag-em-report.html) from 01/03/05/06
 python scripts/export_acr.py <review> [--open]   # independently-verified ACR (VPAT® 2.5 shape) reviews/<id>/<id>-acr.html,
                                                # generated ENTIRELY from the database — see ontology/reporting.md §Third output
 ```

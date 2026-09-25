@@ -705,12 +705,6 @@ def brand_header(cfg: dict, root: pathlib.Path) -> str:
     path = cfg.get("logo")
     if path:
         f = (root / path) if not os.path.isabs(path) else pathlib.Path(path)
-        # Word's HTML importer does not render an SVG data URI -- the header
-        # comes through as a broken image. Browsers prefer the vector. So a
-        # raster sibling of the same name wins when one exists: drop
-        # `logo.png` next to `logo.svg` and both renderers are served.
-        if f.suffix.lower() == ".svg" and f.with_suffix(".png").is_file():
-            f = f.with_suffix(".png")
         if f.is_file():
             mime = LOGO_TYPES.get(f.suffix.lower(), "image/png")
             data = base64.b64encode(f.read_bytes()).decode("ascii")
@@ -1061,6 +1055,110 @@ def roadmap_section(d: dict) -> str:
     return "".join(out)
 
 
+# --- Word export ------------------------------------------------------------
+# htmldocx (github.com/pqzx/html2docx) walks the HTML and builds the document
+# through python-docx. Three things it does not handle, all fixed here:
+#
+#   1. `<img src="data:...">` — it treats every src as a file path and dies on
+#      the base64. The logo is decoded to a real file first. python-docx cannot
+#      embed SVG at all, so an SVG logo is skipped with a warning; the
+#      raster-sibling rule in brand_header() is what avoids that in practice.
+#   2. CSS classes are dropped, so the conformance levels arrive as plain text
+#      and lose the colour that the stylesheet went out of its way to keep
+#      literal. They are shaded again here, from the term itself.
+#   3. A table header row does not repeat across a page break. In a 32-row
+#      criterion table that leaves pages 2 and 3 as anonymous grids.
+DOCX_SHADE = {"Supports": "E6F4EC", "Partially Supports": "FDF3E0",
+              "Does Not Support": "FCEBED", "Not Applicable": "EEF1F4",
+              "Not Evaluated": "F0EBF8"}
+
+
+def _shade(cell, hexcolor):
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    el = OxmlElement("w:shd")
+    el.set(qn("w:val"), "clear")
+    el.set(qn("w:fill"), hexcolor)
+    cell._tc.get_or_add_tcPr().append(el)
+
+
+def _repeat_header(row):
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    el = OxmlElement("w:tblHeader")
+    el.set(qn("w:val"), "true")
+    row._tr.get_or_add_trPr().append(el)
+
+
+RASTER = (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff")
+
+
+def raster_logo(cfg: dict, root: pathlib.Path):
+    """The logo in a format python-docx can embed, or None.
+
+    The page embeds the logo as configured, which for a wordmark means SVG.
+    python-docx cannot embed SVG at all, so the Word export takes a raster
+    sibling of the same name -- `logo.png` beside `logo.svg`. Generating that
+    PNG needs an SVG renderer, and the best one on the machine is the headless
+    Chrome this repo already drives: see scripts/rasterise_logo.py."""
+    path = cfg.get("logo")
+    if not path:
+        return None
+    f = (root / path) if not os.path.isabs(path) else pathlib.Path(path)
+    if f.suffix.lower() in RASTER and f.is_file():
+        return f
+    sibling = f.with_suffix(".png")
+    if sibling.is_file():
+        return sibling
+    print(f"  note: {f.name} cannot be embedded in a Word document and no raster "
+          f"sibling was found. Run scripts/rasterise_logo.py to make one.", file=sys.stderr)
+    return None
+
+
+def write_docx(html: str, out: pathlib.Path, logo=None) -> pathlib.Path:
+    """Convert the generated report to .docx. Returns the path written."""
+    try:
+        from docx import Document
+        from docx.shared import Inches, Pt
+        from htmldocx import HtmlToDocx
+    except ImportError as e:
+        raise SystemExit(f"--docx needs python-docx and htmldocx: {e}\n"
+                         f"  python -m pip install -r requirements.txt")
+
+    body = html[html.index("<body"):]
+    body = re.sub(r"<img[^>]*>", "", body)          # handled separately
+    body = re.sub(r"(?s)<style.*?</style>", "", body)
+
+    doc = Document()
+    for sec in doc.sections:
+        sec.top_margin = sec.bottom_margin = Inches(0.6)
+        sec.left_margin = sec.right_margin = Inches(0.7)
+    style = doc.styles["Normal"]
+    style.font.name = "Calibri"
+    style.font.size = Pt(10)
+    if logo:
+        doc.add_picture(str(logo), height=Inches(0.42))
+
+    parser = HtmlToDocx()
+    parser.table_style = "Table Grid"
+    parser.add_html_to_document(body, doc)
+
+    for table in doc.tables:
+        head = [c.text.strip() for c in table.rows[0].cells]
+        _repeat_header(table.rows[0])
+        for cell in table.rows[0].cells:
+            for run in cell.paragraphs[0].runs:
+                run.bold = True
+        if "Conformance level" in head:
+            col = head.index("Conformance level")
+            for row in table.rows[1:]:
+                fill = DOCX_SHADE.get(row.cells[col].text.strip())
+                if fill:
+                    _shade(row.cells[col], fill)
+    doc.save(str(out))
+    return out
+
+
 def out_path(review: pathlib.Path, override=None) -> pathlib.Path:
     return pathlib.Path(override) if override else review / f"{review.name}-acr.html"
 
@@ -1087,15 +1185,21 @@ def main() -> int:
     ap.add_argument("review", help="review directory name or unique substring")
     ap.add_argument("--out", help="write somewhere other than reviews/<id>/<id>-acr.html")
     ap.add_argument("--open", action="store_true", help="open the report in a browser")
+    ap.add_argument("--docx", action="store_true",
+                    help="also write the report as .docx next to the .html")
     ap.add_argument("--org", help="organisation name for the branding header")
     ap.add_argument("--unit", help="second line under the organisation name")
     ap.add_argument("--logo", help="image file to embed in the branding header")
     a = ap.parse_args()
     review = rv.resolve(a.review)
     root = pathlib.Path(__file__).resolve().parent.parent
-    path = write(review, override=a.out,
-                 brand_cfg=branding(root, logo=a.logo, org=a.org, unit=a.unit))
+    cfg = branding(root, logo=a.logo, org=a.org, unit=a.unit)
+    path = write(review, override=a.out, brand_cfg=cfg)
     print(f"ACR written: {path}")
+    if a.docx:
+        d = write_docx(path.read_text(encoding="utf-8"), path.with_suffix(".docx"),
+                       raster_logo(cfg, root))
+        print(f"ACR written: {d}")
     if a.open:
         webbrowser.open(path.resolve().as_uri())
     return 0

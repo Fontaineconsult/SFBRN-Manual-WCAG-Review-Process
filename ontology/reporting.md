@@ -571,6 +571,33 @@ fact is not in an extracted field, it does not reach the report.
   A conformance report nobody can ask a question about is worth less than one
   that names a person.
 
+- **Word export (`--docx`).** Procurement runs on `.docx`, and "open the
+  `.html` in Word" asks the recipient to do a conversion and trust the result.
+  `python scripts/export_acr.py <review> --docx` does it here and checks it.
+  **htmldocx** walks the HTML and builds the document through python-docx;
+  three things it drops are put back:
+
+  1. **Data-URI images** kill it — it treats every `src` as a file path. The
+     `<img>` is stripped and the logo inserted separately.
+  2. **CSS classes are lost**, so the conformance levels arrive as plain text.
+     They are shaded again from the term itself (`DOCX_SHADE`), which is the
+     same information the stylesheet keeps as literal hex for the same reason.
+  3. **Header rows do not repeat** across a page break, which leaves pages 2
+     and 3 of a 32-row criterion table as anonymous grids. `w:tblHeader` is
+     set on every table's first row.
+
+  **The logo, per renderer.** The page embeds the logo as configured — for a
+  wordmark that is SVG, sharper at every zoom and a third of the size.
+  python-docx cannot embed SVG at all, so the Word export takes a **raster
+  sibling** of the same name, `logo.png` beside `logo.svg`, and says so if it
+  cannot find one. Producing that PNG needs an SVG renderer, and the best one
+  on the machine is the headless Chrome this repo already drives:
+  `scripts/rasterise_logo.py` loads the SVG at four times its rendered height
+  on a transparent background and screenshots it.
+
+  **Both outputs come from one generator**, so the `.docx` is never edited —
+  fix `05` and regenerate, exactly as with the `.html`.
+
 - **No status, no decision, no TAAP.** The ACR carries neither the
   interim/final state nor the procurement decision. Both are procurement-gate
   states rather than properties of the product: they live in `06` and, where

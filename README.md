@@ -51,6 +51,10 @@ python scripts/review.py next <review>         # highest-value cell to test next
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
 python scripts/preflight.py [--launch --url URL] [--anon]   # session pre-flight: websocket-client, debug profile, port 9222 (9223 with --anon), authenticated tab, zero extension targets; --launch starts Chrome with the full flag set
+python scripts/export_acr.py <review> [--docx] [--open]
+                                               # VPAT-shaped ACR from the database; --docx also
+                                               # writes the Word version (needs htmldocx)
+python scripts/rasterise_logo.py               # SVG wordmark -> PNG, for the .docx branding header
 python scripts/view_probe.py <review> --view S# --url URL [--dry-run]
                                                # answer the instrument-decidable checks of a view by
                                                # measurement (media absent → n/a, lang, title, target size,

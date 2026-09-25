@@ -428,7 +428,7 @@ def write_answers(run_dir, answers, facts, modality, today, refresh=()):
         else:
             text = re.sub(r"(?m)^## Notes", block + eol + "## Notes", text, count=1)
     # Result
-    parsed = re.findall(r"(?m)^\|\s*([A-Z]+\d+)\s*—\s*.+?\s*\|(.*?)\|", text)
+    parsed = rv.CHECK_ROW_SHORT_RE.findall(text)
     outcomes = {cid: o.strip().strip("*` ").lower() for cid, o in parsed}
     blanks = [c for c, o in outcomes.items() if not o]
     fails = [c for c, o in outcomes.items() if o in ("fail", "partial")]

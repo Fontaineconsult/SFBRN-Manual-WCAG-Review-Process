@@ -128,11 +128,16 @@ CREATE TABLE IF NOT EXISTS observations (
 CREATE TABLE IF NOT EXISTS findings (
   review_id TEXT NOT NULL, finding_id TEXT NOT NULL,
   section TEXT,                   -- task / view
-  view_id TEXT, task_id TEXT, where_text TEXT, observed TEXT, affected TEXT,
+  view_id TEXT,                   -- first view code in `Where`; every one is in finding_views
+  task_id TEXT, where_text TEXT, observed TEXT, affected TEXT,
   severity TEXT, evidence TEXT, withdrawn INTEGER NOT NULL DEFAULT 0,
   plain_summary TEXT,             -- one publishable sentence; rules in PLAIN_RULES
   fields_json TEXT,
   PRIMARY KEY (review_id, finding_id)
+);
+CREATE TABLE IF NOT EXISTS finding_views (
+  review_id TEXT NOT NULL, finding_id TEXT NOT NULL, view_id TEXT NOT NULL,
+  PRIMARY KEY (review_id, finding_id, view_id)
 );
 CREATE TABLE IF NOT EXISTS finding_criteria (
   review_id TEXT NOT NULL, finding_id TEXT NOT NULL, sc TEXT NOT NULL,
@@ -280,6 +285,9 @@ def parse_tasks(review):
     return out
 
 
+PLACEHOLDER_OBS = re.compile(r"which view state|^\(state: which")
+
+
 def parse_findings(review):
     text = rv.read(review / rv.STAGES[3])
     section = "view"
@@ -300,12 +308,19 @@ def parse_findings(review):
         plain_summary = fields.get("Plain summary", "").strip()
         withdrawn = 1 if re.search(r"withdrawn", crit_cell + " " + observed[:120] + " " + fields.get("Severity", ""), re.I) else 0
         where = fields.get("Where", "") or fields.get("Step", "")
-        vm = re.match(r"\s*([SR]\d+)\b", where)
+        # Every view code anywhere in Where, not just one anchored at the
+        # start. The real shape is "Student Practice Area (S12) - every
+        # selection update", which the anchored match dropped: 29 of this
+        # review's 43 live findings landed with no view at all, so the
+        # dashboard showed seven sampled pages with zero findings while
+        # the ACR -- always a findall -- showed them correctly.
+        vids = rv.VIEWCODE_RE.findall(where)
         tm = re.match(r"T(\d+)-", head.group(1))
         evidence = fields.get("Evidence", "")
         runs = sorted(set(re.findall(r"\bR\d{3}\b", evidence + " " + observed)))
         out.append({"id": head.group(1), "section": section,
-                    "view": vm.group(1) if vm else "", "task": f"T{tm.group(1)}" if tm else "",
+                    "view": (vids[0] if vids else ""), "views": vids,
+                    "task": f"T{tm.group(1)}" if tm else "",
                     "where": where, "observed": observed, "plain_summary": plain_summary,
                     "affected": fields.get("Affected users", ""),
                     "severity": fields.get("Severity", ""), "evidence": evidence, "withdrawn": withdrawn,
@@ -337,6 +352,12 @@ def parse_observations(run_dir):
     lines = text.splitlines()
     for i, ln in enumerate(lines):
         m = re.match(r"^- O(\d+)\s*(?:\[([^\]]+)\])?\s*(.*)$", ln)
+        # The run template prints a worked example in exactly this shape. Left
+        # alone it imports as a real O1, and because observations are keyed
+        # (review, run, obs_id) with OR REPLACE, the template's O1 and the
+        # run's own O1 silently collapse into whichever the file lists last.
+        if m and PLACEHOLDER_OBS.search(m.group(3) or ""):
+            m = None
         if not m:
             continue
         classified = ""
@@ -387,7 +408,8 @@ def parse_measurements(run_dir):
 def sync_review(con, review):
     rid = review.name
     cur = con.cursor()
-    for t in ("views", "tasks", "runs", "check_outcomes", "observations", "findings", "finding_criteria",
+    for t in ("views", "tasks", "runs", "check_outcomes", "observations", "findings", "finding_views",
+              "finding_criteria",
               "finding_runs", "criterion_outcomes", "criterion_findings", "measurements", "coverage_boxes",
               "walkthrough_steps", "sync_log"):
         cur.execute(f"DELETE FROM {t} WHERE review_id = ?", (rid,))
@@ -437,6 +459,8 @@ def sync_review(con, review):
                      f["affected"], f["severity"], f["evidence"], f["withdrawn"],
                      f.get("plain_summary", ""),
                      json.dumps(f["fields"], ensure_ascii=False)))
+        cur.executemany("INSERT OR IGNORE INTO finding_views VALUES (?,?,?)",
+                        [(rid, f["id"], v) for v in f.get("views", [])])
         cur.executemany("INSERT OR IGNORE INTO finding_criteria VALUES (?,?,?)", [(rid, f["id"], sc) for sc in f["criteria"]])
         cur.executemany("INSERT OR IGNORE INTO finding_runs VALUES (?,?,?)", [(rid, f["id"], r) for r in f["runs"]])
     for sc, norm, raw, claim, tf, remarks, fids, remediation in parse_criterion_outcomes(review):
@@ -449,7 +473,7 @@ def sync_review(con, review):
         cur.execute("INSERT INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                     (rid, meta["run"], meta["date"], meta["view"], meta["url"], meta["task"], meta["modality"],
                      meta["tool"], meta["baseline"], meta["tester"], meta["result"], full.group(1) if full else ""))
-        raw_rows = re.findall(r"(?m)^\|\s*([A-Z]+\d+)\s*—\s*.+?\s*\|(.*?)\|", rv.read(d / "run.md"))
+        raw_rows = rv.CHECK_ROW_SHORT_RE.findall(rv.read(d / "run.md"))
         raw_map = {cid: o.strip() for cid, o in raw_rows}
         cur.executemany("INSERT OR REPLACE INTO check_outcomes VALUES (?,?,?,?,?,?)",
                         [(rid, meta["run"], cid, outcome, raw_map.get(cid, ""), note)

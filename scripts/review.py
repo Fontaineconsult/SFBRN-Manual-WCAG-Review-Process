@@ -323,6 +323,24 @@ FPC = {
     "cognition": [("302.9", "With Limited Language, Cognitive, and Learning Abilities")],
 }
 
+# A check row is `| ID — text | outcome | observations |`. The dash is written
+# by hand often enough that all three are accepted: em, en, plain hyphen.
+# ONE pattern, imported by every parser -- six copies of this regex had drifted
+# to em-dash-only while the close-run writer accepted a hyphen, so a
+# hyphen-dashed row could be answered by the CLI and still be invisible to
+# `gaps`, to the mirror and to completion.
+# A view code anywhere in a sentence: "Practice Area (S12) - on selection".
+# Anchoring this to the start of the cell is what lost 29 of 43 findings.
+VIEWCODE_RE = re.compile(r"\b([SR]\d{1,2})\b")
+
+CHECK_DASH = "[\u2014\u2013-]"
+CHECK_ROW_RE = re.compile(
+    rf"(?m)^\|\s*([A-Z]+\d+)\s*{CHECK_DASH}\s*(.+?)\s*\|(.*?)\|(.*?)\|?\s*$")
+CHECK_ROW_SHORT_RE = re.compile(
+    rf"(?m)^\|\s*([A-Z]+\d+)\s*{CHECK_DASH}\s*.+?\s*\|(.*?)\|")
+CHECK_ROW_HEAD_RE = re.compile(rf"^\|\s*[A-Z]+\d+\s*{CHECK_DASH}")
+
+
 CHECK_OUTCOMES = {"pass": "pass", "fail": "fail", "partial": "partial",
                   "n/a": "n/a", "na": "n/a"}
 # Checks that legitimately map to no WCAG criterion (FPC-only) — anything
@@ -368,8 +386,7 @@ def run_checks(run_dir):
     """[(check id, outcome, notes)] from a run's Checks table. Outcome is
     normalised to pass/fail/partial/n/a, "" (unanswered) or "?" (unrecognised)."""
     rows = []
-    for cid, _label, outcome, notes in re.findall(
-            r"(?m)^\|\s*([A-Z]+\d+)\s*—\s*(.+?)\s*\|(.*?)\|(.*?)\|?\s*$",
+    for cid, _label, outcome, notes in CHECK_ROW_RE.findall(
             read(run_dir / "run.md")):
         raw = outcome.strip().strip("*`_ ").lower()   # runs sometimes bold the outcome
         norm = "" if not raw else CHECK_OUTCOMES.get(raw.split()[0].rstrip(",;:"), "?")
@@ -692,7 +709,7 @@ def cmd_log_test(args):
 
 
 RESULTS = ["Works", "Works with issues", "Broken", "N/A"]
-CHECK_ID_RE = re.compile(r"^\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*[\u2014-]")
+CHECK_ID_RE = re.compile(rf"^\\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\\d+)\\s*{CHECK_DASH}")
 
 
 def answer_check_rows(text, answers):
@@ -1090,7 +1107,7 @@ def cmd_sync_checks(args):
         path = d / "run.md"
         lines = read(path).splitlines(keepends=True)
         last = max(i for i, ln in enumerate(lines)
-                   if re.match(r"^\|\s*[A-Z]+\d+\s*—", ln))
+                   if CHECK_ROW_HEAD_RE.match(ln))
         eol = "\r\n" if lines[last].endswith("\r\n") else "\n"
         new = [f"| {cid} — {text} | | (row added {today} by sync-checks — "
                f"not part of the original session; answer or mark n/a) |{eol}"

@@ -423,6 +423,33 @@ fact is not in an extracted field, it does not reach the report.
   stripped. The same applies to evidence filenames left behind when a run
   identifier is removed.
 
+- **Vendor roadmap (added 2026-09-24).** The CSU procurement gate has two
+  faces: what the **vendor** must commit to fix, and what the **department**
+  must do meanwhile. The ACR carries the first; the TAAP
+  (`ontology/TAAP Version 3_2 051225.docx`) carries the second. So the ACR ends
+  with the work it implies, grouped by what each change costs rather than by
+  criterion, so a remediation timeline can be negotiated against it:
+
+  | Stage | Meaning | Procurement use |
+  |---|---|---|
+  | 1 Corrections | values and attributes; no change to how anything is built | fix before purchase, or in a maintenance release |
+  | 2 Component rework | specific widgets rebuilt as real controls | a contractual date |
+  | 3 Platform modernisation | the page architecture itself | a roadmap commitment with milestones |
+
+  **Each finding is counted once.** Themes are assigned by how specifically
+  they describe a fix, not by where they appear: a finding citing both 1.3.1
+  and 4.1.2 is a control problem, so the control theme claims it and the
+  structure theme takes the remainder. That is what makes the counts addable,
+  and the generator warns on stderr if any finding matches no theme.
+
+  Stage 3 themes usually show **"underlying cause"** rather than a count: the
+  layout tables and the custom accessibility layer do not add issues of their
+  own, they are why issues counted above have to be fixed page by page.
+
+  **This is the one editorial section in the ACR and it says so.** The counts
+  are read from the database; the grouping is an engineering judgement, stated
+  as such in the document, and it changes no conformance level.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

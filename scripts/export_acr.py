@@ -771,6 +771,7 @@ def render(d: dict) -> str:
  .sev-minor {{ background:var(--nabg); color:var(--na); }}
  .fnd, .ev {{ margin-top:.35rem; color:var(--mut); font-size:.85rem; }}
  .lbl {{ font-weight:700; color:var(--ink); }}
+ .cause {{ color:var(--mut); font-style:italic; }}
  .lvltag {{ color:var(--mut); font-weight:400; font-size:.86em; }}
  .badge {{ font-size:.72rem; background:var(--panel); border:1px solid var(--line); border-radius:4px;
    padding:0 .3rem; color:var(--mut); }}
@@ -848,6 +849,13 @@ rather than inferred.</p>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{chr(10).join(fpc_rows)}</tbody></table>
 
+<h2>Vendor roadmap</h2>
+<p class="sub">The work this report implies, grouped by what each change costs to make rather than by
+criterion, so that it can be scheduled. Issue counts are taken from the findings above; <b>the grouping is an
+engineering judgement</b> and is the only part of this report not read directly from the evaluation record.
+Nothing here changes a conformance level.</p>
+{roadmap_section(d)}
+
 <h2>Legal disclaimer</h2>
 <p class="sub">This report is provided for informational purposes only. It records the findings of an
 independent evaluation of the product identified above, carried out on the pages and by the methods described,
@@ -860,6 +868,168 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 
 </div></body></html>
 """
+
+
+
+# --- Vendor roadmap ---------------------------------------------------------
+# Each theme names the criteria it would clear. Counts come from the database;
+# the grouping is an engineering judgement and the section says so.
+ROADMAP = [
+ ("Corrections",
+  "Values and attributes only. No change to how any page is built, and no design "
+  "decision to make \u2014 the product already does each of these correctly somewhere, "
+  "so the work is to apply an existing pattern consistently. Deliverable in a "
+  "maintenance release.",
+  [("Text alternatives for images", ["1.1.1"],
+    "Give every informative figure an alt attribute. On the solutions page the "
+    "alternative text was written and lost to a missing quote inside the src "
+    "attribute, so part of this is a typo fix; four figures on the printable "
+    "assignment already carry good descriptions and show the intended standard."),
+   ("Headings and landmarks on every page", ["1.3.1", "2.4.1", "2.4.6"],
+    "One page in the sample \u2014 View Assignment Solutions \u2014 already publishes a "
+    "real outline, a level-one heading for the assignment and a level-two heading "
+    "per problem. Reproducing that on the other pages, with a main landmark, is the "
+    "single highest-value change in this list."),
+   ("Field labels", ["3.3.2", "1.3.5"],
+    "Associate each visible caption with its field. The sign-in page does this "
+    "correctly one click away from the password reset page, which does not; the "
+    "fix is to copy it. Add autocomplete tokens to fields collecting the user's own "
+    "details."),
+   ("A second cue wherever colour carries meaning", ["1.4.1"],
+    "Randomised values, deduction percentages, the calendar's event bar and the "
+    "late-submission dates are distinguished by colour alone. The problem "
+    "navigator's status marks already carry a symbol as well as a colour and are "
+    "the pattern to copy."),
+   ("Colour values that meet contrast", ["1.4.3", "1.4.11"],
+    "Darken the orange, red and teal tokens used for headings, values, deduction "
+    "percentages and table rules."),
+   ("Page language", ["3.1.1"],
+    "Add a lang attribute to the pages that lack one."),
+   ("Target sizes", ["2.5.8"],
+    "Enlarge or space the row action control and the problem-navigator links."),
+   ("Captions on instructional video", ["1.2.2", "1.2.3", "1.2.5"],
+    "The library's videos rely on automatically generated captions. Reviewed "
+    "captions, and a transcript or audio description where the visual content "
+    "carries meaning, are needed for instructional media.")]),
+
+ ("Component rework",
+  "Specific interactive components rebuilt so that they are what they claim to be. "
+  "This is where most of the product's failures sit, and they share one cause: "
+  "behaviour is attached to elements that were never made into controls. Needs a "
+  "scheduled release, and is the right subject for a contractual date.",
+  [("Make every control a control", ["4.1.2", "2.1.1", "2.4.7"],
+    "Row action menus, expand toggles, problem checkboxes, the grade-profile link "
+    "and the calendar's events are div, span, img and anchor elements carrying "
+    "click handlers, with no role, no name and no place in the tab order. Rebuilt "
+    "as buttons, links and inputs they become reachable, operable and announceable "
+    "at once \u2014 which is why this one theme clears more failures than any other."),
+   ("Announce what changes", ["4.1.3"],
+    "No page in the sample carries a live region, so a modal opening, a month "
+    "changing and a filter re-rendering all pass silently, while one page re-reads "
+    "itself entirely. Mark the region that changes and announce the change."),
+   ("Move focus deliberately", ["2.4.3"],
+    "Activating a problem does not move focus into it; dialogs open without taking "
+    "focus; an inserted hint appears below the reading position."),
+   ("Confirm actions that cost marks", ["3.3.4"],
+    "Submit and Feedback change a student's score on one activation without asking. "
+    "The \u201cI give up\u201d control already confirms and shows the intended "
+    "pattern.")]),
+
+ ("Platform modernisation",
+  "The page architecture itself. These are not defects in a component but "
+  "consequences of how pages are assembled, and they are the reason several of the "
+  "corrections above have to be applied page by page rather than once. A roadmap "
+  "commitment with milestones rather than a release date.",
+  [("Retire layout tables in favour of semantic structure", ["1.3.1"],
+    "Pages are built from nested layout tables \u2014 twenty-seven on one view, with "
+    "thirteen empty cells announced as content. This is what makes structure, "
+    "reading order and position-independence hard to fix locally, and it is the "
+    "substrate under the heading and landmark work above."),
+   ("Reflow instead of a fixed-width canvas", ["1.4.10", "1.4.4"],
+    "Every page is laid out in a fixed 1300-pixel container, so nothing reflows at "
+    "any zoom level and a popup becomes unreachable beyond 175 per cent."),
+   ("Retire the custom accessibility layer", ["2.4.1", "4.1.2"],
+    "The hidden jump-point mechanism and the separate Accessibility Mode page exist "
+    "to compensate for missing semantics. With real headings, landmarks and "
+    "controls they are unnecessary, and a single accessible interface replaces the "
+    "maintenance of two.")]),
+]
+
+
+def roadmap_section(d: dict) -> str:
+    """Themes, with each issue counted exactly once.
+
+    A finding is assigned to the first theme that names one of its criteria, so
+    the stages partition the findings and the counts can be added up. Themes
+    further down that address the *cause* of issues already counted say so
+    instead of counting them again \u2014 the layout tables under the missing
+    headings, the custom accessibility layer under the unnamed controls."""
+    by_finding = {}
+    for sc, items in d["by_sc"].items():
+        for it in items:
+            by_finding.setdefault(it["fid"], set()).add(sc)
+
+    # Assignment order is by how specifically a theme describes a fix, not by
+    # where it appears in the document: a finding citing both 1.3.1 and 4.1.2 is
+    # a control problem, not a structure problem, so the control theme claims it
+    # first. Structure and platform themes come last and take the remainder,
+    # which is what makes their counts meaningful.
+    ORDER = ["Text alternatives for images",
+             "Captions on instructional video",
+             "Make every control a control",
+             "Field labels",
+             "Announce what changes",
+             "Move focus deliberately",
+             "Confirm actions that cost marks",
+             "A second cue wherever colour carries meaning",
+             "Colour values that meet contrast",
+             "Page language",
+             "Target sizes",
+             "Reflow instead of a fixed-width canvas",
+             "Headings and landmarks on every page",
+             "Retire layout tables in favour of semantic structure",
+             "Retire the custom accessibility layer"]
+    themes_by_title = {t[0]: t for _n, _b, ts in ROADMAP for t in ts}
+    claimed, assigned = set(), {}
+    for title in ORDER:
+        t = themes_by_title.get(title)
+        if not t:
+            continue
+        hit = {fid for fid, fscs in by_finding.items()
+               if fid not in claimed and fscs & set(t[1])}
+        assigned[title] = hit
+        claimed |= hit
+    unplaced = set(by_finding) - claimed
+    if unplaced:
+        print(f"  note: {len(unplaced)} finding(s) match no roadmap theme: "
+              f"{', '.join(sorted(unplaced))}", file=sys.stderr)
+
+    out = []
+    for tier, (name, blurb, themes) in enumerate(ROADMAP, 1):
+        rows = []
+        for title, scs, fix in themes:
+            n = len(assigned.get(title, ()))
+            # a theme whose criteria are all claimed earlier is a cause, not a count
+            underlies = [x for x in scs if any(x in f for f in by_finding.values())]
+            if not underlies:
+                continue
+            count = (f"{n} issue{'s' if n != 1 else ''}" if n
+                     else "<span class='cause'>underlying cause</span>")
+            label = ("Clears" if n else "Addresses the cause of issues counted above, under")
+            rows.append(
+                f"<tr><th scope='row'>{e(title)}</th>"
+                f"<td class='lvl'>{count}</td>"
+                f"<td class='rem'><p class='lead'>{md(fix)}</p>"
+                f"<div class='ev'>{label}: {', '.join(e(x) for x in underlies)}</div></td></tr>")
+        if rows:
+            total = sum(len(assigned.get(t[0], ())) for t in themes)
+            head = (f"<h3>Stage {tier}: {e(name)}</h3>"
+                    f"<p class='sub'>{md(blurb)}</p>")
+            out.append(head + f"<table><thead><tr><th scope='col'>Work</th>"
+                              f"<th scope='col'>Issues addressed</th>"
+                              f"<th scope='col'>What it involves</th></tr></thead>"
+                              f"<tbody>{''.join(rows)}</tbody></table>")
+    return "".join(out)
 
 
 def out_path(review: pathlib.Path, override=None) -> pathlib.Path:

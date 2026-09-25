@@ -250,7 +250,7 @@ if nobody said the word "test".
   status/validate/matrix parse them. After editing review files, re-run
   `status` + `validate`; a parse regression is a broken edit.
 - **The decision is human.** Never set the `06-report.md` procurement
-  decision (Approved / Needs TAAP / Denied) yourself; draft the evidence,
+  decision (Approved / Approved with TAAP / Do Not Purchase) yourself; draft the evidence,
   the reviewer decides.
 - **Browser work** follows `ontology/assisted-exploration.md` preconditions:
   the reviewer is signed in with the review's test account; you never
@@ -263,7 +263,9 @@ if nobody said the word "test".
   dedicated debug-profile Chrome — setup in testing-tools.md §axe-core;
   default-profile debugging does not work on Chrome 136+). WAVE is
   secondary and reviewer-run — blind on shadow-DOM apps (testing-tools.md).
-- **Vocabulary is fixed:** ACR outcomes (Supports / Partially Supports /
+- **Vocabulary is fixed:** procurement decisions (Approved / Approved with
+  TAAP / Do Not Purchase — `rv.DECISIONS`, checked by `review_db.py check`),
+  ACR outcomes (Supports / Partially Supports /
   Does Not Support / Not Applicable / Not Evaluated), task verdicts (Pass /
   Pass with barriers / Fail), run results (Works / Works with issues /
   Broken / N/A), modalities (no-vision, low-vision, no-color, no-hearing,

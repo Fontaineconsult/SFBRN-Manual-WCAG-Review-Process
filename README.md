@@ -7,7 +7,7 @@ review records procurement information, vendor contacts, test procedures, and
 testing outputs, and produces a report with one of three decisions:
 
 - **Approved** — the product may enter the campus ecosystem
-- **Needs TAAP** — procurable only with a Technology Accessibility
+- **Approved with TAAP** — procurable only with a Technology Accessibility
   Accommodation Plan and a vendor remediation roadmap
 - **Denied** — the product may not enter the campus ecosystem
 
@@ -143,7 +143,7 @@ Each review contains:
 | — removing a view from the sample | append ` — removed YYYY-MM-DD: <reason>` to its name in `03` §3.1/§3.2 (never delete the row); the CLI, mirror and dashboard drop it from coverage and completion and keep its runs and findings on record |
 | `04-task-testing.md` | WCAG-EM step 4: testing clustered around tasks (user stories) — task verdicts (Pass / Pass with barriers / Fail) with findings that cite the WCAG criteria failed, plus a view sweep and random-sample comparison |
 | `05-results.md` | Per-criterion rollup of task findings for all 55 WCAG 2.2 A/AA criteria, in VPAT/ACR table structure with vendor-claim comparison |
-| `06-report.md` | **Independent verification report** (not a VPAT/ACR — see `ontology/reporting.md`): procurement decision (Approved / Needs TAAP / Denied) driven by task verdicts; RFP-comparable "At a glance" box; key findings by user impact with root causes; **vendor ACR audit** (coverage + reliability, both directions); contract-ready remediation exhibit; coverage/limitations honesty box; TAAP inputs when required. `05-results.md` remains the ACR-shaped technical appendix. |
+| `06-report.md` | **Independent verification report** (not a VPAT/ACR — see `ontology/reporting.md`): procurement decision (Approved / Approved with TAAP / Do Not Purchase) driven by task verdicts; RFP-comparable "At a glance" box; key findings by user impact with root causes; **vendor ACR audit** (coverage + reliability, both directions); contract-ready remediation exhibit; coverage/limitations honesty box; TAAP inputs when required. `05-results.md` remains the ACR-shaped technical appendix. |
 | `evidence/` | Test-run record: `test-log.md` index plus `runs/R###/` per session (run metadata, JAWS notes / WAVE counts, screenshots) — see `ontology/testing-tools.md` |
 | `vendor-acr/` | The vendor's ACR/VPAT as received |
 

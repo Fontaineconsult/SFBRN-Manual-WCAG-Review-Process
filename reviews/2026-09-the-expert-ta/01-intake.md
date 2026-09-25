@@ -7,7 +7,7 @@
 | **Reviewer(s)** | Daniel Fontaine (SFBRN ATI Coordinator) — reviewer of record. Campus side: Zach Oshri (CSUEB ATI Coordinator, ICT questionnaire and VPAT review), Jonathan Hale (CSUEB IT Business Operations, procurement and TAAP) |
 | **Reviewer contact** | fontaine@sfsu.edu |
 | **Status** | Intake → Testing → Decided |
-| **Decision** | Pending (final: Approved / Needs TAAP / Denied — see `06-report.md`) |
+| **Decision** | Pending (final: Approved / Approved with TAAP / Do Not Purchase — see `06-report.md`) |
 
 ## Procurement information
 

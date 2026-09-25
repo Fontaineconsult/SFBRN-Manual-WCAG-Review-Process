@@ -22,10 +22,10 @@ Derivation rules: `ontology/reporting.md`.
 
 | | |
 |---|---|
-| **Decision** | Approved / Needs TAAP / Denied |
-| **Decision date** | |
-| **Decided by** | |
-| **Rationale** | (1–2 sentences tying the decision to the results below) |
+| **Decision** | Approved with TAAP |
+| **Decision date** | 2026-09-25 |
+| **Decided by** | Daniel Fontaine (SFBRN ATI Coordinator), reviewer of record |
+| **Rationale** | Answering and submitting a problem could not be completed with a screen reader, and five of the ten pages evaluated could not be used at all, so the product does not meet the CSU's WCAG 2.1 AA requirement on its own. The barriers are in how the controls are built rather than in the instructional content, and the vendor already implements the right pattern in several places, so a departmental alternative can carry affected students while remediation proceeds. |
 
 **Decision buckets** — driven by the task verdicts in `04-task-testing.md`;
 apply the first bucket whose conditions all hold:
@@ -34,11 +34,11 @@ apply the first bucket whose conditions all hold:
   of **Fail**, no Blocker findings, and no "Does Not Support" outcome or
   Major finding that substantially burdens an essential task for any affected
   user group.
-- **Needs TAAP** — the product may be procured only with a Technology
+- **Approved with TAAP** — the product may be procured only with a Technology
   Accessibility Accommodation Plan. Task failures or Major barriers exist,
   but every essential task remains achievable through accommodation, and the
   vendor commits to a remediation roadmap.
-- **Denied** — the product may not enter the campus ecosystem. One or more
+- **Do Not Purchase** — the product must not be acquired. One or more
   essential tasks are blocked for an affected user group with no workable
   accommodation, or the vendor will not commit to remediation.
 
@@ -185,7 +185,7 @@ fix; "Verify by" names the re-test that proves delivery.
 
 ## TAAP — Technology Accessibility Accommodation Plan
 
-(Required when the decision is **Needs TAAP**; delete otherwise. Campus
+(Required when the decision is **Approved with TAAP**; delete otherwise. Campus
 accessibility officers build their local accommodation from this.)
 
 | Field | Value |

@@ -11,7 +11,7 @@ vendor's voice, structured per-criterion. This team is not the vendor; it is
 the **verifier**. Producing an ACR-shaped report would discard the three
 things only an independent reviewer can produce:
 
-1. **A procurement decision** (Approved / Needs TAAP / Denied) with the
+1. **A procurement decision** (Approved / Approved with TAAP / Do Not Purchase) with the
    evidence trail behind it.
 2. **An audit of the vendor's ACR** — coverage (does it even address the
    target standard?) and reliability (where independent testing landed
@@ -226,6 +226,36 @@ motor half and appears under Limited Manual Dexterity as well as Blindness.
 Narrowing the whole finding by its run had silently dropped it. A barrier
 therefore appears under **every** group its criteria affect, and the same
 statement can occur in more than one row.
+
+### The Verdict row
+
+The internal report's **Report information** opens with a `Verdict` row: the
+procurement decision, one sentence saying what it means, and the date and the
+person who took it. It is the first thing in the document because it is what
+the reader opened it for.
+
+**The conformance report does not carry it.** That one goes to the supplier
+and the public, where a decision field invites them to argue with a call that
+was never theirs to see.
+
+The three outcomes were renamed on 2026-09-25, from *Needs TAAP* and
+*Denied*:
+
+| Verdict | Means |
+|---|---|
+| Approved | The product may enter the campus ecosystem as it stands. |
+| Approved with TAAP | The product may be acquired only alongside a Temporary Alternative Access Plan covering the barriers. |
+| Do Not Purchase | The product must not be acquired: an essential task is blocked with no workable alternative. |
+
+The new words name **what the procurement office does next** rather than pass
+judgement on the product — "Denied" in particular read as a verdict on the
+software when it is an instruction about the purchase.
+
+They are fixed vocabulary (`rv.DECISIONS`), mirrored into `reviews.decision`
+with `decision_date` and `decided_by`, and `review_db.py check` reports a
+value outside the three. **C12 still counts it**, and taking the decision is
+still the reviewer's act alone — the generator prints what `06` says and
+prints "Not yet decided" when `06` still offers a choice.
 
 ### What it leaves out
 
@@ -762,7 +792,7 @@ fact is not in an extracted field, it does not reach the report.
 
   The gate itself still exists and is still the definition of done
   (`review_db.py completion`, C1–C12): C1–C11 mechanical, and **C12 the
-  reviewer's own act** — record the decision in `06` (Approved / Needs TAAP /
+  reviewer's own act** — record the decision in `06` (Approved / Approved with TAAP /
   Denied) and set the report status. The assistant never takes C12. It simply
   no longer shows up here.
 

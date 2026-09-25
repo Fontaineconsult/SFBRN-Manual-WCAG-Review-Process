@@ -343,10 +343,10 @@ def gather(con, review: pathlib.Path) -> dict:
     q = lambda sql, *a: con.execute(sql, a).fetchall()
     rid = review.name
 
-    row = q("SELECT product, decision, report_status, evaluator, evaluator_contact, source_sha "
-            "FROM reviews WHERE review_id=?", rid)
-    (product, decision, report_status, evaluator, contact, source_sha) = (
-        row[0] if row else ("", "", "", "", "", ""))
+    row = q("SELECT product, decision, report_status, decision_date, decided_by, "
+            "evaluator, evaluator_contact, source_sha FROM reviews WHERE review_id=?", rid)
+    (product, decision, report_status, decision_date, decided_by,
+     evaluator, contact, source_sha) = (row[0] if row else ("",) * 8)
 
     criteria = q("""
         SELECT w.sc, w.name, w.level, w.principle_no, w.principle, w.version_added, w.understanding_url,
@@ -515,7 +515,8 @@ def gather(con, review: pathlib.Path) -> dict:
 
     return dict(rid=rid, pages=pages, by_sc=by_sc, by_modality=by_modality, verified=verified,
                 product=product, decision=decision, report_status=report_status,
-                source_sha=source_sha, evaluator=evaluator, contact=contact, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
+                source_sha=source_sha, evaluator=evaluator, contact=contact,
+                decision_date=decision_date, decided_by=decided_by, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
                 views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
                 tasks=tasks)
 
@@ -915,6 +916,7 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
     body_name = re.sub(r"(?i)^the\s+", "", body)
     kind = "Internal Report" if internal else "Accessibility Conformance Report"
     lead = INTERNAL_NOTE if internal else EXTERNAL_NOTE.format(body=e(body))
+    verdict = verdict_row(d) if internal else ""
     front = (f"<h2>User Functional Limitations</h2>{INTERNAL_INTRO}"
              f"<h3>Summary</h3>{limitations_summary(d)}"
              f"<h3>Barriers by user group</h3>{barriers_section(d)}") if internal else ""
@@ -1011,7 +1013,7 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
 
 <h2>Report information</h2>
 <table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
-<tr><th scope='row'>Name of product</th><td>{e(prod)}</td></tr>
+{verdict}<tr><th scope='row'>Name of product</th><td>{e(prod)}</td></tr>
 <tr><th scope='row'>Report date</th><td>{e(report_date)}</td></tr>
 <tr><th scope='row'>Product description</th><td>Web-delivered software evaluated across {len(d['views'])} pages of the
  student-facing interface.</td></tr>
@@ -1075,6 +1077,32 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 """
     return contents(page)
 
+
+
+# The procurement verdict belongs to the internal report only. The conformance
+# report goes to the supplier and the public, and a decision field there
+# invites them to argue with a call that was never theirs to see.
+VERDICT_BLURB = {
+    "Approved": "The product may enter the campus ecosystem as it stands.",
+    "Approved with TAAP": "The product may be acquired only alongside a Temporary Alternative Access "
+                          "Plan covering the barriers below.",
+    "Do Not Purchase": "The product must not be acquired: an essential task is blocked with no "
+                       "workable alternative.",
+}
+
+
+def verdict_row(d: dict) -> str:
+    """The Report-information row that carries the procurement decision."""
+    v = (d.get("decision") or "").strip()
+    if not v or v == "Pending":
+        return ("<tr><th scope='row'>Verdict</th><td><b>Not yet decided.</b> The procurement decision "
+                "is the reviewer's act and has not been taken.</td></tr>")
+    when = d.get("decision_date") or ""
+    who = d.get("decided_by") or ""
+    tail = " &middot; ".join(x for x in (e(when), e(who)) if x)
+    return (f"<tr><th scope='row'>Verdict</th><td><b>{e(v)}</b>"
+            f"{' &mdash; ' + e(VERDICT_BLURB[v]) if v in VERDICT_BLURB else ''}"
+            f"{f'<div class=\"ev\">{tail}</div>' if tail else ''}</td></tr>")
 
 
 # --- the internal variant: user functional limitations ----------------------
@@ -1447,7 +1475,13 @@ def write_docx(html: str, out: pathlib.Path, logo=None) -> pathlib.Path:
                 fill = DOCX_SHADE.get(row.cells[col].text.strip())
                 if fill:
                     _shade(row.cells[col], fill)
-    doc.save(str(out))
+    try:
+        doc.save(str(out))
+    except PermissionError:
+        # Word holds an exclusive lock on an open document, and regenerating
+        # while the last version is on screen is the normal way to work here
+        raise SystemExit(f"{out.name} is open in Word — close it and run again. "
+                         f"The .html was written and is up to date.")
     return out
 
 

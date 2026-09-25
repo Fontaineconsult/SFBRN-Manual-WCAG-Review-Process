@@ -63,7 +63,11 @@ STAGES = [
 ]
 OUTCOMES = ["Supports", "Partially Supports", "Does Not Support",
             "Not Applicable", "Not Evaluated"]
-DECISION_PLACEHOLDER = "Approved / Needs TAAP / Denied"
+# The three procurement outcomes, named for what the office does next rather
+# than for a judgement on the product (reviewer, 2026-09-25 -- previously
+# "Needs TAAP" and "Denied"). Fixed vocabulary: never a synonym.
+DECISIONS = ["Approved", "Approved with TAAP", "Do Not Purchase"]
+DECISION_PLACEHOLDER = " / ".join(DECISIONS)
 VERDICT_PLACEHOLDER = "Not run / Pass / Pass with barriers / Fail"
 
 
@@ -100,9 +104,14 @@ def product_name(review):
 def decision(review):
     m = re.search(r"\|\s*\*\*Decision\*\*\s*\|\s*(.+?)\s*\|",
                   read(review / STAGES[5]))
-    if not m or m.group(1) == DECISION_PLACEHOLDER:
+    if not m:
         return "Pending"
-    return m.group(1)
+    cell = m.group(1).strip()
+    # any cell still offering a choice is the template's, not a decision --
+    # this also catches the pre-2026-09-25 placeholder after the rename
+    if not cell or " / " in cell or cell.startswith("Pending"):
+        return "Pending"
+    return cell
 
 
 def criteria_counts(review):

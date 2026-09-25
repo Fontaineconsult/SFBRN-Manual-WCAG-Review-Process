@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS reviews (
   product TEXT,
   decision TEXT,
   report_status TEXT,
+  decision_date TEXT,           -- 06 `**Decision date**`; when the procurement office decided
+  decided_by TEXT,              -- 06 `**Decided by**`; who took it
   evaluator TEXT,               -- reviewer of record, from 01 `**Reviewer(s)**` (the name before the parenthesis)
   evaluator_contact TEXT,       -- from 01 `**Reviewer contact**`; the ACR prints it, so a report can be answered
   source_sha TEXT               -- sha256 over the stage files (no timestamps: the file is byte-stable)
@@ -393,6 +395,9 @@ def sync_review(con, review):
     # Who did the work and how to reach them. A conformance report nobody can
     # answer a question about is worth less than one that names a person, and
     # the name belongs in the record, not in the generator.
+    report = rv.read(review / rv.STAGES[5])
+    ddate = re.search(r"\|\s*\*\*Decision date\*\*\s*\|\s*(.*?)\s*\|", report)
+    dby = re.search(r"\|\s*\*\*Decided by\*\*\s*\|\s*(.*?)\s*\|", report)
     intake = rv.read(review / rv.STAGES[0])
     m = re.search(r"\|\s*\*\*Reviewer\(s\)\*\*\s*\|\s*(.*?)\s*\|", intake)
     evaluator = re.split(r"\s+[(—]", m.group(1))[0].strip() if m else ""
@@ -401,8 +406,9 @@ def sync_review(con, review):
     if contact.startswith("_") or contact.startswith("("):
         contact = ""   # the template's own placeholder
     source = hashlib.sha256(b"".join((review / st).read_bytes() for st in rv.STAGES if (review / st).exists())).hexdigest()
-    cur.execute("INSERT OR REPLACE INTO reviews VALUES (?,?,?,?,?,?,?)",
+    cur.execute("INSERT OR REPLACE INTO reviews VALUES (?,?,?,?,?,?,?,?,?)",
                 (rid, rv.product_name(review), rv.decision(review), status.group(1) if status else "",
+                 ddate.group(1) if ddate else "", dby.group(1) if dby else "",
                  evaluator, contact, source))
     cur.executemany("INSERT INTO views VALUES (?,?,?,?,?,?,?)",
                     [(rid, vid, n, loc, rep, kind, removed) for vid, n, loc, rep, kind, removed in parse_views(review)])
@@ -703,6 +709,15 @@ def integrity(con, rid):
             rmissing.append(f"{sc} ({outcome})")
         elif bad:
             rbroken.append(f"{sc}: {'; '.join(bad)}")
+    bad_decision = [row[0] for row in con.execute(
+        "SELECT decision FROM reviews WHERE review_id=?", (rid,))
+        if row[0] not in rv.DECISIONS and row[0] != "Pending"]
+    if bad_decision:
+        issues.append({"check": "decision not in the fixed vocabulary",
+                       "description": "06's `**Decision**` must read exactly one of "
+                                      + ", ".join(rv.DECISIONS) + " (or stay at the template choice "
+                                      "until the reviewer takes it)",
+                       "count": len(bad_decision), "items": bad_decision})
     if rmissing:
         issues.append({"check": "remediation missing",
                        "description": "a criterion the report lists under Priorities has no `Remediation:` "

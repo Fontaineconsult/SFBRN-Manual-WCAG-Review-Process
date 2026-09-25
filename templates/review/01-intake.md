@@ -7,7 +7,7 @@
 | **Reviewer(s)** | |
 | **Reviewer contact** | _(email of the reviewer of record — published in the ACR)_ |
 | **Status** | Intake → Testing → Decided |
-| **Decision** | Pending (final: Approved / Needs TAAP / Denied — see `06-report.md`) |
+| **Decision** | Pending (final: Approved / Approved with TAAP / Do Not Purchase — see `06-report.md`) |
 
 ## Procurement information
 

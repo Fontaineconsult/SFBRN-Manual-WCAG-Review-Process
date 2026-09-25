@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Broken |
+
+
+**Result reasoning.** Nothing in the practice area takes keyboard focus, so a screen-reader or keyboard user cannot select a book, a chapter or a problem. The unlabeled combos axe reports are the same controls the walk could not reach.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O3 recorded; reviewer to confirm/dismiss |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O3 closed against the no-vision walk. O1 (`label` ×12 on the Books and Chapters combos and the problem check boxes) → V-F28, which the walk confirmed to be the same defect as the unreachability: nothing in the practice area takes focus. O2 (`color-contrast` ×4 on the Library, Books, Chapters and filter captions) → V-F23. O3 (`aria-command-name`, `aria-hidden-focus`, `region` ×30, no `main`, no `h1`) → V-F1 and V-F8. O4 and O5 are incompletes handled under W2. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O4 (two button captions, bgImage) → low-vision eyedropper; O5 (bypass) → settled on S1 |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Cross-check with the JAWS walk of the library browser (student-facing) |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R059 — Broken). axe reported thirty unlandmarked regions and no heading structure, and the walk found no way into the controls at all, so the two agree. Nothing here required treating the sweep as instrument-blind. |
 
 ## Observations
 

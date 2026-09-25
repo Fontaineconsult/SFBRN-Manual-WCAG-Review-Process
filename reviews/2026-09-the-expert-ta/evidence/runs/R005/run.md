@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+
+**Result reasoning.** The alternate accessible mode is operable and its native selects carry names, which is why the `label` rule now passes, but the page still has no headings, no landmarks and an unnamed action control on every row. Confirmed against the screen-reader walk.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O5 recorded; reviewer to confirm/dismiss |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O4 closed against the no-vision walk. O1 (`select-name` on the per-row Actions select — the route to Take Assignment in this mode) → V-F6. O2 (`color-contrast` on the section captions) → V-F23. O3 (`aria-command-name` on the jump point) → V-F8; the `aria-hidden-focus` node is the header logo link, whose missing name is recorded as V-F43. O4 (no landmarks, no headings, `region` ×29) → V-F1, with the point the report makes: the accessible alternative adds no structure of its own. O5 is a pass count, dismissed as informational. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O6 (bypass) — this page has explicit skip links ("Tab for Assignments, Enter to skip"), so propose pass once the no-vision run confirms they work |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Cross-check with the JAWS walk of S2 (the mode the vendor built for AT users) |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R016 — Works with issues). axe reported no landmarks and no headings on the page the vendor offers *as* the accessible version; the walk confirmed it. O6 (`bypass` incomplete) was routed to that walk, which established that the skip links announce no destination — V-F3. |
 
 ## Observations
 

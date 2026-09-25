@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Broken |
+
+
+**Result reasoning.** The walk could not complete on this page: a screen-reader user meets thirty-two unnamed buttons and a grade table with no headings or landmarks to navigate by, and the values that carry meaning are distinguished by colour alone. Every violation is recorded as a finding.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O5 recorded; reviewer to confirm/dismiss |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O4 closed against the no-vision walk. O1 (`aria-command-name` ×32 — thirty-two nameless buttons in a row, one per problem) → V-F8. O2 (`color-contrast` ×62 on the randomised-variable values) → V-F23, and the 'red means late' use of the same token → V-F31. O3 (`image-alt` ×9) is one tracking pixel per problem, dismissed: it carries no information and is correctly ignorable, though an empty `alt` would be the right fix. O4 (`aria-hidden-focus`, `region` ×18, no `main`, no `h1`) → V-F1. O5 is a pass count and a note on file size, dismissed as informational. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O6 (99 contrast incompletes, mostly SVG diagram text) → low-vision eyedropper on one FBD label; O7 (`link-in-text-block` ×22 — the blue [?] help links) → no-color run; O8 (`th-has-data-cells` ×22) → no-vision run: are the per-part tables real data tables? |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Cross-check with the JAWS walk of the grade report (P5) |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R029 — Broken). axe reported eighteen unlandmarked regions and no heading structure on a page built entirely of nested tables; the walk found the same and could not reach the grades. The instrument penetrated. |
 
 ## Observations
 

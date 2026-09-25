@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 151 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+
+**Result reasoning.** Every user can reach the form and sign in, so the page is not broken, but four violations survive confirmation: no page language, an unnamed logo link as the first focusable element, a label below contrast, and no landmarks or headings. All four are recorded as findings against this view.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O6 recorded; reviewer to confirm |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O4 closed against the no-vision walk. O1 (`html-has-lang`) → V-F18. O2 (logo `image-alt` + `link-name`) → V-F43; the reviewer tabbed the page on 2026-09-21 and the control announced as a link whose name is the file, confirming it. O3 (`color-contrast`, User Name label) → V-F23. O4 (no landmarks, no headings) → V-F1. O5 and O6 are counts and page text, dismissed as informational. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O7 (bypass) → dismiss proposed (single-form page); O8 (two contrast incompletes, elmPartiallyObscuring) → low-vision run; O9 (link-in-text-block ×4) → no-color run on S7 |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Cross-check with the JAWS walk of the sign-in page (few elements; expect agreement) |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R093 — Works with issues). axe reported no landmarks, no `main` and no `h1`; the walk found the same absence, so the instrument penetrated and its structure output stands. The page is a single short form, which is also why O7 (`bypass` incomplete) was dismissed rather than routed. |
 
 ## Observations
 

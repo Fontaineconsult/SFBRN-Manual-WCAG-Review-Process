@@ -11,14 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — CO1, CO2, CO3, CO4, CO5, CO7, CO8, CO10, CO11 need the reviewer (inspection) |
+| **Result** | N/A |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** The view was withdrawn from the sample on 2026-09-15 as not student-facing (03 §3.1), after the walk-throughs established that the page is reachable only by an instructor account. This run was logged before that decision and cannot be completed: its open check rows ask what a user experiences on a page that is no longer in scope, and answering them would put weight on evidence the review does not rely on. The measurements already in this folder — the axe output and the probe JSON — stay on record and can be reopened unchanged if the scope is ever extended to instructor-facing pages.
 
 ## Checks (cognition)
 
@@ -27,17 +22,17 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| CO1 — Navigation and component identification are consistent with the rest of the product | | |
-| CO2 — Help (if offered) appears in a consistent location | | |
-| CO3 — Labels and instructions make the required input clear | | |
-| CO4 — Errors suggest how to fix the problem | | |
-| CO5 — Previously entered information is not demanded again | | |
+| CO1 — Navigation and component identification are consistent with the rest of the product | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO2 — Help (if offered) appears in a consistent location | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO3 — Labels and instructions make the required input clear | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO4 — Errors suggest how to fix the problem | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO5 — Previously entered information is not demanded again | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | CO6 — Authentication does not require transcription or memorization (no cognitive-function test) | n/a | O2 — no password/authentication field on the view |
-| CO7 — Time limits are adjustable/extendable; moving content can be paused | | |
-| CO8 — Focus/input does not trigger unexpected context changes | | |
+| CO7 — Time limits are adjustable/extendable; moving content can be paused | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO8 — Focus/input does not trigger unexpected context changes | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | CO9 — Fields collecting the user's own information (name, email, address, phone, …) carry the matching `autocomplete` purpose so browsers and AT can fill them | n/a | O3 — no field collects the user's own information (name/email/phone/address/… not present) |
-| CO10 — Each view is reachable in more than one way (navigation plus search, site map, index, or related links) unless it is a step in a process | | |
-| CO11 — Submissions with legal, financial, or data-changing consequences are reversible, checked for input errors, or confirmable before commit | | |
+| CO10 — Each view is reachable in more than one way (navigation plus search, site map, index, or related links) unless it is a step in a process | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| CO11 — Submissions with legal, financial, or data-changing consequences are reversible, checked for input errors, or confirmable before commit | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | CO12 — Nothing flashes more than three times per second (photosensitive-safety check; WCAG-only — no 508 FPC counterpart) | n/a | O4 — no CSS animation, animated image, marquee/blink, canvas, SVG animation or video on the view — nothing can flash |
 **view_probe 2026-09-11:** answered CO6=n/a, CO9=n/a, CO12=n/a by measurement; facts in `R058-probe.json`.
 

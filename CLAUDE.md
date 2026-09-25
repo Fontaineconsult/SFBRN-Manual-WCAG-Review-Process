@@ -156,6 +156,7 @@ if nobody said the word "test".
 | Take work off the reviewer before a session (instrument-answerable checks) | `ontology/modality-checks.md` §Assistant-answerable checks, `ontology/testing-tools.md` §view_probe | `scripts/view_probe.py` → the cell's run (pass / n/a / measured fail + `R###-probe.json`); sign-in views only via the signed-out profile |
 | Test (the loop) | `ontology/testing-loop.md`, `ontology/modality-checks.md`, `ontology/testing-tools.md` | run file → `04-task-testing.md` → `05-results.md` → enclosure |
 | Log/scaffold a run | `review.py log-test` (only way) | `evidence/runs/R###/` |
+| Close a run (set its Result) | `review.py close-run --help`, ontology/testing-loop.md §Closing a run | the run's Result cell + `**Result reasoning.**` — never by hand; every note names its basis |
 | Reviewer-driven session (JAWS, zoom, confirmations) | `ontology/testing-loop.md` §Reviewer session walkthroughs | `reviews/<id>/session-<sample>-reviewer-walkthrough.md` + the runs it feeds |
 | Results rollup / report | `05`/`06` template text | `05-results.md`, `06-report.md` |
 | Finish a review | `review.py validate` until clean | `06-report.md`, then `save-enclosure` |

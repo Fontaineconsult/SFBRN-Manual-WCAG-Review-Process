@@ -11,14 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — LV2, LV4, LV5, LV6, LV7, LV9 need the reviewer (zoom, B3); measured fail on LV1 awaits confirmation |
+| **Result** | N/A |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** The view was withdrawn from the sample on 2026-09-15 as not student-facing (03 §3.1), after the walk-throughs established that the page is reachable only by an instructor account. This run was logged before that decision and cannot be completed: its open check rows ask what a user experiences on a page that is no longer in scope, and answering them would put weight on evidence the review does not rely on. The measurements already in this folder — the axe output and the probe JSON — stay on record and can be reopened unchanged if the scope is ever extended to instructor-facing pages.
 
 ## Checks (low-vision)
 
@@ -28,14 +23,14 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | LV1 — At 400% zoom content reflows to one column — no two-dimensional scrolling (except exempt content such as data tables, canvases, maps) | fail | O2 — at 320 CSS px scrollWidth = 1304 (two-dimensional scrolling); non-exempt overflow: ul right=353; li right=353; a right=353; li#TemplateHeader1_liChangePassword right=353; a right=353; li right=353; a right=353; div#container right=1300; table right=1304; tbody right=1304; tr right=1304; td right=1304 (measured) |
-| LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | | |
+| LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | LV3 — The view tolerates text-spacing overrides without loss | pass | O3 — text-spacing override (line 1.5, letter 0.12 em, word 0.16 em, paragraph 2 em) applied: no newly clipped text container (measured; 3 container(s) were already clipped before the override) |
-| LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | | |
-| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | |
-| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | | |
-| LV7 — Focus indicator remains visible and unobscured at zoom | | |
+| LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV7 — Focus indicator remains visible and unobscured at zoom | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | LV8 — The view works in both portrait and landscape | pass | O4 — no orientation media query and no screen.orientation.lock use (19 inline + 47 external scripts scanned, 1 unreadable) — content is not restricted to one orientation |
-| LV9 — Text is real text, not images of text (logos and essential presentation excepted) — at 400% zoom image text pixelates or stops reflowing | | |
+| LV9 — Text is real text, not images of text (logos and essential presentation excepted) — at 400% zoom image text pixelates or stops reflowing | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 
 **view_probe 2026-09-11:** answered LV1=fail, LV3=pass, LV8=pass by measurement; facts in `R072-probe.json`.
 

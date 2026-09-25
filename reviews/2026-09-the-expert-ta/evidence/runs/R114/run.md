@@ -11,14 +11,9 @@
 | **Tool** | probe; zoom + eyedropper (reviewer, W68) |
 | **Baseline** | B3 |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — LV5 (any control at 3:1 — the page has only the shared header links) needs the reviewer (W68); answered: LV1 fail (V-F19), LV4 fail (V-F23), LV9 fail (V-F24), LV2/LV3/LV6/LV7/LV8 pass |
+| **Result** | Broken |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** At 320 CSS pixels the page scrolls in two dimensions, and the figures that carry the mathematics are low-resolution images that blur at 400 %, so the content this page exists to deliver is the content that degrades. Text contrast fails on the randomised values, as elsewhere. Zoom, focus and hover behaviour are otherwise sound.
 
 ## Checks (low-vision)
 
@@ -31,7 +26,7 @@ run's Result is set. Fails cite observation IDs.
 | LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | pass | O5 — "nothing cut off" at 400 % (reviewer) |
 | LV3 — The view tolerates text-spacing overrides without loss | pass | O3 — text-spacing override (line 1.5, letter 0.12 em, word 0.16 em, paragraph 2 em) applied: no newly clipped text container (measured; 0 container(s) were already clipped before the override) |
 | LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | fail | O6 — "same contrast issues as before with the red values" (reviewer, eyedropper) → V-F23 |
-| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | |
+| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | pass | Answered as the walkthrough step directed ("the header links / any control at 3:1 -- 'same as the other pages' is enough"). The page's only controls are the standard header links and the hidden accessibility menu, the same components the reviewer eyedroppered and passed on five other pages. The grade tables' thin rules that fail this check on the grade report and the calendar do not appear here. |
 | LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | pass | O6 — "no hover or focus issues" (reviewer) |
 | LV7 — Focus indicator remains visible and unobscured at zoom | pass | O6 — no focus issue at 400 % (reviewer) |
 | LV8 — The view works in both portrait and landscape | pass | O4 — no orientation media query and no screen.orientation.lock use (81 inline + 29 external scripts scanned, 1 unreadable) — content is not restricted to one orientation |

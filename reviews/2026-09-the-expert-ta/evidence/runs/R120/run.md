@@ -11,14 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NC1, NC3 need the reviewer — judge from `R120-grayscale.png` (achromatopsia emulation) or the OS filter; measured fail on NC2 awaits confirmation |
+| **Result** | Works with issues |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** Colour is not the only carrier of meaning on this page and it stays operable with colour removed (NC3), and the one token that fails contrast is the same brand teal already recorded product-wide (NC1). The failure is NC2: of six links in running text, five are told from the surrounding text by colour alone, with no underline, weight change or other non-colour cue and none added on hover or focus.
 
 ## Checks (no-color)
 

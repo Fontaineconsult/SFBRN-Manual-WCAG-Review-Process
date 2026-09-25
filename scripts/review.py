@@ -682,6 +682,144 @@ def cmd_log_test(args):
           f"and {rid}-*.png files alongside it.")
 
 
+RESULTS = ["Works", "Works with issues", "Broken", "N/A"]
+CHECK_ID_RE = re.compile(r"^\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*[\u2014-]")
+
+
+def answer_check_rows(text, answers):
+    """Fill named check rows: {check_id: (outcome, note)}. Returns (text, n)."""
+    n = 0
+    out = []
+    for line in text.split("\n"):
+        parts = line.split("|")
+        if len(parts) == 5 and line.lstrip().startswith("|"):
+            m = CHECK_ID_RE.match(parts[1])
+            if m and m.group(1) in answers:
+                outcome, note = answers[m.group(1)]
+                parts[2] = f" {outcome} "
+                parts[3] = f" {note} "
+                line = "|".join(parts)
+                n += 1
+        out.append(line)
+    return "\n".join(out), n
+
+
+def set_run_result(run_dir, result, reason, answer_open=None, note=None, answers=None):
+    """Write a run's Result, its reasoning, and optionally its open check rows.
+
+    The Result cell must hold the bare term and nothing else -- `matrix`
+    matches it against those exact strings and prints anything else verbatim,
+    which blew the grid apart on 2026-08-14. The reasoning goes in the
+    `**Result reasoning.**` paragraph under the table, where there is no
+    length limit.
+
+    Returns (changed_result, rows_answered)."""
+    f = run_dir / "run.md"
+    text = read(f)
+    if not text:
+        raise SystemExit(f"{run_dir.name}: no run.md")
+
+    m = re.search(r"(\|\s*\*\*Result\*\*\s*\|)(\s*.*?\s*)(\|)", text)
+    if not m:
+        raise SystemExit(f"{run_dir.name}: no Result row in the metadata table")
+    text = text[:m.start()] + f"| **Result** | {result} |" + text[m.end():]
+
+    # the reasoning paragraph: replace the template's guidance if it is still
+    # there, otherwise insert directly after the metadata table
+    guidance = re.search(r"\n\*\*When you set the Result.*?\n\n", text, re.S)
+    para = f"\n**Result reasoning.** {reason}\n\n"
+    if re.search(r"\n\*\*Result reasoning\.\*\*.*?\n\n", text, re.S):
+        text = re.sub(r"\n\*\*Result reasoning\.\*\*.*?\n\n", para, text, count=1, flags=re.S)
+    elif guidance:
+        text = text[:guidance.start()] + para + text[guidance.end():]
+    else:
+        end = text.index("\n## ")
+        text = text[:end] + "\n" + para.rstrip("\n") + "\n" + text[end:]
+
+    answered = 0
+    if answers:
+        text, answered = answer_check_rows(text, answers)
+    if answer_open:
+        out = []
+        for line in text.split("\n"):
+            parts = line.split("|")
+            if (len(parts) == 5 and line.lstrip().startswith("|")
+                    and CHECK_ID_RE.match(parts[1]) and not parts[2].strip()):
+                parts[2] = f" {answer_open} "
+                obs = parts[3].strip()
+                parts[3] = f" {obs + ' — ' if obs else ''}{note or reason} "
+                line = "|".join(parts)
+                answered += 1
+            out.append(line)
+        text = "\n".join(out)
+
+    f.write_text(text, encoding="utf-8")
+    return True, answered
+
+
+def parse_answers(specs):
+    """`--answer W1=pass=note text` → {"W1": ("pass", "note text")}."""
+    out = {}
+    for spec in specs or []:
+        cid, _, rest = spec.partition("=")
+        outcome, _, note = rest.partition("=")
+        if not cid or outcome not in set(CHECK_OUTCOMES.values()):
+            raise SystemExit(f"--answer must read CHECK=outcome=note, got: {spec}")
+        out[cid.strip()] = (outcome.strip(), note.strip())
+    return out
+
+
+def cmd_close_run(args):
+    """Set the Result on one or more runs, with the reason, in one pass."""
+    review = resolve(args.review)
+    if args.result not in RESULTS:
+        raise SystemExit(f"--result must be one of: {', '.join(RESULTS)}")
+    if args.answer_open and args.answer_open not in set(CHECK_OUTCOMES.values()):
+        raise SystemExit("--answer-open must be one of: "
+                         + ", ".join(sorted(set(CHECK_OUTCOMES.values()))))
+
+    dirs = {d.name: d for d in run_dirs(review)}
+    if args.runs:
+        missing = [r for r in args.runs if r not in dirs]
+        if missing:
+            raise SystemExit(f"no such run(s): {', '.join(missing)}")
+        targets = [dirs[r] for r in args.runs]
+    elif args.removed_views:
+        # Runs against a view that has since left the sample. They can never
+        # be finished -- the page is out of scope -- but leaving them at
+        # "Not set" makes the review look permanently unfinished, and the
+        # definition of done counts them.
+        gone = {v.lower() for v, _, _, _ in removed_views(review)}
+        targets = [d for d in run_dirs(review)
+                   if run_meta(d)["view"].lower() in gone]
+    else:
+        raise SystemExit("name the runs, or pass --removed-views")
+
+    targets = [d for d in targets if args.force or run_meta(d)["result"] == "Not set"]
+    if not targets:
+        print("Nothing to close — every named run already has a Result "
+              "(use --force to overwrite).")
+        return
+
+    for d in targets:
+        meta = run_meta(d)
+        if args.dry_run:
+            print(f"{d.name}  view={meta['view']:<4} modality={meta['modality']:<11} "
+                  f"→ {args.result}")
+            continue
+        _, n = set_run_result(d, args.result, args.reason, args.answer_open, args.note,
+                              parse_answers(args.answer))
+        print(f"{d.name}  view={meta['view']:<4} → {args.result}"
+              + (f"  ({n} check row{'s' if n != 1 else ''} answered)" if n else ""))
+
+    if args.dry_run:
+        print(f"\n{len(targets)} run(s) would be closed. Drop --dry-run to write.")
+        return
+    print(f"\n{len(targets)} run(s) closed as {args.result}.")
+    db_sync(review)
+    print("Database resynced. Run `review.py validate` to see the new completion.")
+
+
 def cmd_runs(args):
     review = resolve(args.review)
     rows = [run_meta(d) for d in run_dirs(review)]
@@ -1210,6 +1348,25 @@ def main():
             sp.add_argument("review", help="review directory name or unique substring")
         sp.add_argument("--json", action="store_true", help="machine-readable output")
         sp.set_defaults(fn=fn)
+
+    p_close = sub.add_parser("close-run",
+                             help="set a run's Result (and optionally its open check rows)")
+    p_close.add_argument("review")
+    p_close.add_argument("runs", nargs="*", help="run IDs, e.g. R006 R007")
+    p_close.add_argument("--result", required=True,
+                         help="Works / Works with issues / Broken / N/A")
+    p_close.add_argument("--reason", required=True,
+                         help="goes in the **Result reasoning.** paragraph")
+    p_close.add_argument("--answer-open", dest="answer_open",
+                         help="also answer every blank check row: pass / fail / partial / n/a")
+    p_close.add_argument("--note", help="observations text for those rows (default: the reason)")
+    p_close.add_argument("--answer", action="append",
+                         help="answer one row with its own reasoning: CHECK=outcome=note (repeatable)")
+    p_close.add_argument("--removed-views", dest="removed_views", action="store_true",
+                         help="select every run against a view that has left the sample")
+    p_close.add_argument("--force", action="store_true", help="overwrite a Result already set")
+    p_close.add_argument("--dry-run", dest="dry_run", action="store_true")
+    p_close.set_defaults(fn=cmd_close_run)
 
     p_gaps = sub.add_parser("gaps",
                             help="unanswered check rows — the reviewer session's question list")

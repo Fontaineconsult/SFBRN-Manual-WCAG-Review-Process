@@ -829,7 +829,21 @@ Before moving to `05-results.md`:
 
 - [ ] Every process in 03 §3.3 has a task cluster with a verdict
 - [ ] Every branch sequence was walked, not just default sequences
-- [ ] Every non-process sample has a view-sweep entry
-- [ ] Every finding names at least one WCAG criterion, a severity, and evidence
+- [x] Every non-process sample has a view-sweep entry
+- [x] Every finding names at least one WCAG criterion, a severity, and evidence
 - [ ] Random-vs-structured comparison completed (and sample extended if needed)
 - [ ] `05-results.md` updated: every failed criterion cites finding IDs from this file
+
+**Boxes 3 and 4 checked 2026-09-24 against the database, not by eye.** Box 3:
+every view still in the sample has an axe run (`C7 views swept`, 10/10) — the
+sweeps on the six views withdrawn on 2026-09-15 are closed as N/A rather than
+counted. Box 4: no live finding is missing a criterion, a severity or a run
+(`C9 findings evidenced`, 43/43).
+
+**Box 6 is one query away and fails on three rows.** 2.4.5, 3.3.1 and 2.4.11
+are decided from check outcomes with no finding behind them: 2.4.5 from the
+cognition pass (no site map, no search, the assignments table is the only
+route), 3.3.1 from the reviewer's correction on the wrong-password case after
+V-F44 was withdrawn, and 2.4.11 still provisional pending the reviewer. Each
+needs a finding raised or an explicit exception recorded before this box is
+honest.

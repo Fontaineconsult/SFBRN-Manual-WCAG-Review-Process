@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Broken |
+
+
+**Result reasoning.** The calendar grid takes no keyboard focus at all, so the walk could not open an event or read an assignment's dates, and the event bar encodes due date and duration in colour and position alone. The grid's own markup is sound, which is what makes this a reachability failure rather than a semantic one.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O4 recorded; reviewer to confirm/dismiss |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O3 closed against the no-vision walk. O1 (`color-contrast` on the assignment event bar — the only content the calendar carries) → V-F23, and its colour-only encoding of due date and duration → V-F39. O2 (`aria-command-name`, `aria-hidden-focus`) → V-F8 and the logo link recorded as V-F43. O3 (`region` ×12, no `main`) → V-F1, with the exception worth recording: `page-has-heading-one` does not fire here, so the Calendar is the one page that carries an `h1`. O4 is a pass count, dismissed as informational — though it also records that FullCalendar's own grid markup is sound, which makes V-F38 a keyboard defect rather than a semantics one. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O5 (`aria-prohibited-attr` ×8 — FullCalendar `aria-label` on elements with no role) → no-vision run: are the day-of-week headers announced?; O6 (contrast on adjacent-month day numbers, 12 nodes) → low-vision eyedropper |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | Calendar is the one view with a heading (h2 month title) — cross-check that JAWS lists it |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R041 — Broken). axe found the grid's `role=grid` and per-cell labels intact while reporting no landmarks around it, and the walk matched: the structure is there and unreachable. O5 (`aria-prohibited-attr` on the day-of-week headers) was routed to that walk. |
 
 ## Observations
 

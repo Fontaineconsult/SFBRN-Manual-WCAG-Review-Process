@@ -11,14 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — NV2, NV3, NV4, NV5, NV6, NV7, NV8, NV10 need the reviewer (jaws, B1) |
+| **Result** | N/A |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** The view was withdrawn from the sample on 2026-09-15 as not student-facing (03 §3.1), after the walk-throughs established that the page is reachable only by an instructor account. This run was logged before that decision and cannot be completed: its open check rows ask what a user experiences on a page that is no longer in scope, and answering them would put weight on evidence the review does not rely on. The measurements already in this folder — the axe output and the probe JSON — stay on record and can be reopened unchanged if the scope is ever extended to instructor-facing pages.
 
 ## Checks (no-vision)
 
@@ -28,17 +23,17 @@ run's Result is set. Fails cite observation IDs.
 | Check | Outcome | Observations |
 |-------|---------|--------------|
 | NV1 — Page/view title identifies its purpose | pass | O3 — document.title = "Manage Class Roster" (non-empty, specific; the reviewer's NVDA+T confirms wording on the walk) |
-| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | | |
-| NV3 — Every control announces an accurate name, role, and value/state | | |
-| NV4 — Images announce appropriate alternatives; decorative images are silent | | |
-| NV5 — Reading order matches the meaning of the visual order | | |
-| NV6 — Form fields announce labels and instructions; errors are announced and identified | | |
-| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | | |
-| NV8 — Nothing is conveyed only by visual position, shape, or size | | |
+| NV2 — Headings and landmarks exist, are hierarchical, and support navigation | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV3 — Every control announces an accurate name, role, and value/state | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV4 — Images announce appropriate alternatives; decorative images are silent | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV5 — Reading order matches the meaning of the visual order | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV6 — Form fields announce labels and instructions; errors are announced and identified | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV7 — Dynamic updates (toasts, async results, validation) are announced without stealing focus | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| NV8 — Nothing is conveyed only by visual position, shape, or size | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | NV9 — Language of the view (and passages) is announced/pronounced from the correct language | pass | O4 — <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists) |
-| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | | |
+| NV10 — Every link's purpose is clear from its link text alone or from its programmatic context (Links list: no bare "click here"/"more", no identical texts pointing to different targets) | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | NV11 — Prerecorded video has audio description or a text media alternative (**n/a** when the view has no video) | n/a | O2 — no <video>, media iframe or embed on the view |
-| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | | (row added 2026-09-14 by sync-checks — not part of the original session; answer or mark n/a) |
+| NV12 — Input errors are identified in text — which field, what is wrong — and the screen reader hears it (submit a form with a missing/invalid value; **n/a** when the view has no validated input) | n/a | (row added 2026-09-14 by sync-checks — not part of the original session; answer or mark n/a) — View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 **view_probe 2026-09-11:** answered NV11=n/a, NV1=pass, NV9=pass by measurement; facts in `R053-probe.json`.
 
 ## Observations

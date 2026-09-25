@@ -72,6 +72,59 @@ next → log-test → narrate/observe → gap questions → write-back → refle
    and the gap list update the moment the write-back lands. Then `next`
    again.
 
+## Closing a run (`review.py close-run`)
+
+A run's Result is set with the CLI, never by hand:
+
+    python scripts/review.py close-run <review> R007 \
+        --result "Broken" --reason "..." \
+        --answer "W1=pass=how each violation was confirmed or dismissed" \
+        --answer "W3=pass=what the cross-check against the walk found"
+
+It writes the bare term into the Result cell (`matrix` matches that cell
+against the exact strings and prints anything else verbatim, which blew the
+grid apart on 2026-08-14), puts the sentences in the `**Result reasoning.**`
+paragraph under the table where there is no length limit, answers the named
+check rows, and resyncs the database. `--answer-open <outcome>` answers every
+still-blank row the same way, for a run being closed wholesale.
+
+**Why it exists.** On 2026-09-24 the review carried 47 runs at "Not set" and
+243 unanswered check rows, and the definition of done counted every one. The
+split, once queried, was:
+
+- **35 runs and 217 rows against views that had left the sample.** Six views
+  were withdrawn on 2026-09-15 as not student-facing; their probe and axe runs
+  stayed on record at "Not set". These can never be finished — the page is out
+  of scope — so they close as **N/A with the withdrawal as the reason**, and
+  their open rows as `n/a`. The measurements stay in the folder and can be
+  reopened unchanged if scope is ever extended.
+- **Eight sweeps whose violations the later walks had already resolved.** W1
+  ("every reported failure is human-confirmed → finding, or dismissed with a
+  written reason") and W3 (structure cross-checked against the screen-reader
+  walk) were left open on eight axe runs while the findings they point to were
+  raised and rolled up months later. Closing them is bookkeeping against
+  evidence that exists — but it is bookkeeping that must name, per violation,
+  which finding took it or why it was dismissed. Two of the eight had their
+  axe output saved and never written up as observations at all; those were
+  written first, from the saved JSON, then closed.
+- **Eight rows that genuinely needed a page in front of someone.**
+
+**The rule the split teaches.** A predicate that counts work against withdrawn
+scope reports a backlog that does not exist. C6 and C7 scope to the sample and
+were right; C4 and C5 count every run and every row, and were reporting 47
+outstanding when the honest number was 12. Rather than narrow the predicates —
+which would have left 35 runs looking permanently unfinished — the runs are
+closed and say why. **The record states what happened; the predicate counts
+it.**
+
+**What close-run must never do.** Invent an outcome. Every note it writes
+names its basis: a finding ID, a walk's run ID, a measurement, or an explicit
+statement that the answer is generalised from another view and on what
+grounds. Generalising a *failure* across views that share a style is something
+the reviewer has authorised; generalising a *pass* needs the pages to be the
+same template, and the note says so.
+
+
 ## Why the enclosure update matters
 
 Step 6's last bullet is what makes this a genuine improvement loop rather

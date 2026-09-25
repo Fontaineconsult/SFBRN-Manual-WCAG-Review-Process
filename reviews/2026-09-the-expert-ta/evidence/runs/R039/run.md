@@ -11,14 +11,9 @@
 | **Tool** | probe |
 | **Baseline** | — |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — MO1, MO2, MO3, MO4, MO5, MO6, MO7, MO8, MO11 need the reviewer (keyboard, B2); measured fail on MO9 awaits confirmation |
+| **Result** | N/A |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** The view was withdrawn from the sample on 2026-09-15 as not student-facing (03 §3.1), after the walk-throughs established that the page is reachable only by an instructor account. This run was logged before that decision and cannot be completed: its open check rows ask what a user experiences on a page that is no longer in scope, and answering them would put weight on evidence the review does not rely on. The measurements already in this folder — the axe output and the probe JSON — stay on record and can be reopened unchanged if the scope is ever extended to instructor-facing pages.
 
 ## Checks (motor)
 
@@ -27,17 +22,17 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| MO1 — Every interactive element can be reached with the keyboard | | |
-| MO2 — Every reached element can be operated (activate, select, dismiss) | | |
-| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | | |
-| MO4 — A visible focus indicator exists at all times | | |
-| MO5 — Focus order follows the meaning and operation order of the view | | |
-| MO6 — Single-character shortcuts can be switched off or remapped | | |
-| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | | |
-| MO8 — Pointer actions can be cancelled (up-event activation) | | |
+| MO1 — Every interactive element can be reached with the keyboard | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO2 — Every reached element can be operated (activate, select, dismiss) | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO3 — Focus is never trapped; Esc/Tab always leads out of widgets and dialogs | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO4 — A visible focus indicator exists at all times | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO5 — Focus order follows the meaning and operation order of the view | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO6 — Single-character shortcuts can be switched off or remapped | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO7 — Dragging and multipoint/path gestures have single-pointer, non-drag alternatives | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| MO8 — Pointer actions can be cancelled (up-event activation) | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | MO9 — Targets are ≥ 24×24 CSS px or adequately spaced | pass | O2 — 14 target(s) under 24×24 px with another target inside the 24 px circle (measured; reviewer confirms which are essential/equivalent-exempt): div#MainContent_seGradeWeight_B-2.dxeButton.dxeButtonEditButton "" 16×9 px next to input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys "1"; div#MainContent_seGradeWeight_B-3.dxeButton.dxeButtonEditButton "" 16×10 px next to input#MainContent_seGradeWeight_I.dxeEditArea.dxeEditAreaSys "1"; div#MainContent_teAssignmentVisibleTime_B-2.dxeButton.dxeButtonEditButton "" 16×9 px next to input#MainContent_teAssignmentVisibleTime_I.dxeEditArea.dxeEditAreaSys "12:01 AM"; div#MainContent_teAssignmentVisibleTime_B-3.dxeButton.dxeButtonEditButton "" 16×9 px next to input#MainContent_teAssignmentVisibleTime_I.dxeEditArea.dxeEditAreaSys "12:01 AM"; div#MainContent_teStartTime_B-2.dxeButton.dxeButtonEditButton "" 16×9 px next to input#MainContent_teStartTime_I.dxeEditArea.dxeEditAreaSys "12:01 AM"; div#MainContent_teStartTime_B-3.dxeButton.dxeButtonEditButton "" 16×9 px next to input#MainContent_teStartTime_I.dxeEditArea.dxeEditAreaSys "12:01 AM" Reviewer 2026-09-14: exempt — the values "can be typed directly" into the fields, so an equivalent control exists (2.5.8 exception); the measurement stands as a record, the outcome is pass. |
 | MO10 — Nothing requires device motion (shake/tilt) without an alternative | n/a | O3 — no devicemotion/deviceorientation use in scripts (126 inline + 54 external scripts scanned, 1 unreadable) |
-| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | | |
+| MO11 — A mechanism exists to bypass repeated blocks (skip link reachable on first Tab, or equivalent) before reaching the view's content | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 
 **view_probe 2026-09-11:** answered MO9=fail, MO10=n/a by measurement; facts in `R039-probe.json`.
 

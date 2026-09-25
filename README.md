@@ -38,6 +38,10 @@ python scripts/review.py save-enclosure <review>
                                                # save the documented enclosure for reuse
 python scripts/review.py log-test <review> --view S1 --modality no-vision \
     --tool jaws --url URL --baseline B1        # log a test run; creates its evidence folder
+python scripts/review.py close-run <review> R007 --result Broken --reason "..." \n    --answer "W1=pass=..." [--removed-views] [--answer-open n/a]
+                                               # set a run's Result, its reasoning and its open
+                                               # check rows; --removed-views selects every run
+                                               # against a view withdrawn from the sample
 python scripts/review.py runs <review>         # list logged test runs
 python scripts/review.py matrix <review>       # views × modalities coverage grid
 python scripts/review.py coverage <review>     # criteria → POUR principles → 508 FPC: which have an

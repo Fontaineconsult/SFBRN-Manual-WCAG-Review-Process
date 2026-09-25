@@ -11,14 +11,9 @@
 | **Tool** | probe; zoom (reviewer, W46 aside) |
 | **Baseline** | B3 |
 | **Tester** | assistant (view_probe) |
-| **Result** | Not set — LV4, LV5, LV6, LV7, LV9 need the reviewer (W52); LV1 fail (V-F19), LV2 fail (V-F25) |
+| **Result** | N/A |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** The view was withdrawn from the sample on 2026-09-15 as not student-facing (03 §3.1), after the walk-throughs established that the page is reachable only by an instructor account. This run was logged before that decision and cannot be completed: its open check rows ask what a user experiences on a page that is no longer in scope, and answering them would put weight on evidence the review does not rely on. The measurements already in this folder — the axe output and the probe JSON — stay on record and can be reopened unchanged if the scope is ever extended to instructor-facing pages.
 
 ## Checks (low-vision)
 
@@ -30,12 +25,12 @@ run's Result is set. Fails cite observation IDs.
 | LV1 — At 400% zoom content reflows to one column — no two-dimensional scrolling (except exempt content such as data tables, canvases, maps) | fail | O2 — at 320 CSS px scrollWidth = 589 (two-dimensional scrolling); non-exempt overflow: table right=589; tbody right=589; tr right=589; td right=589; table right=589; tbody right=589; tr right=589; td right=589; tr right=589; td right=589; table#ASPxRoundPanel2 right=589; tbody right=589 (measured) |
 | LV2 — No content or functionality is lost at zoom; nothing overlaps or clips | fail | O5 — above 175 % zoom the popup's off-screen part cannot be scrolled to: the page will not scroll while the modal is active (reviewer) → V-F25 |
 | LV3 — The view tolerates text-spacing overrides without loss | pass | O3 — text-spacing override (line 1.5, letter 0.12 em, word 0.16 em, paragraph 2 em) applied: no newly clipped text container (measured; 0 container(s) were already clipped before the override) |
-| LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | | |
-| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | | |
-| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | | |
-| LV7 — Focus indicator remains visible and unobscured at zoom | | |
+| LV4 — Text contrast ≥ 4.5:1 (3:1 for large text) | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV5 — UI component and meaningful graphic contrast ≥ 3:1 | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV6 — Content appearing on hover/focus is dismissible, hoverable, persistent | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
+| LV7 — Focus indicator remains visible and unobscured at zoom | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 | LV8 — The view works in both portrait and landscape | pass | O4 — no orientation media query and no screen.orientation.lock use (31 inline + 26 external scripts scanned) — content is not restricted to one orientation |
-| LV9 — Text is real text, not images of text (logos and essential presentation excepted) — at 400% zoom image text pixelates or stops reflowing | | |
+| LV9 — Text is real text, not images of text (logos and essential presentation excepted) — at 400% zoom image text pixelates or stops reflowing | n/a | View out of scope from 2026-09-15 — not answerable against a page no student reaches. |
 
 **view_probe 2026-09-11:** answered LV1=fail, LV3=pass, LV8=pass by measurement; facts in `R078-probe.json`.
 

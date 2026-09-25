@@ -11,7 +11,10 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 153 debug profile); classification pending reviewer |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Works with issues |
+
+
+**Result reasoning.** A screen-reader user can move through this page by its headings, which no other page allows, and it is the page where the worked answers live. What is lost is the content itself: the figures carry no alternative text because of an authoring-pipeline defect, and every equation is an unnamed control.
 
 ## Checks (axe sweep)
 
@@ -20,9 +23,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes |  | O1–O6 recorded; reviewer to confirm/dismiss — O1 is a markup bug worth showing the vendor verbatim |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1–O4 closed against the no-vision walk. O1 (`image-alt` ×14) splits in two and both halves are recorded: the figures whose alternative text a missing quote swallowed into the `src` → V-F35, and the mathematics exposed as unnamed controls → V-F45. O2 (`aria-command-name` ×33 — one jump point per problem and part) → V-F8. O3 (`color-contrast` ×17 on the randomised values) → V-F23. O4 (`aria-hidden-focus`, `region` ×241, no `main`) → V-F1, with the exception recorded: `page-has-heading-one` passes and this page carries a heading per problem, which is the pattern the report asks the vendor to apply everywhere. O5 and O6 are informational and dismissed. |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | partial | O7 (442 contrast incompletes — MathJax glyphs and obscured spans) → low-vision run: eyedropper one rendered equation and one problem statement; the count is an artefact of MathJax's span-per-glyph rendering, not 442 issues |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) |  | This is the only view with an h1 + h2 outline (9 problem headings) — cross-check that JAWS's heading list shows them |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk (R087 — Works with issues). This is the one page where axe reported real structure — an `h1` and a heading per problem — and the walk confirmed the headings were reachable, so the instrument is not blind here and the output stands. O7 (`color-contrast` incomplete ×442 across MathJax glyphs) was routed to the low-vision run. |
 
 ## Observations
 

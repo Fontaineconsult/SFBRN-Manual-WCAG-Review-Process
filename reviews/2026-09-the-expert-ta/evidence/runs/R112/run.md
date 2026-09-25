@@ -11,14 +11,9 @@
 | **Tool** | axe |
 | **Baseline** | — |
 | **Tester** | — |
-| **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
+| **Result** | Broken |
 
-**When you set the Result, replace this cell with the bare term and
-nothing else** — `Works`, `Works with issues`, `Broken` or `N/A`. `matrix`
-matches the cell against those exact strings and prints anything else
-verbatim, which blows the grid apart (hit 2026-08-14). Put the reasoning
-in a `**Result reasoning.**` paragraph directly below this table — that is
-where it belongs anyway, and there is no length limit there.
+**Result reasoning.** This page was sampled to test whether it is a conforming alternate route for reading an assignment, and it is not. It has no headings and no landmarks, eight of fourteen figures carry no usable alternative, and every equation announces as an unnamed button that opens a menu instead of being read. A screen-reader user gets neither the diagrams, nor the mathematics, nor a way to move between problems.
 
 ## Checks (axe sweep)
 
@@ -27,9 +22,9 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | | |
-| W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | | |
-| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | | |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O1-O4 closed against the reviewer's NVDA walk of this page. O1 (`select-name` on the hidden accessibility menu) is the control the walk had to use to move at all; O2 (`color-contrast` on the randomised values) -> V-F23, confirmed at 400 % zoom; O3 (`aria-command-name`, `aria-hidden-focus`) -> V-F8 and V-F43; O4 (no landmarks, no `main`, no `h1`, `region` x29) -> V-F1. O5 is counts and the product-wide `bypass` incomplete, dismissed. |
+| W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | pass | The single incomplete is `bypass`, the product-wide question settled once on S1. |
+| W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | pass | Cross-checked against the NVDA walk of this page. axe reported no headings and no landmarks; the reviewer found the same and had to navigate by a hidden custom menu whose controls are unnamed. The instrument penetrated -- what it could not see is the mathematics, which announces as unnamed buttons (V-F45) and is invisible to a rule that only checks for a name. |
 
 ## Observations
 
@@ -40,7 +35,16 @@ Format:
 - O1 [new] (state: which view state): what happened
   - Classified: <check ID> / WCAG <SC> / <severity> → finding <ID> | dismissed: <reason>
 
-(none yet)
+- O1 [classified] (state: View Printable Assignment, the nine problems of "Chapter 5 Sample Assignment" rendered on one page): axe `select-name` (critical) ×1 — the accessibility-menu select in the custom hidden header has no accessible name.
+  - Proposed: W1 / WCAG 1.3.1 + 4.1.2 (A) / Major — the reviewer reached this page's navigation only through that hidden menu (W69) → folded into **V-F45**'s neighbours; the unnamed navigation controls are recorded there.
+- O2 [classified] (state: as O1): `color-contrast` (serious) ×3 — the randomised-variable values in the problem statements, the same `#FF6347` on white token measured at **2.94:1** elsewhere.
+  - Proposed: W1 / WCAG 1.4.3 (AA) / Major → **V-F23**; the reviewer confirmed at 400 % zoom (W68: "same contrast issues as before with the red values").
+- O3 [classified] (state: as O1): `aria-command-name` ×1 and `aria-hidden-focus` ×1 — the jump point and the header logo link (PW-B, PW-C).
+  - Proposed: fold into **V-F8** (jump points) and **V-F43** (logo link).
+- O4 [classified] (state: as O1): `region` ×29, `landmark-one-main`, `page-has-heading-one` — no landmarks, no `main`, no `h1`.
+  - Proposed: → **V-F1**; confirmed by the walk (W69: "no headings, uses the custom hidden accessibility menue").
+- O5 [classified] (state: as O1): passes 36 / inapplicable 51; **incomplete** `bypass` ×1.
+  - dismissed: counts are informational; the `bypass` incomplete is the product-wide question settled once on S1 (PW-E).
 
 ## Notes
 

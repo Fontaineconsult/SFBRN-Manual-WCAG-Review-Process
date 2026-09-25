@@ -229,10 +229,13 @@ statement can occur in more than one row.
 
 ### The Verdict row
 
-The internal report's **Report information** opens with a `Verdict` row: the
-procurement decision, one sentence saying what it means, and the date and the
-person who took it. It is the first thing in the document because it is what
-the reader opened it for.
+The internal report's **Report information** opens with a `Verdict` row. The
+cell is **the decision and nothing else** — no gloss on what it means, no date,
+no decider. A first version added all three and the reviewer cut them: an
+explanatory clause after the verdict reads as the generator qualifying a call
+that is not its to qualify, and the date and the decider are in `06` and in
+the database for anyone who needs them. It is the first row in the document
+because it is what the reader opened it for.
 
 **The conformance report does not carry it.** That one goes to the supplier
 and the public, where a decision field invites them to argue with a call that
@@ -241,15 +244,12 @@ was never theirs to see.
 The three outcomes were renamed on 2026-09-25, from *Needs TAAP* and
 *Denied*:
 
-| Verdict | Means |
-|---|---|
-| Approved | The product may enter the campus ecosystem as it stands. |
-| Approved with TAAP | The product may be acquired only alongside a Temporary Alternative Access Plan covering the barriers. |
-| Do Not Purchase | The product must not be acquired: an essential task is blocked with no workable alternative. |
-
-The new words name **what the procurement office does next** rather than pass
-judgement on the product — "Denied" in particular read as a verdict on the
-software when it is an instruction about the purchase.
+**Approved**, **Approved with TAAP**, **Do Not Purchase**. The new words name
+**what the procurement office does next** rather than pass judgement on the
+product — "Denied" in particular read as a verdict on the software when it is
+an instruction about the purchase. What each one means for the department is
+set out in `06`'s decision buckets, which is where a reader who needs it
+should be looking.
 
 They are fixed vocabulary (`rv.DECISIONS`), mirrored into `reviews.decision`
 with `decision_date` and `decided_by`, and `review_db.py check` reports a

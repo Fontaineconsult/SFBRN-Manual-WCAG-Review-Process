@@ -1082,27 +1082,14 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 # The procurement verdict belongs to the internal report only. The conformance
 # report goes to the supplier and the public, and a decision field there
 # invites them to argue with a call that was never theirs to see.
-VERDICT_BLURB = {
-    "Approved": "The product may enter the campus ecosystem as it stands.",
-    "Approved with TAAP": "The product may be acquired only alongside a Temporary Alternative Access "
-                          "Plan covering the barriers below.",
-    "Do Not Purchase": "The product must not be acquired: an essential task is blocked with no "
-                       "workable alternative.",
-}
-
-
+#
+# The cell is the decision and nothing else. An explanatory clause after it
+# reads as the generator qualifying the reviewer's call, and the date and the
+# decider are in `06` and in the database for anyone who needs them.
 def verdict_row(d: dict) -> str:
     """The Report-information row that carries the procurement decision."""
-    v = (d.get("decision") or "").strip()
-    if not v or v == "Pending":
-        return ("<tr><th scope='row'>Verdict</th><td><b>Not yet decided.</b> The procurement decision "
-                "is the reviewer's act and has not been taken.</td></tr>")
-    when = d.get("decision_date") or ""
-    who = d.get("decided_by") or ""
-    tail = " &middot; ".join(x for x in (e(when), e(who)) if x)
-    return (f"<tr><th scope='row'>Verdict</th><td><b>{e(v)}</b>"
-            f"{' &mdash; ' + e(VERDICT_BLURB[v]) if v in VERDICT_BLURB else ''}"
-            f"{f'<div class=\"ev\">{tail}</div>' if tail else ''}</td></tr>")
+    return (f"<tr><th scope='row'>Verdict</th>"
+            f"<td><b>{e((d.get('decision') or 'Pending').strip())}</b></td></tr>")
 
 
 # --- the internal variant: user functional limitations ----------------------

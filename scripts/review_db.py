@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS findings (
   section TEXT,                   -- task / view
   view_id TEXT, task_id TEXT, where_text TEXT, observed TEXT, affected TEXT,
   severity TEXT, evidence TEXT, withdrawn INTEGER NOT NULL DEFAULT 0,
+  plain_summary TEXT,             -- one publishable sentence; rules in PLAIN_RULES
   fields_json TEXT,
   PRIMARY KEY (review_id, finding_id)
 );
@@ -291,6 +292,7 @@ def parse_findings(review):
         crit_cell = fields.get("WCAG criteria failed", "")
         criteria = sorted(set(re.findall(r"\b\d\.\d\.\d+\b", crit_cell)))
         observed = fields.get("Observed", "")
+        plain_summary = fields.get("Plain summary", "").strip()
         withdrawn = 1 if re.search(r"withdrawn", crit_cell + " " + observed[:120] + " " + fields.get("Severity", ""), re.I) else 0
         where = fields.get("Where", "") or fields.get("Step", "")
         vm = re.match(r"\s*([SR]\d+)\b", where)
@@ -299,7 +301,8 @@ def parse_findings(review):
         runs = sorted(set(re.findall(r"\bR\d{3}\b", evidence + " " + observed)))
         out.append({"id": head.group(1), "section": section,
                     "view": vm.group(1) if vm else "", "task": f"T{tm.group(1)}" if tm else "",
-                    "where": where, "observed": observed, "affected": fields.get("Affected users", ""),
+                    "where": where, "observed": observed, "plain_summary": plain_summary,
+                    "affected": fields.get("Affected users", ""),
                     "severity": fields.get("Severity", ""), "evidence": evidence, "withdrawn": withdrawn,
                     "criteria": criteria, "runs": runs, "fields": fields})
     return out
@@ -409,9 +412,10 @@ def sync_review(con, review):
                          "" if pending else " / ".join(f.strip()[:200] for f in fbs if not f.strip().startswith("_(pending)_"))))
         cur.execute("INSERT OR REPLACE INTO sync_log VALUES (?,?,?)", (rid, wf.name, sha(wf)))
     for f in parse_findings(review):
-        cur.execute("INSERT INTO findings VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        cur.execute("INSERT INTO findings VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (rid, f["id"], f["section"], f["view"], f["task"], f["where"], f["observed"],
                      f["affected"], f["severity"], f["evidence"], f["withdrawn"],
+                     f.get("plain_summary", ""),
                      json.dumps(f["fields"], ensure_ascii=False)))
         cur.executemany("INSERT OR IGNORE INTO finding_criteria VALUES (?,?,?)", [(rid, f["id"], sc) for sc in f["criteria"]])
         cur.executemany("INSERT OR IGNORE INTO finding_runs VALUES (?,?,?)", [(rid, f["id"], r) for r in f["runs"]])
@@ -549,12 +553,83 @@ INTEGRITY = [
 ]
 
 
+
+# --------------------------------------------------------------------------
+# Plain summary — the one field in the record written FOR a reader
+# --------------------------------------------------------------------------
+# Every other field in a finding is working notes: informal, attributed, dated,
+# full of identifiers. That is right for a review file and wrong for a report,
+# and three attempts to convert one mechanically into publishable prose failed
+# (ontology/reporting.md). So each finding carries one authored sentence, and
+# these rules are what "authored" means. They are checked, not just documented.
+#
+#   1. ONE sentence, ending in a full stop. Not two, not a fragment.
+#   2. About the PRODUCT, in the present tense. Not about the test, the
+#      reviewer, the tool or when it happened.
+#   3. States what is wrong, and what a user cannot do because of it.
+#   4. No internal identifiers: no finding, run, observation, step, check or
+#      view codes. Name the page in words if the page matters.
+#   5. No dates, no attribution, no quoting the reviewer. Text the PRODUCT
+#      shows may be quoted.
+#   6. Plain language. A procurement officer is the reader, not an engineer.
+#   7. At most 200 characters, so it fits a table cell.
+#
+# Derived from the record, not invented: the sentence must be supportable by
+# the finding's own Observed cell. It restates; it does not add.
+PLAIN_MAX = 200
+PLAIN_BAD = (
+    (r"\b(?:V-F\d+|T\d+-F\d+|R\d{3}|O\d{1,2}|W\d{1,2}|"
+     r"(?:NV|LV|NC|NH|NS|MO|CO)\d{1,2}|S\d{1,2})\b", "contains an internal identifier"),
+    (r"20\d\d-\d\d-\d\d", "contains a date"),
+    (r"(?i)\b(?:the\s+)?reviewer\b", "refers to the reviewer"),
+    (r"(?i)\b(?:axe|probe|NVDA|JAWS|CDP|screenshot)\b", "names a test instrument"),
+    (r"(?i)\b(?:measured|confirmed|walked|narrated|re-?tested)\b", "describes the test, not the product"),
+)
+
+
+def plain_summary_issues(text: str):
+    """Which authoring rules a summary breaks. Empty list means it passes."""
+    t = (text or "").strip()
+    if not t:
+        return ["missing"]
+    bad = []
+    if len(t) > PLAIN_MAX:
+        bad.append(f"longer than {PLAIN_MAX} characters")
+    if not t.endswith("."):
+        bad.append("does not end in a full stop")
+    if len(re.findall(r"[.!?]\s+[A-Z]", t)) >= 1:
+        bad.append("more than one sentence")
+    for pat, why in PLAIN_BAD:
+        if re.search(pat, t):
+            bad.append(why)
+    return bad
+
+
 def integrity(con, rid):
     issues = []
     for title, desc, sql in INTEGRITY:
         rows = [r[0] for r in con.execute(sql, {"r": rid}).fetchall()]
         if rows:
             issues.append({"check": title, "description": desc, "count": len(rows), "items": rows})
+    # the authored field, checked against its own rules
+    missing, broken = [], []
+    for fid, ps in con.execute(
+            "SELECT finding_id, COALESCE(plain_summary,'') FROM findings "
+            "WHERE review_id=? AND withdrawn=0 ORDER BY finding_id", (rid,)):
+        bad = plain_summary_issues(ps)
+        if bad == ["missing"]:
+            missing.append(fid)
+        elif bad:
+            broken.append(f"{fid}: {'; '.join(bad)}")
+    if missing:
+        issues.append({"check": "plain summary missing",
+                       "description": "a live finding has no `Plain summary` row; the report has nothing "
+                                      "publishable to quote for it",
+                       "count": len(missing), "items": missing})
+    if broken:
+        issues.append({"check": "plain summary breaks a rule",
+                       "description": "see PLAIN_RULES in review_db.py / ontology/reporting.md",
+                       "count": len(broken), "items": broken})
     return issues
 
 

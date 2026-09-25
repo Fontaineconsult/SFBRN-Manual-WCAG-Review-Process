@@ -65,6 +65,7 @@ confirmations, error messages, and other feedback are all in scope.
 |---|---|
 | **Where** | Step 2, Class Management in Accessibility Mode (S2) — reaching the assignments table |
 | **Observed** | A screen-reader user arriving on the page has no headings (`H`) and no landmarks (`D`) to move by. The two data grids are reachable with `T` but carry the same generic caption ("Data table related to the headers above"), so the user cannot tell the assignments table from the news table until tabbing onto a focusable title div. The page's skip links do work (revised 2026-09-10: Enter moves focus to the next section's skip link) but are exposed as links with instruction-like wording. Task remains completable (reviewer: "I can navigate it successfully") by linear reading, the skip links, or table-key trial. Details: V-F1, V-F2, V-F3. Open: whether table navigation from the row's Go button works in browse mode (R016 O9). |
+| **Plain summary** | The assignments table and its controls carry no headings or landmarks, so a screen-reader user must tab through the whole page to find an assignment. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1, 4.1.2 |
 | **Severity** | Major |
@@ -76,6 +77,7 @@ confirmations, error messages, and other feedback are all in scope.
 |---|---|
 | **Where** | Step 4, Take Assignment (S3) — moving from the problem navigator into a problem |
 | **Observed** | The problem links ("Problem N Click To Activate") are reachable with `K` and activate the problem, but focus stays where it was; the activated problem's content is not focused and the page has no headings, so a screen-reader user has no structural way to find the problem they just opened. The vendor's alternative — a visually hidden "Press tab to go to problems. Press enter to open the accessibility shortcuts menu" button that mounts jump links on Enter — requires discovering a hidden tab stop and, under NVDA, a mode switch (V-F8). |
+| **Plain summary** | Activating a problem does not move focus to it and no heading marks it, so a screen-reader user has no way to reach the problem they just opened. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 2.4.3, 1.3.1 |
 | **Severity** | Major |
@@ -87,6 +89,7 @@ confirmations, error messages, and other feedback are all in scope.
 |---|---|
 | **Where** | Step 3, Class Management in standard mode (S1) — opening the assignment row's action menu (⋮) to reach "Take Assignment" |
 | **Observed** | In standard mode the Class Assignments grid row has no focusable control: Tab reaches nothing in the row, and Enter, Space and the Applications key do nothing on the row or the ⋮ cell. The reviewer: "Only way to nav is by clicking the table row." The action menu, and with it "Take Assignment", "View Grade Report" and the rest, opens by mouse click only; when it is opened with the mouse, its appearance is not announced to NVDA and its items are read only on mouse-over (R015 O12). The Accessibility Mode page (S2) replaces the menu with an Actions select plus Go button that does work (R016 O13), so the route exists only after the user finds the "Accessibility Page" button and switches modes; the mode is stored on the account. The exploration record (R001 O7) showed the row as plain cells with a click handler; this confirms it. |
+| **Plain summary** | On the standard Class Management page the assignment row's action menu opens only by mouse, so a keyboard user must switch to the Accessibility Page to start an assignment. |
 | **Affected users** | Keyboard-only users; screen reader users (the default page dead-ends the core task) |
 | **WCAG criteria failed** | 2.1.1 (menu operable by pointer only); 4.1.2 (no control exposed for the row action) |
 | **Severity** | Minor (reviewer's ruling 2026-09-14: the Accessibility Mode page is accepted as a conforming alternate version — "not an ideal solution, but it does allow access" — so the defect is the standard page's own operability and the discoverability of the alternate, not a task stop. Would be a Blocker for the standard page alone.) |
@@ -193,6 +196,7 @@ differently.
 |---|---|
 | **Where** | Every sampled page — the whole application is laid out in a fixed-width 1300 px box (`div#container`); measured on all 14 views (S1–S12, R1, R2) and confirmed by the reviewer on Class Management, standard mode (S1) and Take Assignment (S3). |
 | **Observed** | At 320 CSS px wide (the 1.4.10 reflow viewport, ≈ 400 % zoom in a 1280 px window) every page scrolls in two dimensions — the content does not re-stack into one column (probe, 2026-09-11: S1 scrollWidth 1343, S3 1300, S5 1373; the Edit Class popup 589 px, the sign-in page 1024 px). Reviewer 2026-09-15 at real 400 % zoom: "nothing is hidden or lost at 400%, but no reflow" on both pages — everything stays reachable, but a line of text or a row of controls is read by scrolling sideways and back for each line. No data table, canvas or image exemption applies to the page layout itself. |
+| **Plain summary** | Every page is fixed at 1300 pixels wide and does not reflow, so a low-vision user at high zoom must scroll horizontally to read any line. |
 | **Affected users** | Low-vision users who enlarge content with browser zoom; anyone on a narrow viewport (a phone, a split screen, a magnifier's reduced viewport) |
 | **WCAG criteria failed** | 1.4.10 |
 | **Severity** | Major |
@@ -204,6 +208,7 @@ differently.
 |---|---|
 | **Where** | Class Management, standard mode (S1) — the "Classes" / "Class Menu" captions, the "Class Assignments" and "Class News" section headings, and the grey welcome / news body text. The same colour family recurs across the product (axe `color-contrast` violations on 11 of 14 views): the orange section headings on the Assignment Editor (S5) and Student Practice Area (S12); grey 12 px notice text on View Grade Report (S4) and Manage Class Roster (S10); red randomized-variable values (`#FF6347`, 2.94:1) and red MathJax values (`#FF0000`, 3.99:1) on View Grade Report (S4), View Assignment Solutions (S8) and View Printable Assignment (S13, confirmed 2026-09-15); the orange deduction percentage (`#FF9900`, 2.14:1) on Take Assignment (S3); the Calendar event bar (white on `#8EA9DB`, 2.37:1); "User Name:" on Sign in (4.05:1); the selected profile on Academic Integrity Preferences (white on `#A0A0A0`, 2.61:1). |
 | **Observed** | Eyedropper by the reviewer, 2026-09-15, Class Management at 100 %: teal captions `#48848C` on white — "Large pass, Fail regular for AA" (the captions are 16 px, so the 4.5:1 threshold applies; 4.23:1); "Class Assignments" `#EFBB75` on white — "fail for all levels" (1.74:1); grey `#808080` text — "fails over white for AAA and only passes for large in AA" (12 px body text; 3.94:1). The other pages' values are axe measurements (R001–R014 `R###-axe.json`) confirmed page by page in W43–W55; the Take Assignment deduction percentage and the grade-report variable values are information a student acts on, not decoration. |
+| **Plain summary** | Section headings, deduction percentages and randomised values fall below the required contrast, so a low-vision user cannot read the numbers a task depends on. |
 | **Affected users** | Low-vision users and anyone reading on a dim or glare-lit screen; colour-vision-deficient users for the orange/red items |
 | **WCAG criteria failed** | 1.4.3 |
 | **Severity** | Major (confirmed by the reviewer 2026-09-15) |
@@ -215,6 +220,7 @@ differently.
 |---|---|
 | **Where** | Class Management, standard mode (S1) — the assignment row's **⋮** menu icon (16 × 16 px) beside the **+** expand glyph (9 × 10 px); Take Assignment (S3) — the nine **problem-number links** in the left navigator (8 × 18 px each, adjacent). The Assignment Editor's spinner/time arrows (S5, 16 × 9 px) were measured too but are exempt: the values can be typed directly (R039). |
 | **Observed** | Measured by the probe (targets under 24 × 24 CSS px with another target inside the 24 px circle). The reviewer ruled on the exceptions 2026-09-14: the ⋮ menu — "no other way found" on this page (the Accessibility Mode page's Actions select is a different page); the problem links — "no alternative found" (the Ctrl+Shift chords and the post-submit "Continue" link do not replace direct problem selection); the editor arrows — exempt, "yes, can be typed directly". A pointer user with a tremor or a coarse pointer hits the neighbouring target: the wrong problem, or the expand glyph instead of the menu. |
+| **Plain summary** | The row action control and the problem-navigator links are smaller than 24 pixels and sit close together, so a user with a tremor or a coarse pointer hits the wrong one. |
 | **Affected users** | Users with limited fine motor control; touch and coarse-pointer users |
 | **WCAG criteria failed** | 2.5.8 |
 | **Severity** | Minor |
@@ -226,6 +232,7 @@ differently.
 |---|---|
 | **Where** | S1 Class Management (standard mode) — the + expand controls of the Class Assignments and Class News grids; **S2 Class Management Accessibility Mode** — the same control, and there it is the *only* graphic `G` reaches (added 2026-09-21); S12 Student Practice Area — the sections grid's expand image, and (2026-09-24) the DevExpress interface sprites that `G` stops on, carrying `alt=""`, `alt="v"` or `alt="[Collapse]"` |
 | **Observed** | `G` (next graphic) stops on two controls announced as "collapsed graphic clickable": the DevExpress detail-expand glyphs (`img.dxGridView_gvDetailCollapsedButton`). They are clickable images with no role (not a button) and no name — a screen-reader user hears that something collapsed is clickable but not what it expands. The site logo, the only other graphic, has alt text. |
+| **Plain summary** | The grid expand controls are images with no name or role, so a screen-reader user hears only that something clickable exists, not what it opens. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (no name, no role); 1.1.1 (an actionable image with no text alternative) |
 | **Severity** | Minor |
@@ -248,6 +255,7 @@ differently.
 |---|---|
 | **Where** | Class Management, standard mode (S1) — the **"view"** control in the Class Assignments grid, in the cell reading "Instructor Default" (it opens the assignment's grade profile: `LaunchGradeProfile(17547, 'Instructor Default')`) |
 | **Observed** | Found by the reviewer with NVDA, 2026-09-21: *"I see a 'view' link that is in the Class Assignments Table that is out of the tab order but is reachable via NVDA links view."* Measured the same day and confirmed. The control is `<a class="actionMenu" onclick="LaunchGradeProfile(…)">view</a>` with **no `href`** — an anchor that is not a link, carrying its behaviour on a click handler. A full tab cycle was walked with real dispatched Tab keys: **41 stops, then the order wraps to the top, and this control is never focused.** The result is an unusual inversion — a **screen-reader user can reach and activate it** from NVDA's links list, while a **sighted keyboard-only user cannot reach it at all**, and neither can a speech-input user who says "click view". It also sits at x⁈1887, outside the product's 1300 px container, so a mouse user has to scroll horizontally to see it (V-F19). This is the second control in this one grid that the keyboard cannot reach; the row action menu (T1-F3) is the first. |
+| **Plain summary** | The grade-profile link is absent from the tab order but present to a screen reader, so a keyboard user without assistive technology cannot reach it at all. |
 | **Affected users** | Keyboard-only users without a screen reader; speech-input users; switch users — the people for whom the AT links-list route does not exist |
 | **Severity** | Minor (proposed 2026-09-21 — the target is an informational grade-profile popup, not a task step, and screen-reader users do have a route. Reviewer to confirm; it is Level A, so a case for Major exists if the grade profile is something a student needs.) |
 | **WCAG criteria failed** | 2.1.1 (functionality not operable from a keyboard interface); 4.1.2 (an `<a>` with no `href` is not exposed as a link consistently — NVDA lists it, the tab order does not) |
@@ -267,6 +275,7 @@ differently.
 |---|---|
 | **Where** | S2 Class Management (Accessibility Mode) — whole page; also S1 (axe R001) and every other signed-in view (axe R004–R014) |
 | **Observed** | No headings and no landmarks: NVDA `H` and `D` report none; the elements list offers no route to the content. The visible section titles ("Classes", "Class Menu", "Class Assignments", "Class News") are `div tabindex="0"` elements wrapping a coloured bold span — focusable, no role, not headings — so they announce as plain text when tabbed to. The "accessible version" of the page adds skip links and captions but no structure. |
+| **Plain summary** | No page carries headings or landmarks, so a screen-reader user cannot jump between sections and must read or tab through everything in order. |
 | **Affected users** | Screen reader users (no structural navigation); keyboard users (extra tab stops with no purpose) |
 | **WCAG criteria failed** | 1.3.1 (visual headings not programmatically determinable); 2.4.1 in combination with V-F3 |
 | **Severity** | Major |
@@ -278,6 +287,7 @@ differently.
 |---|---|
 | **Where** | S2 Class Management — Class Assignments and Class News grids (DevExpress) |
 | **Observed** | Each grid is rendered as two tables: a header table captioned "Headers for the data table below" and a body table captioned "Data table related to the headers above". Both grids use the identical generic captions, so `T`-key navigation announces "Data table related to the headers above, table clickable with x rows and x columns" for either and the user cannot tell which table they are in; on entering, no header names are listed. Column headers **are** announced per cell during table navigation ("row 3, Actions, column 1" — R016 O10), so the header–cell relationship holds; the defect is identification. |
+| **Plain summary** | The two data grids share one generic caption and generic column headers, so a screen-reader user can tell them apart only by their position on the page. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1 (table identification) |
 | **Severity** | Minor (revised 2026-09-10) |
@@ -289,6 +299,7 @@ differently.
 |---|---|
 | **Where** | S2 Class Management — the skip links "Tab for Assignments, Enter to skip…" and "Tab for Class News, Enter to skip" |
 | **Observed** | The section skip controls ("Tab for Assignments, Enter to skip…", "Tab for Class News, Enter to skip") **do work**: Enter moves focus to the next section's skip control, skipping the section (revised 2026-09-10 from the reviewer's first impression that nothing happened). They are exposed as links (`href="javascript:skipper('News')"`) although they act as buttons, and their wording reads as an instruction rather than as the name of a control, so a user hears "Tab for Assignments, Enter to skip, link" and cannot tell what will be skipped. Together with the top-of-page jump point they satisfy 2.4.1 on this page. |
+| **Plain summary** | The skip links are announced as links whose text names no destination, so a screen-reader user cannot tell where they lead. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (role); 2.4.4 (link purpose from its text) |
 | **Severity** | Minor |
@@ -311,6 +322,7 @@ differently.
 |---|---|
 | **Where** | S11 — the popup forms (e.g. Edit Class: Class Name, Class Description, Time Zone, Academic Year, Semester, Subject) |
 | **Observed** | Form inputs are not labelled; the visible "labels" are text in an adjacent table column of the layout table, not associated with the inputs. Confirms axe `label` ×6 on the same document (R002 O1). |
+| **Plain summary** | The popup form fields are not associated with their captions, so a screen-reader user is not told what each field expects. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1, 3.3.2, 4.1.2 |
 | **Severity** | Major |
@@ -322,6 +334,7 @@ differently.
 |---|---|
 | **Where** | S2 Class Management (Accessibility Mode) — the per-row **Actions** `<select>` in the Class Assignments grid, the control that leads to Take Assignment |
 | **Observed** | The select has no accessible name of its own (axe `select-name`, R005 O1). In NVDA browse mode the cell text is read before the control — Speech Viewer: "Create Assignment  Go  Assignment Menu - Click To Activate  row 3  Actions  column 1  combo box  Create Assignment  collapsed" — so the user hears "Assignment Menu - Click To Activate" from the cell, followed by "combo box, Create Assignment, collapsed"; a focus-mode Tab onto the control would announce only the combo box and its current value. Column header "Actions" is announced. |
+| **Plain summary** | The per-row action control has no accessible name, so a screen-reader user cannot tell what the control does before using it. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.2 (name) |
 | **Severity** | Minor |
@@ -333,6 +346,7 @@ differently.
 |---|---|
 | **Where** | S2 Class Management (Accessibility Mode) — the "Classes:" and "Class Menu:" `<select>` controls at the top of the page |
 | **Observed** | Both selects announce the same accessible name — "First make your selection here and then click Go button to confirm your choice." — followed by role and current value (Speech Viewer: "First make your selection here and then click Go button to confirm your choice.  combo box  Testing Course for CSU East Bay  collapsed"). The visible captions "Classes:" and "Class Menu:" are not announced at all. A screen-reader user cannot tell which select is the class chooser and which is the action menu except from the current value. |
+| **Plain summary** | The class selection controls announce an instruction instead of their label, so a screen-reader user learns what a control is for only after moving past it. |
 | **Affected users** | Screen reader users; speech-input users (the visible label is not in the name) |
 | **WCAG criteria failed** | 1.3.1, 2.5.3, 4.1.2 |
 | **Severity** | Major |
@@ -344,6 +358,7 @@ differently.
 |---|---|
 | **Where** | S2 (and S1) Class Management — the top-of-page "jump point" (`#top_of_page_jump_point`, `div role="button" tabindex="0"`), the first focusable control on every signed-in view |
 | **Observed** | The controls have no accessible name (axe `aria-command-name` on all 14 views) — NVDA reads only their instruction text plus "button". On Class Management, Enter changes the text to "No Shortcuts" and navigates nowhere. On Take Assignment (R017 O2) the problems jump point is a **visually hidden** tab stop; Enter mounts the "accessibility shortcuts menu" links, which keyboard users can Tab to but NVDA users reach only after switching to browse mode. The reviewer judged the pattern "very confusing for a screen reader user": the bypass mechanism exists but is discoverable only by tabbing into a hidden area. The documented `Ctrl+Shift+1` (previous part) chord moves focus to the top jump point instead (R017 O13). |
+| **Plain summary** | The jump-point shortcuts have no accessible name and appear outside the normal focus path, so a screen-reader user cannot tell what they do or reach them predictably. |
 | **Affected users** | Screen reader users; keyboard users |
 | **WCAG criteria failed** | 4.1.2; 2.4.3 |
 | **Severity** | Major (re-rated 2026-09-10 on Take Assignment) — pending the keyboard run's check of focus visibility on the hidden stop (2.4.7) |
@@ -363,6 +378,7 @@ differently.
 |---|---|
 | **Where** | Take Assignment (S3) — the problem figures (`<img>` per problem; the same images on View Grade Report, S4 — confirmed 2026-09-15 — View Assignment Solutions, S8, and View Printable Assignment, S13). Problems 1 and 6 in particular: text drawn over the graphic. |
 | **Observed** | The figures are low-resolution raster images that contain text — "usually math" (reviewer, 2026-09-15): labels, values and formulas a student needs to solve the problem are pixels, not text, although the same page renders its statement mathematics with MathJax (real text). At 400 % zoom they "don't scale well … they are blurry" — the math in them stops being readable exactly when a low-vision user enlarges it. On Problems 1 and 6 the text sits over a graphic and "fail[s] color contrast" (reviewer, eyedropper). Related: the same images have empty `alt` for screen-reader users (V-F12, 1.1.1). **Added 2026-09-21 (reviewer, grayscale pass on S4):** *"the images used also fail contrast in some ways when in grey"* — the figures do not only pixelate at zoom, they lose internal contrast when colour is removed, so a grayscale or colour-blind reader loses detail inside the diagram as well as sharpness. |
+| **Plain summary** | The problem figures are low-resolution images containing text, so they blur at high zoom and the mathematics inside them becomes unreadable. |
 | **Affected users** | Low-vision users (zoom, magnification); users with colour-vision or contrast sensitivity loss; screen-reader users via V-F12 |
 | **WCAG criteria failed** | 1.4.5, 1.4.3 |
 | **Severity** | Major (confirmed by the reviewer 2026-09-15) |
@@ -374,6 +390,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — the `Ctrl+Shift+2` "read out your answer" function (live region `#calc-announce`), Problem 9 multiple choice with MathJax in the option text |
 | **Observed** | After selecting an option, `Ctrl+Shift+2` places the option's **raw MathJax HTML source** in the alert live region. NVDA reads roughly 4,400 characters of element, class, style and attribute markup ("span class MathJax_Preview style color inherit display none … data minus mathml ltmath xmlns quot http divided by divided by www.w3.org …") before and around the actual answer text (T₂ is less than T₁). `Ctrl+Shift+5` (instructions) works correctly on the same region, so the mechanism is sound and the defect is the content injected for math-bearing answers. This is the vendor's compensating read-back for parts whose radio buttons have no names (R004 O1), and its "human-friendly spoken math" claim. |
+| **Plain summary** | The answer read-back speaks raw markup instead of the mathematics, so a screen-reader user cannot check what they have entered before submitting. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.3, 1.3.1 |
 | **Severity** | Blocker for the read-back function (unusable output); Major for Task T2 |
@@ -396,6 +413,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — multiple-choice answer radio buttons (Problems 8 and 9) |
 | **Observed** | The radios have no accessible name (axe `label` ×5/6, R004 O1; accessibility tree shows unnamed radios). Browse mode: arrowing between options reads the adjacent cell text, so plain-text options are usable; a math option ("½ g") announces only "row 4 table 1". Focus mode (Shift+Tab from Submit, 2026-09-10): the group is entered as "table"; arrowing auto-selects and announces "Radio Button Checked X of X" plus the column-two answer text, but MathJax inside an option does not reliably play and the user must leave focus mode to hear it; the auto-read of an option mixing text and math breaks. `Ctrl+Shift+2` read-back of a math option is unusable in both modes (V-F9). |
+| **Plain summary** | Multiple-choice answer options have no accessible name, so a screen-reader user cannot tell which option they are selecting; where options contain mathematics the answer is unreadable. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.3.1, 4.1.2 |
 | **Severity** | Major (Blocker for parts whose options contain math) |
@@ -407,6 +425,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — the problem figure (observed: Problem 8, two blocks and a pulley; exploration found the same on Problems 6, 7, 9) |
 | **Observed** | NVDA `G` (next graphic) finds no graphic on the page; the figure cannot be right-clicked. The figure `<img>` has an **empty alt**, so it is treated as decorative and hidden from the screen reader, although the statement refers to it ("as shown") and it carries the physical setup. Problems 1, 4, 5 carry descriptive alt (exploration) — so this is per-problem authoring, and the solutions page shows a broken `alt=` quote on some figures (R014 O1). |
+| **Plain summary** | The diagram in a problem is hidden from assistive technology, so a screen-reader user cannot see the figure the question depends on. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 1.1.1 |
 | **Severity** | Major |
@@ -418,6 +437,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — the formula/number entry area of symbolic ("Equation") and numeric ("Algorithm") parts; observed on Problem 2 Part (a) and Problem 5 |
 | **Observed** | The entry area is not a form control: it is a `div` (`<div class="problemanswer" id="problem_answer">332 fact( exp( | ) )</div>`, reviewer-pasted) holding the typed expression and a blinking-caret span — no role, no name, no value exposed, not in the Tab order. Nothing announces it as the F_NET (or other quantity) answer: the visible "F_NET =" prefix is a MathJax expression beside it, not an associated label. A screen-reader user cannot reach it directly — only by tabbing to a neighbouring element and arrowing into it in browse mode — and hears its content only through `Ctrl+Shift+2` (empty: "Alert your answer in degrees"; populated: read left to right with no nesting conveyed). The caret can be moved with on-screen ←/→/HOME/END buttons; its position is not announced as it moves, but `Ctrl+Shift+3` reports it on request. Typing works and the keypad buttons are Tab-reachable, so entry is possible once the area is found. |
+| **Plain summary** | The formula and number entry area is a plain container rather than a form field, so a screen-reader user is not told it is an input or what it expects. |
 | **Affected users** | Screen reader users; keyboard users (no focusable, visible entry stop) |
 | **WCAG criteria failed** | 4.1.2, 1.3.1, 3.3.2, 2.4.3 |
 | **Severity** | Major |
@@ -429,6 +449,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — Problem 3 drag-and-drop ranking, the alternative "drag and drop accessibility table" form |
 | **Observed** | The alternative form is discoverable and operable: an exposed button ("Show drag and drop accessibility table") reachable by Tab moves focus into a Bucket / Order / Item table of combo boxes with "Add Item" and "Reset". But a placement, and the resulting ranking, are not announced in any designed way; the user can only derive the state by navigating the table. The `Ctrl+Shift+2` read-back reads only the Item column and runs the rows together "like a long paragraph" with no boundary between items, so the user cannot tell which item is being referenced. The combo boxes and the ✖ delete buttons are properly announced; the visual cards outside the form announce nothing (empty alt), the form's item descriptions being the only accessible rendering of them. |
+| **Plain summary** | Placing an item in the drag-and-drop ranking is not announced, so a screen-reader user cannot confirm where their answer went. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.3 |
 | **Severity** | Minor ("not unusable" — reviewer) |
@@ -440,6 +461,7 @@ differently.
 |---|---|
 | **Where** | S3 Take Assignment — the **Hint** button (and, by the same mechanism, Feedback) on any part |
 | **Observed** | Activating Hint inserts the hint text below the problem area, but nothing is announced: NVDA's Speech Viewer at that moment shows only "table with 3 rows and 1 column Submissions Info." The reviewer found no clear way to navigate to the inserted hint. Requesting a hint costs a deduction (the percentages are spoken), so a screen-reader user pays for content they are not told has arrived and cannot easily find. |
+| **Plain summary** | A requested hint is inserted below the reading position without announcement, so a screen-reader user is not told the help they asked for has arrived. |
 | **Affected users** | Screen reader users |
 | **WCAG criteria failed** | 4.1.3, 2.4.3 |
 | **Severity** | Major |
@@ -451,6 +473,7 @@ differently.
 |---|---|
 | **Where** | Take Assignment (S3, `/Common/TakeTutorialAssignment…`), Sign in (S7, `login.theexpertta.com/Login.aspx`), the Edit Class popup (S11, Class Management → Class Menu → Edit Class → Go) and Password reset (S14, `login.theexpertta.com/ResetPassword.aspx` — added 2026-09-21) — the `<html>` element |
 | **Observed** | These three pages declare no `lang` attribute; the other eleven sampled views declare `lang="en"`. A screen reader whose synthesizer defaults to another language reads the assignment, the sign-in form and the popup with the wrong voice; with an English default nothing is audible (the reviewer heard no mispronunciation, R017 NV9). Measured by axe (R004 O2, `html-has-lang`) and the probe (R093, R077); confirmed as a finding by the reviewer's delegation 2026-09-14 ("your call"). |
+| **Plain summary** | Four pages declare no language, so a screen reader may pronounce them with the wrong voice. |
 | **Affected users** | Screen reader users whose default synthesizer language is not English |
 | **WCAG criteria failed** | 3.1.1 |
 | **Severity** | Minor |
@@ -470,6 +493,7 @@ differently.
 |---|---|
 | **Where** | Student Practice Area (S12) — `https://dei56mo.theexpertta.com/Tutorial/ClassTutorialSelection.aspx?m=1&eid=3373` (Class Menu → Student Practice Area → Go): the sections grid that holds the practice problems ("Problems to Help Students Learn Expert TA" and the chapter sections), its expand controls and its per-problem checkboxes. |
 | **Observed** | Reviewer, 2026-09-15: "this page is hard to navigate … the sections table requires an expansion to view the content, but the expand buttons are not appropriately labeled, no forms have labels, no headings, tabbing focus is lost outside of the initial buttons and dropdowns, their ctrl alt 1 doesn't do anything. can't tab into the check boxes, there is no obvious way to find the tutorial content". The markup the reviewer saved (`R059-sections-table.html`) explains it: the content is four nested tables with no captions, headers or headings; the expand control is an `<img alt="[Collapse]">` with an `onclick` and no role or tabindex; the problem checkboxes are DevExpress `<span>`s, not inputs. So a keyboard user's Tab stops at the Books / Chapters selects and the buttons and then focus vanishes — the practice problems can never be reached or selected; a screen-reader user has no heading, landmark or caption to find them and hears unnamed graphics and unlabeled fields. This is the student's self-study entry point (F1 access course content). |
+| **Plain summary** | Nothing in the Student Practice Area takes keyboard focus and the page has no headings, so a keyboard or screen-reader user cannot choose a book, a chapter or a problem. |
 | **Affected users** | Keyboard-only and switch users (cannot reach the content at all); screen-reader users (cannot find or identify it); low-vision users navigating by focus |
 | **WCAG criteria failed** | 2.1.1, 2.4.7, 1.3.1, 4.1.2 |
 | **Severity** | Blocker for this page (assistant's rating — reviewer to confirm) |
@@ -481,6 +505,7 @@ differently.
 |---|---|
 | **Where** | Student Practice Area (S12) — every selection update (choosing a book, a chapter, a difficulty filter) |
 | **Observed** | Reviewer with NVDA, 2026-09-24. Choosing a book re-announces **the entire page** instead of the chapters that changed, and the announcement is byte-for-byte the same whichever selection is made: *"Student Practice Area document / form landmark / table / Class Management Instructor Help Library Take Tutorial Assignment Take Tutorial Assignment Clear Selection Clear Selection Sections row 1 column 1 / table / … row 2 column 2"* — the menu chain read twice, with nothing about the chapters list that actually updated. Their summary: **"that is what is announced on update, its always the same thing."** Measured: the view carries **zero `aria-live`, `role=status` or `role=alert` regions**, so the selection triggers a full re-render and the screen reader re-reads the container because nothing marks the result as a status message. This is the **mirror image of V-F40** on the Calendar, where changes are announced not at all: the same criterion failed from opposite directions, and both have the same fix — mark the region that changes and say what changed. |
+| **Plain summary** | Every selection re-announces the whole page identically, so a screen-reader user is never told which part actually changed. |
 | **Affected users** | Screen reader users (a wall of unchanged text after every selection, and no way to hear the result); users with attention or cognitive disabilities |
 | **WCAG criteria failed** | 4.1.3 (status messages not programmatically determinable) |
 | **Severity** | Major (proposed 2026-09-24 — reviewer to confirm) |
@@ -492,6 +517,7 @@ differently.
 |---|---|
 | **Where** | Take Assignment (S3) — the three controls in the answer area that change a student's score: **Submit**, **Feedback**, and **"I give up"** |
 | **Observed** | Reviewer 2026-09-24: **"Submit does not warn, 'I give up' does warn, 'Feedback' does not warn, each of these has an effect on the total points earned."** All three act on a single activation and all three cost marks. **Submit** consumes an attempt and, if the answer is wrong, applies the incorrect-submission deduction — the purple percentages the grade report itemises (R100 O6). **Feedback** applies its own deduction, the orange "4%"/"5%" the same page records as the price of help. Neither asks first. **"I give up"** — the most obviously final of the three, and the one a student is least likely to press by accident — is the only one that does warn. WCAG 3.3.4 covers submissions that modify user-controllable data or **submit user test responses**, which is precisely what these do. The finding is not that the product cannot ask: it demonstrably can, and does, in one place out of three. It asks in the wrong one. A student with a cognitive or motor disability who presses Submit or Feedback in error loses marks with no confirmation step and no way back. |
+| **Plain summary** | Submitting an answer and requesting feedback each reduce the score on a single activation without asking, so a user who activates one in error loses marks irreversibly. |
 | **Affected users** | Users with cognitive, learning or memory disabilities; users with tremor or imprecise pointing who activate a control unintentionally; anyone using a keyboard where these controls sit in the tab order |
 | **WCAG criteria failed** | 3.3.4 (no reversal, check or confirmation on submissions that affect graded test responses) |
 | **Severity** | Major (proposed 2026-09-24 — the loss is graded marks and it is irreversible. Reviewer to confirm.) |
@@ -511,6 +537,7 @@ differently.
 |---|---|
 | **Where** | View Grade Report (S4) — the per-problem grade tables (score / submission date / answer cells); Calendar (S6) — the month grid's lines (confirmed 2026-09-15). |
 | **Observed** | The tables' cell borders "are too small and fail color contrast at all levels" (reviewer, eyedropper, 2026-09-15): thin lines below 3:1 against white, so the cell boundaries that separate one submission's date and score from the next are hard to make out for a low-vision reader; the table is the page's only presentation of the grade breakdown. |
+| **Plain summary** | The grade tables and calendar grid draw their rules below the required contrast, so a low-vision user loses the boundaries between cells. |
 | **Affected users** | Low-vision users; users with reduced contrast sensitivity |
 | **WCAG criteria failed** | 1.4.11 |
 | **Severity** | Minor (confirmed by the reviewer 2026-09-15) |
@@ -522,6 +549,7 @@ differently.
 |---|---|
 | **Where** | View Grade Report (S4) — the **22 `[?]` help links**, one beside each deduction and hint row (all of them link to `blog.theexpertta.com/hints-and-feedback`) |
 | **Observed** | Reviewer with NVDA, 2026-09-21: *"[?] are all unlabled and announce only Visited Link."* Measured the same day and the cause is exact: every one of the 22 links has `[?]` as its **entire** text content, with no `title` and no `aria-label`. Screen readers do not speak bracket-question-bracket, so the computed accessible name is empty and NVDA is left announcing only the visited state. A user hears 22 anonymous links and cannot tell what help any of them offers — nor that all 22 lead to the same page, which is the one thing that would make ignoring them safe. This is the page's only route to an explanation of how hints and deductions affect a grade. |
+| **Plain summary** | The grade report's help links contain only punctuation, so a screen-reader user hears 22 anonymous links and cannot tell what help any of them offers. |
 | **Affected users** | Screen reader users; speech-input users (there is no name to speak); users with cognitive disabilities (22 identical unexplained controls) |
 | **WCAG criteria failed** | 2.4.4 (link purpose not determinable from the text or its context); 4.1.2 (no accessible name) |
 | **Severity** | Major (proposed 2026-09-21 — the links are the documented explanation of the deduction scheme, and every one of them is anonymous. Reviewer to confirm.) |
@@ -533,6 +561,7 @@ differently.
 |---|---|
 | **Where** | View Grade Report (S4) — the per-problem images inside the submission table cells (`/images/<hash>.png`, the rendering of the student's own submitted work) |
 | **Observed** | Reviewer with NVDA, 2026-09-21: *"Tables have headings, however the tables contain images in the cells which have no alt text and are therefore fully not accessible for purpose."* Measured: **20 images on the view, every one inside a table cell, 16 of them with no alt text at all.** The table structure is the part the product got right — the reviewer confirms headers are announced with cells — which makes the failure sharper, not milder: the screen reader navigates correctly to a cell and finds nothing in it. What is missing is not decoration. These images *are* the student's answer as submitted, so the page's entire purpose — "shows your detailed work" — is unavailable without sight, while the page reports itself as navigable. |
+| **Plain summary** | The student's submitted work is shown as images with no text alternative, so a screen-reader user cannot read their own graded answers. |
 | **Affected users** | Screen reader users (the content of their own submitted work); users of text-only or image-blocked browsing |
 | **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
 | **Severity** | Blocker for this view's purpose (proposed 2026-09-21 — a student cannot read their own graded work here by any means. Reviewer to confirm the rating; it is what turns "navigable with effort" into a Broken result.) |
@@ -554,6 +583,7 @@ differently.
 |---|---|
 | **Where** | Calendar (S6) — the month grid and the assignment events inside it |
 | **Observed** | Reviewer with NVDA, 2026-09-21: **"there is no way to tab into the calendar, T enters calendar as its a table … calendar has to be naved as a table."** Measured: the event is a `div` with `tabIndex = -1`, no `href`, no `role`, and nothing else in the grid takes focus. It is announced as the assignment name plus **"clickable"** — a state, not a role — on an element that cannot be focused, so what a screen-reader user hears is an invitation the keyboard cannot accept. A screen-reader user reaches the content by table navigation; a **keyboard-only user without a screen reader has no route into the grid at all**, and no way to open an event. Third instance of the same pattern in this product, after the row action menu (T1-F3) and the grade-profile "view" control (V-F32): behaviour attached to an element that was never made focusable. |
+| **Plain summary** | The calendar grid takes no keyboard focus, so a keyboard user cannot reach an assignment or open its details. |
 | **Affected users** | Keyboard-only users without a screen reader; switch and speech-input users |
 | **WCAG criteria failed** | 2.1.1 (functionality not operable from a keyboard); 4.1.2 (clickable announced without a role, on a non-focusable element) |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
@@ -565,6 +595,7 @@ differently.
 |---|---|
 | **Where** | Calendar (S6) — the assignment event: its start is a cell, its span and end date are the coloured bar |
 | **Observed** | Reviewer with NVDA, 2026-09-21: **"when we enter the cell where the assignment starts, we hear the assignment name 'clickable' but we dont hear that the assignment spans or ends on the 8th."** Measured: the event's text sits in the **single** day cell where it begins, while the bar that carries the range is a visual element spanning the others. So a screen-reader user learns that an assignment exists on the 1st and nothing about when it is due; a colour-blind user loses the bar too (V-F31, R102 O3 — "fails totally"). The due date is the reason the page exists, and it is the one fact conveyed by presentation alone. The event modal does hold the dates, but reaching it requires a mouse (V-F38) and it announces nothing when it opens (V-F40). |
+| **Plain summary** | An assignment's due date and duration are shown only by the coloured bar's extent, so neither a screen-reader nor a colour-blind user can tell when work is due. |
 | **Affected users** | Screen reader users; users with colour vision deficiency; anyone on a monochrome or low-quality display |
 | **WCAG criteria failed** | 1.3.1 (information conveyed by presentation and not programmatically available) |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm; a case for Blocker exists, since due dates are the view's whole purpose) |
@@ -576,6 +607,7 @@ differently.
 |---|---|
 | **Where** | Calendar (S6) — opening an event's modal, and changing the displayed month |
 | **Observed** | Reviewer with NVDA, 2026-09-21: **"if we click the assignment a modal opens, no annoncement on open … month change not announced."** Measured the same day, and the cause is structural rather than a timing artefact: the view carries **no `role="dialog"`, no `aria-modal`, and zero `aria-live`, `role=status` or `role=alert` regions anywhere**. There is no mechanism by which either change could be announced. A screen-reader user clicks an event and the page appears to do nothing; they change month and the grid silently becomes a different month under a reading position that did not move. |
+| **Plain summary** | Opening an event and changing the month are not announced, so a screen-reader user is not told the page has changed. |
 | **Affected users** | Screen reader users; users with attention or memory disabilities who rely on being told what changed |
 | **WCAG criteria failed** | 4.1.3 (status messages not programmatically determinable); 2.4.3 in combination, for the modal that takes no focus |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
@@ -587,6 +619,7 @@ differently.
 |---|---|
 | **Where** | Calendar (S6) — the event detail modal: its title field, and the start / due / end dates; also the two filter checkboxes on the page behind it |
 | **Observed** | Reviewer with NVDA, 2026-09-21: **"the modal looks like a form but is not, the form fielnds are not labled, there is a start due end date, but they are calendar selection widget and not actually just info on the assignment."** Two defects, and the second is the more interesting. **Unlabelled:** measured, the modal's `#modal-title` is an `input type="text"` that is neither read-only nor disabled, with no `label`, no `aria-label` and no `title`; the page's two filter checkboxes (`#classFilter-3373`, `#hlpCheckbox`) have no naming mechanism either. **Mis-typed:** the assignment's dates are presented as date-picker widgets although they are information the student cannot change. A screen-reader user is told they are sitting in an editable date control and must work out that there is nothing to edit — the role actively misdescribes the content. |
+| **Plain summary** | The event detail fields are unlabelled, and read-only dates are presented as editable date pickers, so a screen-reader user is invited to change information they cannot change. |
 | **Affected users** | Screen reader users; speech-input users (no names to speak); users with cognitive disabilities (controls that invite input they cannot make) |
 | **WCAG criteria failed** | 3.3.2 (no labels for fields); 4.1.2 (role does not match the content's nature); 1.3.1 |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
@@ -608,6 +641,7 @@ differently.
 |---|---|
 | **Where** | View Assignment Solutions (S8) — the worked-solution figures, 14 of the view's 15 images |
 | **Observed** | Reviewer with NVDA, 2026-09-21: *"graphics have no meaningful alt text, just random characters are announced."* Measured the same day: **14 of 15 images carry no `alt` attribute at all**, so the screen reader falls back to the file name and reads out `zbrvxxz3.j3f.png`, `22tfvbot.c0p.png` and the like — the "random characters". **The markup shows the cause, and it is a typo rather than an omission:** 7 of these images are written `src="/images/….png alt="`, with the `alt=` attribute swallowed into the `src` value by a missing quote. Someone set out to write alternative text and the browser never receives an `alt` attribute. That makes this the cheapest finding in the review to fix and among the more damaging to leave: the solutions page is where a student goes to learn what they got wrong, and the worked figures are the explanation. The rest of the page works — headings navigate, math voices correctly — so a screen-reader user reaches every problem and then finds the explanation missing. Confirms with AT what axe flagged as broken `alt=` markup on 2026-09-10 (R014). |
+| **Plain summary** | The worked solution figures have no alternative text because the attribute is malformed in the markup, so a screen-reader user reaches every problem and finds the explanation missing. |
 | **Affected users** | Screen reader users (the worked solutions are the page's content); users of text-only or image-blocked browsing |
 | **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
 | **Severity** | Major (proposed 2026-09-21 — reviewer to confirm) |
@@ -629,6 +663,7 @@ differently.
 |---|---|
 | **Where** | View Printable Assignment (S13) — the problem figures: 6 with no `alt` attribute, 4 with empty `alt`, and 2 painted as CSS `background-image` on a `div` (`/images/x3j4awcq.tk5.png`, `/images/r3fze21y.3sa.png`) |
 | **Observed** | Reviewer with NVDA, 2026-09-21: *"only a few of the images have proper alt text, other 'images' don't seem to register as images at all and have no right click."* Measured the same day, the page does **three different things** with its 14 figures. **4 carry real descriptive alternatives** — "A red block with mass m rests on a frictionless…", "The image shows a car stuck in the mud…" — which is the important part of this finding: the vendor writes good alternative text when it writes any, so this is not a capability gap. **6 have no `alt` attribute** and **4 have empty `alt`**. The remaining **2 are not `<img>` elements at all**: they are `div`s painted with a CSS `background-image`, which is why the reviewer finds no graphic and no right-click — a CSS background never enters the accessibility tree, and **no alt attribute can be added to it** without changing the markup. That last pair is the only place in the review where the fix is structural rather than editorial. Diagrams in a physics problem are the problem: a student who cannot see them cannot attempt the question. |
+| **Plain summary** | Most problem figures on the printable assignment carry no alternative text and two are background images that cannot carry any, so a screen-reader user cannot read the diagrams. |
 | **Affected users** | Screen reader users; users of text-only or image-blocked browsing |
 | **WCAG criteria failed** | 1.1.1 (informative images with no text alternative) |
 | **Severity** | Major (proposed 2026-09-21 — and it is what denies this page the conforming-alternate role it was sampled to test. Reviewer to confirm.) |
@@ -640,6 +675,7 @@ differently.
 |---|---|
 | **Where** | View Printable Assignment (S13) — the layout tables the problems are rendered in: 13 of 73 cells are empty |
 | **Observed** | Reviewer with NVDA, 2026-09-21: *"the page has not been optimized, many 'blank' voicings."* The reading order itself is sound — they confirm it — so the noise is inside an otherwise correct sequence. Measured: **13 of the view's 73 table cells are empty**, and **no control on the page is unnamed** (0 of 157 focusable stops lack an accessible name). The blank announcements therefore come from empty *layout* table cells being exposed and read as content, not from anonymous controls. The product lays its pages out in tables throughout (the same construction the reviewer described on the password reset page, V-F30), so spacer cells become things a screen reader stops on and voices as nothing. |
+| **Plain summary** | Empty layout-table cells are announced as content, so a screen-reader user hears repeated blank cells between the parts of a problem. |
 | **Affected users** | Screen reader users — extra announcements with no content, between the parts of a problem |
 | **WCAG criteria failed** | 1.3.1 (layout tables exposed as content structure) |
 | **Severity** | Minor (proposed 2026-09-21 — noise rather than a barrier; the reviewer reads the page successfully through it. Reviewer to confirm.) |
@@ -651,6 +687,7 @@ differently.
 |---|---|
 | **Where** | Sign in (S7) and Password reset (S14) — the Expert TA logo at the right of both pages |
 | **Observed** | From the markup the reviewer supplied 2026-09-24, identical on both pages: `<a href="http://theexpertta.com/"><img src="/images/loginlogo.png" border="0" height="250px"></a>`. The image carries **no `alt` attribute**, the link carries no `aria-label` or `title`, and **neither is inside `aria-hidden`**. So the link's accessible name is computed from nothing at all: a screen-reader user meets a link in the tab order and in the links list with no indication of what it is or where it goes — it leaves the product for the vendor's marketing site. This differs from the in-app header logo (V-F29, withdrawn to advisory) precisely because that one *is* `aria-hidden` and NVDA announced it anyway; here there is no name to fall back on. It sits on the two pages a locked-out student must use, where there is least context to guess from. |
+| **Plain summary** | The logo link on the sign-in and password reset pages has no accessible name, so a screen-reader user meets a link that says nothing about where it leads. |
 | **Affected users** | Screen reader users; speech-input users (no name to speak) |
 | **WCAG criteria failed** | 2.4.4 (link purpose); 4.1.2 (no accessible name); 1.1.1 (image with no text alternative) |
 | **Severity** | **Minor — confirmed by the reviewer 2026-09-24** (W76). The destination is harmless and the pages are short, but it is an unnamed link on the authentication path, announcing as "Unlabeld Graphic Visited Link". |
@@ -673,6 +710,7 @@ differently.
 |---|---|
 | **Where** | View Printable Assignment (S13) — every mathematical expression on the page (148 MathJax nodes) |
 | **Observed** | Reviewer with NVDA, 2026-09-24: **"all the math announce as button clickable, clicking opens the mathjax menu."** The expressions are exposed as unnamed **buttons**. A screen-reader user is told there is a control where there is content, and activating it opens MathJax's own context menu rather than reading the expression. Since the mathematics *is* the problem on a physics assignment, this removes most of the page's substance. **The decisive comparison is with View Assignment Solutions**, where the same reviewer found three days earlier that "math expressions on this page voice as expected" (R087 O5). Same library, same product, one click apart — so this is a **configuration fault, not a limitation** of MathJax, of MathML or of the screen reader, and the fix is to match the sibling page's setup. It compounds the two failures already on this view: no headings to navigate by (V-F1) and 8 of 14 figures with no usable alternative (V-F36). Between them, a screen-reader user gets neither the diagram, nor the mathematics, nor a way to move between problems. |
+| **Plain summary** | Every mathematical expression on the printable assignment is exposed as an unnamed button, so a screen-reader user gets a control instead of the mathematics. |
 | **Affected users** | Screen reader users — the mathematical content of every problem |
 | **WCAG criteria failed** | 1.1.1 (content exposed without a text alternative); 4.1.2 (role reported as button, no accessible name) |
 | **Severity** | Major (proposed 2026-09-24 — a case for Blocker exists, since the mathematics is the assignment. Reviewer to confirm.) |
@@ -692,6 +730,7 @@ differently.
 |---|---|
 | **Where** | Assignment Editor (S5) — the videos in the expanding area under **Library** (YouTube embeds), `UI: Assignment Editor → Library → expand`. |
 | **Observed** | The videos carry captions, but they are YouTube **auto-generated** captions (reviewer, 2026-09-15: "they have captions and are YouTube embeds … they are auto generated"). Auto-generated captions are not an equivalent for the audio — speaker attribution, punctuation and, in physics content, symbols and units are unreliable — so 1.2.2 is not met by them. Not yet checked: whether the videos autoplay (1.4.2) and whether an audio description or transcript exists (1.2.3 / 1.2.5 — NV11 on R035). The probe's media sweep missed these embeds because the panel opens on demand. |
+| **Plain summary** | The library videos rely on automatically generated captions, so a user who cannot hear gets an unreviewed transcript of instructional material. |
 | **Affected users** | Deaf and hard-of-hearing users; users watching without sound |
 | **WCAG criteria failed** | 1.2.2 |
 | **Severity** | Major (confirmed by the reviewer 2026-09-15). **Kept in the report at the reviewer's ruling 2026-09-15 although the Assignment Editor (S5) left the sample as instructor-facing.** |
@@ -711,6 +750,7 @@ differently.
 |---|---|
 | **Where** | Sign in (S7, `login.theexpertta.com/Login.aspx`) — the "User Name:" field |
 | **Observed** | The user-name field carries no `autocomplete` attribute, so its purpose (username) is not programmatically identified for browsers and assistive technologies that fill or label fields from it (1.3.5 requires the token on fields collecting the user's own data). The reviewer notes the practical mitigation: "no app specific autocomplete but works fine with chrome password manager" — Chrome's heuristic fill still works, which is why the severity is Minor. |
+| **Plain summary** | The sign-in user-name field carries no autocomplete token, so browsers and assistive technology cannot identify its purpose to fill it automatically. |
 | **Affected users** | Users with cognitive or motor disabilities who rely on autofill and purpose-aware AT |
 | **WCAG criteria failed** | 1.3.5 |
 | **Severity** | Minor |
@@ -732,6 +772,7 @@ differently.
 |---|---|
 | **Where** | Edit Class popup (S11) — `UI: Class Management → Class Menu → Edit Class → Go`; by construction the same for the other Class Menu popups (Create Class, Student/TA Registration, Create New Assignment). |
 | **Observed** | The popup is a fixed-size (589 px) modal and the page behind it is locked against scrolling while it is open. Once browser zoom passes 175 % the popup no longer fits the viewport and "we can't scroll the page when it is active" (reviewer, 2026-09-15) — the fields, and the Save / Cancel buttons at the bottom, that fall outside the viewport cannot be reached by any means. At 200 % zoom (the 1.4.4 threshold) the form cannot be completed; at 400 % most of it is unreachable. Elsewhere in the product zoom loses nothing (LV2 pass on S1–S5). |
+| **Plain summary** | The Edit Class popup is fixed in size and the page behind it cannot scroll, so above 175 per cent zoom its fields and buttons cannot be reached at all. |
 | **Affected users** | Low-vision users working at 200 % zoom or more; anyone on a small or narrow window |
 | **WCAG criteria failed** | 1.4.4, 1.4.10 |
 | **Severity** | Major (Blocker for the popup alone; confirmed by the reviewer 2026-09-15). **Kept in the report at the reviewer's ruling 2026-09-15 although the Edit Class popup (S11) left the sample as instructor-facing.** |
@@ -751,6 +792,7 @@ differently.
 |---|---|
 | **Where** | Password reset (S14, `login.theexpertta.com/ResetPassword.aspx`, reached from Sign in → "Trouble Logging in?") — the user-name field |
 | **Observed** | The field has no label of its own. Tabbing into it, NVDA does not announce a label — it reads out the surrounding layout **table**, the same table-based construction used throughout the application. The reviewer: *"The form field for the user name in password reset isn't properly labeled, and like the rest of the app the whole reset form is structured in a table, tabbing into the form field and launch a voice notification describing the whole reset table, so it is accessible, but not best practice."* A screen-reader user can therefore work out what to type, from context rather than from a label, and the reviewer rules the page **usable**. axe reports the same defect independently on the same page (`label`, critical, one form element — R122). This is the account-recovery path: a student locked out of the product has no other route back in, which is why a merely-inferable field label matters more here than the Minor rating suggests. |
+| **Plain summary** | The password reset field has no label of its own, so a screen-reader user must infer what to type from the surrounding table. |
 | **Affected users** | Screen reader users (the purpose is inferred from a table read-out, not stated); users with cognitive disabilities (a verbose table announcement in place of a field name) |
 | **WCAG criteria failed** | 1.3.1 (label not programmatically associated); 3.3.2 (no label or instruction for a required input); 4.1.2 (no accessible name) |
 | **Severity** | **Minor — confirmed by the reviewer 2026-09-24**, after seeing that the sign-in page labels the same field correctly one click away (`<label for="MainContent_UserName">` against this page's `<strong><font>`). Their 2026-09-21 ruling stands: "accessible, but not best practice" — the table read-out carries the meaning, so this is a quality defect, not a barrier. The comparison is kept in the finding because it makes the fix a one-liner: copy the neighbouring page. |
@@ -762,6 +804,7 @@ differently.
 |---|---|
 | **Where** | Product-wide. Confirmed by eye on four views in one grayscale pass 2026-09-21, and extended to two more by measurement under the reviewer's same-styles ruling (see Observed): **View Printable Assignment** (S13) — the randomised values in `#FF6347` ×10, the same token and the same job as on Take Assignment; **Student Practice Area** (S12) — the "Library" section heading in `#EFBB75`, as on Class Management. Confirmed directly, and most sharply on **View Grade Report** (S4) — the grade formula and the late submission date-times (see Observed). Confirmed directly: **Take Assignment** (S3) — the randomised variable values (`#FF6347`) inside problem statements, and the hint/feedback deduction percentages (`#FF9900`); **View Assignment Solutions** (S8) — the same orange-red number token inside the worked solutions; **Calendar** (S6) — the event bar (white on `#8EA9DB`) carrying an assignment's name and the days it spans; **Class Management** (S1) — the "Class Assignments" and "Class News" headings that label the two grids. |
 | **Observed** | With a grayscale filter on, the reviewer walked the pages the sweeps had identified as colour-carrying: *"the contrast of the orange-red numbers are very hard to see when at greyscale … hint fails, random values fail, navigator fail, status marks pass … class assignment and class news fail … in calendar, the name of the assignment in the calendar, the bar that extends across days, fails totally … the orange-red colors use for numbers in the ViewAssignmentSolution fails."* In each case colour is the only visual channel carrying the distinction. The consequences are not cosmetic: the randomised values are **the numbers the student must put into the calculation**, so a student who cannot use colour cannot reliably tell which numbers in the statement are theirs; the deduction percentages state **what taking a hint costs**, so the price of help is unreadable; the Calendar loses both an assignment's identity and its span, which the reviewer rates as failing *totally*. **The sharpest case is the grade report** (R100 O6, O7, measured 2026-09-21). Its two deduction types are orange — "Deduction for Final Submission" — and purple — "Deductions for Incorrect Submissions, Hints and Feedback". Beside their labels the words carry them, but the summary line renders `Student Grade = 100 - 100 - 9 = 0%` with the first number orange and the second purple, and **nothing but hue says which deduction each is**: no title, no aria-label, no legend. On the same page 14 late submissions are marked only by a red date-time, and the product states the convention itself — *"Red submission date times indicate late work."* Naming a colour in a legend does not satisfy 1.4.1; a user who cannot see red still cannot tell which dates are late. **Two places pass, and they are the fix.** The problem-navigator status marks are carried by a **symbol**, and lateness at part level is carried by a **sentence** — *"Late submissions were made on this part…"*. The product already knows how to do this in two places; the finding is that it does not do it in the rest. That contrast is the finding's own remedy: the same symbol-plus-colour pattern applied to the other carriers would fix it. Separately, the low contrast of these same elements is already recorded under V-F23 (1.4.3); this finding is about colour being the only carrier, not about how dark it is. |
+| **Plain summary** | Randomised values, hint costs, calendar events and late submissions are marked by colour alone, so a colour-blind user cannot tell which numbers are theirs or when work is due. |
 | **Affected users** | Users with colour vision deficiency (about 8 % of men); users of grayscale or high-contrast modes, e-ink and monochrome print; anyone on a washed-out display |
 | **WCAG criteria failed** | 1.4.1 (colour as the only visual means of conveying information and distinguishing elements) |
 | **Severity** | Major (proposed 2026-09-21 from the reviewer's own "fails" / "fails totally" wording — a student can still read every number, so it is not a Blocker, but on Take Assignment they cannot tell which numbers are theirs without guessing from sentence structure. Reviewer to confirm the rating.) |

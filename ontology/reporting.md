@@ -455,6 +455,52 @@ fact is not in an extracted field, it does not reach the report.
   notes. The statements live in the tables above, where they are already
   cleaned; repeating a worse version here helps nobody.
 
+- **The `Plain summary` field — the one sentence written for a reader.**
+  Added 2026-09-24 after three attempts to convert working notes into
+  publishable prose mechanically. Every other field in a finding is a working
+  field: informal, attributed, dated, full of identifiers. That is correct for
+  a review file and wrong for a report, and no amount of stripping fixes it —
+  each pass produced fragments ("Fails on all 10 views."), dangling references
+  ("The pattern is one mechanism:") or the same sentence under two different
+  criteria.
+
+  So each finding carries **one authored sentence**, stored in the database as
+  `findings.plain_summary` and extracted from a `| **Plain summary** | … |`
+  row in the `04` finding block. The report uses it verbatim; it needs no
+  cleaning because it was written for this purpose.
+
+  **The rules, which are checked and not merely documented** (`PLAIN_RULES` in
+  `scripts/review_db.py`, reported by `review_db.py check`):
+
+  1. **One sentence**, ending in a full stop. Not two, not a fragment.
+  2. **About the product, in the present tense** — not about the test, the
+     reviewer, the tool, or when it happened.
+  3. **States what is wrong _and_ what a user cannot do because of it.** The
+     second half is what makes it useful to a procurement reader.
+  4. **No internal identifiers** — no finding, run, observation, step, check
+     or view codes. Name the page in words where the page matters.
+  5. **No dates, no attribution, no quoting the reviewer.** Text the *product*
+     shows may be quoted.
+  6. **Plain language.** The reader is a procurement officer, not an engineer.
+  7. **At most 200 characters**, so it fits a table cell.
+
+  **Derived, not invented.** The sentence must be supportable by that
+  finding's own `Observed` cell: it restates, it does not add. The authoring
+  is the only writing in the pipeline, and it happens once, into the record —
+  never in the generator.
+
+  `review_db.py check` reports two integrity issues against these rules:
+  *plain summary missing* (a live finding has none) and *plain summary breaks
+  a rule* (naming which rule). Both count toward C11.
+
+  **Where the report uses it**: as the statement in each criterion's bullets,
+  and as the "what is outstanding" line in Priorities for remediation. For a
+  criterion with several findings the priorities line shows the most severe,
+  and among equals the finding citing the **fewest criteria** — the one most
+  specific to that criterion, since picking by severity alone made three
+  criteria quote the same sentence. A criterion with many findings is still
+  represented by one of them; the full set is in the criterion's own row.
+
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the
   runs behind it) and regenerate.

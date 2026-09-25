@@ -66,6 +66,7 @@ barrier occurs)
 |---|---|
 | **Where** | (step and view) |
 | **Observed** | (what happens; steps to reproduce) |
+| **Plain summary** | (ONE sentence for the published report: what is wrong and what a user cannot do, present tense, no IDs, no dates, no reviewer, no tool names, ≤ 200 chars — rules in ontology/reporting.md) |
 | **Affected users** | (e.g., screen reader users, keyboard-only users) |
 | **WCAG criteria failed** | (e.g., 3.3.2, 4.1.2) |
 | **Severity** | Blocker / Major / Minor |
@@ -105,6 +106,7 @@ differently.
 |---|---|
 | **Where** | (view and component) |
 | **Observed** | |
+| **Plain summary** | (ONE sentence for the published report — rules in ontology/reporting.md) |
 | **Affected users** | |
 | **WCAG criteria failed** | |
 | **Severity** | Blocker / Major / Minor |

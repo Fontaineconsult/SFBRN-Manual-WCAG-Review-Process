@@ -207,6 +207,12 @@ if nobody said the word "test".
   or FPC (modality-checks.md §Completeness contract). If you add or rename a
   check row, run `review.py sync-checks` on every in-flight review. Report
   coverage in POUR and 508-FPC terms (`coverage`), never as run counts.
+- **Every finding carries a `Plain summary`** — one authored sentence, present
+  tense, about the product, naming what a user cannot do; no IDs, dates,
+  reviewer or tool names; ≤ 200 chars. It is the only text in the record
+  written for a reader, it is what the ACR publishes, and `review_db.py check`
+  enforces the rules (ontology/reporting.md §Plain summary). Never write report
+  prose in a generator; write it once, here.
 - **Findings cite runs.** Exploration observations are recon → `03` §2.6,
   phrased "verify X under check Y in a run". No run, no finding.
 - **Every run carries a replicable locator** — validate enforces it. A real

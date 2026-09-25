@@ -447,15 +447,19 @@ def gather(con, review: pathlib.Path) -> dict:
 
     # which findings bear on each criterion, with the page each was found on
     by_sc = {}
-    for sc, fid, where, observed, sev in q("""
-            SELECT fc.sc, f.finding_id, f.where_text, f.observed, f.severity
+    for sc, fid, where, observed, plain_s, sev, ncrit in q("""
+            SELECT fc.sc, f.finding_id, f.where_text, f.observed,
+                   COALESCE(f.plain_summary, ''), f.severity,
+                   (SELECT COUNT(*) FROM finding_criteria x
+                     WHERE x.finding_id = f.finding_id AND x.review_id = f.review_id)
             FROM finding_criteria fc
             JOIN findings f ON f.finding_id = fc.finding_id AND f.review_id = fc.review_id
             WHERE fc.review_id = ? AND f.withdrawn = 0
             ORDER BY fc.sc, f.finding_id""", rid):
         vids = VIEWCODE.findall(where or "")
         by_sc.setdefault(sc, []).append(dict(fid=fid, where=where or "", observed=observed or "",
-                                             sev=severity(sev), views=vids))
+                                             plain=(plain_s or "").strip(),
+                                             sev=severity(sev), views=vids, ncrit=ncrit))
 
     return dict(rid=rid, pages=pages, by_sc=by_sc, verified=verified,
                 product=product, decision=decision, report_status=report_status,
@@ -472,10 +476,16 @@ def statements(sc: str, d: dict) -> str:
     than five times (reviewer, 2026-09-24: "combine issues where possible")."""
     merged = {}
     for f in d["by_sc"].get(sc, []):
-        text = brief(plain(f["observed"], d["pages"]), 130)
-        text = DANGLING.sub("", text).strip()          # may surface after the split
-        if text and text[:1].islower():
-            text = text[0].upper() + text[1:]
+        # The authored sentence when the record has one: it is written for this
+        # document and needs no cleaning. Mining the working notes is only the
+        # fallback for a finding not yet given one.
+        if f["plain"]:
+            text = f["plain"]
+        else:
+            text = brief(plain(f["observed"], d["pages"]), 130)
+            text = DANGLING.sub("", text).strip()
+            if text and text[:1].islower():
+                text = text[0].upper() + text[1:]
         key = re.sub(r"[^a-z0-9 ]", "", text.lower())[:70]
         pgs = [d["pages"][v]["name"] for v in dict.fromkeys(f["views"]) if v in d["pages"]]
         if key in merged:
@@ -888,6 +898,19 @@ ROADMAP_TIERS = [
 ]
 
 
+def worst_summary(items) -> str:
+    """The most severe finding's authored sentence, for the priorities table."""
+    if not items:
+        return ""
+    # Most severe first, then the finding that cites the FEWEST criteria: a
+    # finding naming four criteria describes none of them as precisely as one
+    # naming only this criterion, and picking by severity alone made three
+    # different criteria quote the same sentence.
+    worst = sorted(items, key=lambda i: ({"Blocker": 0, "Major": 1}.get(i["sev"], 2),
+                                         i.get("ncrit", 9)))[0]
+    return worst.get("plain", "")
+
+
 def roadmap_section(d: dict) -> str:
     """One row per qualifying criterion: what it is, where, and what is wrong.
 
@@ -923,12 +946,12 @@ def roadmap_section(d: dict) -> str:
                 f"<tr><th scope='row'>{e(sc)} {e(cname)}</th>"
                 f"<td class='lvl'>Level {e(lv)}</td>"
                 f"<td class='lvl'>{n if n else '—'}</td>"
-                f"<td class='rem'>{e(where)}</td></tr>")
+                f"<td class='rem'>{md(worst_summary(items))}<div class='ev'>{e(where)}</div></td></tr>")
         if rows:
             out.append(
                 f"<h3>{e(name)}</h3><p class='sub'>{md(blurb)}</p>"
                 f"<table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th>"
-                f"<th scope='col'>Issues</th><th scope='col'>Pages affected</th></tr></thead>"
+                f"<th scope='col'>Issues</th><th scope='col'>What is outstanding</th></tr></thead>"
                 f"<tbody>{''.join(rows)}</tbody></table>")
     return "".join(out)
 

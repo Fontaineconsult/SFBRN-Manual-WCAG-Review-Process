@@ -884,6 +884,15 @@ CSS = """
  a { color:inherit; } a.sc { font-weight:700; text-decoration:none; }
  a.sc:hover { text-decoration:underline; }
  a.u { font-size:.74rem; color:var(--mut); }
+ nav.toc { border:1px solid var(--line); background:var(--panel); padding:.5rem .8rem;
+   margin:1rem 0; page-break-inside:avoid; }
+ nav.toc h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; border:0;
+   margin:0 0 .3rem; padding:0; }
+ nav.toc ul { list-style:none; margin:0; padding:0; column-width:17rem; column-gap:1.6rem; }
+ nav.toc li { margin:.1rem 0; font-size:.9rem; break-inside:avoid; }
+ nav.toc li.toc-h3 { padding-left:1rem; font-size:.85rem; color:var(--mut); }
+ nav.toc a { text-decoration:none; }
+ nav.toc a:hover { text-decoration:underline; }
  .colophon { color:var(--mut); font-size:.8rem; margin-top:1.4rem; padding-top:.5rem;
    border-top:1px solid var(--line); }
 
@@ -907,7 +916,8 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
     kind = "Internal Report" if internal else "Accessibility Conformance Report"
     lead = INTERNAL_NOTE if internal else EXTERNAL_NOTE.format(body=e(body))
     front = (f"<h2>User Functional Limitations</h2>{INTERNAL_INTRO}"
-             f"{limitations_summary(d)}{barriers_section(d)}") if internal else ""
+             f"<h3>Summary</h3>{limitations_summary(d)}"
+             f"<h3>Barriers by user group</h3>{barriers_section(d)}") if internal else ""
     back = "" if internal else (f"<h2>Vendor Roadmap</h2>{ROADMAP_INTRO}"
                                 f"{roadmap_section(d)}")
 
@@ -985,7 +995,7 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
                         for t in d["tasks"])
     terms = "\n".join(f"<tr><th scope='row'>{e(t)}</th><td>{e(x)}</td></tr>" for t, x in TERMS)
 
-    return f"""<!doctype html>
+    page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{REPORT_NAME} — {e(prod)}{' (internal)' if internal else ''}</title>
@@ -996,6 +1006,8 @@ def render(d: dict, brand="", cfg=None, internal=False) -> str:
  VPAT<sup>&reg;</sup> Version 2.5Rev, WCAG Edition</p>
 
 {lead}
+
+<!--TOC-->
 
 <h2>Report information</h2>
 <table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
@@ -1061,6 +1073,7 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 
 </div></body></html>
 """
+    return contents(page)
 
 
 
@@ -1436,6 +1449,48 @@ def write_docx(html: str, out: pathlib.Path, logo=None) -> pathlib.Path:
                     _shade(row.cells[col], fill)
     doc.save(str(out))
     return out
+
+
+# --- contents ---------------------------------------------------------------
+# Built from the rendered page, not written beside it. A hand-kept list drifts
+# the first time a section is renamed, and this generator produces two
+# documents whose sections differ, so it would have to be kept twice.
+#
+# In Word the links do not navigate -- htmldocx writes no bookmarks -- but the
+# document carries real Heading styles, so Word's own navigation pane and its
+# Insert > Table of Contents both work on it. The list still reads as one.
+HEADING = re.compile(r"<(h2|h3)([^>]*)>(.*?)</\1>", re.S)
+
+
+def slug(text: str) -> str:
+    plain = re.sub(r"<[^>]+>", "", text)
+    plain = re.sub(r"&[a-z]+;|&#\d+;", " ", plain)
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", plain.lower())).strip("-") or "section"
+
+
+def contents(page: str) -> str:
+    """Give every h2/h3 an id and return (page, nav). Idempotent by construction."""
+    seen, items = {}, []
+
+    def mark(m):
+        tag, attrs, inner = m.group(1), m.group(2), m.group(3)
+        if "id=" in attrs:
+            return m.group(0)
+        base = slug(inner)
+        n = seen.get(base, 0)
+        seen[base] = n + 1
+        sid = base if not n else f"{base}-{n + 1}"
+        items.append((tag, sid, inner.strip()))
+        return f"<{tag}{attrs} id=\"{sid}\">{inner}</{tag}>"
+
+    page = HEADING.sub(mark, page)
+    if not items:
+        return page
+    rows = "".join(
+        f"<li class='toc-{tag}'><a href='#{sid}'>{inner}</a></li>" for tag, sid, inner in items)
+    nav = (f"<nav class='toc' aria-labelledby='contents-heading'>"
+           f"<h2 id='contents-heading'>Contents</h2><ul>{rows}</ul></nav>")
+    return page.replace("<!--TOC-->", nav, 1)
 
 
 def out_path(review: pathlib.Path, override=None, internal=False) -> pathlib.Path:

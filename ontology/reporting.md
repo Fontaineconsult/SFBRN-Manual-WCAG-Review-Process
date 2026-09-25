@@ -166,7 +166,14 @@ Nothing in the table is authored. The statements are the findings' own
 person cannot do because of it — which is exactly what this table needs, and
 the reason the field exists.
 
-### The summary above the table
+### Summary, then the table
+
+`User Functional Limitations` has two subsections: **Summary** — the five
+sentences below — and **Barriers by user group**, the table. Splitting them
+gives the summary a heading of its own, which is what lets a reader be sent to
+it, and puts it in the contents list.
+
+### The summary
 
 Five sentences, generated, sitting between the one-line preamble and the
 table. They exist so an instructor deciding whether to set work in the
@@ -230,6 +237,30 @@ is a plan nobody finishes.
 stay in `06-report.md`, where C12 puts them — the reviewer's act. This
 document is evidence for writing a TAAP, not the record of a decision, and a
 department reading it should not find the answer already filled in.
+
+
+## Contents (both outputs, 2026-09-25)
+
+Both reports carry a **Contents** block between the standing note and Report
+information — two levels, every `h2` and `h3`, linked.
+
+**It is built from the rendered page, not written beside it.** `contents()`
+runs last in `render()`, gives every heading an `id` slugged from its own
+text, and assembles the list from the same pass. A hand-kept list drifts the
+first time a section is renamed, and this generator now produces two documents
+whose sections differ — Vendor Roadmap in one, User Functional Limitations in
+the other — so it would have to be kept twice and drift twice. Because the
+pass runs after the template, generated sections (the roadmap tiers, the
+criterion tables) are in the list without anyone remembering to add them.
+
+Duplicate headings get a numbered suffix rather than a duplicate anchor. The
+`Contents` heading itself is not in its own list: the nav is inserted after
+the heading pass has run.
+
+**In Word the links do not navigate** — htmldocx writes no bookmarks — but the
+document carries real `Heading` styles, so Word's navigation pane and
+*Insert → Table of Contents* both work on it, and the static list still reads
+as a contents page.
 
 
 ## Rules

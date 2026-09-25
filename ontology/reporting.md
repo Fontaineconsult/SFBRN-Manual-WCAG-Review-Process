@@ -448,11 +448,12 @@ fact is not in an extracted field, it does not reach the report.
 
   The report is evaluated against WCAG **2.2**; the requirement quoted is
   **2.1**. Those normally coincide — a product failing at this level fails on
-  criteria that have been in the standard since 2.0 — but the closing sentence
-  is **computed, not written** (`roadmap_scope()`): it states that every listed
-  criterion is a 2.1 A/AA requirement only when that is true of this review,
-  and names the 2.2 additions otherwise. A review that turns up a 2.2-only
-  failure must not be made to say that clearing the list delivers 2.1 AA.
+  criteria that have been in the standard since 2.0 — and a first version
+  closed the section with a computed sentence saying so. It was cut: the
+  section is three sentences of requirement followed by the table, and the
+  standards arithmetic belonged nowhere near it. Keep the check in mind when a
+  review turns up a **2.2-only** failure, because the paragraph as written
+  claims the list delivers 2.1 AA.
 
   Level A is the higher priority throughout: it is the floor of the standard.
   **Partial support at Level AA is deliberately excluded** — listing
@@ -554,6 +555,12 @@ fact is not in an extracted field, it does not reach the report.
   put the worst finding's sentence there and three different criteria ended up
   quoting the same one.
 
+- **The report's name.** The document is
+  **San Francisco Bay Region Network Manual Product Accessibility Evaluation**
+  (`REPORT_NAME`), named for the process that produced it rather than the
+  format it borrows. The product is the subject line under it, where the
+  VPAT/ACR lineage is also stated.
+
 - **Branding header.** The report goes out under an organisation's name, so
   the page opens with a header slot: logo, organisation, and an optional
   second line. It is filled from **`branding.json` at the repo root** (copy
@@ -565,7 +572,19 @@ fact is not in an extracted field, it does not reach the report.
   The logo is **embedded as a data URI, not linked**. The report is mailed as
   one file and opened in Word; both lose a relative `src`. When the
   organisation name is also written out the image is marked decorative,
-  otherwise it carries the name as its `alt`.
+  otherwise it carries the name as its `alt` — and with the SFBRN wordmark
+  above a heading that begins "San Francisco Bay Region Network", `alt` is
+  correctly empty.
+
+  **A raster sibling wins over an SVG.** Word's HTML importer does not render
+  an SVG data URI — the header arrives as a broken image — while browsers and
+  PDF want the vector. So a `logo.png` sitting next to the configured
+  `logo.svg` is used automatically, and both renderers are served without a
+  second config entry.
+
+  The wordmark's text is near-black, which vanishes on the dark theme. It is
+  given a white chip there rather than a CSS filter, which would have shifted
+  the brand's own colours.
 
 - **No legal disclaimer.** Removed 2026-09-24. It said the report was
   informational and not a warranty, which undercut the one thing the document

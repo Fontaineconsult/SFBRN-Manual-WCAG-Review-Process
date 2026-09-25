@@ -660,6 +660,9 @@ def issue_row(n: int, f, d: dict) -> str:
 
 
 
+REPORT_NAME = "San Francisco Bay Region Network Manual Product Accessibility Evaluation"
+
+
 # --- branding ---------------------------------------------------------------
 # The report goes out under an organisation's name, so the page carries a
 # header slot. It is filled from `branding.json` at the repo root (so a
@@ -699,6 +702,12 @@ def brand_header(cfg: dict, root: pathlib.Path) -> str:
     path = cfg.get("logo")
     if path:
         f = (root / path) if not os.path.isabs(path) else pathlib.Path(path)
+        # Word's HTML importer does not render an SVG data URI -- the header
+        # comes through as a broken image. Browsers prefer the vector. So a
+        # raster sibling of the same name wins when one exists: drop
+        # `logo.png` next to `logo.svg` and both renderers are served.
+        if f.suffix.lower() == ".svg" and f.with_suffix(".png").is_file():
+            f = f.with_suffix(".png")
         if f.is_file():
             mime = LOGO_TYPES.get(f.suffix.lower(), "image/png")
             data = base64.b64encode(f.read_bytes()).decode("ascii")
@@ -746,12 +755,18 @@ CSS = """
 
  /* branding slot -- empty unless branding.json or --logo/--org supplies one */
  .brand { border-bottom:2px solid var(--line); padding:0 0 .5rem; margin:0 0 1rem; }
- .brand img { max-height:52px; width:auto; vertical-align:middle; }
+ .brand img { height:42px; width:auto; vertical-align:middle; }
+ /* the wordmark's text is near-black, so give it a white chip in dark mode
+    rather than filtering it -- a filter would shift the brand colours too */
+ @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .brand img {
+   background:#fff; padding:3px 5px; } }
+ :root[data-theme="dark"] .brand img { background:#fff; padding:3px 5px; }
  .brand .org { display:inline-block; vertical-align:middle; margin-left:.7rem;
    font-size:1rem; font-weight:700; letter-spacing:.01em; }
  .brand .unit { display:block; font-weight:400; font-size:.82rem; color:var(--mut); letter-spacing:0; }
 
  h1 { font-size:1.45rem; margin:0 0 .15rem; line-height:1.2; }
+ .subject { margin:.1rem 0 .8rem; font-size:1rem; }
  h2 { font-size:1.1rem; margin:1.5rem 0 .4rem; padding-bottom:.2rem; border-bottom:2px solid var(--line);
    page-break-after:avoid; }
  h3 { font-size:.95rem; margin:1rem 0 .3rem; page-break-after:avoid; }
@@ -883,17 +898,17 @@ def render(d: dict, brand="") -> str:
         ) if d["removed"] else "none"
     tasks_txt = "".join(f"<li>{e(t[1].split(' \u2014 ')[0])} \u2014 <b>{e(t[2])}</b></li>"
                         for t in d["tasks"])
-    roadmap_scope_txt = roadmap_scope(d)
     terms = "\n".join(f"<tr><th scope='row'>{e(t)}</th><td>{e(x)}</td></tr>" for t, x in TERMS)
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Accessibility Conformance Report — {e(prod)}</title>
+<title>{REPORT_NAME} — {e(prod)}</title>
 <style>{CSS}</style></head><body><div class="wrap">
 {brand}
-<h1>{e(prod)} Accessibility Conformance Report</h1>
-<p class="sub">Based on VPAT<sup>&reg;</sup> Version 2.5Rev &mdash; WCAG Edition</p>
+<h1>{REPORT_NAME}</h1>
+<p class="subject"><b>{e(prod)}</b> &mdash; Accessibility Conformance Report, based on
+ VPAT<sup>&reg;</sup> Version 2.5Rev, WCAG Edition</p>
 
 <div class="note">
 <p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
@@ -962,9 +977,6 @@ rather than inferred.</p>
 acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
 failure to meet it <i>may</i> jeopardize future acquisitions. <b>The following fixes should be implemented to
 meet the WCAG 2.1 AA standard.</b></p>
-<p class="sub">The list is deliberately short: only criteria the product <b>does not support</b> at either
-level, together with Level A criteria it supports only <b>in part</b>. Everything else, including partial
-support at Level AA, is in the tables above. {roadmap_scope_txt}</p>
 {roadmap_section(d)}
 
 <p class="colophon">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
@@ -990,28 +1002,6 @@ ROADMAP_TIERS = [
      "Level AA criteria the product does not meet. Level AA is the conformance target for the sector; these "
      "remain outstanding once the Level A work is done."),
 ]
-
-
-def roadmap_scope(d: dict) -> str:
-    """Whether the listed criteria are all within the standard the CSU requires.
-
-    The report is evaluated against WCAG 2.2; the procurement requirement is
-    2.1 AA. Usually those coincide, because a product failing at this level
-    fails on criteria that have been in the standard since 2.0 -- but a review
-    that turns up a 2.2 addition must not be made to say that fixing the list
-    delivers 2.1 AA. So the sentence is computed, not written."""
-    listed = {c[0] for c in d["criteria"]
-              if c[7] == "Does Not Support" or (c[7] == "Partially Supports" and c[2] == "A")}
-    new = sorted(listed & {c[0] for c in d["criteria"] if (c[5] or "") == "2.2"},
-                 key=lambda sc: [int(x) for x in sc.split(".")])
-    if not new:
-        return ("Every criterion listed is a Level A or AA requirement of WCAG 2.1, so this list is the work "
-                "required to reach the standard.")
-    names = ", ".join(e(sc) for sc in new)
-    plural = len(new) > 1
-    return (f"All but {names} are Level A or AA requirements of WCAG 2.1; "
-            f"{'those are' if plural else 'that one is'} new in WCAG 2.2 and "
-            f"{'sit' if plural else 'sits'} above the procurement requirement.")
 
 
 def roadmap_section(d: dict) -> str:

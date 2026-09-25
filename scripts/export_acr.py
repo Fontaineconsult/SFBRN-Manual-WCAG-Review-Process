@@ -343,8 +343,10 @@ def gather(con, review: pathlib.Path) -> dict:
     q = lambda sql, *a: con.execute(sql, a).fetchall()
     rid = review.name
 
-    row = q("SELECT product, decision, report_status, source_sha FROM reviews WHERE review_id=?", rid)
-    product, decision, report_status, source_sha = row[0] if row else ("", "", "", "")
+    row = q("SELECT product, decision, report_status, evaluator, evaluator_contact, source_sha "
+            "FROM reviews WHERE review_id=?", rid)
+    (product, decision, report_status, evaluator, contact, source_sha) = (
+        row[0] if row else ("", "", "", "", "", ""))
 
     criteria = q("""
         SELECT w.sc, w.name, w.level, w.principle_no, w.principle, w.version_added, w.understanding_url,
@@ -466,7 +468,7 @@ def gather(con, review: pathlib.Path) -> dict:
 
     return dict(rid=rid, pages=pages, by_sc=by_sc, verified=verified,
                 product=product, decision=decision, report_status=report_status,
-                source_sha=source_sha, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
+                source_sha=source_sha, evaluator=evaluator, contact=contact, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
                 views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
                 tasks=tasks)
 
@@ -689,6 +691,7 @@ def branding(root: pathlib.Path, logo=None, org=None, unit=None) -> dict:
         cfg["org"] = org
     if unit:
         cfg["unit"] = unit
+    cfg.setdefault("body", cfg.get("org", "the evaluating body"))
     return cfg
 
 
@@ -826,9 +829,33 @@ CSS = """
  @media print { body { font-size:9.5pt; } .wrap { padding:0; max-width:none; }
    h1 { font-size:15pt; } h2 { font-size:12pt; } h3 { font-size:10.5pt; } table { font-size:8.5pt; } }
 """
-def render(d: dict, brand="") -> str:
+
+
+def render(d: dict, brand="", cfg=None) -> str:
     prod = d["product"] or d["rid"]
+    cfg = cfg or {}
+    mail = d.get("contact") or ""
+    contact_txt = (f'<a href="mailto:{e(mail)}">{e(mail)}</a>' if mail
+                   else 'Named in the accompanying review record.')
+    # the sentence wants the article ("produced by the SFBRN ..."), the table
+    # cell does not ("Daniel Fontaine, SFBRN ...")
+    body = cfg.get("body") or "the evaluating body"
+    body_name = re.sub(r"(?i)^the\s+", "", body)
     interim = "INTERIM" in (d["report_status"] or "").upper()
+    # 06 carries the template's unresolved choice ("INTERIM (…) / FINAL") until the
+    # reviewer picks one. Printed raw it showed the reader both at once.
+    status_txt = "Interim — testing in progress" if interim else "Final"
+    # An interim report must say what would make it final, or a reader cannot
+    # tell a provisional level from a settled one. The gate is the definition
+    # of done (`review_db.py completion`): every criterion decided and
+    # evidenced, every task cluster given a verdict, every run resulted, every
+    # check row answered, the coverage boxes checked and the integrity queries
+    # clean -- and then the reviewer's own act, recording the procurement
+    # decision and setting the report status to FINAL.
+    interim_note = ("<b>This report is INTERIM: testing is in progress and conformance levels may change.</b> "
+                    "It becomes final when every criterion in scope has been decided from a completed test run, "
+                    "the task walk-throughs have verdicts, and the reviewer of record signs off; "
+                    "the levels below reflect the evidence recorded to date.") if interim else ""
 
     fpc_rows = []
     for f in d["fpc"]:
@@ -912,20 +939,22 @@ def render(d: dict, brand="") -> str:
 
 <div class="note">
 <p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
-the supplier about its own product. This report was produced by the evaluating body from its own testing, and
-every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
+the supplier about its own product. This report was produced by {e(body)} during a procurement
+requisition, to determine whether the product meets the CSU's accessibility requirements for acquisition.
+Every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
 relied on anywhere in this document.
-{"<b>This report is INTERIM: testing is in progress and levels may change.</b>" if interim else ""}</p>
+{interim_note}</p>
 </div>
 
 <h2>Report information</h2>
 <table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
 <tr><th scope='row'>Name of product</th><td>{e(prod)}</td></tr>
 <tr><th scope='row'>Report date</th><td>{e(report_date)}</td></tr>
-<tr><th scope='row'>Report status</th><td>{e(d['report_status'])}</td></tr>
+<tr><th scope='row'>Report status</th><td>{status_txt}</td></tr>
 <tr><th scope='row'>Product description</th><td>Web-delivered software evaluated across {len(d['views'])} pages of the
  student-facing interface.</td></tr>
-<tr><th scope='row'>Contact information</th><td>The evaluating body named in the accompanying review record.</td></tr>
+<tr><th scope='row'>Evaluated by</th><td>{e(d['evaluator'] or 'Not recorded')}{(', ' + e(body_name)) if body != 'the evaluating body' else ''}</td></tr>
+<tr><th scope='row'>Contact information</th><td>{contact_txt}</td></tr>
 <tr><th scope='row'>Evaluation methods used</th><td>Manual testing by a human reviewer operating the product with assistive
  technology &mdash; screen reader, keyboard-only operation, browser zoom, colour filters and contrast
  measurement &mdash; supported by automated scanning (axe-core) and programmatic measurement over the Chrome
@@ -1058,7 +1087,7 @@ def write(review: pathlib.Path, con=None, override=None, brand_cfg=None) -> path
     root = pathlib.Path(__file__).resolve().parent.parent
     cfg = branding(root) if brand_cfg is None else brand_cfg
     try:
-        page = render(gather(con, review), brand_header(cfg, root))
+        page = render(gather(con, review), brand_header(cfg, root), cfg)
     finally:
         if own:
             con.close()

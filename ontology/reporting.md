@@ -555,6 +555,37 @@ fact is not in an extracted field, it does not reach the report.
   put the worst finding's sentence there and three different criteria ended up
   quoting the same one.
 
+- **Who produced it, and who to ask.** The standing note names the evaluating
+  body and the reason the evaluation exists: *produced by the SFBRN Accessible
+  Technology Initiative during a procurement requisition, to determine whether
+  the product meets the CSU's accessibility requirements for acquisition.*
+  "Acquisition" rather than "purchase" because it is the CSU's own term and
+  covers licences and renewals, which is most of what passes this gate.
+
+  The body is organisation identity, so it lives in `branding.json` under
+  `body` (the article is part of the value; the Report-information cell strips
+  it). The **reviewer of record and their contact address** are per-review, so
+  they come from the record: `01-intake.md` `**Reviewer(s)**` (the name before
+  the first parenthesis) and a `**Reviewer contact**` row added to the intake
+  template, mirrored into `reviews.evaluator` / `reviews.evaluator_contact`.
+  A conformance report nobody can ask a question about is worth less than one
+  that names a person.
+
+- **Interim, and what closes it.** `06`'s Report-status line is a template
+  choice — `INTERIM (testing in progress) / FINAL` — until the reviewer
+  resolves it; printed raw it showed the reader both at once, so the report
+  prints the one that applies. An interim report also states **what would make
+  it final**, or a reader cannot tell a provisional level from a settled one.
+
+  The gate is the definition of done (`review_db.py completion`, C1–C12):
+  every criterion decided and evidenced, every task cluster given a verdict,
+  every run resulted, every check row answered, every view swept, every FPC
+  exercised, every finding evidenced, the `04` §D coverage boxes checked and
+  the integrity queries clean — C1–C11, all mechanical. **C12 is the
+  reviewer's own act**: record the procurement decision in `06` (Approved /
+  Needs TAAP / Denied) and set the report status to FINAL. The assistant never
+  takes C12.
+
 - **The report's name.** The document is
   **San Francisco Bay Region Network Manual Product Accessibility Evaluation**
   (`REPORT_NAME`), named for the process that produced it rather than the

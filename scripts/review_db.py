@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS reviews (
   product TEXT,
   decision TEXT,
   report_status TEXT,
+  evaluator TEXT,               -- reviewer of record, from 01 `**Reviewer(s)**` (the name before the parenthesis)
+  evaluator_contact TEXT,       -- from 01 `**Reviewer contact**`; the ACR prints it, so a report can be answered
   source_sha TEXT               -- sha256 over the stage files (no timestamps: the file is byte-stable)
 );
 CREATE TABLE IF NOT EXISTS views (
@@ -388,9 +390,20 @@ def sync_review(con, review):
               "walkthrough_steps", "sync_log"):
         cur.execute(f"DELETE FROM {t} WHERE review_id = ?", (rid,))
     status = re.search(r"\|\s*\*\*Report status\*\*\s*\|\s*(.*?)\s*\|", rv.read(review / rv.STAGES[5]))
+    # Who did the work and how to reach them. A conformance report nobody can
+    # answer a question about is worth less than one that names a person, and
+    # the name belongs in the record, not in the generator.
+    intake = rv.read(review / rv.STAGES[0])
+    m = re.search(r"\|\s*\*\*Reviewer\(s\)\*\*\s*\|\s*(.*?)\s*\|", intake)
+    evaluator = re.split(r"\s+[(—]", m.group(1))[0].strip() if m else ""
+    m = re.search(r"\|\s*\*\*Reviewer contact\*\*\s*\|\s*(.*?)\s*\|", intake)
+    contact = (m.group(1).strip() if m else "")
+    if contact.startswith("_") or contact.startswith("("):
+        contact = ""   # the template's own placeholder
     source = hashlib.sha256(b"".join((review / st).read_bytes() for st in rv.STAGES if (review / st).exists())).hexdigest()
-    cur.execute("INSERT OR REPLACE INTO reviews VALUES (?,?,?,?,?)",
-                (rid, rv.product_name(review), rv.decision(review), status.group(1) if status else "", source))
+    cur.execute("INSERT OR REPLACE INTO reviews VALUES (?,?,?,?,?,?,?)",
+                (rid, rv.product_name(review), rv.decision(review), status.group(1) if status else "",
+                 evaluator, contact, source))
     cur.executemany("INSERT INTO views VALUES (?,?,?,?,?,?,?)",
                     [(rid, vid, n, loc, rep, kind, removed) for vid, n, loc, rep, kind, removed in parse_views(review)])
     cur.executemany("INSERT INTO tasks VALUES (?,?,?,?,?,?)",

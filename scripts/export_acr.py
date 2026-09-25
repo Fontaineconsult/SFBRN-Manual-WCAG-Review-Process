@@ -438,6 +438,53 @@ def gather(con, review: pathlib.Path) -> dict:
                     FROM findings f WHERE review_id=? AND withdrawn=0
                     ORDER BY CASE severity WHEN 'Blocker' THEN 0 END, finding_id""", rid)
 
+    # Which modality a finding belongs to is a question about who it affects,
+    # and the criterion answers it: 1.4.5 maps to a low-vision check, 1.2.2 to
+    # a hearing one. The run says only where it was noticed -- a reviewer on a
+    # screen-reader walk also sees that the figures blur at zoom.
+    #
+    # 51 of the 55 criteria map to exactly one modality, so for those the
+    # criterion decides alone. The other four are ambiguous -- 1.1.1 reaches a
+    # no-vision check about alternative text and a no-hearing check about media
+    # alternatives -- and there the run breaks the tie. Doing this per
+    # criterion rather than per finding is what keeps a finding that cites both
+    # 2.1.1 and 4.1.2 under Limited Manual Dexterity as well as Blindness.
+    sc_mods = {}
+    for sc, mod in q("""SELECT DISTINCT cc.sc, c.modality FROM check_criteria cc
+                        JOIN checks c ON c.check_id = cc.check_id"""):
+        sc_mods.setdefault(sc, set()).add(mod)
+
+    run_mods, meta, f_crit = {}, {}, {}
+    for fid, sev, plain, where, sc in q("""
+            SELECT f.finding_id, f.severity, COALESCE(f.plain_summary,''),
+                   COALESCE(f.where_text,''), fc.sc
+            FROM findings f
+            JOIN finding_criteria fc ON fc.review_id=f.review_id AND fc.finding_id=f.finding_id
+            WHERE f.review_id=? AND f.withdrawn=0""", rid):
+        meta[fid] = (sev, plain.strip(), where)
+        f_crit.setdefault(fid, set()).add(sc)
+    for fid, mod in q("""
+            SELECT DISTINCT f.finding_id, r.modality
+            FROM findings f
+            JOIN finding_runs fr ON fr.review_id=f.review_id AND fr.finding_id=f.finding_id
+            JOIN runs r ON r.review_id=f.review_id AND r.run_id=fr.run_id
+            WHERE f.review_id=? AND f.withdrawn=0 AND r.modality NOT IN ('', '\u2014')""", rid):
+        run_mods.setdefault(fid, set()).add(mod)
+
+    by_modality = {}
+    for fid, crits in sorted(f_crit.items()):
+        sev, plain, where = meta[fid]
+        mods = set()
+        for sc in crits:
+            cand = sc_mods.get(sc, set())
+            if len(cand) > 1:
+                cand = (cand & run_mods.get(fid, set())) or cand
+            mods |= cand
+        for mod in sorted(mods):
+            by_modality.setdefault(mod, []).append(
+                dict(fid=fid, sev=severity(sev), plain=plain,
+                     views=VIEWCODE.findall(where)))
+
     views = q("""SELECT view_id, name, locator FROM views
                  WHERE review_id=? AND COALESCE(removed,'')='' ORDER BY CAST(SUBSTR(view_id,2) AS INT)""", rid)
     removed = q("""SELECT view_id, name, removed FROM views
@@ -466,7 +513,7 @@ def gather(con, review: pathlib.Path) -> dict:
                                              plain=(plain_s or "").strip(),
                                              sev=severity(sev), views=vids, ncrit=ncrit))
 
-    return dict(rid=rid, pages=pages, by_sc=by_sc, verified=verified,
+    return dict(rid=rid, pages=pages, by_sc=by_sc, by_modality=by_modality, verified=verified,
                 product=product, decision=decision, report_status=report_status,
                 source_sha=source_sha, evaluator=evaluator, contact=contact, criteria=criteria, ev=ev, fpc=fpc, findings=findings,
                 views=views, removed=removed, runs_total=runs_total, runs_resulted=runs_resulted,
@@ -662,6 +709,29 @@ def issue_row(n: int, f, d: dict) -> str:
 
 
 
+EXTERNAL_NOTE = """<div class="note">
+<p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
+the supplier about its own product. This report was produced by {body} during a procurement
+requisition, to determine whether the product meets the CSU's accessibility requirements for acquisition.
+Every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
+relied on anywhere in this document.</p>
+</div>"""
+
+INTERNAL_NOTE = """<div class="note">
+<p><b>Internal document. Not for distribution to the supplier or the public.</b> This is the campus-facing counterpart of the accessibility conformance report for the same product, produced from the same evaluation and the same evidence. The conformance report states what the supplier has to fix; this one states what the people who will use the product cannot do while it stays unfixed, which is what a Temporary Alternative Access Plan is written against.</p>
+</div>"""
+
+INTERNAL_INTRO = """<p class="sub">Written to be lifted into a TAAP. Each heading below is a box in the form's <b>Affected User Groups</b> checklist, and the statements under it are the <b>known accessibility barriers that affect core functionality</b> the box above it asks for. Nothing here is new evidence: every statement is a finding recorded in the criterion tables that follow, and the pages named are pages this evaluation walked.</p>
+<p class="sub">A barrier is listed under <b>every</b> group its success criterion affects, so the same statement can appear more than once. The sentences are the evaluation's own, and name the user the barrier was first observed with — a focus-order barrier reads "a screen-reader user" and also stops a keyboard user, which is why it appears under both.</p>
+<p class="sub">Barriers of lower severity are summarised as a count rather than listed. They are real and they are in the tables below, but a plan written against every one of them is a plan nobody finishes; the ones printed here are those that stop or seriously impede a task.</p>"""
+
+
+ROADMAP_INTRO = """<p class="sub">The California State University requires that the information and communication technology it
+acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
+failure to meet it <i>may</i> jeopardize future acquisitions. <b>The following fixes should be implemented to
+meet the WCAG 2.1 AA standard.</b></p>"""
+
+
 REPORT_NAME = "San Francisco Bay Region Network Manual Product Accessibility Evaluation"
 
 
@@ -825,16 +895,25 @@ CSS = """
 """
 
 
-def render(d: dict, brand="", cfg=None) -> str:
+def render(d: dict, brand="", cfg=None, internal=False) -> str:
     prod = d["product"] or d["rid"]
     cfg = cfg or {}
-    mail = d.get("contact") or ""
-    contact_txt = (f'<a href="mailto:{e(mail)}">{e(mail)}</a>' if mail
-                   else 'Named in the accompanying review record.')
+    # the two variants differ in audience, not in evidence: same database, same
+    # tables, a different section in front and a different thing asked of the
+    # reader. Keeping them in one template is what stops them drifting apart.
     # the sentence wants the article ("produced by the SFBRN ..."), the table
     # cell does not ("Daniel Fontaine, SFBRN ...")
     body = cfg.get("body") or "the evaluating body"
     body_name = re.sub(r"(?i)^the\s+", "", body)
+    kind = "Internal Report" if internal else "Accessibility Conformance Report"
+    lead = INTERNAL_NOTE if internal else EXTERNAL_NOTE.format(body=e(body))
+    front = f"<h2>What a user will not be able to do</h2>{INTERNAL_INTRO}{barriers_section(d)}" if internal else ""
+    back = "" if internal else (f"<h2>Vendor Roadmap</h2>{ROADMAP_INTRO}"
+                                f"{roadmap_section(d)}")
+
+    mail = d.get("contact") or ""
+    contact_txt = (f'<a href="mailto:{e(mail)}">{e(mail)}</a>' if mail
+                   else 'Named in the accompanying review record.')
 
     fpc_rows = []
     for f in d["fpc"]:
@@ -909,21 +988,14 @@ def render(d: dict, brand="", cfg=None) -> str:
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{REPORT_NAME} — {e(prod)}</title>
+<title>{REPORT_NAME} — {e(prod)}{' (internal)' if internal else ''}</title>
 <style>{CSS}</style></head><body><div class="wrap">
 {brand}
 <h1>{REPORT_NAME}</h1>
-<p class="subject"><b>{e(prod)}</b> &mdash; Accessibility Conformance Report, based on
+<p class="subject"><b>{e(prod)}</b> &mdash; {kind}, based on
  VPAT<sup>&reg;</sup> Version 2.5Rev, WCAG Edition</p>
 
-<div class="note">
-<p><b>This is an independent evaluation, not a vendor self-attestation.</b> A VPAT/ACR is normally completed by
-the supplier about its own product. This report was produced by {e(body)} during a procurement
-requisition, to determine whether the product meets the CSU's accessibility requirements for acquisition.
-Every conformance level in it is derived from logged test runs. No claim made by the supplier is reproduced or
-relied on anywhere in this document.
-</p>
-</div>
+{lead}
 
 <h2>Report information</h2>
 <table class="meta"><colgroup><col style='width:30%'><col style='width:70%'></colgroup><tbody>
@@ -959,6 +1031,7 @@ standard/guidelines.</p>
 <thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
 <tbody>{terms}</tbody></table>
 
+{front}
 <h2>WCAG 2.2 Report</h2>
 <p class="sub">Tables 1 and 2 also document conformance with EN 301 549 and Revised Section 508 where those standards incorporate WCAG by reference.</p>
 <h3>Table 1: Success Criteria, Level A</h3>
@@ -979,12 +1052,8 @@ rather than inferred.</p>
 <th scope="col">Remarks and explanations</th></tr></thead>
 <tbody>{chr(10).join(fpc_rows)}</tbody></table>
 
-<h2>Vendor Roadmap</h2>
-<p class="sub">The California State University requires that the information and communication technology it
-acquires conform to <b>WCAG 2.1 Level AA</b>. This product does not currently meet that standard. Continued
-failure to meet it <i>may</i> jeopardize future acquisitions. <b>The following fixes should be implemented to
-meet the WCAG 2.1 AA standard.</b></p>
-{roadmap_section(d)}
+
+{back}
 
 <p class="colophon">Source database hash {e((d['source_sha'] or '')[:16])}. VPAT<sup>&reg;</sup> is a registered
 service mark of the Information Technology Industry Council (ITI); this report follows the structure of
@@ -993,6 +1062,143 @@ VPAT<sup>&reg;</sup> 2.5 and is not endorsed by ITI.</p>
 </div></body></html>
 """
 
+
+
+# --- the internal variant: what a user will not be able to do ---------------
+# The external report is addressed to the vendor and says what to fix. The
+# internal one is addressed to the procurement team and the department that
+# will own the product, and it answers a different question: who on our campus
+# cannot do what, starting today.
+#
+# It is shaped to be lifted into a TAAP. Every heading below is a box in the
+# TAAP's `Affected User Groups` checklist, and the statements under it are the
+# "known accessibility barriers that affect core functionality" the form asks
+# for in the box above it. Nothing is authored here -- the statements are the
+# findings' own `Plain summary` sentences, which are written to say what is
+# wrong AND what a person cannot do because of it, which is exactly what this
+# section needs.
+#
+# Two of the TAAP's groups take one modality each; two pair up, because the
+# evaluation does not separate them and pretending otherwise would invent a
+# distinction the evidence cannot carry. Colour has no box of its own on the
+# form, so it is reported under Low Vision and said so.
+TAAP_GROUPS = [
+    ("Blindness", ("no-vision",), ("302.1",),
+     "People who cannot see the screen and operate it with a screen reader."),
+    ("Low Vision", ("low-vision", "no-color"), ("302.2", "302.3"),
+     "People who enlarge, re-colour or re-space the screen. Colour vision deficiency has no box of "
+     "its own on the TAAP checklist, so colour barriers are reported here."),
+    ("Deafness &middot; Hard of Hearing", ("no-hearing",), ("302.4", "302.5"),
+     "Both boxes take the same evidence: audio content and whether an equivalent exists."),
+    ("Speech Disabilities", ("no-speech",), ("302.6",),
+     "People who cannot operate a control that requires speech."),
+    ("Limited Manual Dexterity &middot; Limited Reach and Strength", ("motor",), ("302.7", "302.8"),
+     "Both boxes take the same evidence: keyboard-only operation, target size, and whether anything "
+     "needs a steady or repeated pointer action."),
+    ("Cognitive Disability", ("cognition",), ("302.9",),
+     "People who rely on consistent navigation, plain instructions, recoverable errors and no time "
+     "pressure."),
+    ("Photosensitivity", (), (),
+     "Decided by 2.3.1 Three Flashes or Below Threshold."),
+]
+
+
+def group_barriers(d: dict, mods) -> tuple:
+    """(blocking, major, minor_count) for a TAAP group, deduplicated by finding."""
+    seen, items = set(), []
+    for m in mods:
+        for it in d["by_modality"].get(m, []):
+            if it["fid"] in seen or not it["plain"]:
+                continue
+            seen.add(it["fid"])
+            items.append(it)
+    rank = {"Blocker": 0, "Major": 1}
+    items.sort(key=lambda i: (rank.get(i["sev"], 2), i["fid"]))
+    return ([i for i in items if i["sev"] == "Blocker"],
+            [i for i in items if i["sev"] == "Major"],
+            sum(1 for i in items if i["sev"] not in ("Blocker", "Major")))
+
+
+def unusable_pages(d: dict, mods) -> list:
+    """Pages a run in this modality recorded as Broken -- not merely degraded."""
+    out = []
+    for f in d["fpc"]:
+        if f["modality"] in mods:
+            for n in f["broken_names"]:
+                if n not in out:
+                    out.append(n)
+    return out
+
+
+def barrier_item(d: dict, it: dict) -> str:
+    # Every page the finding names, including one withdrawn from the sample:
+    # the sample was drawn student-facing, but a TAAP covers everyone at the
+    # institution, and an instructor-only page is still a page somebody uses.
+    where = ", ".join(dict.fromkeys(
+        d["pages"][v]["name"] for v in it["views"] if v in d["pages"]))
+    tag = (f"<span class='sev sev-{it['sev'].lower()}'>{e(it['sev'])}</span>"
+           if it["sev"] in ("Blocker", "Major") else "")
+    return (f"<li>{md(it['plain'])}{tag}"
+            + (f"<div class='ev'>{e(where)}</div>" if where else "") + "</li>")
+
+
+def core_functionality(d: dict) -> str:
+    """The TAAP asks about core functionality. The task verdicts are that answer."""
+    failed = [t for t in d["tasks"] if (t[2] or "").startswith("Fail")]
+    barred = [t for t in d["tasks"] if (t[2] or "").startswith("Pass with barriers")]
+    unrun = [t for t in d["tasks"] if (t[2] or "").startswith("Not run")]
+    bits = []
+    if failed:
+        bits.append("<b>Cannot be completed:</b> " + "; ".join(
+            e(t[1].split(" \u2014 ")[0]) for t in failed) + ".")
+    if barred:
+        bits.append("<b>Completed only with barriers:</b> " + "; ".join(
+            e(t[1].split(" \u2014 ")[0]) for t in barred) + ".")
+    if unrun:
+        bits.append("<b>Not yet walked:</b> " + "; ".join(
+            e(t[1].split(" \u2014 ")[0]) for t in unrun)
+            + " \u2014 barriers in these may be additional to everything below.")
+    return ("<div class='note'><p><b>Core functionality.</b> The TAAP asks which barriers affect core "
+            "functionality. These are the end-to-end tasks this evaluation walked, and how they ended.</p>"
+            "<p>" + " ".join(bits) + "</p></div>") if bits else ""
+
+
+def barriers_section(d: dict) -> str:
+    out = [core_functionality(d)]
+    na = {c[0]: c[7] for c in d["criteria"]}
+    for name, mods, codes, blurb in TAAP_GROUPS:
+        blocking, major, minor = group_barriers(d, mods)
+        pages = unusable_pages(d, mods)
+        if not mods:                                  # photosensitivity
+            outcome = na.get("2.3.1", "Not Evaluated")
+            verdict = ("<b>No barrier found.</b> Nothing in the evaluated pages flashes; "
+                       "2.3.1 is recorded Not Applicable. Leave this box unticked."
+                       if outcome == "Not Applicable" else
+                       f"2.3.1 is recorded <b>{e(outcome)}</b> \u2014 see the criterion table below.")
+        elif blocking or major or minor:
+            verdict = ("<b>Barriers found \u2014 tick this box.</b>"
+                       + (f" {len(blocking)} of them "
+                          f"{'stops' if len(blocking) == 1 else 'stop'} the task outright."
+                          if blocking else ""))
+        else:
+            verdict = ("<b>No barrier found in the evaluated sample.</b> "
+                       "Leave this box unticked unless the department knows otherwise.")
+        body = [f"<h3>{name}</h3>", f"<p class='lead'>{verdict}</p>",
+                f"<p class='sub'>{blurb}"
+                + (f" Reported under {', '.join(e(c) for c in codes)} in the Section 508 table below."
+                   if codes else "") + "</p>"]
+        if pages:
+            body.append("<p><b>Could not be used at all:</b> "
+                        + ", ".join(f"<b>{e(n)}</b>" for n in pages) + ".</p>")
+        if blocking or major:
+            body.append("<ul class='stmts'>"
+                        + "".join(barrier_item(d, i) for i in blocking + major) + "</ul>")
+        if minor:
+            body.append(f"<p class='sub'>{minor} further barrier{'s' if minor != 1 else ''} of lower "
+                        f"severity {'are' if minor != 1 else 'is'} recorded in the criterion tables "
+                        f"below.</p>")
+        out.append("".join(body))
+    return "".join(out)
 
 
 # --- Vendor roadmap ---------------------------------------------------------
@@ -1159,21 +1365,23 @@ def write_docx(html: str, out: pathlib.Path, logo=None) -> pathlib.Path:
     return out
 
 
-def out_path(review: pathlib.Path, override=None) -> pathlib.Path:
-    return pathlib.Path(override) if override else review / f"{review.name}-acr.html"
+def out_path(review: pathlib.Path, override=None, internal=False) -> pathlib.Path:
+    if override:
+        return pathlib.Path(override)
+    return review / f"{review.name}-{'internal' if internal else 'acr'}.html"
 
 
-def write(review: pathlib.Path, con=None, override=None, brand_cfg=None) -> pathlib.Path:
+def write(review: pathlib.Path, con=None, override=None, brand_cfg=None, internal=False) -> pathlib.Path:
     own = con is None
     con = con or db.connect(review)
     root = pathlib.Path(__file__).resolve().parent.parent
     cfg = branding(root) if brand_cfg is None else brand_cfg
     try:
-        page = render(gather(con, review), brand_header(cfg, root), cfg)
+        page = render(gather(con, review), brand_header(cfg, root), cfg, internal)
     finally:
         if own:
             con.close()
-    path = out_path(review, override)
+    path = out_path(review, override, internal)
     prev = path.read_text(encoding="utf-8") if path.is_file() else None
     if prev != page:
         path.write_text(page, encoding="utf-8")
@@ -1185,6 +1393,8 @@ def main() -> int:
     ap.add_argument("review", help="review directory name or unique substring")
     ap.add_argument("--out", help="write somewhere other than reviews/<id>/<id>-acr.html")
     ap.add_argument("--open", action="store_true", help="open the report in a browser")
+    ap.add_argument("--internal", action="store_true",
+                    help="the campus-facing variant: what a user will not be able to do, for a TAAP")
     ap.add_argument("--docx", action="store_true",
                     help="also write the report as .docx next to the .html")
     ap.add_argument("--org", help="organisation name for the branding header")
@@ -1194,12 +1404,13 @@ def main() -> int:
     review = rv.resolve(a.review)
     root = pathlib.Path(__file__).resolve().parent.parent
     cfg = branding(root, logo=a.logo, org=a.org, unit=a.unit)
-    path = write(review, override=a.out, brand_cfg=cfg)
-    print(f"ACR written: {path}")
+    path = write(review, override=a.out, brand_cfg=cfg, internal=a.internal)
+    label = "Internal report" if a.internal else "ACR"
+    print(f"{label} written: {path}")
     if a.docx:
         d = write_docx(path.read_text(encoding="utf-8"), path.with_suffix(".docx"),
                        raster_logo(cfg, root))
-        print(f"ACR written: {d}")
+        print(f"{label} written: {d}")
     if a.open:
         webbrowser.open(path.resolve().as_uri())
     return 0

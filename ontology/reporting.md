@@ -115,6 +115,93 @@ fill Word-side metadata (document title, author) there.
   conclusion. Precision in the claims is the whole defense — it does not
   need to be announced.
 
+## Fourth output: the internal report (2026-09-25)
+
+`python scripts/export_acr.py <review> --internal [--docx]` →
+`reviews/<id>/<id>-internal.html`.
+
+**Same generator, same database, different audience.** The conformance report
+is addressed to the supplier and the public and says what has to be fixed.
+The internal report is addressed to the procurement team and to the department
+that will own the product, and answers the other question: **who here cannot
+do what, starting today.** Keeping both in one template is what stops them
+drifting apart — the criterion tables and the 508 section are the same bytes
+in both.
+
+The two differ in three places: the standing note, the title's subject line,
+and one section. The external report ends with the **Vendor Roadmap**; the
+internal one opens, before the criterion tables, with **What a user will not
+be able to do**, and carries no roadmap at all — what the vendor owes is not
+what the department has to plan around.
+
+### It is shaped to be lifted into a TAAP
+
+`ontology/TAAP Version 3_2 051225.docx` asks for two things this section
+supplies. Its **Known Accessibility Barriers** box wants the barriers "that
+affect core functionality"; its **Affected User Groups** box is a checklist.
+So every `<h3>` in the section *is* one of those boxes, in the form's own
+words, and each opens by saying whether to tick it.
+
+| TAAP group | From | 508 |
+|---|---|---|
+| Blindness | no-vision | 302.1 |
+| Low Vision | low-vision + no-color | 302.2, 302.3 |
+| Deafness · Hard of Hearing | no-hearing | 302.4, 302.5 |
+| Speech Disabilities | no-speech | 302.6 |
+| Limited Manual Dexterity · Limited Reach and Strength | motor | 302.7, 302.8 |
+| Cognitive Disability | cognition | 302.9 |
+| Photosensitivity | 2.3.1's outcome | — |
+
+Two pairs share a modality, because the evaluation does not separate them and
+splitting them would invent a distinction the evidence cannot carry — the
+section says so rather than implying two independent results. **Colour has no
+box on the form**, so colour barriers are reported under Low Vision and the
+text says that too; a reader who ticks Low Vision on the strength of a colour
+barrier should know that is what they are doing.
+
+The section opens with **core functionality**, taken from the task verdicts,
+because that is the phrase the form uses: which end-to-end tasks cannot be
+completed, which complete only with barriers, and which have not been walked
+yet — the last so a reader knows the list may grow.
+
+### Who a barrier affects is a question the criterion answers
+
+The first cut grouped a finding by the **modality of the run that produced
+it**. That is where it was *found*, which is a different question: a reviewer
+walking a page with a screen reader also notices that the figures blur at zoom
+and that the library videos carry auto-captions, and neither is a barrier to a
+blind user. Both landed under Blindness.
+
+So the mapping is **criterion → check → modality**. 1.4.5 reaches a low-vision
+check, 1.2.2 a hearing one, 2.1.1 a motor one. **51 of the 55 criteria map to
+exactly one modality**, so for those the criterion decides alone. The other
+four are ambiguous — 1.1.1 reaches a no-vision check about alternative text
+*and* a no-hearing check about media alternatives — and there the run breaks
+the tie.
+
+Doing this **per criterion rather than per finding** is what matters: a
+finding citing both 2.1.1 and 4.1.2, walked with a screen reader, keeps its
+motor half and appears under Limited Manual Dexterity as well as Blindness.
+Narrowing the whole finding by its run had silently dropped it.
+
+**A barrier therefore appears under every group its criteria affect**, and the
+section says so, along with the other thing a reader needs to know: the
+sentences are the findings' own `Plain summary` text and name the user the
+barrier was first observed with. A focus-order barrier reads "a screen-reader
+user" and also stops a keyboard user, which is why it is printed under both.
+
+### What it leaves out
+
+**Barriers below Major are summarised as a count**, with a pointer to the
+criterion tables. They are real, and a plan written against every one of them
+is a plan nobody finishes.
+
+**It carries no procurement decision.** The decision and the report status
+stay in `06-report.md`, where C12 puts them — the reviewer's act. This
+document is evidence for writing a TAAP, not the record of a decision, and a
+department reading it should not find the answer already filled in.
+
+
 ## Rules
 
 - **The decision stays human.** The report scaffolds evidence and

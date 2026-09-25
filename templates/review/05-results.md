@@ -23,6 +23,20 @@ ACR, `02-vendor.md`); **Task findings** (IDs from `04-task-testing.md` — which
 tasks and views failed this criterion); and **Remarks** (what was tested, on
 which sample items, with which tool/method — evidence lives with the findings).
 
+Criteria that end at **Does Not Support** (either level) or **Partially
+Supports at Level A** also carry a **Remediation** line — one authored,
+imperative instruction covering all of that criterion's findings, which the
+ACR's Priorities section prints verbatim. Add it under Remarks:
+
+    - **Remediation:** Add a `lang` attribute to the `html` element of the
+      four pages that lack one.
+
+Rules (enforced by `review_db.py check`, documented in
+`ontology/reporting.md` §Remediation): imperative; covers every finding under
+the criterion; names the product's own working example where one exists; says
+what to build, never which framework; no identifiers, dates or attribution;
+at most 450 characters.
+
 ---
 
 ## Table 1: Success Criteria, Level A

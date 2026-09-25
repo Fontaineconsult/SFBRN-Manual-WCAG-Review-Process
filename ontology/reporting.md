@@ -448,12 +448,53 @@ fact is not in an extracted field, it does not reach the report.
   the themes were bound to one product so the section would not generalise,
   and grouping by what a fix costs reads as a set of demands.
 
-  **The section carries no prose.** Criterion, level, issue count, pages —
-  and nothing else. Every attempt to reduce a `05` remark to a summary line
-  mechanically produced a fragment ("Fails on all 10 views.") or a dangling
-  reference ("The pattern is one mechanism:"), because the remarks are working
-  notes. The statements live in the tables above, where they are already
-  cleaned; repeating a worse version here helps nobody.
+  **The cell is an instruction, not a summary.** By the time a reader reaches
+  this section they know what is wrong — they have just read the criterion
+  tables. What the section adds is the *work*: the authored `Remediation`
+  field, below.
+
+- **The `Remediation` field — what to do, per criterion.** Added 2026-09-24,
+  after a first version of Priorities carried each criterion's worst finding
+  sentence and read, correctly, as "just summaries of the findings". A
+  restatement of the defect is not a plan.
+
+  So each criterion the section publishes carries **one authored instruction**,
+  stored as `criterion_outcomes.remediation` and extracted from a
+  `- **Remediation:**` line in the `05` criterion block. The report prints it
+  verbatim.
+
+  **The rules, which are checked and not merely documented**
+  (`REMEDIATION_RULES` in `scripts/review_db.py`, reported by
+  `review_db.py check`):
+
+  1. **Imperative.** "Give every informative image an `alt` attribute", not
+     "images lack alternative text".
+  2. **Covers all of that criterion's findings**, not the worst one. This is
+     why the field sits on the criterion and not on the finding: 4.1.2 has
+     eighteen findings and one fix.
+  3. **Names the product's own working example where one exists.** This review
+     kept finding that the vendor already does the right thing somewhere —
+     headings on the solutions page, a symbol on the status marks, a label on
+     the sign-in form, a confirmation on one of the three scoring controls.
+     Pointing at it turns a demand into "do what you already do", which is both
+     more actionable and more accurate.
+  4. **Says what to build, never which framework or library to use.** How is
+     the vendor's decision; naming a framework in a procurement document is
+     both out of scope and easy to dismiss.
+  5. **No internal identifiers, no dates, no attribution.**
+  6. **At most 450 characters** — longer than a `Plain summary` because an
+     instruction covering several findings needs the room, short enough that
+     the table stays readable.
+
+  **Required** on any criterion that is Does Not Support at either level, or
+  Partially Supports at Level A — exactly the set Priorities publishes.
+  Optional elsewhere. `review_db.py check` reports *remediation missing* and
+  *remediation breaks a rule*; both count toward C11.
+
+  **Derived from the findings, not from the report generator.** The
+  instruction must be supportable by that criterion's own findings and
+  remarks. As with `Plain summary`, the authoring happens once, into the
+  record; the generator only selects and prints.
 
 - **The `Plain summary` field — the one sentence written for a reader.**
   Added 2026-09-24 after three attempts to convert working notes into
@@ -493,13 +534,10 @@ fact is not in an extracted field, it does not reach the report.
   *plain summary missing* (a live finding has none) and *plain summary breaks
   a rule* (naming which rule). Both count toward C11.
 
-  **Where the report uses it**: as the statement in each criterion's bullets,
-  and as the "what is outstanding" line in Priorities for remediation. For a
-  criterion with several findings the priorities line shows the most severe,
-  and among equals the finding citing the **fewest criteria** — the one most
-  specific to that criterion, since picking by severity alone made three
-  criteria quote the same sentence. A criterion with many findings is still
-  represented by one of them; the full set is in the criterion's own row.
+  **Where the report uses it**: as the statement in each criterion's bullets.
+  Priorities uses the criterion-level `Remediation` instead — an early version
+  put the worst finding's sentence there and three different criteria ended up
+  quoting the same one.
 
 - **Deterministic**: no timestamps in the body, so a diff on the committed
   page means the review changed. Never hand-edit it — change `05` (or the

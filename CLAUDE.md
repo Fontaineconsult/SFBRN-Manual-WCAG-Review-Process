@@ -213,6 +213,14 @@ if nobody said the word "test".
   written for a reader, it is what the ACR publishes, and `review_db.py check`
   enforces the rules (ontology/reporting.md §Plain summary). Never write report
   prose in a generator; write it once, here.
+- **Every published criterion carries a `Remediation`** — one authored,
+  imperative instruction in `05`, covering *all* of that criterion's findings
+  and naming the product's own working example where one exists; says what to
+  build, never which framework; ≤ 450 chars. Required wherever the outcome is
+  Does Not Support, or Partially Supports at Level A — the set the ACR's
+  Priorities section publishes. `Plain summary` says what is wrong;
+  `Remediation` says what to do. `review_db.py check` enforces both
+  (ontology/reporting.md §Remediation).
 - **Findings cite runs.** Exploration observations are recon → `03` §2.6,
   phrased "verify X under check Y in a run". No run, no finding.
 - **Every run carries a replicable locator** — validate enforces it. A real

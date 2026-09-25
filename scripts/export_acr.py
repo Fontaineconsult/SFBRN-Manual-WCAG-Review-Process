@@ -345,7 +345,7 @@ def gather(con, review: pathlib.Path) -> dict:
 
     criteria = q("""
         SELECT w.sc, w.name, w.level, w.principle_no, w.principle, w.version_added, w.understanding_url,
-               co.outcome, co.remarks, co.task_findings, co.vendor_claim
+               co.outcome, co.remarks, co.task_findings, co.vendor_claim, co.remediation
         FROM wcag_criteria w
         LEFT JOIN criterion_outcomes co ON co.sc = w.sc AND co.review_id = ?
         WHERE w.in_target = 1
@@ -589,7 +589,7 @@ def echoes(lead: str, stmts_html: str) -> bool:
 
 def crit_rows(d: dict, level: str) -> str:
     out = []
-    for (sc, name, lv, pno, pr, ver, url, outcome, remarks, tf, vendor) in d["criteria"]:
+    for (sc, name, lv, pno, pr, ver, url, outcome, remarks, tf, vendor, _rem) in d["criteria"]:
         if lv != level:
             continue
         outcome = outcome or "Not Evaluated"
@@ -898,29 +898,18 @@ ROADMAP_TIERS = [
 ]
 
 
-def worst_summary(items) -> str:
-    """The most severe finding's authored sentence, for the priorities table."""
-    if not items:
-        return ""
-    # Most severe first, then the finding that cites the FEWEST criteria: a
-    # finding naming four criteria describes none of them as precisely as one
-    # naming only this criterion, and picking by severity alone made three
-    # different criteria quote the same sentence.
-    worst = sorted(items, key=lambda i: ({"Blocker": 0, "Major": 1}.get(i["sev"], 2),
-                                         i.get("ncrit", 9)))[0]
-    return worst.get("plain", "")
-
-
 def roadmap_section(d: dict) -> str:
     """One row per qualifying criterion: what it is, where, and what is wrong.
 
     Only Does Not Support at either level, plus Partially Supports at Level A.
     Everything else is in the tables above; repeating it here would make the
     section too long to act on."""
-    # name, level, outcome and the criterion's own remark: a criterion-level
-    # summary belongs here, not one finding's wording, which would describe a
-    # single page and read identically under two different criteria.
-    meta = {c[0]: (c[1], c[2], c[7], c[8]) for c in d["criteria"]}
+    # The cell is the criterion's authored `Remediation` -- an instruction, not
+    # a restatement of the defect. By this point in the report the reader knows
+    # what is wrong; what they need here is the work. A finding's own sentence
+    # will not do: it describes one page, and the same sentence would appear
+    # under two different criteria.
+    meta = {c[0]: (c[1], c[2], c[7], c[11]) for c in d["criteria"]}
     out = []
     for name, level, outcome, blurb in ROADMAP_TIERS:
         rows = []
@@ -936,22 +925,17 @@ def roadmap_section(d: dict) -> str:
                         pages.append(nm)
             where = ("Product-wide" if len(pages) >= max(3, len(d["views"]) * 0.6)
                      else ", ".join(pages) if pages else "Product-wide")
-            # No summary sentence here. The 05 remarks are working notes, and
-            # every attempt to reduce one mechanically produced a fragment
-            # ("Fails on all 10 views.") or a dangling reference. The criterion,
-            # its level, the count and the pages are what this section is for;
-            # the statements themselves are in the tables above.
             n = len(items)
             rows.append(
                 f"<tr><th scope='row'>{e(sc)} {e(cname)}</th>"
                 f"<td class='lvl'>Level {e(lv)}</td>"
                 f"<td class='lvl'>{n if n else '—'}</td>"
-                f"<td class='rem'>{md(worst_summary(items))}<div class='ev'>{e(where)}</div></td></tr>")
+                f"<td class='rem'>{md(rem or '')}<div class='ev'>{e(where)}</div></td></tr>")
         if rows:
             out.append(
                 f"<h3>{e(name)}</h3><p class='sub'>{md(blurb)}</p>"
                 f"<table><thead><tr><th scope='col'>Criterion</th><th scope='col'>Level</th>"
-                f"<th scope='col'>Issues</th><th scope='col'>What is outstanding</th></tr></thead>"
+                f"<th scope='col'>Issues</th><th scope='col'>What needs to be done</th></tr></thead>"
                 f"<tbody>{''.join(rows)}</tbody></table>")
     return "".join(out)
 

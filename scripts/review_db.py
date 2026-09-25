@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS criterion_outcomes (
   review_id TEXT NOT NULL, sc TEXT NOT NULL,
   outcome TEXT NOT NULL,          -- normalised ACR vocabulary
   outcome_raw TEXT, vendor_claim TEXT, task_findings TEXT, remarks TEXT,
+  remediation TEXT,               -- imperative; what to do. Rules in REMEDIATION_RULES
   PRIMARY KEY (review_id, sc)
 );
 CREATE TABLE IF NOT EXISTS criterion_findings (
@@ -322,7 +323,7 @@ def parse_criterion_outcomes(review):
         norm = next((x for x in rv.OUTCOMES if raw.startswith(x)), raw or "Not Evaluated")
         tf = cell("Task findings")
         out.append((h.group(1), norm, raw, cell("Vendor claim"), tf, cell("Remarks"),
-                    sorted(set(re.findall(FINDING_ID, tf)))))
+                    sorted(set(re.findall(FINDING_ID, tf))), cell("Remediation")))
     return out
 
 
@@ -419,8 +420,9 @@ def sync_review(con, review):
                      json.dumps(f["fields"], ensure_ascii=False)))
         cur.executemany("INSERT OR IGNORE INTO finding_criteria VALUES (?,?,?)", [(rid, f["id"], sc) for sc in f["criteria"]])
         cur.executemany("INSERT OR IGNORE INTO finding_runs VALUES (?,?,?)", [(rid, f["id"], r) for r in f["runs"]])
-    for sc, norm, raw, claim, tf, remarks, fids in parse_criterion_outcomes(review):
-        cur.execute("INSERT INTO criterion_outcomes VALUES (?,?,?,?,?,?,?)", (rid, sc, norm, raw, claim, tf, remarks))
+    for sc, norm, raw, claim, tf, remarks, fids, remediation in parse_criterion_outcomes(review):
+        cur.execute("INSERT INTO criterion_outcomes VALUES (?,?,?,?,?,?,?,?)",
+                    (rid, sc, norm, raw, claim, tf, remarks, remediation))
         cur.executemany("INSERT OR IGNORE INTO criterion_findings VALUES (?,?,?)", [(rid, sc, fid) for fid in fids])
     for d in rv.run_dirs(review):
         meta = rv.run_meta(d)
@@ -605,6 +607,56 @@ def plain_summary_issues(text: str):
     return bad
 
 
+
+# --------------------------------------------------------------------------
+# Remediation — what to DO about a criterion, not what is wrong with it
+# --------------------------------------------------------------------------
+# The Plain summary on a finding states the defect. By the time a procurement
+# reader reaches the priorities table they know the defect; what they need is
+# the work. So each criterion that qualifies for that table carries an
+# authored instruction. Rules:
+#
+#   1. IMPERATIVE. "Give every informative image an alt attribute", not "images
+#      lack alternative text".
+#   2. Addresses ALL of that criterion's findings, not one of them.
+#   3. Names the product's own working example where one exists. This review
+#      keeps finding that the vendor already does the right thing somewhere —
+#      headings on the solutions page, a symbol on the status marks, a label on
+#      the sign-in form, a confirmation on one control. Pointing at it turns a
+#      demand into "do what you already do".
+#   4. Says what to build, never which framework or library to use. How is the
+#      vendor's decision.
+#   5. No internal identifiers, no dates, no attribution.
+#   6. At most 450 characters.
+#
+# Required on any criterion that is Does Not Support at either level, or
+# Partially Supports at Level A — the set the report's priorities section
+# publishes. Optional elsewhere.
+REMEDIATION_MAX = 450
+REMEDIATION_BAD = (
+    (r"\b(?:V-F\d+|T\d+-F\d+|R\d{3}|O\d{1,2}|W\d{1,2}|"
+     r"(?:NV|LV|NC|NH|NS|MO|CO)\d{1,2}|S\d{1,2})\b", "contains an internal identifier"),
+    (r"20\d\d-\d\d-\d\d", "contains a date"),
+    (r"(?i)\b(?:the\s+)?reviewer\b", "refers to the reviewer"),
+    (r"(?i)\b(?:react|angular|vue|svelte|jquery|bootstrap|framework)\b",
+     "prescribes an implementation choice; say what to build, not how"),
+)
+
+
+def remediation_issues(text: str):
+    """Which authoring rules a remediation breaks. Empty list means it passes."""
+    t = (text or "").strip()
+    if not t:
+        return ["missing"]
+    bad = []
+    if len(t) > REMEDIATION_MAX:
+        bad.append(f"longer than {REMEDIATION_MAX} characters")
+    for pat, why in REMEDIATION_BAD:
+        if re.search(pat, t):
+            bad.append(why)
+    return bad
+
+
 def integrity(con, rid):
     issues = []
     for title, desc, sql in INTEGRITY:
@@ -626,6 +678,27 @@ def integrity(con, rid):
                        "description": "a live finding has no `Plain summary` row; the report has nothing "
                                       "publishable to quote for it",
                        "count": len(missing), "items": missing})
+    rmissing, rbroken = [], []
+    for sc, outcome, lvl, rem in con.execute(
+            """SELECT co.sc, co.outcome, w.level, COALESCE(co.remediation,'')
+               FROM criterion_outcomes co JOIN wcag_criteria w ON w.sc = co.sc
+               WHERE co.review_id=? AND (co.outcome='Does Not Support'
+                     OR (co.outcome='Partially Supports' AND w.level='A'))
+               ORDER BY w.sort_key""", (rid,)):
+        bad = remediation_issues(rem)
+        if bad == ["missing"]:
+            rmissing.append(f"{sc} ({outcome})")
+        elif bad:
+            rbroken.append(f"{sc}: {'; '.join(bad)}")
+    if rmissing:
+        issues.append({"check": "remediation missing",
+                       "description": "a criterion the report lists under Priorities has no `Remediation:` "
+                                      "line, so the report can say what is wrong but not what to do",
+                       "count": len(rmissing), "items": rmissing})
+    if rbroken:
+        issues.append({"check": "remediation breaks a rule",
+                       "description": "see REMEDIATION_RULES in review_db.py / ontology/reporting.md",
+                       "count": len(rbroken), "items": rbroken})
     if broken:
         issues.append({"check": "plain summary breaks a rule",
                        "description": "see PLAIN_RULES in review_db.py / ontology/reporting.md",

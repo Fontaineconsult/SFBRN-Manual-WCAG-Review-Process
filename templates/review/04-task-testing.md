@@ -129,11 +129,11 @@ additions. Repeat until no new types or findings appear.
 
 ## D. Coverage check
 
-Before moving to `05-results.md`:
+Two assertions no query can make for you. Everything else the old checklist
+asked for is now proved by the database — `review_db.py completion` covers
+task verdicts (C3), view sweeps (C7) and finding evidence (C9), and
+`review_db.py check` covers the rollup. A human ticking a box is weaker
+evidence than the query, not stronger.
 
-- [ ] Every process in 03 §3.3 has a task cluster with a verdict
 - [ ] Every branch sequence was walked, not just default sequences
-- [ ] Every non-process sample has a view-sweep entry
-- [ ] Every finding names at least one WCAG criterion, a severity, and evidence
 - [ ] Random-vs-structured comparison completed (and sample extended if needed)
-- [ ] `05-results.md` updated: every failed criterion cites finding IDs from this file

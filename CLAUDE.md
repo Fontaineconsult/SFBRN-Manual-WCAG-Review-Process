@@ -158,8 +158,9 @@ if nobody said the word "test".
 | Log/scaffold a run | `review.py log-test` (only way) | `evidence/runs/R###/` |
 | Close a run (set its Result) | `review.py close-run --help`, ontology/testing-loop.md §Closing a run | the run's Result cell + `**Result reasoning.**` — never by hand; every note names its basis |
 | Reviewer-driven session (JAWS, zoom, confirmations) | `ontology/testing-loop.md` §Reviewer session walkthroughs | `reviews/<id>/session-<sample>-reviewer-walkthrough.md` + the runs it feeds |
-| Results rollup / report | `05`/`06` template text | `05-results.md`, `06-report.md` |
-| Finish a review | `review.py validate` until clean | `06-report.md`, then `save-enclosure` |
+| Results rollup | `05` template text | `05-results.md` — the source **both** reports generate from |
+| Record the procurement decision (human) | `06` template text | `06-report.md` — the decision, its rationale, the vendor-ACR audit and this review's limits. Never a report: everything else is generated |
+| Finish a review | `review.py validate` until clean (C1–C13) | both reports regenerated (`export_acr.py <review> --docx` and `--internal --docx`), then `save-enclosure` |
 | Export the report for distribution | `scripts/export_report.py --help`, ontology/reporting.md §Distribution | `reviews/<id>/<id>-report.docx` — generated output; edit the .md and re-export, never the .docx |
 | Export an ACR (VPAT-shaped, for a counterparty who needs the grid) | ontology/reporting.md §Third output | `reviews/<id>/<id>-acr.html` (+ `-acr.docx` with `--docx`) — generated from the **database only**, never from notes or prose; fix `05` and regenerate. Branding comes from `branding.json` (copy `branding.example.json`) or `--org`/`--logo` |
 | Export the internal report (campus-facing: what a user cannot do, feeds a TAAP) | ontology/reporting.md §Fourth output, `ontology/TAAP Version 3_2 051225.docx` | `reviews/<id>/<id>-internal.html` — `export_acr.py <review> --internal`; same database, never carries the procurement decision |

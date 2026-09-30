@@ -1216,7 +1216,7 @@ def _completion_summary(review):
         return None
     import review_db
     con = review_db.connect(review)
-    rows = review_db.completion(con, review.name)
+    rows = review_db.completion(con, review.name, review)
     con.close()
     short = [f"{r['name'].split(' ')[0]} {r['done']}/{r['total']}" for r in rows if not (r['total'] and r['done'] >= r['total'])]
     return {"satisfied": sum(1 for r in rows if r['total'] and r['done'] >= r['total']),
@@ -1306,7 +1306,7 @@ def cmd_validate(args):
     if db_sync(review):
         import review_db
         con = review_db.connect(review)
-        done_rows = review_db.completion(con, review.name)
+        done_rows = review_db.completion(con, review.name, review)
         for r in done_rows:
             if r["total"] and r["done"] >= r["total"]:
                 continue

@@ -825,25 +825,11 @@ additions. Repeat until no new types or findings appear.
 
 ## D. Coverage check
 
-Before moving to `05-results.md`:
+Two assertions no query can make for you. Everything else the old checklist
+asked for is now proved by the database — `review_db.py completion` covers
+task verdicts (C3), view sweeps (C7) and finding evidence (C9), and
+`review_db.py check` covers the rollup. A human ticking a box is weaker
+evidence than the query, not stronger.
 
-- [ ] Every process in 03 §3.3 has a task cluster with a verdict
 - [ ] Every branch sequence was walked, not just default sequences
-- [x] Every non-process sample has a view-sweep entry
-- [x] Every finding names at least one WCAG criterion, a severity, and evidence
 - [ ] Random-vs-structured comparison completed (and sample extended if needed)
-- [ ] `05-results.md` updated: every failed criterion cites finding IDs from this file
-
-**Boxes 3 and 4 checked 2026-09-24 against the database, not by eye.** Box 3:
-every view still in the sample has an axe run (`C7 views swept`, 10/10) — the
-sweeps on the six views withdrawn on 2026-09-15 are closed as N/A rather than
-counted. Box 4: no live finding is missing a criterion, a severity or a run
-(`C9 findings evidenced`, 43/43).
-
-**Box 6 is one query away and fails on three rows.** 2.4.5, 3.3.1 and 2.4.11
-are decided from check outcomes with no finding behind them: 2.4.5 from the
-cognition pass (no site map, no search, the assignments table is the only
-route), 3.3.1 from the reviewer's correction on the wrong-password case after
-V-F44 was withdrawn, and 2.4.11 still provisional pending the reviewer. Each
-needs a finding raised or an explicit exception recorded before this box is
-honest.

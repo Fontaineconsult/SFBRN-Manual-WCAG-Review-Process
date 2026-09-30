@@ -823,20 +823,55 @@ COMPLETION = [
      "SELECT 'box ' || box_no || ': ' || substr(text,1,60) FROM coverage_boxes WHERE review_id=:r AND checked=0"),
     ("C11 integrity clean", "no integrity issue (see `check`)",
      None, None, None),
-    ("C12 decision (human)", "06 procurement decision set and report status FINAL — the reviewer's act, never the assistant's",
-     """SELECT (decision NOT IN ('Pending','')) + (report_status LIKE 'FINAL%') FROM reviews WHERE review_id=:r""",
-     "SELECT 2",
-     """SELECT CASE WHEN decision IN ('Pending','') THEN 'decision not set' END FROM reviews WHERE review_id=:r
-        UNION ALL SELECT CASE WHEN report_status NOT LIKE 'FINAL%' THEN 'report status ' || report_status END FROM reviews WHERE review_id=:r"""),
+    ("C12 decision (human)", "06 procurement decision recorded — the reviewer's act, never the assistant's",
+     """SELECT (decision NOT IN ('Pending','')) FROM reviews WHERE review_id=:r""",
+     "SELECT 1",
+     """SELECT CASE WHEN decision IN ('Pending','') THEN 'decision not set' END FROM reviews WHERE review_id=:r"""),
+    # C13 is checked in Python, not SQL: it has to look at the filesystem.
+    ("C13 reports current", "both generated reports exist and match the evidence they were built from",
+     None, None, None),
 ]
 
 
-def completion(con, rid):
-    """Rows of the definition of done: name, description, done, total, missing[]."""
+def reports_state(review, con, rid):
+    """(satisfied, of, missing) for C13 — the two generated deliverables.
+
+    A report is current when it exists and carries the source hash the
+    database holds now. The generator writes that hash into the page
+    (`Source database hash …`), so a stale report is detectable without
+    re-running it, and a review cannot be called finished on documents built
+    from evidence that has since changed."""
+    row = con.execute("SELECT source_sha FROM reviews WHERE review_id=?", (rid,)).fetchone()
+    sha16 = (row[0] or "")[:16] if row else ""
+    missing = []
+    for kind, flag in (("acr", ""), ("internal", " --internal")):
+        f = review / f"{review.name}-{kind}.html"
+        if not f.is_file():
+            missing.append(f"{f.name} not generated (export_acr.py {review.name}{flag})")
+        elif sha16 and sha16 not in f.read_text(encoding="utf-8", errors="ignore"):
+            missing.append(f"{f.name} is stale — regenerate (export_acr.py {review.name}{flag})")
+    return 2 - len(missing), 2, missing
+
+
+def completion(con, rid, review=None):
+    """Rows of the definition of done: name, description, done, total, missing[].
+
+    `review` is the review directory; C13 needs it because the deliverables
+    are files, not rows. Without it C13 reports itself unmeasured rather than
+    silently passing."""
     con.execute("DROP VIEW IF EXISTS fpc_mod")
     con.execute("CREATE TEMP VIEW fpc_mod AS SELECT DISTINCT modality FROM fpc")
     rows = []
     for name, desc, q_done, q_total, q_missing in COMPLETION:
+        if name.startswith("C13"):
+            if review is None:
+                rows.append({"name": name, "description": desc, "done": 0, "total": 2,
+                             "missing": ["not measured (no review path given)"]})
+            else:
+                done, total, missing = reports_state(review, con, rid)
+                rows.append({"name": name, "description": desc, "done": done,
+                             "total": total, "missing": missing})
+            continue
         if q_done is None:  # integrity
             iss = integrity(con, rid)
             n_iss = sum(i["count"] for i in iss)
@@ -887,7 +922,7 @@ def bar(done, total, width=20):
 def state_data(con, rid):
     q = lambda sql, **kw: con.execute(sql, {"r": rid, **kw}).fetchall()  # noqa: E731
     rev = con.execute("SELECT product, decision, report_status, source_sha FROM reviews WHERE review_id=?", (rid,)).fetchone()
-    done = completion(con, rid)
+    done = completion(con, rid, review)
     # POUR
     pour = []
     for pno, pname in sorted(rv.PRINCIPLES.items()):
@@ -1134,7 +1169,7 @@ def main():
         if not args.no_sync:
             sync(review, quiet=True)
         con = connect(review)
-        rows = completion(con, review.name)
+        rows = completion(con, review.name, review)
         if args.json:
             print(json.dumps(rows, indent=1, ensure_ascii=False))
         else:

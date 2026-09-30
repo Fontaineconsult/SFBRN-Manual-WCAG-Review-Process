@@ -29,7 +29,7 @@ result reasoning, narration, remarks prose, walkthrough files, screenshots).
 | Artifact | Extracted | Table | Normalisation / rule |
 |---|---|---|---|
 | `01-intake.md` H1 | product name | `reviews.product` | text after "Review Intake — " |
-| `06-report.md` header table | `**Decision**` cell; `**Report status**` cell | `reviews.decision`, `reviews.report_status` | decision placeholder → `Pending` |
+| `06-report.md` header table | `**Decision**` cell | `reviews.decision` | decision placeholder → `Pending` |
 | `03` §3.1 / §3.2 rows | `\| S# \| name \| locator \| represents \|`; `\| R# \| name \| locator \|` | `views` | row exists only if the name cell is non-empty; kind = structured / random; `removed` = `YYYY-MM-DD: reason` when the name ends in ` — removed YYYY-MM-DD: reason` (the view stays on record but leaves the sample: C6, C7, the FPC counts, the matrix and the dashboard use `removed=''` only; integrity still recognises its runs) |
 | `04` §A `### Task T# — name — …` blocks | task id, name, `**Verdict**`, `**Baselines run**`, `**Date(s) tested**` cells | `tasks` | verdict placeholder → `Not run`; only the four fixed verdict terms count as decided |
 | `04` `#### Finding <ID>` blocks | every `\| **Label** \| value \|` row (kept whole as JSON); `Where`, `Observed`, `Affected users`, `Severity`, `Evidence` | `findings` (+ `fields_json`) | section = task if under `## A.`, else view; view = leading `S#`/`R#` of *Where*; task = `T#` prefix of the ID |

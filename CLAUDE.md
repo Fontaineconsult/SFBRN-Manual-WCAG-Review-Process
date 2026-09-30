@@ -298,6 +298,11 @@ if nobody said the word "test".
   authenticate, create accounts, purchase, permanently delete, or submit
   forms. Record any artifact your exploration creates (e.g., an Untitled
   document).
+- **Close a page before opening the next.** `review.py next` names the page,
+  `page --view S#` shows its full state, `gaps --view S#` is its question
+  list, `close-page` refuses until every modality has a resulted run, every
+  check row is answered and the sweep is triaged. Automate first
+  (`axe_scan.py`, `view_probe.py`) — the reviewer is asked only what is left.
 - **Every sampled view gets an automated sweep run** — validate enforces
   it. Primary: `python scripts/axe_scan.py <review> --view S# --url URL`
   (assistant-runs it; logs the run, saves raw `R###-axe.json`; needs the

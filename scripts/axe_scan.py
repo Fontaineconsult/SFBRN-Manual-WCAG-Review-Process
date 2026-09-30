@@ -40,6 +40,7 @@ ontology/modality-checks.md (automated-sweep checks) and testing-tools.md.
 """
 import argparse
 import json
+import re
 import subprocess
 import sys
 import time
@@ -129,6 +130,79 @@ class CDP:
         return res.get("result", {}).get("value")
 
 
+# axe tags carry the criterion: "wcag143" -> 1.4.3, "wcag2aa" -> not a criterion
+WCAG_TAG = re.compile(r"^wcag(\d)(\d)(\d+)$")
+
+
+def tag_criteria(tags):
+    """The WCAG success criteria an axe rule maps to, from its own tags."""
+    out = []
+    for t in tags or ():
+        m = WCAG_TAG.match(t)
+        if m:
+            sc = f"{m.group(1)}.{m.group(2)}.{m.group(3)}"
+            if sc not in out:
+                out.append(sc)
+    return out
+
+
+def observation_block(result, run_id):
+    """Numbered observations for every violation and incomplete axe reported.
+
+    One per RULE, not per node: a rule firing on 62 nodes is one defect with a
+    count, and 62 observations would bury the run file. The node count is what
+    tells a reviewer whether it is a one-off or the page's whole pattern."""
+    lines = []
+    n = 0
+    for v in sorted(result.get("violations", []),
+                    key=lambda v: {"critical": 0, "serious": 1, "moderate": 2}.get(v.get("impact"), 3)):
+        n += 1
+        scs = tag_criteria(v.get("tags"))
+        sc_txt = (" + ".join(f"WCAG {x}" for x in scs)) if scs else "no WCAG tag (best practice)"
+        lines.append(
+            f"- O{n} [new] (state: as scanned): axe `{v['id']}` "
+            f"({v.get('impact') or 'n/a'}) \u00d7 **{len(v['nodes'])} node(s)** \u2014 {v['help']}.")
+        lines.append(
+            f"  - Proposed: W1 / {sc_txt} / severity TBD \u2014 confirm against the walk of this page, "
+            f"or dismiss here in writing")
+    for v in result.get("incomplete", []):
+        n += 1
+        scs = tag_criteria(v.get("tags"))
+        sc_txt = (" + ".join(f"WCAG {x}" for x in scs)) if scs else "no WCAG tag"
+        lines.append(
+            f"- O{n} [new] (state: as scanned): axe **incomplete** `{v['id']}` "
+            f"\u00d7 {len(v['nodes'])} node(s) \u2014 {v['help']}. axe could not decide; a human must.")
+        lines.append(
+            f"  - Proposed: W2 / {sc_txt} \u2014 route to the modality run that can settle it")
+    if not lines:
+        lines.append("- O1 [new] (state: as scanned): axe reported no violations and no incompletes.")
+        lines.append("  - dismissed: informational \u2014 a clean sweep is not a pass; the walk decides")
+    passes = len(result.get("passes", []))
+    inapp = len(result.get("inapplicable", []))
+    n += 1
+    lines.append(f"- O{n} [new] (state: as scanned): passes {passes} / inapplicable {inapp}.")
+    lines.append("  - dismissed: informational")
+    return "\n".join(lines) + "\n"
+
+
+def write_observations(run_dir, run_id, result):
+    """Put the observations into run.md, under ## Observations. Idempotent."""
+    f = run_dir / "run.md"
+    text = f.read_text(encoding="utf-8")
+    block = observation_block(result, run_id)
+    start = text.index("\n## Observations")
+    end = text.index("\n## Notes")
+    body = text[start:end]
+    head, _, _ = body.partition("\n- O")
+    # keep the section's guidance and its Format example; replace any
+    # previously generated observations, so a re-scan does not duplicate them
+    if "\n- O" not in body:
+        head = body.rstrip("\n") + "\n"
+    new = head.rstrip("\n") + "\n\n" + block
+    f.write_text(text[:start] + new + text[end:], encoding="utf-8")
+    return block.count("\n- O")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("review", nargs="?",
@@ -207,8 +281,10 @@ def main():
             print(f"  [{(v.get('impact') or 'n/a'):8}] {v['id']}"
                   f"  (nodes: {len(v['nodes'])})")
     if run_dir is not None:
-        print(f"\nNext: record outcomes in {run_dir.relative_to(ROOT)}\\run.md "
-              "(automated-sweep checks; testing-tools.md conventions).")
+        n = write_observations(run_dir, run_id, result)
+        print(f"\n{n} observation(s) written into {run_dir.relative_to(ROOT)}\\run.md.")
+        print("W1 and W3 are deliberately left blank: every violation above still needs "
+              "confirming against this page's walk, or dismissing in writing.")
 
 
 if __name__ == "__main__":

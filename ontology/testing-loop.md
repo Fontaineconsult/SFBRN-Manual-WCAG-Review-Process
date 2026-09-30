@@ -8,69 +8,70 @@ and the assistant drives the browser. Capture mode: **hybrid** — the reviewer 
 assistant maps narration to the checklist in the background and asks only
 about gaps.
 
-## The loop
+## The loop — one page at a time
 
 ```
-next → log-test → narrate/observe → gap questions → write-back → reflect → next
+next → automate → gaps --view → reviewer walks → write-back → close-page → next
 ```
 
-1. **Pick the target.** `review.py next <review>` names the highest-value
-   uncovered view×modality cell. Priority: cells whose modality verifies
-   vendor-claim discrepancies (Does Not Support weighted over Partially
-   Supports), then sample order. It prints the ready `log-test` command.
-2. **Open the run.** `log-test` scaffolds `run.md` with that modality's
-   checklist as an empty outcomes table — the empty rows are the session's
-   question list. `--url` takes the **replicable locator**: a durable URL
-   (transient params stripped; documents by `/id/urn:…` ID from the `03`
-   §2.6 registry, never display name) or `UI: <action path>` for
-   unaddressable states. If the target doesn't exist yet (a document the
-   run will create), resolve the placeholder **in the same session** the
-   artifact appears — `validate` flags unresolved locators.
-3. **Reviewer narrates.** Test the page in any order and report what you see,
-   free-form. No need to follow the checklist sequence.
-4. **Assistant structures.** Each narrated item becomes a numbered
-   observation (`O1, O2…`) in the run file; check outcomes fill in
-   (pass / fail / partial / n/a) as narration covers them.
-5. **Assistant asks gap questions.** Questions are generated from
-   deterministic gaps, not improvisation — `review.py gaps <review> [--view
-   S#]` prints exactly that list (every check row still without an outcome,
-   grouped by run). Open a session with it; re-run it to see what is left:
-   - a check row still empty → ask that check, quoting its text
-   - a fail/partial without reproduction detail → ask for exact behavior
-     (JAWS: paste the Speech History; WAVE: the summary counts)
-   - an observation without a view state → ask which state
-   - promotion to finding missing a required field (where / observed /
-     affected users / WCAG SC / severity / evidence) → ask for that field
-   - a screenshot-worthy moment without a file → ask for one
-     (`R###-<what>.png`)
+**The unit of work is a page, not a view×modality cell.** Ranking cells sent
+sessions hopping between pages and left every page half-walked; the reviewer
+pays for that twice, once in context-switching and once in re-reading a page
+they have already been through. `next` names a page, prefers one already
+started, and will not call the review finished while a task cluster is unrun.
 
-   **Do not re-interpret the reviewer's words into something stronger.**
-   When a narrated phrase matches a checklist item's own wording, it is the
-   answer to *that check* — not a finding in disguise. "Focus is not
-   trapped" was an MO3 pass (you can always get out); the assistant read it
-   as focus escaping an open modal and raised a Major 2.4.3 finding, which
-   the reviewer's next sentence retracted. Ask what happened before writing
-   what it means.
+1. **Pick the page.** `review.py next <review>` names it and lists what is
+   open on it. `review.py page <review> --view S#` is the same page in full:
+   every modality, its run, its Result, its unanswered checks, and whether the
+   sweep's raw JSON is on disk.
 
-   **Ask before recording any assistant hypothesis.** On 2026-08-06 three
-   assistant conclusions were wrong and all three were caught this way,
-   costing one question each instead of a retraction in the report. A
-   withdrawn finding in a delivered ACR is far more expensive than a
-   question.
-6. **Write-back.** The assistant updates, immediately, in this order:
-   - the run's checks table and observations (with lifecycle status:
-     `new → clarified → classified → finding:<ID> | dismissed`)
-   - the run **Result** (derived: any Blocker-level fail → Broken; any fail →
-     Works with issues; all pass → Works; no relevant content → N/A)
-   - findings in `04-task-testing.md` §B (citing check ID, observation IDs,
-     run ID, evidence files)
-   - the criterion rollup in `05-results.md` (outcome + finding refs)
-   - **the enclosure itself** in `03-scope-and-sample.md` when testing
-     reveals unmapped views, states, or functionality — new S rows widen the
-     matrix; corrected user stories reshape the tasks
-7. **Reflect.** `matrix` and `validate` parse the same files, so coverage
-   and the gap list update the moment the write-back lands. Then `next`
-   again.
+2. **Automate before you ask the reviewer anything.** This is the step that
+   decides how much of their time the review costs.
+   - `python scripts/axe_scan.py <review> --view S# --url URL` — logs the
+     sweep run, saves `R###-axe.json`, and **writes an observation per
+     violation and per incomplete**, each with the WCAG criteria taken from
+     axe's own rule tags. It does not answer W1 or W3: transcription is
+     automatable, confirmation is not.
+   - `python scripts/view_probe.py <review> --view S# --url URL` — answers by
+     measurement what a structural fact decides (~17 check rows: title, lang,
+     media, speech API, target size, reflow, text spacing, autocomplete,
+     orientation, and NC2 by colour measurement) and names the rest.
+   - Never point the authenticated tab at the sign-in page — it ends the
+     session. Sign-in views go through the signed-out profile on port 9223.
+
+3. **Ask only what is left.** `review.py gaps <review> --view S#` prints every
+   check row on that page still without an outcome, across every modality,
+   **whether or not a run exists yet**. That is the session's question list;
+   never improvise one, and never ask something the record already answers.
+
+4. **The reviewer walks the page and narrates.** Free-form, any order. The
+   assistant converts narration into numbered observations, answers check
+   rows, and asks a gap question when a row is still open — quoting the
+   check's own wording.
+
+   **Do not re-interpret the reviewer's words into something stronger.** When
+   a narrated phrase matches a checklist item's own wording, it is the answer
+   to *that check*, not a finding in disguise.
+
+   **Ask before recording any assistant hypothesis.** A question costs one
+   exchange; a withdrawn finding in a delivered report costs far more.
+
+5. **Write back immediately**, in this order: the run's checks and
+   observations → the run **Result** (`review.py close-run`) → findings in
+   `04` §B → the rollup in `05` → the enclosure in `03` when testing reveals
+   views or functionality the map missed.
+
+6. **Close the page.** `review.py close-page <review> S#` refuses, with
+   reasons, until every modality has a resulted run, every check row is
+   answered, and the sweep is triaged with its JSON on disk. **Do not open
+   the next page until it passes.**
+
+**Then the tasks.** When every page is closed, `next` names the task clusters
+still to walk (`04` §A). A review that only ever swept views has not done the
+work — the reports' task verdicts, and the internal report's "core
+functionality" line, come from there and nowhere else.
+
+**Finally**, regenerate both reports: C13 fails while either is stale.
 
 ## Closing a run (`review.py close-run`)
 

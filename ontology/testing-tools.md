@@ -48,6 +48,17 @@ status messages, and announcement of dynamic changes.
 
 ## axe-core — automated per-view sweep (primary)
 
+**`axe_scan.py` writes its own observations.** It saves the raw JSON and then
+puts one numbered observation into `run.md` per violation and per incomplete,
+with the node count and the WCAG criteria read from axe's own rule tags. It
+leaves **W1 and W3 empty on purpose**: every violation still has to be
+confirmed against that page's walk or dismissed in writing, and the structure
+cross-check needs the screen reader. Transcription is automatable;
+confirmation is not. (Before this, two sweeps in the 2026-09 review sat with
+their JSON on disk and no observations at all, and closing them meant reading
+the JSON back weeks later.)
+
+
 **Role:** the standard automated checker, run on **every sampled view and
 significant state**. Assistant-runnable, and it traverses open shadow DOM —
 which WAVE cannot on this product class. Engine vendored at

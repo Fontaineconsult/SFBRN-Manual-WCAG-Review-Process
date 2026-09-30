@@ -48,6 +48,11 @@ python scripts/review.py coverage <review>     # criteria → POUR principles �
                                                # answered check, and whether 05 agrees (reliability flags)
 python scripts/review.py sync-checks <review>  # add check rows introduced after a run was logged
 python scripts/review.py next <review>         # highest-value cell to test next
+python scripts/review.py page <review> [--view S1]
+                                               # one page's full state: every modality, its sweep,
+                                               # its raw axe JSON, its unanswered checks
+python scripts/review.py close-page <review> S1
+                                               # assert a page is finished; refuses with reasons
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
 python scripts/preflight.py [--launch --url URL] [--anon]   # session pre-flight: websocket-client, debug profile, port 9222 (9223 with --anon), authenticated tab, zero extension targets; --launch starts Chrome with the full flag set

@@ -2,7 +2,7 @@
 
 How the assistant explores the product with browser automation (Claude in
 Chrome) during WCAG-EM step 2, and writes what it finds back into the review's
-`03-scope-and-sample.md`. First used in `2026-07-adobe-express` (2026-08-04).
+`03-scope-and-sample.md`. First used in `2026-07-adobe-express` (now `reviews/archive/`) (2026-08-04).
 
 **Division of labor.** In the testing loop (`testing-loop.md`) the *reviewer*
 drives the product and the assistant structures. In exploration the roles can

@@ -60,8 +60,50 @@ same page and the logo announced as "The ExperTa graphic visited link", with
 six more real links at stops 2–7. An elements list is not an inventory —
 absence from it is not absence from the page.
 
+## A review, start to finish
+
+**Six phases, in order.** Each one has to exist before the next is worth
+starting; going out of order is how a review ends up with findings on pages
+nobody chose and tasks nobody walked.
+
+| # | Phase | You are done when | Command |
+|---|---|---|---|
+| 1 | **Intake** — what the product is, who asked, what the vendor claims | `01`, `02` filled; vendor ACR imported if there is one | `review.py new`, `import_acr.py` |
+| 2 | **Site map** — what pages the product actually has | `03` §2.1 lists the product's views with real URLs, §2.2 the user stories, §2.4 the technologies | `crawl_map.py harvest` then `map` |
+| 3 | **Sample** — which of those pages get tested | `03` §3.1 structured sample, §3.2 random sample; each row an `S#`/`R#` with a durable locator | reviewer decides; `review.py status` shows the sample |
+| 4 | **Processes** — the tasks that span several pages | `03` §3.3: each process a step→view table; every view in a sequence is in the sample. `04` §A gets a task cluster per process | reviewer decides |
+| 5 | **Test, page by page** — automate first, ask the reviewer what is left, close the page | every sampled page closes | `review.py next` → `page` → `gaps --view` → `close-page` |
+| 6 | **Decide and publish** — the verdict, then the two reports | C1–C13 satisfied | `review_db.py completion`, `export_acr.py … --docx` (×2) |
+
+**Phase 5 is the loop you will spend the review in, and it is per page:**
+
+1. `review.py next <review>` names the page — it prefers a page already
+   started, because half-walked pages are how reviews rot.
+2. **Automate everything measurable first**, before the reviewer is asked
+   anything: `axe_scan.py --view S# --url …` (saves `R###-axe.json`) and
+   `view_probe.py --view S# --url …` (answers ~17 checks by measurement and
+   names the rest). Never point the authenticated tab at the sign-in page.
+3. `review.py gaps <review> --view S#` — **that is the reviewer's question
+   list for this page**, and it is now complete even before any run exists.
+4. Reviewer walks the page and narrates; the assistant records observations,
+   answers check rows, raises findings, rolls them up.
+5. `review.py close-page <review> S#` — it refuses, with reasons, until every
+   modality has a resulted run, every check row is answered, and the sweep is
+   triaged. **Do not open the next page until this passes.**
+
+**Then the tasks.** When every page is closed, `next` names the task clusters
+still to walk. §A of `04` is where the reports' task verdicts come from, and a
+review that only ever swept views has not done the work.
+
+**The deliverables are generated, never written.** `05-results.md` is the
+source; `06-report.md` is the decision record, not a report. If you are
+writing report prose anywhere but a `Plain summary` or a `Remediation` line,
+you are in the wrong file.
+
 ## Session start (every session, before anything else)
 
+0. **No review yet?** `python scripts/review.py new` and work the phases
+   above in order. Everything below assumes a review already exists.
 1. `python scripts/review.py list` — reviews and their states, then
    `python scripts/review_db.py state <review> --log` — the review-state
    dashboard (definition of done, POUR, FPC, matrix, findings, vendor

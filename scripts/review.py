@@ -83,7 +83,7 @@ def resolve(query):
     """Resolve a review by exact directory name or unique substring."""
     if not REVIEWS.exists():
         sys.exit("No reviews/ directory yet. Create one with: review.py new \"Product\"")
-    dirs = sorted(d for d in REVIEWS.iterdir() if d.is_dir())
+    dirs = sorted(d for d in REVIEWS.iterdir() if d.is_dir() and d.name != "archive")
     exact = [d for d in dirs if d.name == query]
     if exact:
         return exact[0]
@@ -660,7 +660,20 @@ def cmd_new(args):
     print(f"Review scaffolded: {dest}")
     if args.enclosure:
         apply_enclosure(dest, resolve_enclosure(args.enclosure))
-    print("Start with 01-intake.md.")
+    print(f"""
+Six phases, in order — see "A review, start to finish" in CLAUDE.md.
+
+  1  Intake      fill 01-intake.md and 02-vendor.md; import the vendor ACR if there is one
+  2  Site map    03 §2.1 — the product's views, with real URLs
+                 python scripts/crawl_map.py harvest <url>   then   map <url> ...
+  3  Sample      03 §3.1/§3.2 — which pages get tested, as S#/R# rows
+  4  Processes   03 §3.3 — the tasks that span pages, as step->view tables
+  5  Test        python scripts/review.py next {dest.name}
+                 per page: axe_scan + view_probe, then gaps --view, then close-page
+  6  Publish     python scripts/export_acr.py {dest.name} --docx
+                 python scripts/export_acr.py {dest.name} --internal --docx
+
+Start with 01-intake.md.""")
 
 
 def cmd_log_test(args):
@@ -1320,7 +1333,7 @@ def cmd_save_enclosure(args):
 
 
 def cmd_list(args):
-    dirs = sorted(d for d in REVIEWS.iterdir() if d.is_dir()) if REVIEWS.exists() else []
+    dirs = sorted(d for d in REVIEWS.iterdir() if d.is_dir() and d.name != "archive") if REVIEWS.exists() else []
     rows = []
     for d in dirs:
         counts = criteria_counts(d)

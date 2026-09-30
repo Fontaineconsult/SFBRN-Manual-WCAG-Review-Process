@@ -109,7 +109,7 @@ Criteria: `no-vision`, `low-vision`, `no-color`, `no-hearing`, `no-speech`,
 used to test them — per-view checklists in `ontology/modality-checks.md`.
 
 `<review>` is the directory name or any unique substring (`adobe` matches
-`2026-07-adobe-express`); enclosure names resolve the same way. `list`,
+`2026-09-the-expert-ta`); enclosure names resolve the same way. `list`,
 `status`, `validate`, and `enclosures` accept `--json`.
 
 ## Enclosures — starting a review blind

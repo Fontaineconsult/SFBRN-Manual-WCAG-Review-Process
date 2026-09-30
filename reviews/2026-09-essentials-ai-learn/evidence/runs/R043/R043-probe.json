@@ -1,0 +1,105 @@
+{
+ "href": "https://learn.essentials-ai.com/profile",
+ "title": "My account · AI Readiness OS",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://learn.essentials-ai.com/profile"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 7,
+  "external": 13,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 0,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [
+  {
+   "type": "text",
+   "name": "",
+   "id": "",
+   "label": "Full name",
+   "autocomplete": null,
+   "personal": "personal"
+  },
+  {
+   "type": "password",
+   "name": "",
+   "id": "",
+   "label": "New password",
+   "autocomplete": "new-password",
+   "personal": "personal"
+  },
+  {
+   "type": "password",
+   "name": "",
+   "id": "",
+   "label": "Confirm password",
+   "autocomplete": "new-password",
+   "personal": "personal"
+  }
+ ],
+ "passwordFields": 2,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 15,
+  "small": [
+   {
+    "el": "a.sr-only.rounded-md",
+    "name": "Skip to main content",
+    "w": 32,
+    "h": 16,
+    "clash": "a.flex.items-center \"AI EssentialsLMS\""
+   }
+  ],
+  "failing": [
+   {
+    "el": "a.sr-only.rounded-md",
+    "name": "Skip to main content",
+    "w": 32,
+    "h": 16,
+    "clash": "a.flex.items-center \"AI EssentialsLMS\""
+   }
+  ]
+ },
+ "probed_at": "2026-09-30",
+ "locator": "https://learn.essentials-ai.com/profile",
+ "view": "S6",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 305,
+   "clientWidth": 305,
+   "overflowing": [],
+   "tableOnly": true
+  },
+  "text_spacing": {
+   "baseline": 1,
+   "after": []
+  }
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "href": "https://learn.essentials-ai.com/learning/03baa839-0ace-4e3b-9d4c-9c2077dcf123",
+ "title": "AI Foundations - Sonoma State University · AI Readiness OS",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://learn.essentials-ai.com/learning/03baa839-0ace-4e3b-9d4c-9c2077dcf123",
+  "(cross-origin frame)"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 4,
+  "external": 11,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 0,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 33,
+  "small": [
+   {
+    "el": "a.sr-only.rounded-md",
+    "name": "Skip to main content",
+    "w": 32,
+    "h": 16,
+    "clash": "a.rounded.px-2 \"My Courses\""
+   },
+   {
+    "el": "a.inline-flex.shrink-0",
+    "name": "My Courses",
+    "w": 89,
+    "h": 20,
+    "clash": null
+   }
+  ],
+  "failing": [
+   {
+    "el": "a.sr-only.rounded-md",
+    "name": "Skip to main content",
+    "w": 32,
+    "h": 16,
+    "clash": "a.rounded.px-2 \"My Courses\""
+   }
+  ]
+ },
+ "probed_at": "2026-09-30",
+ "locator": "UI: My Courses → Start course → 3 AI & Ethics → Finding Hidden Scholarships with AI",
+ "view": "R1",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 305,
+   "clientWidth": 305,
+   "overflowing": [],
+   "tableOnly": true
+  },
+  "text_spacing": {
+   "baseline": 12,
+   "after": [
+    "span \"What is AI? Breaking it Down\"",
+    "span \"⚠️ Ask So You Can Check It! ⚠️\"",
+    "span \"Finding Scholarships with AI\""
+   ]
+  }
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "view": "S3",
+ "locator": "UI: My Courses → Start course → 1 Intro to the Course → Icebreaker",
+ "probed_at": "2026-09-30",
+ "grayscale": {
+  "screenshot": "R021-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 1
+  }
+ }
+}

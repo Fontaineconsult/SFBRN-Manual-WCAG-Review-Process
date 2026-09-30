@@ -1,0 +1,89 @@
+{
+ "href": "https://learn.essentials-ai.com/login",
+ "title": "Sign in · AI Readiness OS",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://learn.essentials-ai.com/login"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 7,
+  "external": 12,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 0,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [
+  {
+   "type": "email",
+   "name": "",
+   "id": "",
+   "label": "Email",
+   "autocomplete": "email",
+   "personal": "personal"
+  },
+  {
+   "type": "password",
+   "name": "",
+   "id": "",
+   "label": "PasswordShow password",
+   "autocomplete": "current-password",
+   "personal": "personal"
+  }
+ ],
+ "passwordFields": 1,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 5,
+  "small": [
+   {
+    "el": "a.text-2xs.font-medium",
+    "name": "Forgot your password?",
+    "w": 118,
+    "h": 15,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-30",
+ "locator": "https://learn.essentials-ai.com/login",
+ "view": "S1",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "overflowing": [],
+   "tableOnly": true
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

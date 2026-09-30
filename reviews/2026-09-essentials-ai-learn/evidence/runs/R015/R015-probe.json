@@ -1,0 +1,15 @@
+{
+ "view": "S2",
+ "locator": "https://learn.essentials-ai.com/learning",
+ "probed_at": "2026-09-30",
+ "grayscale": {
+  "screenshot": "R015-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 1
+  }
+ }
+}

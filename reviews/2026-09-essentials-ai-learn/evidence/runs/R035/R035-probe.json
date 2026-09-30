@@ -1,0 +1,15 @@
+{
+ "view": "R1",
+ "locator": "UI: My Courses → Start course → 3 AI & Ethics → Finding Hidden Scholarships with AI",
+ "probed_at": "2026-09-30",
+ "grayscale": {
+  "screenshot": "R035-grayscale.png",
+  "emulation": "CDP Emulation.setEmulatedVisionDeficiency achromatopsia",
+  "link_cues": {
+   "inText": 0,
+   "colorOnly": [],
+   "failing": [],
+   "unreadableSheets": 1
+  }
+ }
+}

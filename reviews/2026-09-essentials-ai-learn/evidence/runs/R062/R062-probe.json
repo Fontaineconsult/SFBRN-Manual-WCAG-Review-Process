@@ -1,0 +1,81 @@
+{
+ "href": "https://learn.essentials-ai.com/forgot-password",
+ "title": "Reset your password · AI Readiness OS",
+ "lang": "en",
+ "xmlLang": null,
+ "docs": [
+  "https://learn.essentials-ai.com/forgot-password"
+ ],
+ "metaRefresh": [],
+ "media": {
+  "video": 0,
+  "audio": 0,
+  "tracks": 0,
+  "autoplay": 0,
+  "embeds": [],
+  "mediaIframes": [],
+  "mediaLinks": []
+ },
+ "scripts": {
+  "inline": 7,
+  "external": 6,
+  "unreadable": [],
+  "hits": {
+   "speech": 0,
+   "motion": 0,
+   "orientationLock": 0,
+   "audioApi": 0,
+   "animationFrame": 0,
+   "timers": 0
+  }
+ },
+ "micControls": [],
+ "inputs": [
+  {
+   "type": "email",
+   "name": "",
+   "id": "",
+   "label": "Email",
+   "autocomplete": "email",
+   "personal": "personal"
+  }
+ ],
+ "passwordFields": 0,
+ "timerText": [],
+ "animation": {
+  "animated": [],
+  "gifs": [],
+  "marqueeBlink": 0,
+  "canvas": 0,
+  "svgAnimate": 0
+ },
+ "orientationRules": [],
+ "targets": {
+  "total": 3,
+  "small": [
+   {
+    "el": "a.font-medium.text-brand",
+    "name": "Back to sign in",
+    "w": 75,
+    "h": 15,
+    "clash": null
+   }
+  ],
+  "failing": []
+ },
+ "probed_at": "2026-09-30",
+ "locator": "https://learn.essentials-ai.com/forgot-password",
+ "view": "S7",
+ "measurements": {
+  "reflow": {
+   "scrollWidth": 320,
+   "clientWidth": 320,
+   "overflowing": [],
+   "tableOnly": true
+  },
+  "text_spacing": {
+   "baseline": 0,
+   "after": []
+  }
+ }
+}

@@ -864,73 +864,186 @@ def cmd_runs(args):
     emit(rows, args.json, text)
 
 
-def cmd_gaps(args):
-    """The assistant's question list: every check row still without an outcome.
+def page_state(review, vid):
+    """Everything known about one page: per modality, the run and its open checks.
 
-    testing-loop.md step 5 says gap questions come from deterministic gaps,
-    not improvisation — this is where that list comes from. `validate` says
-    which runs lack a Result; this says which *checks* are unanswered, which
-    is what a reviewer session actually works through.
-    """
+    The unit of work is a page, not a view x modality cell. A page is finished
+    when every modality has a resulted run, every check row in those runs is
+    answered, and the automated sweep has been triaged -- and until it is, the
+    open rows here ARE the session's question list for it."""
+    runs = [run_meta(d) | {"dir": d} for d in run_dirs(review)]
+    mine = [r for r in runs if r["view"].upper() == vid.upper()]
+    out = {"view": vid, "modalities": {}, "sweep": None, "open": 0, "unresulted": 0}
+    for m in REQUIRED_MODALITIES:
+        r = next((x for x in mine if x["modality"] == m), None)
+        checks = modality_checklist(m)
+        if r is None:
+            cell = {"run": None, "result": None,
+                    "open": [(cid, txt) for cid, txt in checks]}
+        else:
+            answered = {cid: o for cid, o, _n in run_checks(r["dir"])}
+            cell = {"run": r["run"], "result": r["result"],
+                    "open": [(cid, txt) for cid, txt in checks if not answered.get(cid)]}
+            if r["result"] == "Not set":
+                out["unresulted"] += 1
+        out["open"] += len(cell["open"])
+        out["modalities"][m] = cell
+    sweep = next((x for x in mine if x["tool"].lower() in ("axe", "wave")), None)
+    if sweep:
+        answered = {cid: o for cid, o, _n in run_checks(sweep["dir"])}
+        open_w = [(cid, txt) for cid, txt in modality_checklist(None) if not answered.get(cid)]
+        raw = sorted(f.name for f in sweep["dir"].glob("*-axe.json"))
+        out["sweep"] = {"run": sweep["run"], "result": sweep["result"], "open": open_w, "raw": raw}
+        out["open"] += len(open_w)
+        if sweep["result"] == "Not set":
+            out["unresulted"] += 1
+    return out
+
+
+def page_blockers(st):
+    """Why a page is not finished, in the order a session should fix them."""
+    bad = []
+    if st["sweep"] is None:
+        bad.append("no automated sweep run (axe_scan.py --view %s --url ...)" % st["view"])
+    elif not st["sweep"]["raw"]:
+        bad.append(f"{st['sweep']['run']}: sweep has no saved R###-axe.json")
+    for m, cell in st["modalities"].items():
+        if cell["run"] is None:
+            bad.append(f"{m}: no run logged ({len(cell['open'])} checks unanswered)")
+        elif cell["result"] in (None, "Not set"):
+            bad.append(f"{m}: {cell['run']} has no Result")
+    if st["open"]:
+        bad.append(f"{st['open']} check row(s) unanswered")
+    return bad
+
+
+def cmd_page(args):
+    """One page's full state — the per-page checklist, and what is left on it."""
     review = resolve(args.review)
-    removed = {v.lower() for v, _, _, _ in removed_views(review)}
+    names = dict(sample_views(review, include_removed=True))
+    vids = [args.view] if args.view else [v for v, _ in sample_views(review)]
+    data = []
+    for vid in vids:
+        st = page_state(review, vid)
+        st["name"] = names.get(vid, "")
+        st["blockers"] = page_blockers(st)
+        data.append(st)
+
+    def text(rows):
+        for st in rows:
+            done = "DONE" if not st["blockers"] else f"{len(st['blockers'])} blocker(s)"
+            print(f"\n{st['view']} {st['name'][:56]}  [{done}]")
+            if st["sweep"]:
+                raw = ", ".join(st["sweep"]["raw"]) or "NO RAW JSON"
+                print(f"   sweep   {st['sweep']['run']:<6} {st['sweep']['result'] or '—':<18} {raw}")
+            else:
+                print("   sweep   —      not run")
+            for m, cell in st["modalities"].items():
+                mark = "ok" if cell["run"] and not cell["open"] and cell["result"] not in (None, "Not set") else "  "
+                print(f"   {mark} {m:<11} {cell['run'] or '—':<6} {cell['result'] or '—':<18}"
+                      + (f"{len(cell['open'])} open" if cell["open"] else ""))
+            for b in st["blockers"]:
+                print(f"      - {b}")
+        if len(rows) > 1:
+            shut = sum(1 for r in rows if not r["blockers"])
+            print(f"\n{shut}/{len(rows)} page(s) closed.")
+
+    emit(data, args.json, text)
+
+
+def cmd_close_page(args):
+    """Refuse, with reasons, unless the page is genuinely finished."""
+    review = resolve(args.review)
+    st = page_state(review, args.view)
+    bad = page_blockers(st)
+    if bad:
+        print(f"{args.view} is NOT closed — {len(bad)} thing(s) outstanding:")
+        for b in bad:
+            print(f"  - {b}")
+        for m, cell in st["modalities"].items():
+            for cid, txt in cell["open"][:40]:
+                print(f"      [ ] {m:<11} {cid} — {txt[:80]}")
+        if st["sweep"]:
+            for cid, txt in st["sweep"]["open"]:
+                print(f"      [ ] sweep       {cid} — {txt[:80]}")
+        raise SystemExit(1)
+    print(f"{args.view} closed: every modality resulted, every check answered, sweep triaged"
+          + (f" ({', '.join(st['sweep']['raw'])})" if st["sweep"] else ""))
+    return 0
+
+
+def cmd_gaps(args):
+    """The session's question list: every check row still without an outcome.
+
+    Taken from the SAMPLE, not from the run folders. Reading the folders meant
+    a sampled view with no runs reported "no unanswered check rows" -- so a
+    fresh review, and every untested page in it, was told its question list
+    was empty while CLAUDE.md said never to improvise one."""
+    review = resolve(args.review)
+    if args.view:
+        vids = [args.view]
+    else:
+        vids = [v for v, _ in sample_views(review)]
+    if not vids:
+        print("No sampled views yet. Define the sample in 03 §3.1 before testing "
+              "(see the review phases in CLAUDE.md).")
+        return
     rows = []
-    for d in run_dirs(review):
-        meta = run_meta(d)
-        if args.view and meta["view"].lower() != args.view.lower():
-            continue
-        if not args.view and meta["view"].lower() in removed:
-            continue  # out of the sample — ask for it explicitly with --view
-        txt = read(d / "run.md")
-        checks = re.findall(
-            r"^\|\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*—\s*(.+?)\s*\|(.*?)\|",
-            txt, re.M)
-        for cid, label, outcome in checks:
-            if not outcome.strip():
-                rows.append({"run": meta["run"], "view": meta["view"],
-                             "modality": meta["modality"], "tool": meta["tool"],
-                             "check": cid, "label": label.strip(),
-                             "result": meta["result"]})
+    for vid in vids:
+        st = page_state(review, vid)
+        for m, cell in st["modalities"].items():
+            for cid, txt in cell["open"]:
+                rows.append({"view": vid, "modality": m, "run": cell["run"],
+                             "result": cell["result"], "check": cid, "label": txt.strip()})
+        if st["sweep"]:
+            for cid, txt in st["sweep"]["open"]:
+                rows.append({"view": vid, "modality": "sweep", "run": st["sweep"]["run"],
+                             "result": st["sweep"]["result"], "check": cid, "label": txt.strip()})
+        elif not args.view:
+            rows.append({"view": vid, "modality": "sweep", "run": None, "result": None,
+                         "check": "—", "label": "no automated sweep run on this page yet"})
 
     def text(rows):
         if not rows:
             print("No unanswered check rows"
                   + (f" on {args.view}" if args.view else "")
-                  + ". Every logged run's checklist is complete.")
+                  + " — every sampled page is answered end to end.")
             return
-        by_run = {}
+        by = {}
         for r in rows:
-            by_run.setdefault(r["run"], []).append(r)
-        for run, items in by_run.items():
-            head = items[0]
-            print(f"{run}  view={head['view']}  modality={head['modality']}  "
-                  f"tool={head['tool']}  ({len(items)} unanswered)")
+            by.setdefault((r["view"], r["modality"]), []).append(r)
+        for (vid, m), items in by.items():
+            run = items[0]["run"] or "no run"
+            print(f"{vid}  {m:<11} {run:<8} ({len(items)} unanswered)")
             for r in items:
-                print(f"    [ ] {r['check']} — {r['label'][:88]}")
-            print()
-        print(f"TOTAL unanswered check rows"
+                print(f"    [ ] {r['check']} — {r['label'][:86]}")
+        print(f"\nTOTAL unanswered check rows"
               + (f" on {args.view}" if args.view else "") + f": {len(rows)}")
 
     emit(rows, args.json, text)
 
 
 def cmd_next(args):
+    """Name the next page to work, and what is open on it.
+
+    Page-shaped on purpose. Ranking view x modality cells sent sessions
+    hopping between pages and left every page half-done; the reviewer pays
+    for that twice, once in context-switching and once in re-reading a page
+    they have already walked."""
     review = resolve(args.review)
     views = sample_views(review)
     if not views:
-        print("No sampled views defined yet — add your initial page(s) as S# rows "
-              "in 03 §3.1 (view name + URL), then run next again.")
+        print("No sampled views yet.\n"
+              "  The sample comes third. Map the product into 03 §2.1, choose the sample in\n"
+              "  03 §3.1, define the cross-page processes in 03 §3.3 — then test.\n"
+              "  See 'A review, start to finish' in CLAUDE.md.")
         return
-    runs = [run_meta(d) for d in run_dirs(review)]
-    covered = {(r["view"].lower(), r["modality"].lower()) for r in runs}
-    swept = {r["view"].lower() for r in runs if r["tool"].lower() in SWEEP_TOOLS}
 
-    # score modalities by vendor-claim discrepancy value: verifying claimed
-    # failures (and shaky Partially Supports) first produces decision-relevant
-    # evidence fastest
+    # score modalities by vendor-claim discrepancy: verifying claimed failures
+    # (and shaky Partially Supports) first produces decision-relevant evidence
+    # fastest -- used to order pages, not to fragment them
     sc2mod = sc_to_modalities()
-    weights = {}
-    reasons = {}
+    weights, reasons = {}, {}
     for sc, claim in vendor_claims(review).items():
         w = 3 if "Does Not Support" in claim else 1 if "Partially Supports" in claim else 0
         if not w:
@@ -939,44 +1052,70 @@ def cmd_next(args):
             weights[m] = weights.get(m, 0) + w
             reasons.setdefault(m, []).append(f"{sc} ({'DNS' if w == 3 else 'PS'})")
 
-    candidates = []
-    for vi, (vid, name) in enumerate(views):
-        for mi, m in enumerate(REQUIRED_MODALITIES):
-            if (vid.lower(), m) not in covered:
-                candidates.append({"view": vid, "name": name, "modality": m,
-                                   "score": weights.get(m, 0),
-                                   "why": reasons.get(m, []),
-                                   "order": (vi, mi)})
-    candidates.sort(key=lambda c: (-c["score"], c["order"]))
-    data = {"review": review.name,
-            "next": candidates[:5],
-            "unswept_views": [vid for vid, _ in views if vid.lower() not in swept]}
+    pages = []
+    for order, (vid, name) in enumerate(views):
+        st = page_state(review, vid)
+        st["name"], st["order"] = name, order
+        st["blockers"] = page_blockers(st)
+        st["started"] = any(c["run"] for c in st["modalities"].values()) or bool(st["sweep"])
+        st["score"] = sum(weights.get(m, 0) for m, c in st["modalities"].items() if c["open"])
+        pages.append(st)
 
-    def text(d):
-        if not d["next"]:
-            print("All view×modality cells have runs."
-                  + (f" Automated sweeps (axe/wave) still missing: {', '.join(d['unswept_views'])}"
-                     if d["unswept_views"] else " Coverage complete."))
-            return
-        top = d["next"][0]
-        tool, baseline = MODALITY_DEFAULTS.get(top["modality"], ("inspection", "—"))
-        n_checks = len(modality_checklist(top["modality"]))
-        print(f"Next: {top['view']} ({top['name']}) × {top['modality']}"
-              f"  [{n_checks} checks]")
-        if top["why"]:
-            print(f"  why: vendor claims to verify — {', '.join(top['why'])}")
-        print(f"  python scripts/review.py log-test {d['review']} "
-              f"--view {top['view']} --modality {top['modality']} "
-              f"--tool {tool} --baseline {baseline}")
-        if len(d["next"]) > 1:
-            print("then:")
-            for c in d["next"][1:]:
-                print(f"  {c['view']} ({c['name']}) × {c['modality']}"
-                      + (f"  [score {c['score']}]" if c["score"] else ""))
-        if d["unswept_views"]:
-            print(f"Automated sweeps (axe/wave) still missing: {', '.join(d['unswept_views'])}")
+    open_pages = [x for x in pages if x["blockers"]]
+    # an already-started page outranks a fresh one: closing it out is what
+    # stops the review accumulating half-walked pages
+    open_pages.sort(key=lambda x: (not x["started"], -x["score"], x["order"]))
+    # a cell still offering the template's choice is not a verdict
+    tasks = [t for t in parse_tasks_light(review)
+             if not t[1] or t[1].startswith("Not run") or " / " in t[1]]
+
+    data = {"review": review.name, "pages_open": len(open_pages), "pages": len(pages),
+            "next": open_pages[0]["view"] if open_pages else None,
+            "tasks_unrun": [t[0] for t in tasks]}
+
+    def text(_d):
+        if open_pages:
+            top = open_pages[0]
+            print(f"Next page: {top['view']} — {top['name'][:60]}"
+                  f"   ({len(pages) - len(open_pages)}/{len(pages)} pages closed)")
+            if top["started"]:
+                print("  (already started — finish it before opening another page)")
+            for b in top["blockers"]:
+                print(f"  - {b}")
+            for m, cell in top["modalities"].items():
+                if cell["run"] is None:
+                    tool, baseline = MODALITY_DEFAULTS.get(m, ("inspection", "—"))
+                    print(f"  python scripts/review.py log-test {review.name} "
+                          f"--view {top['view']} --modality {m} --tool {tool} --baseline {baseline}")
+                    break
+            print(f"  python scripts/review.py gaps {review.name} --view {top['view']}"
+                  "      # the page's question list")
+            print(f"  python scripts/review.py close-page {review.name} {top['view']}"
+                  "   # when it is finished")
+            if len(open_pages) > 1:
+                print("then: " + ", ".join(x["view"] for x in open_pages[1:6]))
+        elif tasks:
+            print(f"Every page is closed ({len(pages)}/{len(pages)}). "
+                  f"{len(tasks)} task cluster(s) still to walk — §A of 04 is where the "
+                  f"report's task verdicts come from:")
+            for tid, _v, nm in tasks:
+                print(f"  - {tid}: {nm[:70]}")
+        else:
+            print("Every page is closed and every task cluster has a verdict.\n"
+                  "  Remaining: `review_db.py completion` for anything still open, then\n"
+                  "  regenerate both reports (C13).")
 
     emit(data, args.json, text)
+
+
+def parse_tasks_light(review):
+    """[(task id, verdict, name)] from 04 §A — enough for `next` to see them."""
+    out = []
+    for tid, name, verdict in re.findall(
+            r"(?m)^### Task (T\d+)\s*—\s*(.+?)\s*$[\s\S]*?^\|\s*\*\*Verdict\*\*\s*\|\s*(.*?)\s*\|",
+            read(review / STAGES[3])):
+        out.append((tid, verdict, name))
+    return out
 
 
 def cmd_matrix(args):
@@ -1393,6 +1532,17 @@ def main():
     p_close.add_argument("--force", action="store_true", help="overwrite a Result already set")
     p_close.add_argument("--dry-run", dest="dry_run", action="store_true")
     p_close.set_defaults(fn=cmd_close_run)
+
+    p_page = sub.add_parser("page", help="one page's full state: every modality, every open check")
+    p_page.add_argument("review")
+    p_page.add_argument("--view", help="a single sample ID (default: every sampled page)")
+    p_page.add_argument("--json", action="store_true")
+    p_page.set_defaults(fn=cmd_page)
+
+    p_cp = sub.add_parser("close-page", help="assert a page is finished; refuses with reasons if not")
+    p_cp.add_argument("review")
+    p_cp.add_argument("view")
+    p_cp.set_defaults(fn=cmd_close_page)
 
     p_gaps = sub.add_parser("gaps",
                             help="unanswered check rows — the reviewer session's question list")

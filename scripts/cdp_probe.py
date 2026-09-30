@@ -91,6 +91,7 @@ def main():
     ap.add_argument("--ax", metavar="FILE", nargs="?", const="-", help="dump AX role/name lines (to FILE, or stdout with no value)")
     ap.add_argument("--shot", metavar="PNG", help="save a screenshot here")
     ap.add_argument("--js", help="JS expression to evaluate after everything else (async IIFE ok)")
+    ap.add_argument("--js-out", metavar="FILE", help="write the full --js result as JSON to FILE (stdout shows only the first 6000 chars)")
     ap.add_argument("--focus", metavar="SELECTOR", help="focus this element before --key")
     ap.add_argument("--key", help="key to dispatch (e.g. 5, Enter, Tab, ArrowDown)")
     ap.add_argument("--ctrl", action="store_true"); ap.add_argument("--shift", action="store_true"); ap.add_argument("--alt", action="store_true")
@@ -148,7 +149,11 @@ def main():
         else:
             pathlib.Path(a.ax).write_text("\n".join(lines), encoding="utf-8"); print("AX dump:", a.ax, f"({len(lines)} lines)")
     if a.js:
-        print("JS:", json.dumps(c.ev(a.js), indent=1, ensure_ascii=False)[:6000])
+        result = c.ev(a.js)
+        if a.js_out:
+            pathlib.Path(a.js_out).write_text(json.dumps(result, indent=1, ensure_ascii=False), encoding="utf-8")
+            print("JS result:", a.js_out)
+        print("JS:", json.dumps(result, indent=1, ensure_ascii=False)[:6000])
 
 
 if __name__ == "__main__":

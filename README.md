@@ -55,6 +55,9 @@ python scripts/review.py close-page <review> S1
                                                # assert a page is finished; refuses with reasons
 python scripts/review.py gaps <review> [--view S1]
                                                # unanswered check rows — the session's question list
+python scripts/axe_report.py <review> [R### ...] | --json PATH
+                                               # render a run's raw axe JSON as R###-axe.md (axe_scan.py does this
+                                               # after every scan; use this to re-render or for ad-hoc JSON)
 python scripts/preflight.py [--launch --url URL] [--anon]   # session pre-flight: websocket-client, debug profile, port 9222 (9223 with --anon), authenticated tab, zero extension targets; --launch starts Chrome with the full flag set
 python scripts/export_acr.py <review> [--internal] [--docx] [--open]
                                                # VPAT-shaped ACR from the database; --docx also
@@ -66,7 +69,7 @@ python scripts/view_probe.py <review> --view S# --url URL [--dry-run]
                                                # answer the instrument-decidable checks of a view by
                                                # measurement (media absent → n/a, lang, title, target size,
                                                # reflow, text spacing, autocomplete) into its runs
-python scripts/cdp_probe.py [URL] [--ax] [--shot PNG] [--js EXPR] [--key K --ctrl --shift]
+python scripts/cdp_probe.py [URL] [--ax] [--shot PNG] [--js EXPR [--js-out FILE]] [--key K --ctrl --shift]
                                                # per-view exploration probe over CDP: frames, text, controls,
                                                # accessibility-tree summary, screenshot, real key chords
 python scripts/crawl_map.py harvest|map URL... [--out FILE]
@@ -96,6 +99,9 @@ testing reveals unmapped views.
 
 `gaps` is the loop's question list made explicit: `validate` reports which
 *runs* lack a Result, `gaps` reports which *checks* are still unanswered —
+each row carries what the page's axe sweep already found under that
+check's criteria (`← R001 O1: axe incomplete video-caption ×1`), so the
+reviewer walks in knowing where the instrument pointed (added 2026-09-30) —
 the rows a reviewer session actually works through, grouped by run. Use it
 to open a session (`gaps <review> --view S1`) and to see what a walkthrough
 still needs.
@@ -164,10 +170,11 @@ Each review contains:
   enclosure)
 - `tools/axe/` — axe-core, vendored so sweeps do not depend on a CDN
 - `scripts/` — process automation (`review.py` — the review CLI;
-  `import_acr.py` — parse a vendor's HTML ACR and fill the review's
-  vendor-claim lines; `axe_scan.py` — per-view automated sweep: runs the
+  `import_acr.py` — parse a vendor's ACR (Adobe-format HTML, or an ITI
+  VPAT 2.5 PDF) and fill the review's vendor-claim lines; `axe_scan.py` — per-view automated sweep: runs the
   vendored axe-core inside the authenticated Chrome session via the
-  DevTools port and saves raw JSON into the run's evidence folder)
+  DevTools port and saves raw JSON into the run's evidence folder;
+  `axe_report.py` — renders that JSON as a readable `R###-axe.md`)
 
 ## Continuing on another machine
 

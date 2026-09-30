@@ -63,7 +63,8 @@ FACTS_JS = r"""(async () => {
   const MEDIA_EXT = /\.(mp4|m4v|webm|ogv|mov|mp3|m4a|wav|ogg|aac|flac)(\?|#|$)/i;
 
   const vis = e => { try { const r = e.getBoundingClientRect(); const cs = getComputedStyle(e);
-    return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'; } catch (x) { return false; } };
+    return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'
+      && cs.clip !== 'rect(0px, 0px, 0px, 0px)' && cs.clipPath !== 'inset(50%)' && cs.opacity !== '0'; } catch (x) { return false; } };  // sr-only/clipped elements are not visible targets (false MO9 fails, 2026-09-30)
   const txt = e => (e.getAttribute && (e.getAttribute('aria-label') || e.getAttribute('title')) || e.textContent || e.value || '').replace(/\s+/g, ' ').trim();
   const desc = e => e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.className && typeof e.className === 'string' ? '.' + e.className.trim().split(/\s+/).slice(0,2).join('.') : '');
 
@@ -103,7 +104,7 @@ FACTS_JS = r"""(async () => {
     }
     for (const e of doc.querySelectorAll('input,select,textarea')) {
       const type = (e.getAttribute('type') || (e.tagName === 'INPUT' ? 'text' : e.tagName.toLowerCase())).toLowerCase();
-      if (['hidden', 'submit', 'button', 'reset', 'image'].includes(type)) continue;
+      if (['hidden', 'submit', 'button', 'reset', 'image', 'checkbox', 'radio', 'file', 'range', 'color'].includes(type)) continue;  // a "Show password" checkbox collects nothing (false CO9 fail, 2026-09-30)
       if (!vis(e)) continue;
       if (type === 'password') F.passwordFields++;
       let label = '';

@@ -283,6 +283,9 @@ def main():
     if run_dir is not None:
         n = write_observations(run_dir, run_id, result)
         print(f"\n{n} observation(s) written into {run_dir.relative_to(ROOT)}\\run.md.")
+        import axe_report  # sibling module: the human-readable rendering of the same JSON
+        md = axe_report.write(run_dir, run_id, result, view=args.view)
+        print(f"readable report: {md.relative_to(ROOT)}")
         print("W1 and W3 are deliberately left blank: every violation above still needs "
               "confirming against this page's walk, or dismissing in writing.")
 

@@ -289,6 +289,34 @@ def modality_checklist(modality):
     return re.findall(r"(?m)^\|\s*([A-Z]+\d+)\s*\|\s*([^|]+?)\s*\|", sec.group(0))
 
 
+def check_criteria_map():
+    """check id -> set of WCAG SC numbers, from the WCAG column of every
+    modality table in ontology/modality-checks.md."""
+    text = read(ROOT / "ontology" / "modality-checks.md")
+    out = {}
+    for cid, wcag in re.findall(
+            r"(?m)^\|\s*([A-Z]+\d+)\s*\|\s*[^|]+?\s*\|\s*([^|]*?)\s*\|", text):
+        out[cid] = set(re.findall(r"\b\d+\.\d+\.\d+\b", wcag))
+    return out
+
+
+SWEEP_OBS_RE = re.compile(
+    r"(?ms)^- (O\d+) \[(\w+)\][^\n]*?axe (\*\*incomplete\*\* )?`([^`]+)`[^\n]*?\u00d7 \**(\d+)\**[^\n]*\n((?:  [^\n]*\n?)*)")
+
+
+def sweep_observations(run_dir):
+    """[{obs, status, kind, rule, nodes, criteria}] for every axe observation
+    the sweep transcribed into run.md -- what the reviewer has to triage,
+    keyed by the WCAG criteria axe's own rule tags carry."""
+    out = []
+    for obs, status, inc, rule, nodes, tail in SWEEP_OBS_RE.findall(read(run_dir / "run.md")):
+        out.append({"obs": obs, "status": status,
+                    "kind": "incomplete" if inc else "violation", "rule": rule,
+                    "nodes": int(nodes),
+                    "criteria": set(re.findall(r"WCAG (\d+\.\d+\.\d+)", tail))})
+    return out
+
+
 def sc_to_modalities():
     """Map WCAG SC number -> set of modalities whose checks cover it."""
     text = read(ROOT / "ontology" / "modality-checks.md")
@@ -1002,16 +1030,31 @@ def cmd_gaps(args):
               "(see the review phases in CLAUDE.md).")
         return
     rows = []
+    cmap = check_criteria_map()
     for vid in vids:
         st = page_state(review, vid)
+        # what the sweep already found on this page, keyed by criterion, so a
+        # check row can say "axe flagged this" before the reviewer walks it
+        hits = []
+        if st["sweep"]:
+            sdir = next((d for d in run_dirs(review) if d.name == st["sweep"]["run"]), None)
+            hits = sweep_observations(sdir) if sdir else []
         for m, cell in st["modalities"].items():
             for cid, txt in cell["open"]:
+                mine = [h for h in hits if h["criteria"] & cmap.get(cid, set())]
                 rows.append({"view": vid, "modality": m, "run": cell["run"],
-                             "result": cell["result"], "check": cid, "label": txt.strip()})
+                             "result": cell["result"], "check": cid, "label": txt.strip(),
+                             "sweep_hits": [f"{st['sweep']['run']} {h['obs']}: axe {h['kind']} `{h['rule']}` \u00d7{h['nodes']}"
+                                            for h in mine]})
         if st["sweep"]:
             for cid, txt in st["sweep"]["open"]:
+                kind = "violation" if cid == "W1" else "incomplete" if cid == "W2" else None
                 rows.append({"view": vid, "modality": "sweep", "run": st["sweep"]["run"],
-                             "result": st["sweep"]["result"], "check": cid, "label": txt.strip()})
+                             "result": st["sweep"]["result"], "check": cid, "label": txt.strip(),
+                             "sweep_hits": [f"{h['obs']}: `{h['rule']}` \u00d7{h['nodes']}"
+                                            + (" (" + ", ".join(sorted(h["criteria"])) + ")" if h["criteria"] else " (no WCAG tag)")
+                                            for h in hits if kind and h["kind"] == kind]
+                             + ([] if kind else [f"{len(hits)} axe observation(s) on this page; the walk decides whether the instrument saw the page"])})
         elif not args.view:
             rows.append({"view": vid, "modality": "sweep", "run": None, "result": None,
                          "check": "—", "label": "no automated sweep run on this page yet"})
@@ -1030,6 +1073,8 @@ def cmd_gaps(args):
             print(f"{vid}  {m:<11} {run:<8} ({len(items)} unanswered)")
             for r in items:
                 print(f"    [ ] {r['check']} — {r['label'][:86]}")
+                for h in r.get("sweep_hits") or []:
+                    print(f"          \u2190 {h}")
         print(f"\nTOTAL unanswered check rows"
               + (f" on {args.view}" if args.view else "") + f": {len(rows)}")
 

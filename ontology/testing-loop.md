@@ -43,6 +43,14 @@ started, and will not call the review finished while a task cluster is unrun.
    check row on that page still without an outcome, across every modality,
    **whether or not a run exists yet**. That is the session's question list;
    never improvise one, and never ask something the record already answers.
+   The list is annotated with the sweep: under every check whose criteria
+   match an axe observation on that page, `gaps` prints `← R### O#: axe
+   violation|incomplete rule ×nodes`, and under W1/W2 it lists the
+   observations each row has to triage. Read the annotated list *before*
+   the walk — it is the structure of the session: the instrument's hits are
+   the first things to confirm or dismiss on that page, and the checks with
+   no annotation are where only the walk can see (added 2026-09-30, after
+   the reviewer asked why the sweep was not shaping the manual review).
 
 4. **The reviewer walks the page and narrates.** Free-form, any order. The
    assistant converts narration into numbered observations, answers check

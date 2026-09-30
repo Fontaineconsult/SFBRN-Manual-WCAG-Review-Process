@@ -131,6 +131,22 @@ Lessons from `2026-09-the-expert-ta` (2026-09-10):
   call; a real key dispatch then confirmed the live-region output.
 - Screenshots and the probe scripts' JSON go to the scratchpad; only the
   curated `crawl-map-<date>.md` stays beside the review.
+- **Big JS walks go to a file.** `--js` prints at most 6000 characters; a
+  21-lesson inventory is three times that. Pass `--js-out FILE` (added
+  2026-09-30) and read the full JSON from the scratchpad. On Windows also set
+  `PYTHONIOENCODING=utf-8` before the probe when page text can hold emoji —
+  the default cp1252 console raises `UnicodeEncodeError` on the first ⚠️ and
+  loses the run.
+- **JS-routed lesson players (2026-09-30, AI Readiness OS):** every lesson is
+  a button, the URL never changes, and the outline is often rendered twice
+  (sidebar + mobile drawer). Inventory by *selecting* each lesson from a
+  de-duplicated button list and reading the main region after each click —
+  never the completion control ("Complete & continue" advances the learner's
+  progress). Record per lesson: iframe `src`/`title`, `<video>` `src` and its
+  `<track>` count, inputs/buttons in the main region, external links. A
+  cross-origin content iframe is opaque to the host page's AX tree — fetch the
+  document directly (`curl`) to fingerprint its markup, and route every
+  in-frame check to the reviewer's AT.
 - **One product tab, always.** The CDP client attaches to the tab already on
   the product (`--tab`, or the URL's host); it refuses to navigate a blank
   tab to the product. Expert TA invalidates the session the moment a second

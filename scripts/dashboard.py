@@ -83,7 +83,7 @@ def plain_locator(loc: str) -> str:
 # --------------------------------------------------------------------------
 def gather(con, review: pathlib.Path) -> dict:
     rid = review.name
-    d = db.state_data(con, rid)
+    d = db.state_data(con, rid, review)
     q = lambda sql, **kw: con.execute(sql, {"r": rid, **kw}).fetchall()  # noqa: E731
 
     # ---- views: one record per sampled view with every cell's latest run ----

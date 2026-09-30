@@ -2,4 +2,5 @@
 websocket-client>=1.6   # CDP clients: axe_scan.py, cdp_probe.py, crawl_map.py, view_probe.py
 python-docx>=1.1        # export_report.py, export_acr.py --docx (.docx rendering)
 htmldocx>=0.0.6         # export_acr.py --docx (HTML -> .docx); pulls in beautifulsoup4
+pymupdf>=1.24           # import_acr.py: ITI VPAT 2.5 PDFs (table cells by geometry)
 # sqlite3, json, re, pathlib, hashlib, subprocess, urllib: standard library

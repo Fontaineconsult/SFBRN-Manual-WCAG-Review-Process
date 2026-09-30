@@ -919,7 +919,7 @@ def bar(done, total, width=20):
     return "█" * n + "░" * (width - n)
 
 
-def state_data(con, rid):
+def state_data(con, rid, review=None):
     q = lambda sql, **kw: con.execute(sql, {"r": rid, **kw}).fetchall()  # noqa: E731
     rev = con.execute("SELECT product, decision, report_status, source_sha FROM reviews WHERE review_id=?", (rid,)).fetchone()
     done = completion(con, rid, review)
@@ -1180,7 +1180,7 @@ def main():
         if not args.no_sync:
             sync(review, quiet=True)
         con = connect(review)
-        d = state_data(con, review.name)
+        d = state_data(con, review.name, review)
         if args.json:
             print(json.dumps(d, indent=1, ensure_ascii=False))
         else:

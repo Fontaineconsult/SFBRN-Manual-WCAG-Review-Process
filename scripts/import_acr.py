@@ -1,7 +1,15 @@
 """Import vendor ACR claims into a review.
 
-Parses an HTML ACR in Adobe's published format (VPAT div-grid: each WCAG
-criterion block followed by conformance-level and remarks divs) and:
+Accepts two ACR shapes, chosen by file extension:
+
+  .html  Adobe's published format (VPAT div-grid: each WCAG criterion block
+         followed by conformance-level and remarks divs; scoped claims such
+         as "Web:" / "Electronic Docs:")
+  .pdf   the ITI VPAT 2.5 template as most vendors export it — three-column
+         tables "Criteria | Conformance Level | Remarks and Explanations"
+         (needs `pymupdf`; the claim scope is recorded as "Product")
+
+Either way it:
 
   1. writes <review>/vendor-acr/acr-wcag-claims.md — extracted per-criterion
      claims with full remarks, greppable
@@ -9,7 +17,7 @@ criterion block followed by conformance-level and remarks divs) and:
      with the claimed conformance level (criteria the ACR does not cover —
      e.g. WCAG 2.2 additions missing from a WCAG 2.1 ACR — are marked so)
 
-Usage: python scripts/import_acr.py <review> <acr.html>
+Usage: python scripts/import_acr.py <review> <acr.html|acr.pdf>
 """
 import html as htmlmod
 import re
@@ -88,18 +96,71 @@ def parse_claims(html):
     return claims
 
 
+CRITERION_CELL = re.compile(
+    r"^\s*(\d+\.\d+\.\d+)\s+(.+?)\s*\(Level (A+)(?:[,;][^)]*)?\)\s*$", re.S)
+
+
+def parse_claims_pdf(pdf_path):
+    """Return the same {sc_number: {...}} dict from an ITI VPAT 2.5 PDF.
+
+    Walks every table on every page; a row counts when its first cell is
+    "d.d.d Name (Level X[, WCAG 2.2])" and its second cell starts with a
+    conformance term. Cells are read by table geometry (PyMuPDF
+    find_tables), never from the flowed text — `pdftotext -layout`
+    interleaves the remarks column with the rows above and below it.
+    Section 508 / EN 301 549 chapters have no such first cell and are
+    skipped. Rows split across a page break arrive as two rows; the
+    second has an empty criterion cell and its remarks are appended.
+    """
+    try:
+        import pymupdf
+    except ImportError:
+        sys.exit("PDF import needs pymupdf: python -m pip install -r requirements.txt")
+    claims, last = {}, None
+    with pymupdf.open(str(pdf_path)) as doc:
+        for page in doc:
+            for table in page.find_tables():
+                for row in table.extract():
+                    cells = [re.sub(r"\s+", " ", (c or "")).strip() for c in row]
+                    if len(cells) < 3:
+                        continue
+                    head = CRITERION_CELL.match(cells[0])
+                    if not head:
+                        if last and not cells[0] and not cells[1] and cells[2]:
+                            claims[last]["remarks"] = (
+                                claims[last]["remarks"] + " " + cells[2]).strip()
+                        continue
+                    term = next((t for t in sorted(CONFORMANCE_TERMS, key=len, reverse=True)
+                                 if cells[1].startswith(t)), None)
+                    if not term:
+                        continue
+                    num, name, level = head.group(1), clean(head.group(2)), head.group(3)
+                    claims[num] = {"name": name, "level": level,
+                                   "claims": [("Product", term)],
+                                   "remarks": cells[2]}
+                    last = num
+    return claims
+
+
 def main():
     if len(sys.argv) != 3:
-        sys.exit("Usage: python scripts/import_acr.py <review> <acr.html>")
+        sys.exit("Usage: python scripts/import_acr.py <review> <acr.html|acr.pdf>")
     review = resolve(sys.argv[1])
     acr_path = Path(sys.argv[2])
-    html = acr_path.read_text(encoding="utf-8", errors="replace")
 
-    title = clean(re.search(r"<title>(.*?)</title>", html, re.S).group(1)) \
-        if "<title>" in html else acr_path.name
-    claims = parse_claims(html)
-    if not claims:
-        sys.exit("No WCAG criterion claims found — is this an Adobe-format HTML ACR?")
+    if acr_path.suffix.lower() == ".pdf":
+        title = acr_path.stem
+        claims = parse_claims_pdf(acr_path)
+        if not claims:
+            sys.exit("No WCAG criterion claims found — is this an ITI VPAT 2.5 PDF "
+                     "with 'Criteria | Conformance Level | Remarks' tables?")
+    else:
+        html = acr_path.read_text(encoding="utf-8", errors="replace")
+        title = clean(re.search(r"<title>(.*?)</title>", html, re.S).group(1)) \
+            if "<title>" in html else acr_path.name
+        claims = parse_claims(html)
+        if not claims:
+            sys.exit("No WCAG criterion claims found — is this an Adobe-format HTML ACR?")
 
     # 1. extracted claims file
     out = [f"# Extracted WCAG claims — {title}",

@@ -177,6 +177,16 @@ on the signed-in default profile, axe sweeps on the debug profile).
   ruleset; `--out PATH` does an ad-hoc scan with no run (recon only).
 - Saves the **raw axe JSON** as `evidence/runs/R###/R###-axe.json` and
   prints a summary (violations by impact, incomplete items).
+- Also renders the same JSON as **`R###-axe.md`** beside it
+  (`scripts/axe_report.py`, added 2026-09-30): per rule — impact, criteria,
+  every node's element, selector and axe's own reason (any/all/none check
+  messages with their data), the passes table, the inapplicable list.
+  Contrast nodes whose `messageKey` says axe assumed a background
+  (`bgGradient`, `bgImage`, pseudo-content…) are marked **treat as
+  unmeasured** in the report — the number next to them is fiction. That
+  page is what a reviewer triages W1/W2 from; the JSON stays the record.
+  Re-render after a renderer change with
+  `python scripts/axe_report.py <review> [R### …]`.
 
 **A `violation` is not automatically true — verify contrast ones (learned
 2026-08-06, R014 O2).** axe normally reports *incomplete* when it cannot
@@ -225,6 +235,24 @@ finding (citing the axe rule ID and the run) or dismissed with a reason;
 checks; `passes`/`inapplicable` counts stay in the raw JSON for the record.
 Sanity-check against the JAWS walk per W3 — axe handles open shadow roots,
 but closed roots and cross-origin iframes are still invisible to it.
+
+**Cross-origin content iframes (learned 2026-09-30, AI Readiness OS).** When
+a lesson's body is an `<iframe>` from another origin, the host-page sweep
+reports only `frame-tested` (incomplete, critical) and sees nothing inside.
+If the framed document is public, sweep it directly: open it in the
+**signed-out** window (port 9223 — never navigate the authenticated tab off
+the product host) and run an ad-hoc scan *into the same run folder*:
+
+    python scripts/axe_scan.py --port 9223 --url <frame src> --tab <src substring> \
+        --out reviews/<id>/evidence/runs/R###/R###-axe-article.json
+    python scripts/axe_report.py --json reviews/<id>/evidence/runs/R###/R###-axe-article.json
+
+then add an observation to the run citing both files and list them under
+its Evidence files. The ad-hoc scan logs no run of its own — it is
+evidence attached to the view's sweep run, which keeps one sweep per view.
+Beware Git Bash: an argument beginning with `/` (e.g. `--tab /learning`) is
+rewritten to a Windows path before Python sees it — pass a substring that
+does not start with a slash.
 
 ## WAVE — automated per-view sweep (secondary)
 
@@ -527,3 +555,15 @@ in" while `/json` showed the tab on `Login.aspx` and a navigation to Class
 Management bouncing to `login.aspx?RUrl=…`. So when a step asks for a sign-in
 or password-reset action, say **in the step** which window to do it in; a
 reviewer reading "enter a wrong password" has no reason to think it matters.
+
+**Two false measured fails, fixed 2026-09-30 (AI Readiness OS).** (a) MO9
+flagged a `sr-only` skip link on six views: the element has a real 32×16
+box but `clip: rect(0,0,0,0)`, so it is no pointer target while hidden. The
+probe's visibility test now also rejects `clip: rect(0px, 0px, 0px, 0px)`,
+`clip-path: inset(50%)` and `opacity: 0`. (b) CO9 flagged a "Show password"
+checkbox as a personal-data field without `autocomplete` because its label
+contains "password"; checkboxes, radios, file, range and colour inputs are
+now skipped — they collect nothing. When a measured fail repeats identically
+across every view, suspect the instrument before the product: read the
+check's note (it names the element) and probe that element's computed
+style before the reviewer is asked to confirm it.

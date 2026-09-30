@@ -78,9 +78,6 @@ python scripts/review_db.py check <review>     # integrity queries: finding ↔ 
                                                # runs cited that don't exist, Works with blank/failed checks …
 python scripts/review_db.py query "SELECT …" --review <r> | --all   # read-only SQL over criteria / checks / runs / outcomes / findings
 python scripts/review_db.py criteria [--level AA] [--principle 2]
-python scripts/export_report.py <review> [--out PATH]
-                                               # render 06-report.md as a styled .docx (real heading
-                                               # styles + tables; needs `pip install python-docx`)
 python scripts/export_acr.py <review> [--open]   # independently-verified ACR (VPAT® 2.5 shape) reviews/<id>/<id>-acr.html,
                                                # generated ENTIRELY from the database — see ontology/reporting.md §Third output
 ```
@@ -154,14 +151,13 @@ Each review contains:
 - `enclosures/` — enclosure library: generic archetypes and saved product enclosures
 - `reviews/` — one directory per review (the system of record)
 - `ontology/` — reference documents converted from W3C sources
-  ([WCAG-EM 2.0](ontology/wcag-em.md), [selecting evaluation tools](ontology/selecting-evaluation-tools.md))
+  ([WCAG-EM 2.0](ontology/wcag-em.md))
   plus this process's own methods: the [testing loop](ontology/testing-loop.md),
   [modality checks](ontology/modality-checks.md), [testing tools](ontology/testing-tools.md),
   and [assisted exploration](ontology/assisted-exploration.md) (the assistant
   drives the browser during WCAG-EM step 2 and writes the map back into the
   enclosure)
-- `tools/` — [searchable catalog](tools/wai-evaluation-tools.md) of the W3C
-  WAI evaluation tools list (refresh with `python tools/update_tools_list.py`)
+- `tools/axe/` — axe-core, vendored so sweeps do not depend on a CDN
 - `scripts/` — process automation (`review.py` — the review CLI;
   `import_acr.py` — parse a vendor's HTML ACR and fill the review's
   vendor-claim lines; `axe_scan.py` — per-view automated sweep: runs the

@@ -256,7 +256,7 @@ structure view against the JAWS walk (W3); if blind, set the sweep run's
 Result to **N/A (instrument-blind)** with the contradiction noted, dismiss
 the structure alerts, and do NOT read 0 errors as a pass. For automated
 coverage of such views, a shadow-DOM-capable checker (axe DevTools, IBM
-Equal Access — `tools/wai-evaluation-tools.md`) may be added to 03 §1.5 as a
+Equal Access) may be added to 03 §1.5 as a
 secondary instrument; WAVE stays the declared standard for views it can
 parse.
 

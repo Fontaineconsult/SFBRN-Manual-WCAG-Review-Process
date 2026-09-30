@@ -203,7 +203,6 @@ if nobody said the word "test".
 | Results rollup | `05` template text | `05-results.md` — the source **both** reports generate from |
 | Record the procurement decision (human) | `06` template text | `06-report.md` — the decision, its rationale, the vendor-ACR audit and this review's limits. Never a report: everything else is generated |
 | Finish a review | `review.py validate` until clean (C1–C13) | both reports regenerated (`export_acr.py <review> --docx` and `--internal --docx`), then `save-enclosure` |
-| Export the report for distribution | `scripts/export_report.py --help`, ontology/reporting.md §Distribution | `reviews/<id>/<id>-report.docx` — generated output; edit the .md and re-export, never the .docx |
 | Export an ACR (VPAT-shaped, for a counterparty who needs the grid) | ontology/reporting.md §Third output | `reviews/<id>/<id>-acr.html` (+ `-acr.docx` with `--docx`) — generated from the **database only**, never from notes or prose; fix `05` and regenerate. Branding comes from `branding.json` (copy `branding.example.json`) or `--org`/`--logo` |
 | Export the internal report (campus-facing: what a user cannot do, feeds a TAAP) | ontology/reporting.md §Fourth output, `ontology/TAAP Version 3_2 051225.docx` | `reviews/<id>/<id>-internal.html` — `export_acr.py <review> --internal`; same database, never carries the procurement decision |
 | Verify a result, count, or cross-reference | `ontology/data-store.md` | nothing — `python scripts/review_db.py query "SQL"` / `check <review>`; the SQLite mirror is the place to verify, the files stay the record |
@@ -326,11 +325,10 @@ That is the only sanctioned way the process changes.
 - `README.md` — process overview and CLI reference
 - `ontology/` — method docs (law): wcag-em, testing-loop,
   assisted-exploration, modality-checks, testing-tools,
-  selecting-evaluation-tools
+
 - `templates/review/` — stage-file templates (structure contract for the CLI)
 - `enclosures/` — archetype + saved product enclosures
 - `reviews/<id>/` — the system of record, one dir per review
 - `scripts/review.py` — the management CLI; `scripts/import_acr.py` — ACR
   importer; `scripts/review_db.py` — the SQLite mirror (`reviews/<id>/<id>.sqlite`,
   one per review, committed, rebuilt deterministically from the files) and its integrity checks
-- `tools/` — W3C evaluation-tools catalog

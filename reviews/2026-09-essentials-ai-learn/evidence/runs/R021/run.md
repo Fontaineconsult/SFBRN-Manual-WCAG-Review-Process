@@ -5,7 +5,7 @@
 | **Run ID** | R021 |
 | **Date/time** | 2026-09-30 14:07 |
 | **View / sample** | S3 |
-| **Page URL / location** | UI: My Courses → Start course → 1 Intro to the Course → Icebreaker |
+| **Page URL / location** | https://learn.essentials-ai.com/learning/03baa839-0ace-4e3b-9d4c-9c2077dcf123 — `UI: My Courses → Start course → 1 Intro to the Course → Icebreaker` (video lesson); Classic experience |
 | **Task / process** | — |
 | **Modality** | no-color |
 | **Tool** | probe |
@@ -44,6 +44,7 @@ Format:
 
 - O2 [measured] (state: view as loaded, 2026-09-30 view_probe): no links inside running text on the view (links are standalone controls/menu items) — measured
   - Classified: NC2 / WCAG 1.4.1 / measured → n/a
+- O3 [new] (state: R021-grayscale.png inspected): Colour-coded states: the current lesson (lavender highlight + filled circle icon), completed vs not-completed lessons (circle icons — none completed yet), the progress bar fill. In grayscale the current lesson keeps its highlight block and icon; status circles differ by fill, not only hue. Reviewer confirms with the OS filter, ideally after one lesson is completed so the completed-state icon can be judged.
 
 ## Notes
 
@@ -51,6 +52,8 @@ Format:
 from Speech History, Insert+Space then H. WAVE: summary counts — Errors,
 Contrast Errors, Alerts, Features/Structural — plus each distinct error type.
 Conventions: ontology/testing-tools.md.)
+
+**Assistant, 2026-10-02.** Facts only; NC1/NC3 stay with the reviewer.
 
 ## Evidence files in this folder
 

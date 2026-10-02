@@ -5,7 +5,7 @@
 | **Run ID** | R016 |
 | **Date/time** | 2026-09-30 14:07 |
 | **View / sample** | S3 |
-| **Page URL / location** | UI: My Courses → Start course → 1 Intro to the Course → Icebreaker |
+| **Page URL / location** | https://learn.essentials-ai.com/learning/03baa839-0ace-4e3b-9d4c-9c2077dcf123 — `UI: My Courses → Start course → 1 Intro to the Course → Icebreaker` (video lesson); Classic experience |
 | **Task / process** | — |
 | **Modality** | no-vision |
 | **Tool** | probe |
@@ -55,6 +55,7 @@ Format:
   - Classified: NV1 / WCAG 2.4.2 / measured → pass
 - O3 [measured] (state: view as loaded, 2026-09-30 view_probe): <html lang="en"> present and well-formed (measured; pronunciation of passages is the reviewer's call if any foreign-language content exists)
   - Classified: NV9 / WCAG 3.1.1, 3.1.2 / measured → pass
+- O4 [new] (state: Accessibility.getFullAXTree on the Icebreaker lesson — recon, not outcomes): Tree: header (skip link, nav "Main", avatar "TU" — V-F3), main: link "My Courses", button "Hide lessons" (title "Hide lesson list"), progressbar "Progress", **one** `navigation "Course outline"` exposed to AT (the drawer copy is hidden while closed), with a list of 4 section buttons ("1 Intro to the Course 0/2 lessons" …) each holding a list of lesson buttons named **"Icebreaker 0m"** etc. (title + duration, space-separated in the tree — the DOM-concatenated "Icebreaker0m" seen by markup tools is *not* what AT gets), the current lesson carrying aria-current; lesson body: **single heading** h1 "Icebreaker" (the course title and the section label are plain text, not headings), `Video "Icebreaker"` with a group "buffering", `DisclosureTriangle "Transcript"`, button "Complete & continue", "Up next: …". One empty `alert` live region. No unnamed control. Listen for: what is announced on load (focus appears to land on the current lesson), the section buttons' expanded state, the lesson buttons' current state, the video's controls, the Transcript disclosure's expanded state, and what "Complete & continue" announces (do not press it unless you intend to complete the lesson — the run records it).
 
 ## Notes
 
@@ -62,6 +63,8 @@ Format:
 from Speech History, Insert+Space then H. WAVE: summary counts — Errors,
 Contrast Errors, Alerts, Features/Structural — plus each distinct error type.
 Conventions: ontology/testing-tools.md.)
+
+**Assistant, 2026-10-02.** NVDA decides every row; NV11 (audio description / media alternative) also needs the reviewer: the Transcript is the text media alternative, the vendor claims integrated description in the narration.
 
 ## Evidence files in this folder
 

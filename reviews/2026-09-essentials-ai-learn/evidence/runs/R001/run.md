@@ -10,7 +10,7 @@
 | **Modality** | — |
 | **Tool** | axe |
 | **Baseline** | — |
-| **Tester** | — |
+| **Tester** | assistant (axe-core 4.10.3 over CDP, Chrome 154 debug profile); triage from R064 and the NVDA walk (R016) |
 | **Result** | Not set (→ Works / Works with issues / Broken / N/A — see ontology/modality-checks.md) |
 
 **When you set the Result, replace this cell with the bare term and
@@ -27,7 +27,7 @@ run's Result is set. Fails cite observation IDs.
 
 | Check | Outcome | Observations |
 |-------|---------|--------------|
-| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | | |
+| W1 — Every reported failure (axe **violations**; WAVE **Errors/Contrast Errors**) is human-confirmed → finding, or dismissed with a written reason in the run notes | pass | O3 — axe reported no violations on the video lesson |
 | W2 — Every warning (axe **incomplete**; WAVE **Alerts**) is reviewed; relevant ones investigated in the matching modality | | |
 | W3 — Structure output is sane and **cross-checked against the JAWS walk**: if the tool reports no/near-no structure where JAWS finds structure, the instrument didn't penetrate — set the sweep's Result to N/A (instrument-blind), dismiss its structure output, never read 0 findings as a pass (see testing-tools.md) | | |
 
@@ -42,6 +42,7 @@ Format:
   - Proposed: W2 / WCAG 1.2.2 — route to the modality run that can settle it
 - O2 [new] (state: as scanned): passes 38 / inapplicable 50.
   - dismissed: informational
+- O3 [new] (state: triage 2026-10-02): W1: no violation reported. W2: the one incomplete, `video-caption` (axe cannot see burned-in captions), is routed to the no-hearing run R064 NH1 (reviewer judges the open captions). W3 waits for the NVDA structure answer (one h1, one outline navigation).
 
 ## Notes
 
@@ -49,6 +50,8 @@ Format:
 from Speech History, Insert+Space then H. WAVE: summary counts — Errors,
 Contrast Errors, Alerts, Features/Structural — plus each distinct error type.
 Conventions: ontology/testing-tools.md.)
+
+**Assistant, 2026-10-02.** W2 closes when R064 NH1 is answered; W3 from R016.
 
 ## Evidence files in this folder
 

@@ -305,11 +305,11 @@ at most 450 characters.
 - **Remarks:**
 
 ### 2.4.6 Headings and Labels (Level AA)
-- **Outcome:** Not Evaluated
+- **Outcome:** Partially Supports (provisional — S1 and S2 decided; remaining views pending)
 - **Vendor claim:** Supports (Product)
-- **Task findings:**
-- **Remarks:**
-
+- **Task findings:** V-F3 (Minor)
+- **Remarks:** Headings are descriptive on the views walked so far (S1 "Sign in"; S2 "My Courses" and the course title). The one defect is a label: the header's account-menu button is named only with the user's initials ("TU"), which does not describe what it opens; it appears on every signed-in view. Vendor-claim discrepancy (Supports claimed).
+- **Remediation:** Give the account-menu button a descriptive accessible name such as "Account menu" (keeping the initials as its visible content), so a screen-reader user hears what the button opens — the sidebar links on the same page already carry descriptive names.
 ### 2.4.7 Focus Visible (Level AA)
 - **Outcome:** Not Evaluated
 - **Vendor claim:** Supports (Product)

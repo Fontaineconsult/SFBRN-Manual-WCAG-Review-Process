@@ -124,6 +124,26 @@ differently.
 | **Severity** | Minor |
 | **Evidence** | R050 O10, O13, O14 (NVDA speech-viewer output); R006 `R006-axe.md` (`form-field-multiple-labels`) |
 
+### View S2 — My Courses (`https://learn.essentials-ai.com/learning`)
+
+| | |
+|---|---|
+| **Baselines run** | B5 (NVDA 2024.1), B2 (keyboard), B3 (400 % zoom), grayscale; axe R008; probe R009–R015 |
+| **Date tested** | 2026-10-02 |
+| **Findings** | V-F3 |
+
+#### Finding V-F3
+
+| | |
+|---|---|
+| **Where** | S2 My Courses — the account-menu button in the header (the avatar showing the user's initials); the same header is on every signed-in view (S3–S6, R1) |
+| **Observed** | The button's only accessible name is the user's initials, "TU". NVDA 2024.1 on focus (R009 O6): "banner landmark, TU, menu button, collapsed, subMenu" — role and state are exposed, but nothing in the name says it is the account menu (it opens "Profile & sessions" and "Sign out"). Reviewer's ruling 2026-10-02: Minor — "the role is not meaningful" to a user who cannot see the avatar. |
+| **Plain summary** | The account menu button in the header is named only with the user's initials, so screen-reader users cannot tell that it opens their account and sign-out options. |
+| **Affected users** | Screen reader users |
+| **WCAG criteria failed** | 2.4.6 |
+| **Severity** | Minor |
+| **Evidence** | R009 O5 (accessibility tree: `button "TU"`, aria-haspopup=menu), O6 (NVDA announcement); R013 `R013-account-menu-open.png` (the menu it opens) |
+
 ---
 
 ## C. Sample comparison (WCAG-EM step 4.3 — random vs structured)

@@ -67,3 +67,4 @@ One row per test run; details and evidence in `runs/<Run>/`.
 | R061 | 2026-09-30 14:09 | S7 | https://learn.essentials-ai.com/forgot-password | motor | probe | — | — | assistant (view_probe) |
 | R062 | 2026-09-30 14:09 | S7 | https://learn.essentials-ai.com/forgot-password | cognition | probe | — | — | assistant (view_probe) |
 | R063 | 2026-09-30 14:09 | S7 | https://learn.essentials-ai.com/forgot-password | no-color | probe | — | — | assistant (view_probe) |
+| R064 | 2026-10-02 13:36 | S3 | https://learn.essentials-ai.com/learning/03baa839-0ace-4e3b-9d4c-9c2077dcf123 — UI: My Courses → Start course → 1 Intro to the Course → Icebreaker (video lesson) | no-hearing | inspection | — | — | — |

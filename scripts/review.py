@@ -750,7 +750,10 @@ def cmd_log_test(args):
 
 
 RESULTS = ["Works", "Works with issues", "Broken", "N/A"]
-CHECK_ID_RE = re.compile(rf"^\\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\\d+)\\s*{CHECK_DASH}")
+CHECK_ID_RE = re.compile(rf"^\s*((?:NV|LV|NC|NH|NS|MO|CO|W)\d+)\s*{CHECK_DASH}")
+# (fixed 2026-10-02: the raw f-string carried doubled backslashes, so the pattern
+#  demanded a literal "\s" and never matched a check cell -- close-run --answer
+#  and --answer-open silently answered nothing until then)
 
 
 def answer_check_rows(text, answers):
